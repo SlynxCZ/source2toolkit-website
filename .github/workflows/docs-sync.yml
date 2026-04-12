@@ -26,17 +26,6 @@ jobs:
           path: source2toolkit-sdk
           ref: main
 
-      - name: Setup .NET 10.x
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.x'
-
-      - name: Run docfx metadata
-        working-directory: source2toolkit-sdk
-        run: |
-          dotnet tool install -g docfx
-          docfx metadata ./docfx.json
-
       - name: Setup Python 3.13
         uses: actions/setup-python@v5
         with:
