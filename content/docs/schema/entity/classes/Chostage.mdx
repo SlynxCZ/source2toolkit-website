@@ -1,0 +1,58 @@
+---
+title: CHostage
+---
+
+# CHostage
+
+**Inheritance**: CHostageExpresserShim
+
+## Fields
+
+- <ApiParam name="m_OnHostageBeginGrab" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnFirstPickedUp" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnDroppedNotRescued" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnRescued" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_entitySpottedState" type="[EntitySpottedState_t](/docs/schema/entity/classes/EntitySpottedState_t)" />
+- <ApiParam name="m_nSpotRules" type="int32_t" />
+- <ApiParam name="m_uiHostageSpawnExclusionGroupMask" type="uint32_t" />
+- <ApiParam name="m_nHostageSpawnRandomFactor" type="uint32_t" />
+- <ApiParam name="m_bRemove" type="bool" />
+- <ApiParam name="m_vel" type="Vector" />
+- <ApiParam name="m_isRescued" type="bool" />
+- <ApiParam name="m_jumpedThisFrame" type="bool" />
+- <ApiParam name="m_nHostageState" type="int32_t" />
+- <ApiParam name="m_leader" type="CHandle&lt;CBaseEntity&gt;" />
+- <ApiParam name="m_lastLeader" type="CHandle&lt;CCSPlayerPawnBase&gt;" />
+- <ApiParam name="m_reuseTimer" type="CountdownTimer" />
+- <ApiParam name="m_hasBeenUsed" type="bool" />
+- <ApiParam name="m_accel" type="Vector" />
+- <ApiParam name="m_isRunning" type="bool" />
+- <ApiParam name="m_isCrouching" type="bool" />
+- <ApiParam name="m_jumpTimer" type="CountdownTimer" />
+- <ApiParam name="m_isWaitingForLeader" type="bool" />
+- <ApiParam name="m_repathTimer" type="CountdownTimer" />
+- <ApiParam name="m_inhibitDoorTimer" type="CountdownTimer" />
+- <ApiParam name="m_inhibitObstacleAvoidanceTimer" type="CountdownTimer" />
+- <ApiParam name="m_wiggleTimer" type="CountdownTimer" />
+- <ApiParam name="m_isAdjusted" type="bool" />
+- <ApiParam name="m_bHandsHaveBeenCut" type="bool" />
+- <ApiParam name="m_hHostageGrabber" type="CHandle&lt;CCSPlayerPawn&gt;" />
+- <ApiParam name="m_fLastGrabTime" type="float" />
+- <ApiParam name="m_vecPositionWhenStartedDroppingToGround" type="Vector" />
+- <ApiParam name="m_vecGrabbedPos" type="Vector" />
+- <ApiParam name="m_flRescueStartTime" type="float" />
+- <ApiParam name="m_flGrabSuccessTime" type="float" />
+- <ApiParam name="m_flDropStartTime" type="float" />
+- <ApiParam name="m_nApproachRewardPayouts" type="int32_t" />
+- <ApiParam name="m_nPickupEventCount" type="int32_t" />
+- <ApiParam name="m_vecSpawnGroundPos" type="Vector" />
+- <ApiParam name="m_vecHostageResetPosition" type="Vector" />
+
+## Methods
+
+### FromIndex()
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type="index.Get()" />
+

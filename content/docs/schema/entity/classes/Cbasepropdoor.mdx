@@ -1,0 +1,57 @@
+---
+title: CBasePropDoor
+---
+
+# CBasePropDoor
+
+**Inheritance**: [CDynamicProp](/docs/schema/entity/classes/Cdynamicprop)
+
+## Fields
+
+- <ApiParam name="m_flAutoReturnDelay" type="float" />
+- <ApiParam name="m_hDoorList" type="CUtlVector&lt;CHandle&lt;CBasePropDoor&gt;&gt;" />
+- <ApiParam name="m_nHardwareType" type="int32_t" />
+- <ApiParam name="m_bNeedsHardware" type="bool" />
+- <ApiParam name="m_eDoorState" type="DoorState_t" />
+- <ApiParam name="m_bLocked" type="bool" />
+- <ApiParam name="m_bNoNPCs" type="bool" />
+- <ApiParam name="m_closedPosition" type="Vector" />
+- <ApiParam name="m_closedAngles" type="QAngle" />
+- <ApiParam name="m_hBlocker" type="CHandle&lt;CBaseEntity&gt;" />
+- <ApiParam name="m_bFirstBlocked" type="bool" />
+- <ApiParam name="m_ls" type="[locksound_t](/docs/schema/entity/classes/locksound_t)" />
+- <ApiParam name="m_bForceClosed" type="bool" />
+- <ApiParam name="m_vecLatchWorldPosition" type="Vector" />
+- <ApiParam name="m_hActivator" type="CHandle&lt;CBaseEntity&gt;" />
+- <ApiParam name="m_SoundMoving" type="CUtlSymbolLarge" />
+- <ApiParam name="m_SoundOpen" type="CUtlSymbolLarge" />
+- <ApiParam name="m_SoundClose" type="CUtlSymbolLarge" />
+- <ApiParam name="m_SoundLock" type="CUtlSymbolLarge" />
+- <ApiParam name="m_SoundUnlock" type="CUtlSymbolLarge" />
+- <ApiParam name="m_SoundLatch" type="CUtlSymbolLarge" />
+- <ApiParam name="m_SoundPound" type="CUtlSymbolLarge" />
+- <ApiParam name="m_SoundJiggle" type="CUtlSymbolLarge" />
+- <ApiParam name="m_SoundLockedAnim" type="CUtlSymbolLarge" />
+- <ApiParam name="m_numCloseAttempts" type="int32_t" />
+- <ApiParam name="m_nPhysicsMaterial" type="CUtlStringToken" />
+- <ApiParam name="m_SlaveName" type="CUtlSymbolLarge" />
+- <ApiParam name="m_hMaster" type="CHandle&lt;CBasePropDoor&gt;" />
+- <ApiParam name="m_OnBlockedClosing" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnBlockedOpening" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnUnblockedClosing" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnUnblockedOpening" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnFullyClosed" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnFullyOpen" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnClose" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnOpen" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnLockedUse" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnAjarOpen" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+
+## Methods
+
+### FromIndex()
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type="index.Get()" />
+

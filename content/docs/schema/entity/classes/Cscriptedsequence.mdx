@@ -1,0 +1,96 @@
+---
+title: CScriptedSequence
+---
+
+# CScriptedSequence
+
+**Inheritance**: CBaseEntity
+
+## Fields
+
+- <ApiParam name="m_iszEntry" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszPreIdle" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszPlay" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszPostIdle" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszModifierToAddOnPlay" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszNextScript" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszEntity" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszSyncGroup" type="CUtlSymbolLarge" />
+- <ApiParam name="m_nMoveTo" type="ScriptedMoveTo_t" />
+- <ApiParam name="m_nMoveToGait" type="SharedMovementGait_t" />
+- <ApiParam name="m_nHeldWeaponBehavior" type="ScriptedHeldWeaponBehavior_t" />
+- <ApiParam name="m_nForcedCrouchState" type="ForcedCrouchState_t" />
+- <ApiParam name="m_bIsPlayingPreIdle" type="bool" />
+- <ApiParam name="m_bIsPlayingEntry" type="bool" />
+- <ApiParam name="m_bIsPlayingAction" type="bool" />
+- <ApiParam name="m_bIsPlayingPostIdle" type="bool" />
+- <ApiParam name="m_bDontRotateOther" type="bool" />
+- <ApiParam name="m_bIsRepeatable" type="bool" />
+- <ApiParam name="m_bShouldLeaveCorpse" type="bool" />
+- <ApiParam name="m_bStartOnSpawn" type="bool" />
+- <ApiParam name="m_bDisallowInterrupts" type="bool" />
+- <ApiParam name="m_bCanOverrideNPCState" type="bool" />
+- <ApiParam name="m_bDontTeleportAtEnd" type="bool" />
+- <ApiParam name="m_bHighPriority" type="bool" />
+- <ApiParam name="m_bHideDebugComplaints" type="bool" />
+- <ApiParam name="m_bContinueOnDeath" type="bool" />
+- <ApiParam name="m_bLoopPreIdleSequence" type="bool" />
+- <ApiParam name="m_bLoopActionSequence" type="bool" />
+- <ApiParam name="m_bLoopPostIdleSequence" type="bool" />
+- <ApiParam name="m_bSynchPostIdles" type="bool" />
+- <ApiParam name="m_bIgnoreLookAt" type="bool" />
+- <ApiParam name="m_bIgnoreGravity" type="bool" />
+- <ApiParam name="m_bDisableNPCCollisions" type="bool" />
+- <ApiParam name="m_bKeepAnimgraphLockedPost" type="bool" />
+- <ApiParam name="m_bDontAddModifiers" type="bool" />
+- <ApiParam name="m_bDisableAimingWhileMoving" type="bool" />
+- <ApiParam name="m_bIgnoreRotation" type="bool" />
+- <ApiParam name="m_flRadius" type="float" />
+- <ApiParam name="m_flRepeat" type="float" />
+- <ApiParam name="m_flPlayAnimFadeInTime" type="float" />
+- <ApiParam name="m_flMoveInterpTime" type="float" />
+- <ApiParam name="m_flAngRate" type="float" />
+- <ApiParam name="m_flMoveSpeed" type="float" />
+- <ApiParam name="m_bWaitUntilMoveCompletesToStartAnimation" type="bool" />
+- <ApiParam name="m_nNotReadySequenceCount" type="int32_t" />
+- <ApiParam name="m_startTime" type="float" />
+- <ApiParam name="m_bWaitForBeginSequence" type="bool" />
+- <ApiParam name="m_saved_effects" type="int32_t" />
+- <ApiParam name="m_savedFlags" type="int32_t" />
+- <ApiParam name="m_savedCollisionGroup" type="int32_t" />
+- <ApiParam name="m_bInterruptable" type="bool" />
+- <ApiParam name="m_sequenceStarted" type="bool" />
+- <ApiParam name="m_bPositionRelativeToOtherEntity" type="bool" />
+- <ApiParam name="m_hTargetEnt" type="CHandle&lt;CBaseEntity&gt;" />
+- <ApiParam name="m_hNextCine" type="CHandle&lt;CScriptedSequence&gt;" />
+- <ApiParam name="m_bThinking" type="bool" />
+- <ApiParam name="m_bInitiatedSelfDelete" type="bool" />
+- <ApiParam name="m_bIsTeleportingDueToMoveTo" type="bool" />
+- <ApiParam name="m_bAllowCustomInterruptConditions" type="bool" />
+- <ApiParam name="m_hForcedTarget" type="CHandle&lt;CBaseAnimGraph&gt;" />
+- <ApiParam name="m_bDontCancelOtherSequences" type="bool" />
+- <ApiParam name="m_bForceSynch" type="bool" />
+- <ApiParam name="m_bPreventUpdateYawOnFinish" type="bool" />
+- <ApiParam name="m_bEnsureOnNavmeshOnFinish" type="bool" />
+- <ApiParam name="m_onDeathBehavior" type="ScriptedOnDeath_t" />
+- <ApiParam name="m_ConflictResponse" type="ScriptedConflictResponse_t" />
+- <ApiParam name="m_OnBeginSequence" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnActionStartOrLoop" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnEndSequence" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnPostIdleEndSequence" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnCancelSequence" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnCancelFailedSequence" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnScriptEvent" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_matOtherToMain" type="CTransform" />
+- <ApiParam name="m_hInteractionMainEntity" type="CHandle&lt;CBaseEntity&gt;" />
+- <ApiParam name="m_iPlayerDeathBehavior" type="int32_t" />
+- <ApiParam name="m_bSkipFadeIn" type="bool" />
+
+## Methods
+
+### FromIndex()
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type="index.Get()" />
+
