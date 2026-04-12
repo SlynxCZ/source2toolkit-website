@@ -1,0 +1,226 @@
+---
+title: CCSGameRules
+---
+
+# CCSGameRules
+
+**Inheritance**: [CTeamplayRules](/docs/schema/entity/classes/Cteamplayrules.mdx)
+
+## Fields
+
+- <ApiParam name="m_bFreezePeriod" type="bool" />
+- <ApiParam name="m_bWarmupPeriod" type="bool" />
+- <ApiParam name="m_fWarmupPeriodEnd" type="float" />
+- <ApiParam name="m_fWarmupPeriodStart" type="float" />
+- <ApiParam name="m_bTerroristTimeOutActive" type="bool" />
+- <ApiParam name="m_bCTTimeOutActive" type="bool" />
+- <ApiParam name="m_flTerroristTimeOutRemaining" type="float" />
+- <ApiParam name="m_flCTTimeOutRemaining" type="float" />
+- <ApiParam name="m_nTerroristTimeOuts" type="int32_t" />
+- <ApiParam name="m_nCTTimeOuts" type="int32_t" />
+- <ApiParam name="m_bTechnicalTimeOut" type="bool" />
+- <ApiParam name="m_bMatchWaitingForResume" type="bool" />
+- <ApiParam name="m_iFreezeTime" type="int32_t" />
+- <ApiParam name="m_iRoundTime" type="int32_t" />
+- <ApiParam name="m_fMatchStartTime" type="float" />
+- <ApiParam name="m_fRoundStartTime" type="float" />
+- <ApiParam name="m_flRestartRoundTime" type="float" />
+- <ApiParam name="m_bGameRestart" type="bool" />
+- <ApiParam name="m_flGameStartTime" type="float" />
+- <ApiParam name="m_timeUntilNextPhaseStarts" type="float" />
+- <ApiParam name="m_gamePhase" type="int32_t" />
+- <ApiParam name="m_totalRoundsPlayed" type="int32_t" />
+- <ApiParam name="m_nRoundsPlayedThisPhase" type="int32_t" />
+- <ApiParam name="m_nOvertimePlaying" type="int32_t" />
+- <ApiParam name="m_iHostagesRemaining" type="int32_t" />
+- <ApiParam name="m_bAnyHostageReached" type="bool" />
+- <ApiParam name="m_bMapHasBombTarget" type="bool" />
+- <ApiParam name="m_bMapHasRescueZone" type="bool" />
+- <ApiParam name="m_bMapHasBuyZone" type="bool" />
+- <ApiParam name="m_bIsQueuedMatchmaking" type="bool" />
+- <ApiParam name="m_nQueuedMatchmakingMode" type="int32_t" />
+- <ApiParam name="m_bIsValveDS" type="bool" />
+- <ApiParam name="m_bLogoMap" type="bool" />
+- <ApiParam name="m_bPlayAllStepSoundsOnServer" type="bool" />
+- <ApiParam name="m_iSpectatorSlotCount" type="int32_t" />
+- <ApiParam name="m_MatchDevice" type="int32_t" />
+- <ApiParam name="m_bHasMatchStarted" type="bool" />
+- <ApiParam name="m_nNextMapInMapgroup" type="int32_t" />
+- <ApiParam name="m_szTournamentEventName" type="char" />
+- <ApiParam name="m_szTournamentEventStage" type="char" />
+- <ApiParam name="m_szMatchStatTxt" type="char" />
+- <ApiParam name="m_szTournamentPredictionsTxt" type="char" />
+- <ApiParam name="m_nTournamentPredictionsPct" type="int32_t" />
+- <ApiParam name="m_flCMMItemDropRevealStartTime" type="float" />
+- <ApiParam name="m_flCMMItemDropRevealEndTime" type="float" />
+- <ApiParam name="m_bIsDroppingItems" type="bool" />
+- <ApiParam name="m_bIsQuestEligible" type="bool" />
+- <ApiParam name="m_bIsHltvActive" type="bool" />
+- <ApiParam name="m_bBombPlanted" type="bool" />
+- <ApiParam name="m_arrProhibitedItemIndices" type="uint16_t" />
+- <ApiParam name="m_arrTournamentActiveCasterAccounts" type="uint32_t" />
+- <ApiParam name="m_numBestOfMaps" type="int32_t" />
+- <ApiParam name="m_nHalloweenMaskListSeed" type="int32_t" />
+- <ApiParam name="m_bBombDropped" type="bool" />
+- <ApiParam name="m_iRoundWinStatus" type="int32_t" />
+- <ApiParam name="m_eRoundWinReason" type="int32_t" />
+- <ApiParam name="m_bTCantBuy" type="bool" />
+- <ApiParam name="m_bCTCantBuy" type="bool" />
+- <ApiParam name="m_iMatchStats_RoundResults" type="int32_t" />
+- <ApiParam name="m_iMatchStats_PlayersAlive_CT" type="int32_t" />
+- <ApiParam name="m_iMatchStats_PlayersAlive_T" type="int32_t" />
+- <ApiParam name="m_TeamRespawnWaveTimes" type="float" />
+- <ApiParam name="m_flNextRespawnWave" type="float" />
+- <ApiParam name="m_vMinimapMins" type="Vector" />
+- <ApiParam name="m_vMinimapMaxs" type="Vector" />
+- <ApiParam name="m_MinimapVerticalSectionHeights" type="float" />
+- <ApiParam name="m_ullLocalMatchID" type="uint64_t" />
+- <ApiParam name="m_nEndMatchMapGroupVoteTypes" type="int32_t" />
+- <ApiParam name="m_nEndMatchMapGroupVoteOptions" type="int32_t" />
+- <ApiParam name="m_nEndMatchMapVoteWinner" type="int32_t" />
+- <ApiParam name="m_iNumConsecutiveCTLoses" type="int32_t" />
+- <ApiParam name="m_iNumConsecutiveTerroristLoses" type="int32_t" />
+- <ApiParam name="m_bHasHostageBeenTouched" type="bool" />
+- <ApiParam name="m_flIntermissionStartTime" type="float" />
+- <ApiParam name="m_flIntermissionEndTime" type="float" />
+- <ApiParam name="m_bLevelInitialized" type="bool" />
+- <ApiParam name="m_iTotalRoundsPlayed" type="int32_t" />
+- <ApiParam name="m_iUnBalancedRounds" type="int32_t" />
+- <ApiParam name="m_endMatchOnRoundReset" type="bool" />
+- <ApiParam name="m_endMatchOnThink" type="bool" />
+- <ApiParam name="m_iNumTerrorist" type="int32_t" />
+- <ApiParam name="m_iNumCT" type="int32_t" />
+- <ApiParam name="m_iNumSpawnableTerrorist" type="int32_t" />
+- <ApiParam name="m_iNumSpawnableCT" type="int32_t" />
+- <ApiParam name="m_arrSelectedHostageSpawnIndices" type="CUtlVector&lt;int32_t&gt;" />
+- <ApiParam name="m_nSpawnPointsRandomSeed" type="int32_t" />
+- <ApiParam name="m_bFirstConnected" type="bool" />
+- <ApiParam name="m_bCompleteReset" type="bool" />
+- <ApiParam name="m_bPickNewTeamsOnReset" type="bool" />
+- <ApiParam name="m_bScrambleTeamsOnRestart" type="bool" />
+- <ApiParam name="m_bSwapTeamsOnRestart" type="bool" />
+- <ApiParam name="m_nEndMatchTiedVotes" type="CUtlVector&lt;int32_t&gt;" />
+- <ApiParam name="m_bNeedToAskPlayersForContinueVote" type="bool" />
+- <ApiParam name="m_numQueuedMatchmakingAccounts" type="uint32_t" />
+- <ApiParam name="m_fAvgPlayerRank" type="float" />
+- <ApiParam name="m_pQueuedMatchmakingReservationString" type="char*" />
+- <ApiParam name="m_numTotalTournamentDrops" type="uint32_t" />
+- <ApiParam name="m_numSpectatorsCountMax" type="uint32_t" />
+- <ApiParam name="m_numSpectatorsCountMaxTV" type="uint32_t" />
+- <ApiParam name="m_numSpectatorsCountMaxLnk" type="uint32_t" />
+- <ApiParam name="m_nCTsAliveAtFreezetimeEnd" type="int32_t" />
+- <ApiParam name="m_nTerroristsAliveAtFreezetimeEnd" type="int32_t" />
+- <ApiParam name="m_bForceTeamChangeSilent" type="bool" />
+- <ApiParam name="m_bLoadingRoundBackupData" type="bool" />
+- <ApiParam name="m_nMatchInfoShowType" type="int32_t" />
+- <ApiParam name="m_flMatchInfoDecidedTime" type="float" />
+- <ApiParam name="mTeamDMLastWinningTeamNumber" type="int32_t" />
+- <ApiParam name="mTeamDMLastThinkTime" type="float" />
+- <ApiParam name="m_flTeamDMLastAnnouncementTime" type="float" />
+- <ApiParam name="m_iAccountTerrorist" type="int32_t" />
+- <ApiParam name="m_iAccountCT" type="int32_t" />
+- <ApiParam name="m_iSpawnPointCount_Terrorist" type="int32_t" />
+- <ApiParam name="m_iSpawnPointCount_CT" type="int32_t" />
+- <ApiParam name="m_iMaxNumTerrorists" type="int32_t" />
+- <ApiParam name="m_iMaxNumCTs" type="int32_t" />
+- <ApiParam name="m_iLoserBonusMostRecentTeam" type="int32_t" />
+- <ApiParam name="m_tmNextPeriodicThink" type="float" />
+- <ApiParam name="m_bVoiceWonMatchBragFired" type="bool" />
+- <ApiParam name="m_fWarmupNextChatNoticeTime" type="float" />
+- <ApiParam name="m_iHostagesRescued" type="int32_t" />
+- <ApiParam name="m_iHostagesTouched" type="int32_t" />
+- <ApiParam name="m_flNextHostageAnnouncement" type="float" />
+- <ApiParam name="m_bNoTerroristsKilled" type="bool" />
+- <ApiParam name="m_bNoCTsKilled" type="bool" />
+- <ApiParam name="m_bNoEnemiesKilled" type="bool" />
+- <ApiParam name="m_bCanDonateWeapons" type="bool" />
+- <ApiParam name="m_firstKillTime" type="float" />
+- <ApiParam name="m_firstBloodTime" type="float" />
+- <ApiParam name="m_hostageWasInjured" type="bool" />
+- <ApiParam name="m_hostageWasKilled" type="bool" />
+- <ApiParam name="m_bVoteCalled" type="bool" />
+- <ApiParam name="m_bServerVoteOnReset" type="bool" />
+- <ApiParam name="m_flVoteCheckThrottle" type="float" />
+- <ApiParam name="m_bBuyTimeEnded" type="bool" />
+- <ApiParam name="m_nLastFreezeEndBeep" type="int32_t" />
+- <ApiParam name="m_bTargetBombed" type="bool" />
+- <ApiParam name="m_bBombDefused" type="bool" />
+- <ApiParam name="m_bMapHasBombZone" type="bool" />
+- <ApiParam name="m_vecMainCTSpawnPos" type="Vector" />
+- <ApiParam name="m_CTSpawnPointsMasterList" type="CUtlVector&lt;CHandle&lt;SpawnPoint&gt;&gt;" />
+- <ApiParam name="m_TerroristSpawnPointsMasterList" type="CUtlVector&lt;CHandle&lt;SpawnPoint&gt;&gt;" />
+- <ApiParam name="m_bRespawningAllRespawnablePlayers" type="bool" />
+- <ApiParam name="m_iNextCTSpawnPoint" type="int32_t" />
+- <ApiParam name="m_flCTSpawnPointUsedTime" type="float" />
+- <ApiParam name="m_iNextTerroristSpawnPoint" type="int32_t" />
+- <ApiParam name="m_flTerroristSpawnPointUsedTime" type="float" />
+- <ApiParam name="m_CTSpawnPoints" type="CUtlVector&lt;CHandle&lt;SpawnPoint&gt;&gt;" />
+- <ApiParam name="m_TerroristSpawnPoints" type="CUtlVector&lt;CHandle&lt;SpawnPoint&gt;&gt;" />
+- <ApiParam name="m_bIsUnreservedGameServer" type="bool" />
+- <ApiParam name="m_fAutobalanceDisplayTime" type="float" />
+- <ApiParam name="m_bAllowWeaponSwitch" type="bool" />
+- <ApiParam name="m_bRoundTimeWarningTriggered" type="bool" />
+- <ApiParam name="m_phaseChangeAnnouncementTime" type="float" />
+- <ApiParam name="m_fNextUpdateTeamClanNamesTime" type="float" />
+- <ApiParam name="m_flLastThinkTime" type="float" />
+- <ApiParam name="m_fAccumulatedRoundOffDamage" type="float" />
+- <ApiParam name="m_nShorthandedBonusLastEvalRound" type="int32_t" />
+- <ApiParam name="m_nMatchAbortedEarlyReason" type="int32_t" />
+- <ApiParam name="m_bHasTriggeredRoundStartMusic" type="bool" />
+- <ApiParam name="m_bSwitchingTeamsAtRoundReset" type="bool" />
+- <ApiParam name="m_pGameModeRules" type="[CCSGameModeRules](/docs/schema/entity/classes/Ccsgamemoderules.mdx)*" />
+- <ApiParam name="m_hPlayerResource" type="CHandle&lt;CBaseEntity&gt;" />
+- <ApiParam name="m_RetakeRules" type="CRetakeGameRules" />
+- <ApiParam name="m_arrTeamUniqueKillWeaponsMatch" type="CUtlVector&lt;int32_t&gt;" />
+- <ApiParam name="m_bTeamLastKillUsedUniqueWeaponMatch" type="bool" />
+- <ApiParam name="m_nMatchEndCount" type="uint8_t" />
+- <ApiParam name="m_nTTeamIntroVariant" type="int32_t" />
+- <ApiParam name="m_nCTTeamIntroVariant" type="int32_t" />
+- <ApiParam name="m_bTeamIntroPeriod" type="bool" />
+- <ApiParam name="m_fTeamIntroPeriodEnd" type="float" />
+- <ApiParam name="m_bPlayedTeamIntroVO" type="bool" />
+- <ApiParam name="m_iRoundEndWinnerTeam" type="int32_t" />
+- <ApiParam name="m_eRoundEndReason" type="int32_t" />
+- <ApiParam name="m_bRoundEndShowTimerDefend" type="bool" />
+- <ApiParam name="m_iRoundEndTimerTime" type="int32_t" />
+- <ApiParam name="m_sRoundEndFunFactToken" type="CUtlString" />
+- <ApiParam name="m_iRoundEndFunFactPlayerSlot" type="int32_t" />
+- <ApiParam name="m_iRoundEndFunFactData1" type="int32_t" />
+- <ApiParam name="m_iRoundEndFunFactData2" type="int32_t" />
+- <ApiParam name="m_iRoundEndFunFactData3" type="int32_t" />
+- <ApiParam name="m_sRoundEndMessage" type="CUtlString" />
+- <ApiParam name="m_iRoundEndPlayerCount" type="int32_t" />
+- <ApiParam name="m_bRoundEndNoMusic" type="bool" />
+- <ApiParam name="m_iRoundEndLegacy" type="int32_t" />
+- <ApiParam name="m_nRoundEndCount" type="uint8_t" />
+- <ApiParam name="m_iRoundStartRoundNumber" type="int32_t" />
+- <ApiParam name="m_nRoundStartCount" type="uint8_t" />
+- <ApiParam name="m_flLastPerfSampleTime" type="double" />
+
+## Methods
+
+### TerminateRound(flDelay, eRoundEndReason)
+
+Terminate round.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="flDelay" type="float" />
+- <ApiParam name="eRoundEndReason" type="int32_t" />
+
+### FindPickerEntity(pPlayer)
+
+Find entity player is aiming at.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pPlayer" type="[CBasePlayerController](/docs/schema/entity/classes/Cbaseplayercontroller.mdx)*" />
+
+### GetClientAimTarget(pPlayer)
+
+Get aim target.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pPlayer" type="[CCSPlayerController](/docs/schema/entity/classes/Ccsplayercontroller.mdx)*" />
+

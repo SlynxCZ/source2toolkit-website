@@ -1,0 +1,102 @@
+---
+title: CFuncMover
+---
+
+# CFuncMover
+
+**Inheritance**: CBaseModelEntity
+
+## Fields
+
+- <ApiParam name="m_iszPathName" type="CUtlSymbolLarge" />
+- <ApiParam name="m_hPathMover" type="CHandle&lt;CPathMover&gt;" />
+- <ApiParam name="m_hPrevPathMover" type="CHandle&lt;CPathMover&gt;" />
+- <ApiParam name="m_iszPathNodeStart" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszPathNodeEnd" type="CUtlSymbolLarge" />
+- <ApiParam name="m_eMoveType" type="CFuncMover::Move_t" />
+- <ApiParam name="m_bIsReversing" type="bool" />
+- <ApiParam name="m_flStartSpeed" type="float" />
+- <ApiParam name="m_flPathLocation" type="float" />
+- <ApiParam name="m_flT" type="float" />
+- <ApiParam name="m_nCurrentNodeIndex" type="int32_t" />
+- <ApiParam name="m_nPreviousNodeIndex" type="int32_t" />
+- <ApiParam name="m_eSolidType" type="SolidType_t" />
+- <ApiParam name="m_bIsMoving" type="bool" />
+- <ApiParam name="m_flTimeToReachMaxSpeed" type="float" />
+- <ApiParam name="m_flDistanceToReachMaxSpeed" type="float" />
+- <ApiParam name="m_flTimeToReachZeroSpeed" type="float" />
+- <ApiParam name="m_flComputedDistanceToReachMaxSpeed" type="float" />
+- <ApiParam name="m_flComputedDistanceToReachZeroSpeed" type="float" />
+- <ApiParam name="m_flStartCurveScale" type="float" />
+- <ApiParam name="m_flStopCurveScale" type="float" />
+- <ApiParam name="m_flDistanceToReachZeroSpeed" type="float" />
+- <ApiParam name="m_flTimeMovementStart" type="float" />
+- <ApiParam name="m_flTimeMovementStop" type="float" />
+- <ApiParam name="m_hStopAtNode" type="CHandle&lt;CMoverPathNode&gt;" />
+- <ApiParam name="m_flPathLocationToBeginStop" type="float" />
+- <ApiParam name="m_flPathLocationStart" type="float" />
+- <ApiParam name="m_flBeginStopT" type="float" />
+- <ApiParam name="m_iszStartForwardSound" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszLoopForwardSound" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszStopForwardSound" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszStartReverseSound" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszLoopReverseSound" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszStopReverseSound" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iszArriveAtDestinationSound" type="CUtlSymbolLarge" />
+- <ApiParam name="m_OnMovementEnd" type="[CEntityIOOutput](/docs/schema/Entityio.mdx)" />
+- <ApiParam name="m_bStartAtClosestPoint" type="bool" />
+- <ApiParam name="m_bStartAtEnd" type="bool" />
+- <ApiParam name="m_bStartFollowingClosestMover" type="bool" />
+- <ApiParam name="m_eOrientationUpdate" type="CFuncMover::OrientationUpdate_t" />
+- <ApiParam name="m_flTimeStartOrientationChange" type="float" />
+- <ApiParam name="m_flTimeToBlendToNewOrientation" type="float" />
+- <ApiParam name="m_flDurationBlendToNewOrientationRan" type="float" />
+- <ApiParam name="m_nOriginalOrientationIndex" type="int32_t" />
+- <ApiParam name="m_bCreateMovableNavMesh" type="bool" />
+- <ApiParam name="m_bAllowMovableNavMeshDockingOnEntireEntity" type="bool" />
+- <ApiParam name="m_iszOrientationMatchEntityName" type="CUtlSymbolLarge" />
+- <ApiParam name="m_hOrientationMatchEntity" type="CHandle&lt;CBaseEntity&gt;" />
+- <ApiParam name="m_flTimeToTraverseToNextNode" type="float" />
+- <ApiParam name="m_vLerpToNewPosStartInPathEntitySpace" type="Vector" />
+- <ApiParam name="m_vLerpToNewPosEndInPathEntitySpace" type="Vector" />
+- <ApiParam name="m_flLerpToPositionT" type="float" />
+- <ApiParam name="m_flLerpToPositionDeltaT" type="float" />
+- <ApiParam name="m_OnLerpToPositionComplete" type="[CEntityIOOutput](/docs/schema/Entityio.mdx)" />
+- <ApiParam name="m_bIsPaused" type="bool" />
+- <ApiParam name="m_eTransitionedToPathNodeAction" type="CFuncMover::TransitionToPathNodeAction_t" />
+- <ApiParam name="m_nDelayedTeleportToNode" type="int32_t" />
+- <ApiParam name="m_bIsVerboseLogging" type="bool" />
+- <ApiParam name="m_hFollowEntity" type="CHandle&lt;CBaseEntity&gt;" />
+- <ApiParam name="m_flFollowDistance" type="float" />
+- <ApiParam name="m_flFollowMinimumSpeed" type="float" />
+- <ApiParam name="m_flCurFollowEntityT" type="float" />
+- <ApiParam name="m_flCurFollowSpeed" type="float" />
+- <ApiParam name="m_strOrientationFaceEntityName" type="CUtlSymbolLarge" />
+- <ApiParam name="m_hOrientationFaceEntity" type="CHandle&lt;CBaseEntity&gt;" />
+- <ApiParam name="m_OnStart" type="[CEntityIOOutput](/docs/schema/Entityio.mdx)" />
+- <ApiParam name="m_OnStartForward" type="[CEntityIOOutput](/docs/schema/Entityio.mdx)" />
+- <ApiParam name="m_OnStartReverse" type="[CEntityIOOutput](/docs/schema/Entityio.mdx)" />
+- <ApiParam name="m_OnStop" type="[CEntityIOOutput](/docs/schema/Entityio.mdx)" />
+- <ApiParam name="m_OnStopped" type="[CEntityIOOutput](/docs/schema/Entityio.mdx)" />
+- <ApiParam name="m_bNextNodeReturnsCurrent" type="bool" />
+- <ApiParam name="m_bStartedMoving" type="bool" />
+- <ApiParam name="m_eFollowEntityDirection" type="CFuncMover::FollowEntityDirection_t" />
+- <ApiParam name="m_hFollowMover" type="CHandle&lt;CFuncMover&gt;" />
+- <ApiParam name="m_iszFollowMoverEntityName" type="CUtlSymbolLarge" />
+- <ApiParam name="m_flFollowMoverDistance" type="float" />
+- <ApiParam name="m_flFollowMoverCalculatedDistance" type="float" />
+- <ApiParam name="m_flFollowMoverSpringStrength" type="float" />
+- <ApiParam name="m_bFollowConstraintsInitialized" type="bool" />
+- <ApiParam name="m_eFollowConstraint" type="CFuncMover::FollowConstraint_t" />
+- <ApiParam name="m_flFollowMoverSpeed" type="float" />
+- <ApiParam name="m_flFollowMoverVelocity" type="float" />
+- <ApiParam name="m_nTickMovementRan" type="int32_t" />
+
+## Methods
+
+### FromIndex()
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type="index.Get()" />
+

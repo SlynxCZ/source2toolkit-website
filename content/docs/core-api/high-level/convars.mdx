@@ -1,0 +1,101 @@
+---
+title: Convars
+---
+
+# convars
+
+## Functions
+
+### UTIL_FindConVar(name)
+
+Finds a ConVar by name.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" /> — ConVar name (e.g. "sv_cheats")
+
+### UTIL_GetConVarInt(accessIndex)
+
+Gets integer value of a ConVar.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+
+### UTIL_GetConVarFloat(accessIndex)
+
+Gets float value of a ConVar.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+
+### UTIL_GetConVarBool(accessIndex)
+
+Gets boolean value of a ConVar.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+
+### UTIL_SetConVarInt(accessIndex, value)
+
+Sets integer value of a ConVar.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="int" />
+
+### UTIL_SetConVarFloat(accessIndex, value)
+
+Sets float value of a ConVar.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="float" />
+
+### UTIL_SetConVarBool(accessIndex, value)
+
+Sets boolean value of a ConVar.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="bool" />
+
+### UTIL_GetConVarString(accessIndex)
+
+Gets string value of a ConVar.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+
+### UTIL_SetConVarString(accessIndex, value)
+
+Sets string value of a ConVar.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="const char*" />
+
+### UTIL_GetConVarValueAddress(accessIndex)
+
+Gets raw pointer to ConVar value.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+
+### UTIL_SetConVarValue(accessIndex, value)
+
+Sets raw value of a ConVar.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="const void*" /> — Pointer to value (type depends on ConVar type)
+

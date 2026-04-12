@@ -1,0 +1,34 @@
+---
+title: Scheduler
+---
+
+# scheduler
+
+## Functions
+
+### UTIL_NextFrame(task)
+
+Executes a task on the next frame.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="task" type="std::function&lt;void()&gt;&&" /> — Callback to execute
+
+### UTIL_AddTimer(interval, callback, flags)
+
+Adds a timer.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="interval" type="float" /> — Time in seconds between executions
+- <ApiParam name="callback" type="TimerCallback" /> — Function to execute
+- <ApiParam name="flags" type="int" /> — Timer behavior flags
+
+### UTIL_KillTimer(timer)
+
+Removes (kills) a timer.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="timer" type="[Timer](/docs/core-api/low-level/IToolkitScheduler.mdx)*" /> — Timer instance
+

@@ -1,0 +1,18 @@
+---
+title: Events
+---
+
+# events
+
+## Functions
+
+### UTIL_RegGameEvent(pchName, handler, mode)
+
+Registers a game event listener.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pchName" type="const char*" /> — Event name (e.g. "player_death", "round_start")
+- <ApiParam name="handler" type="GameEventHandler" /> — parameters:
+- <ApiParam name="mode" type="Mode" /> — Execution mode (Pre = before engine processing, Post = after)
+
