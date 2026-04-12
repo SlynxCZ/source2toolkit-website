@@ -1,0 +1,70 @@
+﻿name: Sync Update
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  check-updates:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout website repository
+        uses: actions/checkout@v4
+        with:
+          repository: SlynxCZ/source2toolkit-website
+          path: website
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout source2toolkit-sdk repository
+        uses: actions/checkout@v4
+        with:
+          repository: SlynxCZ/source2toolkit-sdk
+          path: source2toolkit-sdk
+          ref: master
+
+      - name: Setup .NET 10.x
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Run docfx metadata
+        working-directory: source2toolkit-sdk
+        run: |
+          dotnet tool install -g docfx
+          docfx metadata ./docfx.json
+
+      - name: Setup Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Run docs generator
+        run: cd source2toolkit-sdk/tools/docsgen && python generator.py
+
+      - name: Remove old API docs
+        run: |
+          rm -rf website/content/docs/core-api/*
+          rm -rf website/content/docs/schema/*
+
+      - name: Copy new API docs
+        run: cp -r source2toolkit-sdk/docs/* website/content/docs/
+
+      - name: Check for changes and commit
+        working-directory: website
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes detected"
+          else
+            git commit -m "chore: sync API documentation from source2toolkit-sdk"
+            git push
+          fi
