@@ -13,32 +13,40 @@ import { LuGithub, LuGlobe } from 'react-icons/lu';
 export function baseOptions(): BaseLayoutProps {
   return {
     nav: {
-      title: appName,
+      title: <>{appName}</>,
     },
     links: [
       {
         type: 'icon',
-        icon: <LuGithub />,
-        url: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
         label: 'GitHub',
+        icon: <LuGithub />,
+        text: 'GitHub',
+        url: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
+        external: true,
       },
       {
         type: 'icon',
-        icon: <LuGlobe />,
-        url: portfolioConfig.link,
         label: 'Portfolio',
+        icon: <LuGlobe />,
+        text: 'Portfolio',
+        url: portfolioConfig.link,
+        external: true,
       },
       {
         type: 'icon',
-        icon: <FaDiscord />,
-        url: discordConfig.link,
         label: 'Discord',
+        icon: <FaDiscord />,
+        text: 'Discord',
+        url: discordConfig.link,
+        external: true,
       },
       {
         type: 'icon',
-        icon: <FaSteam />,
-        url: steamConfig.link,
         label: 'Steam',
+        icon: <FaSteam />,
+        text: 'Steam',
+        url: steamConfig.link,
+        external: true,
       },
     ],
   };
