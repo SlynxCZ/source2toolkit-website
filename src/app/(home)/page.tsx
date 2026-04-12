@@ -56,7 +56,7 @@ export default function HomePage() {
               <div className="relative" ref={downloadRef}>
                 <button
                   onClick={() => setDownloadOpen(v => !v)}
-                  className="border px-8 py-3 rounded-md flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
+                  className="border px-8 py-3 rounded-md flex items-center justify-center w-full gap-2 bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
                 >
                   <LuDownload className="w-4 h-4" />
                   Download
