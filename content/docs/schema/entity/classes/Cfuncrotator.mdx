@@ -1,0 +1,60 @@
+---
+title: CFuncRotator
+---
+
+# CFuncRotator
+
+**Inheritance**: [CBaseModelEntity](/docs/schema/entity/classes/Cbasemodelentity)
+
+## Fields
+
+- <ApiParam name="m_hRotatorTarget" type="CHandle&lt;CBaseEntity&gt;" />
+- <ApiParam name="m_bIsRotating" type="bool" />
+- <ApiParam name="m_bIsReversing" type="bool" />
+- <ApiParam name="m_flTimeToReachMaxSpeed" type="float" />
+- <ApiParam name="m_flTimeToReachZeroSpeed" type="float" />
+- <ApiParam name="m_flDistanceAlongArcTraveled" type="float" />
+- <ApiParam name="m_flTimeToWaitOscillate" type="float" />
+- <ApiParam name="m_flTimeRotationStart" type="float" />
+- <ApiParam name="m_qLSPrevChange" type="Quaternion" />
+- <ApiParam name="m_qWSPrev" type="Quaternion" />
+- <ApiParam name="m_qWSInit" type="Quaternion" />
+- <ApiParam name="m_qLSInit" type="Quaternion" />
+- <ApiParam name="m_qLSOrientation" type="Quaternion" />
+- <ApiParam name="m_OnRotationStarted" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnRotationCompleted" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnOscillate" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnOscillateStartArrive" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnOscillateStartDepart" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnOscillateEndArrive" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnOscillateEndDepart" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_bOscillateDepart" type="bool" />
+- <ApiParam name="m_nOscillateCount" type="int32_t" />
+- <ApiParam name="m_eRotateType" type="CFuncRotator::Rotate_t" />
+- <ApiParam name="m_ePrevRotateType" type="CFuncRotator::Rotate_t" />
+- <ApiParam name="m_bHasTargetOverride" type="bool" />
+- <ApiParam name="m_qOrientationOverride" type="Quaternion" />
+- <ApiParam name="m_eSpaceOverride" type="RotatorTargetSpace_t" />
+- <ApiParam name="m_qAngularVelocity" type="QAngle" />
+- <ApiParam name="m_vLookAtForcedUp" type="Vector" />
+- <ApiParam name="m_strRotatorTarget" type="CUtlSymbolLarge" />
+- <ApiParam name="m_bRecordHistory" type="bool" />
+- <ApiParam name="m_vecRotatorHistory" type="CUtlVector&lt;RotatorHistoryEntry_t&gt;" />
+- <ApiParam name="m_bReturningToPreviousOrientation" type="bool" />
+- <ApiParam name="m_vecRotatorQueue" type="CUtlVector&lt;RotatorQueueEntry_t&gt;" />
+- <ApiParam name="m_vecRotatorQueueHistory" type="CUtlVector&lt;RotatorHistoryEntry_t&gt;" />
+- <ApiParam name="m_eSolidType" type="SolidType_t" />
+- <ApiParam name="m_hSpeedFromMover" type="CHandle&lt;CFuncMover&gt;" />
+- <ApiParam name="m_iszSpeedFromMover" type="CUtlSymbolLarge" />
+- <ApiParam name="m_flSpeedScale" type="float" />
+- <ApiParam name="m_flMinYawRotation" type="float" />
+- <ApiParam name="m_flMaxYawRotation" type="float" />
+
+## Methods
+
+### FromIndex()
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type="index.Get()" />
+

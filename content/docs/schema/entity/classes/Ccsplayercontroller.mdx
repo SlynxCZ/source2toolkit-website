@@ -1,0 +1,320 @@
+---
+title: CCSPlayerController
+---
+
+# CCSPlayerController
+
+**Inheritance**: CBasePlayerController
+
+## Fields
+
+- <ApiParam name="m_pInGameMoneyServices" type="CCSPlayerController_InGameMoneyServices*" />
+- <ApiParam name="m_pInventoryServices" type="CCSPlayerController_InventoryServices*" />
+- <ApiParam name="m_pActionTrackingServices" type="CCSPlayerController_ActionTrackingServices*" />
+- <ApiParam name="m_pDamageServices" type="CCSPlayerController_DamageServices*" />
+- <ApiParam name="m_iPing" type="uint32_t" />
+- <ApiParam name="m_bHasCommunicationAbuseMute" type="bool" />
+- <ApiParam name="m_uiCommunicationMuteFlags" type="uint32_t" />
+- <ApiParam name="m_szCrosshairCodes" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iPendingTeamNum" type="uint8_t" />
+- <ApiParam name="m_flForceTeamTime" type="float" />
+- <ApiParam name="m_iCompTeammateColor" type="int32_t" />
+- <ApiParam name="m_bEverPlayedOnTeam" type="bool" />
+- <ApiParam name="m_bAttemptedToGetColor" type="bool" />
+- <ApiParam name="m_iTeammatePreferredColor" type="int32_t" />
+- <ApiParam name="m_bTeamChanged" type="bool" />
+- <ApiParam name="m_bInSwitchTeam" type="bool" />
+- <ApiParam name="m_bHasSeenJoinGame" type="bool" />
+- <ApiParam name="m_bJustBecameSpectator" type="bool" />
+- <ApiParam name="m_bSwitchTeamsOnNextRoundReset" type="bool" />
+- <ApiParam name="m_bRemoveAllItemsOnNextRoundReset" type="bool" />
+- <ApiParam name="m_flLastJoinTeamTime" type="float" />
+- <ApiParam name="m_szClan" type="CUtlSymbolLarge" />
+- <ApiParam name="m_iCoachingTeam" type="int32_t" />
+- <ApiParam name="m_nPlayerDominated" type="uint64_t" />
+- <ApiParam name="m_nPlayerDominatingMe" type="uint64_t" />
+- <ApiParam name="m_iCompetitiveRanking" type="int32_t" />
+- <ApiParam name="m_iCompetitiveWins" type="int32_t" />
+- <ApiParam name="m_iCompetitiveRankType" type="int8_t" />
+- <ApiParam name="m_iCompetitiveRankingPredicted_Win" type="int32_t" />
+- <ApiParam name="m_iCompetitiveRankingPredicted_Loss" type="int32_t" />
+- <ApiParam name="m_iCompetitiveRankingPredicted_Tie" type="int32_t" />
+- <ApiParam name="m_nEndMatchNextMapVote" type="int32_t" />
+- <ApiParam name="m_unActiveQuestId" type="uint16_t" />
+- <ApiParam name="m_rtActiveMissionPeriod" type="uint32_t" />
+- <ApiParam name="m_unPlayerTvControlFlags" type="uint32_t" />
+- <ApiParam name="m_iDraftIndex" type="int32_t" />
+- <ApiParam name="m_msQueuedModeDisconnectionTimestamp" type="uint32_t" />
+- <ApiParam name="m_uiAbandonRecordedReason" type="uint32_t" />
+- <ApiParam name="m_eNetworkDisconnectionReason" type="uint32_t" />
+- <ApiParam name="m_bCannotBeKicked" type="bool" />
+- <ApiParam name="m_bEverFullyConnected" type="bool" />
+- <ApiParam name="m_bAbandonAllowsSurrender" type="bool" />
+- <ApiParam name="m_bAbandonOffersInstantSurrender" type="bool" />
+- <ApiParam name="m_bDisconnection1MinWarningPrinted" type="bool" />
+- <ApiParam name="m_bScoreReported" type="bool" />
+- <ApiParam name="m_nDisconnectionTick" type="int32_t" />
+- <ApiParam name="m_bControllingBot" type="bool" />
+- <ApiParam name="m_bHasControlledBotThisRound" type="bool" />
+- <ApiParam name="m_bHasBeenControlledByPlayerThisRound" type="bool" />
+- <ApiParam name="m_nBotsControlledThisRound" type="int32_t" />
+- <ApiParam name="m_bCanControlObservedBot" type="bool" />
+- <ApiParam name="m_hPlayerPawn" type="CHandle&lt;CCSPlayerPawn&gt;" />
+- <ApiParam name="m_hObserverPawn" type="CHandle&lt;CCSObserverPawn&gt;" />
+- <ApiParam name="m_DesiredObserverMode" type="int32_t" />
+- <ApiParam name="m_hDesiredObserverTarget" type="CEntityHandle" />
+- <ApiParam name="m_bPawnIsAlive" type="bool" />
+- <ApiParam name="m_iPawnHealth" type="uint32_t" />
+- <ApiParam name="m_iPawnArmor" type="int32_t" />
+- <ApiParam name="m_bPawnHasDefuser" type="bool" />
+- <ApiParam name="m_bPawnHasHelmet" type="bool" />
+- <ApiParam name="m_nPawnCharacterDefIndex" type="uint16_t" />
+- <ApiParam name="m_iPawnLifetimeStart" type="int32_t" />
+- <ApiParam name="m_iPawnLifetimeEnd" type="int32_t" />
+- <ApiParam name="m_iPawnBotDifficulty" type="int32_t" />
+- <ApiParam name="m_hOriginalControllerOfCurrentPawn" type="CHandle&lt;CCSPlayerController&gt;" />
+- <ApiParam name="m_iScore" type="int32_t" />
+- <ApiParam name="m_iRoundScore" type="int32_t" />
+- <ApiParam name="m_iRoundsWon" type="int32_t" />
+- <ApiParam name="m_recentKillQueue" type="uint8_t" />
+- <ApiParam name="m_nFirstKill" type="uint8_t" />
+- <ApiParam name="m_nKillCount" type="uint8_t" />
+- <ApiParam name="m_bMvpNoMusic" type="bool" />
+- <ApiParam name="m_eMvpReason" type="int32_t" />
+- <ApiParam name="m_iMusicKitID" type="int32_t" />
+- <ApiParam name="m_iMusicKitMVPs" type="int32_t" />
+- <ApiParam name="m_iMVPs" type="int32_t" />
+- <ApiParam name="m_nUpdateCounter" type="int32_t" />
+- <ApiParam name="m_flSmoothedPing" type="float" />
+- <ApiParam name="m_lastHeldVoteTimer" type="IntervalTimer" />
+- <ApiParam name="m_bShowHints" type="bool" />
+- <ApiParam name="m_iNextTimeCheck" type="int32_t" />
+- <ApiParam name="m_bJustDidTeamKill" type="bool" />
+- <ApiParam name="m_bPunishForTeamKill" type="bool" />
+- <ApiParam name="m_bGaveTeamDamageWarning" type="bool" />
+- <ApiParam name="m_bGaveTeamDamageWarningThisRound" type="bool" />
+- <ApiParam name="m_dblLastReceivedPacketPlatFloatTime" type="double" />
+- <ApiParam name="m_LastTeamDamageWarningTime" type="float" />
+- <ApiParam name="m_LastTimePlayerWasDisconnectedForPawnsRemove" type="float" />
+- <ApiParam name="m_nSuspiciousHitCount" type="uint32_t" />
+- <ApiParam name="m_nNonSuspiciousHitStreak" type="uint32_t" />
+- <ApiParam name="m_bFireBulletsSeedSynchronized" type="bool" />
+
+## Methods
+
+### FromPawn(pPawn)
+
+Get controller from pawn.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pPawn" type="CCSPlayerPawn*" />
+
+### FromSlot(iSlot)
+
+Get controller from slot.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iSlot" type="int" />
+
+### FromSlot(slot)
+
+Get controller from slot.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="slot" type="CPlayerSlot" />
+
+### FromUserId(iUserId)
+
+Get controller from user id.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iUserId" type="int" />
+
+### FromUserId(userId)
+
+Get controller from user id.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="userId" type="CPlayerUserId" />
+
+### FromSteamId(uSteamId)
+
+Get controller from steam id.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="uSteamId" type="uint64" />
+
+### FromSteamId(steamId)
+
+Get controller from steam id.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="steamId" type="CSteamID" />
+
+### PrintToConsole(pszMessage)
+
+Print to console.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszMessage" type="const char*" />
+
+### PrintToChat(pszMessage)
+
+Print to chat.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszMessage" type="const char*" />
+
+### PrintToCenter(pszMessage)
+
+Print to center.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszMessage" type="const char*" />
+
+### PrintToCenterAlert(pszMessage)
+
+Print alert.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszMessage" type="const char*" />
+
+### PrintToCenterHtml(pszMessage, iDuration)
+
+Print to center in HTML.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszMessage" type="const char*" />
+- <ApiParam name="iDuration" type="int" />
+
+### Respawn()
+
+Respawn player.
+
+### SwitchTeam(nTeam)
+
+Switch team without killing.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="nTeam" type="int" />
+
+### ChangeTeam(nTeam)
+
+Change team like jointeam.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="nTeam" type="int" />
+
+### IsBot()
+
+Is bot.
+
+### Disconnect(eReason)
+
+Disconnect player.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="eReason" type="ENetworkDisconnectionReason" />
+
+### ExecuteClientCommand(pszCommand)
+
+Execute client command.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszCommand" type="const char*" />
+
+### ExecuteClientCommandFromServer(pszCommand)
+
+Execute command from server.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszCommand" type="const char*" />
+
+### GetPawn()
+
+Get pawn.
+
+### GetPlayerPawn()
+
+Get player pawn.
+
+### GetObserverPawn()
+
+Get observer pawn.
+
+### GetPlayerIndex()
+
+Get player index.
+
+### GetSlot()
+
+Get slot.
+
+### GetPlayerSlot()
+
+Get player slot.
+
+### GetUserID()
+
+Get steamid.
+
+### GetPlayerUserID()
+
+Get player userid.
+
+### GetSteamID()
+
+Get steamid.
+
+### GetPlayerSteamID()
+
+Get player steamid.
+
+### GetPlayerName()
+
+Get player name.
+
+### GetIpAddress()
+
+Get IP address.
+
+### ReplicateConVar(pszConVar, pszValue)
+
+Replicate convar.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszConVar" type="const char*" />
+- <ApiParam name="pszValue" type="const char*" />
+
+### FireEventToClient(pEvent)
+
+Fires gameEvent to client's legacy listener.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pEvent" type="IGameEvent*" />
+
+### FromIndex()
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type="index.Get()" />
+

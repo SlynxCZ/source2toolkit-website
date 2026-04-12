@@ -1,0 +1,152 @@
+---
+title: CCSPlayerPawn
+---
+
+# CCSPlayerPawn
+
+**Inheritance**: [CCSPlayerPawnBase](/docs/schema/entity/classes/Ccsplayerpawnbase)
+
+## Fields
+
+- <ApiParam name="m_pBulletServices" type="[CCSPlayer_BulletServices](/docs/schema/entity/classes/Ccsplayer_bulletservices)*" />
+- <ApiParam name="m_pHostageServices" type="[CCSPlayer_HostageServices](/docs/schema/entity/classes/Ccsplayer_hostageservices)*" />
+- <ApiParam name="m_pBuyServices" type="[CCSPlayer_BuyServices](/docs/schema/entity/classes/Ccsplayer_buyservices)*" />
+- <ApiParam name="m_pActionTrackingServices" type="[CCSPlayer_ActionTrackingServices](/docs/schema/entity/classes/Ccsplayer_actiontrackingservices)*" />
+- <ApiParam name="m_pRadioServices" type="CCSPlayer_RadioServices*" />
+- <ApiParam name="m_pDamageReactServices" type="[CCSPlayer_DamageReactServices](/docs/schema/entity/classes/Ccsplayer_damagereactservices)*" />
+- <ApiParam name="m_nCharacterDefIndex" type="uint16_t" />
+- <ApiParam name="m_bHasFemaleVoice" type="bool" />
+- <ApiParam name="m_strVOPrefix" type="CUtlString" />
+- <ApiParam name="m_szLastPlaceName" type="char" />
+- <ApiParam name="m_bInHostageResetZone" type="bool" />
+- <ApiParam name="m_bInBuyZone" type="bool" />
+- <ApiParam name="m_TouchingBuyZones" type="CUtlVector&lt;CHandle&lt;CBaseEntity&gt;&gt;" />
+- <ApiParam name="m_bWasInBuyZone" type="bool" />
+- <ApiParam name="m_bInHostageRescueZone" type="bool" />
+- <ApiParam name="m_bInBombZone" type="bool" />
+- <ApiParam name="m_bWasInHostageRescueZone" type="bool" />
+- <ApiParam name="m_iRetakesOffering" type="int32_t" />
+- <ApiParam name="m_iRetakesOfferingCard" type="int32_t" />
+- <ApiParam name="m_bRetakesHasDefuseKit" type="bool" />
+- <ApiParam name="m_bRetakesMVPLastRound" type="bool" />
+- <ApiParam name="m_iRetakesMVPBoostItem" type="int32_t" />
+- <ApiParam name="m_RetakesMVPBoostExtraUtility" type="loadout_slot_t" />
+- <ApiParam name="m_flHealthShotBoostExpirationTime" type="float" />
+- <ApiParam name="m_flLandingTimeSeconds" type="float" />
+- <ApiParam name="m_aimPunchAngle" type="QAngle" />
+- <ApiParam name="m_aimPunchAngleVel" type="QAngle" />
+- <ApiParam name="m_aimPunchTickBase" type="int32_t" />
+- <ApiParam name="m_aimPunchTickFraction" type="float" />
+- <ApiParam name="m_aimPunchCache" type="CUtlVector&lt;QAngle&gt;" />
+- <ApiParam name="m_bIsBuyMenuOpen" type="bool" />
+- <ApiParam name="m_lastLandTime" type="float" />
+- <ApiParam name="m_bOnGroundLastTick" type="bool" />
+- <ApiParam name="m_iPlayerLocked" type="int32_t" />
+- <ApiParam name="m_flTimeOfLastInjury" type="float" />
+- <ApiParam name="m_flNextSprayDecalTime" type="float" />
+- <ApiParam name="m_bNextSprayDecalTimeExpedited" type="bool" />
+- <ApiParam name="m_nRagdollDamageBone" type="int32_t" />
+- <ApiParam name="m_vRagdollDamageForce" type="Vector" />
+- <ApiParam name="m_vRagdollDamagePosition" type="Vector" />
+- <ApiParam name="m_szRagdollDamageWeaponName" type="char" />
+- <ApiParam name="m_bRagdollDamageHeadshot" type="bool" />
+- <ApiParam name="m_vRagdollServerOrigin" type="Vector" />
+- <ApiParam name="m_EconGloves" type="[CEconItemView](/docs/schema/entity/classes/Ceconitemview)" />
+- <ApiParam name="m_nEconGlovesChanged" type="uint8_t" />
+- <ApiParam name="m_qDeathEyeAngles" type="QAngle" />
+- <ApiParam name="m_bSkipOneHeadConstraintUpdate" type="bool" />
+- <ApiParam name="m_bLeftHanded" type="bool" />
+- <ApiParam name="m_fSwitchedHandednessTime" type="float" />
+- <ApiParam name="m_flViewmodelOffsetX" type="float" />
+- <ApiParam name="m_flViewmodelOffsetY" type="float" />
+- <ApiParam name="m_flViewmodelOffsetZ" type="float" />
+- <ApiParam name="m_flViewmodelFOV" type="float" />
+- <ApiParam name="m_bIsWalking" type="bool" />
+- <ApiParam name="m_fLastGivenDefuserTime" type="float" />
+- <ApiParam name="m_fLastGivenBombTime" type="float" />
+- <ApiParam name="m_flDealtDamageToEnemyMostRecentTimestamp" type="float" />
+- <ApiParam name="m_iDisplayHistoryBits" type="uint32_t" />
+- <ApiParam name="m_flLastAttackedTeammate" type="float" />
+- <ApiParam name="m_allowAutoFollowTime" type="float" />
+- <ApiParam name="m_bResetArmorNextSpawn" type="bool" />
+- <ApiParam name="m_nLastKillerIndex" type="CEntityIndex" />
+- <ApiParam name="m_entitySpottedState" type="[EntitySpottedState_t](/docs/schema/entity/classes/EntitySpottedState_t)" />
+- <ApiParam name="m_nSpotRules" type="int32_t" />
+- <ApiParam name="m_bIsScoped" type="bool" />
+- <ApiParam name="m_bResumeZoom" type="bool" />
+- <ApiParam name="m_bIsDefusing" type="bool" />
+- <ApiParam name="m_bIsGrabbingHostage" type="bool" />
+- <ApiParam name="m_iBlockingUseActionInProgress" type="CSPlayerBlockingUseAction_t" />
+- <ApiParam name="m_flEmitSoundTime" type="float" />
+- <ApiParam name="m_bInNoDefuseArea" type="bool" />
+- <ApiParam name="m_iBombSiteIndex" type="CEntityIndex" />
+- <ApiParam name="m_nWhichBombZone" type="int32_t" />
+- <ApiParam name="m_bInBombZoneTrigger" type="bool" />
+- <ApiParam name="m_bWasInBombZoneTrigger" type="bool" />
+- <ApiParam name="m_iShotsFired" type="int32_t" />
+- <ApiParam name="m_flFlinchStack" type="float" />
+- <ApiParam name="m_flVelocityModifier" type="float" />
+- <ApiParam name="m_flHitHeading" type="float" />
+- <ApiParam name="m_nHitBodyPart" type="int32_t" />
+- <ApiParam name="m_vecTotalBulletForce" type="Vector" />
+- <ApiParam name="m_bWaitForNoAttack" type="bool" />
+- <ApiParam name="m_ignoreLadderJumpTime" type="float" />
+- <ApiParam name="m_bKilledByHeadshot" type="bool" />
+- <ApiParam name="m_LastHitBox" type="int32_t" />
+- <ApiParam name="m_pBot" type="[CCSBot](/docs/schema/entity/classes/Ccsbot)*" />
+- <ApiParam name="m_bBotAllowActive" type="bool" />
+- <ApiParam name="m_thirdPersonHeading" type="QAngle" />
+- <ApiParam name="m_flSlopeDropOffset" type="float" />
+- <ApiParam name="m_flSlopeDropHeight" type="float" />
+- <ApiParam name="m_vHeadConstraintOffset" type="Vector" />
+- <ApiParam name="m_nLastPickupPriority" type="int32_t" />
+- <ApiParam name="m_flLastPickupPriorityTime" type="float" />
+- <ApiParam name="m_ArmorValue" type="int32_t" />
+- <ApiParam name="m_unCurrentEquipmentValue" type="uint16_t" />
+- <ApiParam name="m_unRoundStartEquipmentValue" type="uint16_t" />
+- <ApiParam name="m_unFreezetimeEndEquipmentValue" type="uint16_t" />
+- <ApiParam name="m_iLastWeaponFireUsercmd" type="int32_t" />
+- <ApiParam name="m_bIsSpawning" type="bool" />
+- <ApiParam name="m_iDeathFlags" type="int32_t" />
+- <ApiParam name="m_bHasDeathInfo" type="bool" />
+- <ApiParam name="m_flDeathInfoTime" type="float" />
+- <ApiParam name="m_vecDeathInfoOrigin" type="Vector" />
+- <ApiParam name="m_vecPlayerPatchEconIndices" type="uint32_t" />
+- <ApiParam name="m_GunGameImmunityColor" type="Color" />
+- <ApiParam name="m_grenadeParameterStashTime" type="float" />
+- <ApiParam name="m_bGrenadeParametersStashed" type="bool" />
+- <ApiParam name="m_angStashedShootAngles" type="QAngle" />
+- <ApiParam name="m_vecStashedGrenadeThrowPosition" type="Vector" />
+- <ApiParam name="m_vecStashedVelocity" type="Vector" />
+- <ApiParam name="m_angShootAngleHistory" type="QAngle" />
+- <ApiParam name="m_vecThrowPositionHistory" type="Vector" />
+- <ApiParam name="m_vecVelocityHistory" type="Vector" />
+- <ApiParam name="m_PredictedDamageTags" type="CUtlVector&lt;PredictedDamageTag_t&gt;" />
+- <ApiParam name="m_nHighestAppliedDamageTagTick" type="int32_t" />
+- <ApiParam name="m_bCommittingSuicideOnTeamChange" type="bool" />
+- <ApiParam name="m_wasNotKilledNaturally" type="bool" />
+- <ApiParam name="m_fImmuneToGunGameDamageTime" type="float" />
+- <ApiParam name="m_bGunGameImmunity" type="bool" />
+- <ApiParam name="m_fMolotovDamageTime" type="float" />
+- <ApiParam name="m_angEyeAngles" type="QAngle" />
+
+## Methods
+
+### GetController()
+
+Get controller.
+
+### GetDefaultController()
+
+Get default controller.
+
+### GetOriginalController()
+
+Get original controller.
+
+### FromIndex()
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type="index.Get()" />
+

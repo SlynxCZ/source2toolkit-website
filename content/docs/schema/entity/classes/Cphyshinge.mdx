@@ -1,0 +1,38 @@
+---
+title: CPhysHinge
+---
+
+# CPhysHinge
+
+**Inheritance**: [CPhysConstraint](/docs/schema/entity/classes/Cphysconstraint)
+
+## Fields
+
+- <ApiParam name="m_soundInfo" type="ConstraintSoundInfo" />
+- <ApiParam name="m_NotifyMinLimitReached" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_NotifyMaxLimitReached" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_bAtMinLimit" type="bool" />
+- <ApiParam name="m_bAtMaxLimit" type="bool" />
+- <ApiParam name="m_hinge" type="[constraint_hingeparams_t](/docs/schema/entity/classes/constraint_hingeparams_t)" />
+- <ApiParam name="m_hingeFriction" type="float" />
+- <ApiParam name="m_systemLoadScale" type="float" />
+- <ApiParam name="m_bIsAxisLocal" type="bool" />
+- <ApiParam name="m_flMinRotation" type="float" />
+- <ApiParam name="m_flMaxRotation" type="float" />
+- <ApiParam name="m_flInitialRotation" type="float" />
+- <ApiParam name="m_flMotorFrequency" type="float" />
+- <ApiParam name="m_flMotorDampingRatio" type="float" />
+- <ApiParam name="m_flAngleSpeed" type="float" />
+- <ApiParam name="m_flAngleSpeedThreshold" type="float" />
+- <ApiParam name="m_flLimitsDebugVisRotation" type="float" />
+- <ApiParam name="m_OnStartMoving" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnStopMoving" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+
+## Methods
+
+### FromIndex()
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type="index.Get()" />
+

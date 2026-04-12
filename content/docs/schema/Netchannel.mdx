@@ -1,0 +1,341 @@
+---
+title: Netchannel
+---
+
+# INetworkChannelNotify
+
+## Methods
+
+### OnShutdownChannel(pChannel)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pChannel" type="[INetChannel](/docs/schema/Netchannel) *" />
+
+## Methods
+
+### FilterMessage(pData, pChannel)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pData" type="const CNetMessage *" />
+- <ApiParam name="pChannel" type="[INetChannel](/docs/schema/Netchannel) *" />
+
+**Inheritance**: INetChannelInfo
+
+## Methods
+
+### Reset(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### Clear(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### Shutdown(reason)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="reason" type="ENetworkDisconnectionReason" />
+
+### GetSteamNetConnection(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### SendNetMessage(pData, bufType)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pData" type="const CNetMessage *" />
+- <ApiParam name="bufType" type="[NetChannelBufType_t](/docs/schema/enums/NetChannelBufType_t)" />
+
+### SendData(msg, bufferType)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="bf_write &" />
+- <ApiParam name="bufferType" type="[NetChannelBufType_t](/docs/schema/enums/NetChannelBufType_t)" />
+
+### Transmit(pDebugName, data)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pDebugName" type="const char *" />
+- <ApiParam name="data" type="bf_write *" />
+
+### SetBitsToSend(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### SendMessages(pDebugName, data)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pDebugName" type="const char *" />
+- <ApiParam name="data" type="bf_write *" />
+
+### UpdateMessageStats(msggroup, bits, ool)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msggroup" type="int" />
+- <ApiParam name="bits" type="int" />
+- <ApiParam name="ool" type="b" />
+
+### unk012()
+
+### CanPacket(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### IsOverflowed(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### HasPendingReliableData(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### SetActiveChannel(pNewChannel)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pNewChannel" type="[INetChannel](/docs/schema/Netchannel) *" />
+
+### AttachSplitPlayer(nSlot, pChannel)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="nSlot" type="CSplitScreenSlot" />
+- <ApiParam name="pChannel" type="[INetChannel](/docs/schema/Netchannel) *" />
+
+### DetachSplitPlayer(nSlot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="nSlot" type="CSplitScreenSlot" />
+
+### SetMinDataRate(rate)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="rate" type="int" />
+
+### SetMaxDataRate(rate)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="rate" type="int" />
+
+### SetTimeout(seconds, bForceExact)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="seconds" type="float" />
+- <ApiParam name="bForceExact" type="bool" />
+
+### IsTimedOut(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### UpdateLastReceivedTime(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### unk111(loat)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="loat" type="f" />
+
+### unk112(pStat)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pStat" type="void *" />
+
+### IsRemoteDisconnected(reason)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="reason" type="ENetworkDisconnectionReason &" />
+
+### SetNetMessageDispatcher(pDispatcher)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pDispatcher" type="INetMessageDispatcher *" />
+
+### StartRegisteringMessageHandlers(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### FinishRegisteringMessageHandlers(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### RegisterNetMessageHandlerAbstract(nSlot, delegate, nParamCount, pNetMessage, nPriority)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="nSlot" type="CUtlSlot *" />
+- <ApiParam name="delegate" type="const CUtlAbstractDelegate &" />
+- <ApiParam name="nParamCount" type="int" />
+- <ApiParam name="pNetMessage" type="INetworkMessageInternal *" />
+- <ApiParam name="nPriority" type="int" />
+
+### UnregisterNetMessageHandlerAbstract(nSlot, delegate, pNetMessage)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="nSlot" type="CUtlSlot *" />
+- <ApiParam name="delegate" type="const CUtlAbstractDelegate &" />
+- <ApiParam name="pNetMessage" type="INetworkMessageInternal *" />
+
+### GetNumBitsWritten(bufferType)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="bufferType" type="[NetChannelBufType_t](/docs/schema/enums/NetChannelBufType_t)" />
+
+### SetDemoRecorder(pDemoRecorder)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pDemoRecorder" type="IDemoRecorderBase *" />
+
+### SetInstantReplayIntercept(pInstantReplayIntercept)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pInstantReplayIntercept" type="IInstantReplayIntercept *" />
+
+### IsNull(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### ParseMessagesDemo(packet)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="packet" type="NetPacket_t *" />
+
+### ProcessMessages()
+
+### InstallMessageFilter(pFilter)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pFilter" type="[INetworkMessageProcessingPreFilter](/docs/schema/Netchannel) *" />
+
+### UninstallMessageFilter(pFilter)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pFilter" type="[INetworkMessageProcessingPreFilter](/docs/schema/Netchannel) *" />
+
+### SetActiveNetMessage(pData)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pData" type="CNetMessage *" />
+
+### SetActiveNetMessagePB(pData)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pData" type="void *" />
+
+### IsActiveNetMessage(id)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="id" type="int16" />
+
+### SetPendingDisconnect(reason)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="reason" type="ENetworkDisconnectionReason" />
+
+### GetPendingDisconnect(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### SuppressTransmit(suppress)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="suppress" type="bool" />
+
+### IsSuppressingTransmit(oid)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="oid" type="v" />
+
+### PostReceivedNetMessage(pData, nBits, nInSequenceNr)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pData" type="const CNetMessage *" />
+- <ApiParam name="nBits" type="int" />
+- <ApiParam name="nInSequenceNr" type="int" />
+
+### InsertReplayMessage(msg)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="InstantReplayMessage_t &" />
+
+### HasQueuedNetMessages(nMessageId)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="nMessageId" type="int" />
+
+### SetUnkWhenEmpty(nt)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="nt" type="i" />
+
+### unk102(pStat)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pStat" type="void *" />
+
+### unk103()
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type="void *" />
+
