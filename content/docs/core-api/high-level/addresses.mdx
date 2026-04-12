@@ -1,0 +1,117 @@
+---
+title: Addresses
+---
+
+# addresses
+
+## Functions
+
+### UTIL_GetModuleHandle(module)
+
+Retrieves the OS-specific module handle.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="module" type="void*" /> — Module identifier or pointer
+
+### UTIL_GetModuleBase(module)
+
+Gets the base address of a module.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="module" type="void*" /> — Module identifier
+
+### UTIL_FindPattern(module, pattern)
+
+Finds a byte pattern in a module.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="module" type="void*" /> — Module to scan
+- <ApiParam name="pattern" type="const char*" /> — Pattern string (IDA-style, e.g. "48 8B ?? ?? ??")
+
+### UTIL_FindPatternInSection(module, section, pattern)
+
+Finds a byte pattern in a specific section of a module.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="module" type="void*" /> — Module to scan
+- <ApiParam name="section" type="const char*" /> — Section name (e.g. ".text", ".data")
+- <ApiParam name="pattern" type="const char*" /> — Pattern string
+
+### UTIL_GetFunctionByName(module, symbol)
+
+Resolves a function by exported symbol name.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="module" type="void*" /> — Module to search
+- <ApiParam name="symbol" type="const char*" /> — Symbol name
+
+### UTIL_GetVirtualTableByName(module, name)
+
+Retrieves a virtual table by class name.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="module" type="void*" /> — Module to search
+- <ApiParam name="name" type="const char*" /> — Class name
+
+### UTIL_Offset(address, offset)
+
+Applies an offset to an address.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="address" type="uintptr_t" /> — Base address
+- <ApiParam name="offset" type="ptrdiff_t" /> — Offset to apply
+
+### UTIL_OffsetSelf(address, offset)
+
+Applies an offset directly to a variable.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="address" type="uintptr_t&" /> — Reference to address
+- <ApiParam name="offset" type="ptrdiff_t" /> — Offset to apply
+
+### UTIL_Deref(address, count)
+
+Dereferences a pointer multiple times.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="address" type="uintptr_t" /> — Starting address
+- <ApiParam name="count" type="int" /> — Number of dereferences
+
+### UTIL_DerefSelf(address, count)
+
+Dereferences a pointer in-place.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="address" type="uintptr_t&" /> — Reference to address
+- <ApiParam name="count" type="int" /> — Number of dereferences
+
+### UTIL_ResolveRelativeAddress(address, offset, size)
+
+Resolves a relative address (RIP-relative).
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="address" type="uintptr_t" /> — Instruction address
+- <ApiParam name="offset" type="ptrdiff_t" /> — Offset to relative value
+- <ApiParam name="size" type="ptrdiff_t" /> — Size of instruction (default = 4 bytes)
+
+### UTIL_FollowNearCall(address, offset, size)
+
+Follows a near CALL instruction to its destination.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="address" type="uintptr_t" /> — Address of CALL instruction
+- <ApiParam name="offset" type="ptrdiff_t" /> — Offset to relative operand
+- <ApiParam name="size" type="ptrdiff_t" /> — Instruction size (default = 5 bytes)
+

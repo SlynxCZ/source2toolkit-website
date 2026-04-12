@@ -1,0 +1,145 @@
+---
+title: IToolkitAddresses
+---
+
+# IToolkitAddresses
+
+## Methods
+
+### GetModuleHandle(modulePtr)
+
+Gets OS-specific module handle.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="modulePtr" type="void*" /> — Module identifier or pointer.
+
+### GetModuleBase(modulePtr)
+
+Gets module base address.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="modulePtr" type="void*" />
+
+### FindPattern(modulePtr, pattern)
+
+Finds pattern in module memory.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="modulePtr" type="void*" />
+- <ApiParam name="pattern" type="const char*" />
+
+### FindPatternInSection(modulePtr, section, pattern)
+
+Finds pattern in a specific section.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="modulePtr" type="void*" />
+- <ApiParam name="section" type="const char*" />
+- <ApiParam name="pattern" type="const char*" />
+
+### GetFunctionByName(modulePtr, symbol)
+
+Gets function address by exported symbol name.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="modulePtr" type="void*" />
+- <ApiParam name="symbol" type="const char*" />
+
+### GetVirtualTableByName(modulePtr, name)
+
+Gets virtual table address by class name.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="modulePtr" type="void*" />
+- <ApiParam name="name" type="const char*" />
+
+### Offset(address, offset)
+
+Applies offset to address.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="address" type="uintptr_t" />
+- <ApiParam name="offset" type="ptrdiff_t" />
+
+### OffsetSelf(address, offset)
+
+Applies offset directly to variable.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="address" type="uintptr_t&" />
+- <ApiParam name="offset" type="ptrdiff_t" />
+
+### Deref(address, count)
+
+Dereferences pointer N times.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="address" type="uintptr_t" />
+- <ApiParam name="count" type="int" />
+
+### DerefSelf(address, count)
+
+Dereferences pointer in-place.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="address" type="uintptr_t&" />
+- <ApiParam name="count" type="int" />
+
+### ResolveRelativeAddress(address, offset, size)
+
+Resolves relative address (RIP-relative).
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="address" type="uintptr_t" />
+- <ApiParam name="offset" type="ptrdiff_t" />
+- <ApiParam name="size" type="ptrdiff_t" />
+
+### FollowNearCall(address, offset, size)
+
+Follows near CALL instruction.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="address" type="uintptr_t" />
+- <ApiParam name="offset" type="ptrdiff_t" />
+- <ApiParam name="size" type="ptrdiff_t" />
+
+### CBaseEntity_CreateEntityByName()
+
+### CBaseEntity_DispatchSpawn()
+
+### CBaseModelEntity_SetModel()
+
+### CBasePlayerController_SetPawn()
+
+### CBasePlayerPawn_RemovePlayerItem()
+
+### CGameRules_TerminateRound()
+
+### CCSPlayerController_LegacyGameEventListener()
+
+### CCSPlayerController_SwitchTeam()
+
+### CEntityInstance_AcceptInput()
+
+### CEntityIOOutput_FireOutputInternal()
+
+### CEntitySystem_AddEntityIOEvent()
+
+### CGameEntitySystem_FindEntityByClassName()
+
+### CGameEntitySystem_FindEntityByName()
+
+### CGameEventManager_Init()
+

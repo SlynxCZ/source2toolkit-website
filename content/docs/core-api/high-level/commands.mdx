@@ -1,0 +1,36 @@
+---
+title: Commands
+---
+
+# commands
+
+## Functions
+
+### UTIL_RegChatListener(pchName, handler)
+
+Registers a chat command listener.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pchName" type="const char*" /> — Command name (e.g. "!hello", "!kick")
+- <ApiParam name="handler" type="ChatHandler" /> — Callback executed when the chat command is triggered
+
+### UTIL_RegConCommand(pchName, handler)
+
+Registers a console command.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pchName" type="const char*" /> — Command name (e.g. "sv_test")
+- <ApiParam name="handler" type="ChatHandler" /> — Callback executed when the command is used
+
+### UTIL_RegConListener(pchName, handler, mode)
+
+Registers a listener for an existing console command.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pchName" type="const char*" /> — Command name to listen for
+- <ApiParam name="handler" type="CommandHandler" /> — Callback executed when the command runs
+- <ApiParam name="mode" type="Mode" /> — Execution mode (Pre = before original, Post = after original)
+

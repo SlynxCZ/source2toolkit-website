@@ -1,0 +1,70 @@
+---
+title: CCSWeaponBase
+---
+
+# CCSWeaponBase
+
+**Inheritance**: CBasePlayerWeapon
+
+## Fields
+
+- <ApiParam name="m_bRemoveable" type="bool" />
+- <ApiParam name="m_bPlayerAmmoStockOnPickup" type="bool" />
+- <ApiParam name="m_bRequireUseToTouch" type="bool" />
+- <ApiParam name="m_iWeaponGameplayAnimState" type="WeaponGameplayAnimState" />
+- <ApiParam name="m_flWeaponGameplayAnimStateTimestamp" type="float" />
+- <ApiParam name="m_flInspectCancelCompleteTime" type="float" />
+- <ApiParam name="m_bInspectPending" type="bool" />
+- <ApiParam name="m_bInspectShouldLoop" type="bool" />
+- <ApiParam name="m_nLastEmptySoundCmdNum" type="int32_t" />
+- <ApiParam name="m_bFireOnEmpty" type="bool" />
+- <ApiParam name="m_OnPlayerPickup" type="[CEntityIOOutput](/docs/schema/Entityio.mdx)" />
+- <ApiParam name="m_weaponMode" type="CSWeaponMode" />
+- <ApiParam name="m_flTurningInaccuracyDelta" type="float" />
+- <ApiParam name="m_vecTurningInaccuracyEyeDirLast" type="Vector" />
+- <ApiParam name="m_flTurningInaccuracy" type="float" />
+- <ApiParam name="m_fAccuracyPenalty" type="float" />
+- <ApiParam name="m_flLastAccuracyUpdateTime" type="float" />
+- <ApiParam name="m_fAccuracySmoothedForZoom" type="float" />
+- <ApiParam name="m_iRecoilIndex" type="int32_t" />
+- <ApiParam name="m_flRecoilIndex" type="float" />
+- <ApiParam name="m_bBurstMode" type="bool" />
+- <ApiParam name="m_nPostponeFireReadyTicks" type="int32_t" />
+- <ApiParam name="m_flPostponeFireReadyFrac" type="float" />
+- <ApiParam name="m_bInReload" type="bool" />
+- <ApiParam name="m_flDroppedAtTime" type="float" />
+- <ApiParam name="m_bIsHauledBack" type="bool" />
+- <ApiParam name="m_bSilencerOn" type="bool" />
+- <ApiParam name="m_flTimeSilencerSwitchComplete" type="float" />
+- <ApiParam name="m_flWeaponActionPlaybackRate" type="float" />
+- <ApiParam name="m_iOriginalTeamNumber" type="int32_t" />
+- <ApiParam name="m_iMostRecentTeamNumber" type="int32_t" />
+- <ApiParam name="m_bDroppedNearBuyZone" type="bool" />
+- <ApiParam name="m_flNextAttackRenderTimeOffset" type="float" />
+- <ApiParam name="m_bCanBePickedUp" type="bool" />
+- <ApiParam name="m_bUseCanOverrideNextOwnerTouchTime" type="bool" />
+- <ApiParam name="m_nextOwnerTouchTime" type="float" />
+- <ApiParam name="m_nextPrevOwnerTouchTime" type="float" />
+- <ApiParam name="m_nextPrevOwnerUseTime" type="float" />
+- <ApiParam name="m_hPrevOwner" type="CHandle&lt;CCSPlayerPawn&gt;" />
+- <ApiParam name="m_nDropTick" type="int32_t" />
+- <ApiParam name="m_bWasActiveWeaponWhenDropped" type="bool" />
+- <ApiParam name="m_donated" type="bool" />
+- <ApiParam name="m_fLastShotTime" type="float" />
+- <ApiParam name="m_bWasOwnedByCT" type="bool" />
+- <ApiParam name="m_bWasOwnedByTerrorist" type="bool" />
+- <ApiParam name="m_numRemoveUnownedWeaponThink" type="int32_t" />
+- <ApiParam name="m_IronSightController" type="CIronSightController" />
+- <ApiParam name="m_iIronSightMode" type="int32_t" />
+- <ApiParam name="m_flLastLOSTraceFailureTime" type="float" />
+- <ApiParam name="m_flWatTickOffset" type="float" />
+- <ApiParam name="m_flLastShakeTime" type="float" />
+
+## Methods
+
+### FromIndex()
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type="index.Get()" />
+

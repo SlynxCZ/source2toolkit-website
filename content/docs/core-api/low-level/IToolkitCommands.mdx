@@ -1,0 +1,39 @@
+---
+title: IToolkitCommands
+---
+
+# IToolkitCommands
+
+## Methods
+
+### RegChatListener(owner, pchName, handler)
+
+Registers a chat command listener.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the command
+- <ApiParam name="pchName" type="const char*" /> — Command name (e.g. "!kick", "!test")
+- <ApiParam name="handler" type="ChatHandler" /> — Callback executed when command is triggered
+
+### RegConCommand(owner, pchName, handler)
+
+Registers a console command.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the command
+- <ApiParam name="pchName" type="const char*" /> — Command name (e.g. "sv_test")
+- <ApiParam name="handler" type="ChatHandler" /> — Callback executed when command is used
+
+### RegConListener(owner, pchName, handler, mode)
+
+Registers a listener for an existing console command.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the listener
+- <ApiParam name="pchName" type="const char*" /> — Existing command name to listen for
+- <ApiParam name="handler" type="CommandHandler" /> — Callback executed on command execution
+- <ApiParam name="mode" type="Mode" /> — Execution mode (Pre = before original, Post = after original)
+

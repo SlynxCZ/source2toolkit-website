@@ -1,0 +1,43 @@
+---
+title: IToolkitScheduler
+---
+
+# Timer
+
+## Methods
+
+### NextFrame(task)
+
+Executes a task on the next frame.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="task" type="std::function&lt;void()&gt;&&" /> — Callback function
+
+### AddTimer(interval, callback, flags)
+
+Adds a timer.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="interval" type="float" /> — Time in seconds between executions
+- <ApiParam name="callback" type="TimerCallback" /> — Function to execute
+- <ApiParam name="flags" type="int" /> — Timer behavior flags
+
+### KillTimer(timer)
+
+Removes a timer.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="timer" type="[Timer](/docs/core-api/low-level/IToolkitScheduler.mdx)*" /> — Timer instance
+
+## Enums
+
+### TimerFlags
+
+#### Values
+
+- <ApiParam name="TIMER_FLAG_REPEAT" /> — = 1 &lt;&lt; 0
+- <ApiParam name="TIMER_FLAG_NO_MAPCHANGE" /> — = 1 &lt;&lt; 1
+

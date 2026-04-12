@@ -1,0 +1,67 @@
+---
+title: CBaseModelEntity
+---
+
+# CBaseModelEntity
+
+**Inheritance**: CBaseEntity
+
+## Fields
+
+- <ApiParam name="m_CRenderComponent" type="CRenderComponent*" />
+- <ApiParam name="m_CHitboxComponent" type="CHitboxComponent" />
+- <ApiParam name="m_nDestructiblePartInitialStateDestructed0" type="HitGroup_t" />
+- <ApiParam name="m_nDestructiblePartInitialStateDestructed1" type="HitGroup_t" />
+- <ApiParam name="m_nDestructiblePartInitialStateDestructed2" type="HitGroup_t" />
+- <ApiParam name="m_nDestructiblePartInitialStateDestructed3" type="HitGroup_t" />
+- <ApiParam name="m_nDestructiblePartInitialStateDestructed4" type="HitGroup_t" />
+- <ApiParam name="m_nDestructiblePartInitialStateDestructed0_PartIndex" type="int32_t" />
+- <ApiParam name="m_nDestructiblePartInitialStateDestructed1_PartIndex" type="int32_t" />
+- <ApiParam name="m_nDestructiblePartInitialStateDestructed2_PartIndex" type="int32_t" />
+- <ApiParam name="m_nDestructiblePartInitialStateDestructed3_PartIndex" type="int32_t" />
+- <ApiParam name="m_nDestructiblePartInitialStateDestructed4_PartIndex" type="int32_t" />
+- <ApiParam name="m_pDestructiblePartsSystemComponent" type="CDestructiblePartsComponent*" />
+- <ApiParam name="m_flDissolveStartTime" type="float" />
+- <ApiParam name="m_OnIgnite" type="[CEntityIOOutput](/docs/schema/Entityio.mdx)" />
+- <ApiParam name="m_nRenderMode" type="RenderMode_t" />
+- <ApiParam name="m_nRenderFX" type="RenderFx_t" />
+- <ApiParam name="m_bAllowFadeInView" type="bool" />
+- <ApiParam name="m_clrRender" type="Color" />
+- <ApiParam name="m_vecRenderAttributes" type="CUtlVector&lt;EntityRenderAttribute_t&gt;" />
+- <ApiParam name="m_bRenderToCubemaps" type="bool" />
+- <ApiParam name="m_bNoInterpolate" type="bool" />
+- <ApiParam name="m_Collision" type="CCollisionProperty" />
+- <ApiParam name="m_Glow" type="[CGlowProperty](/docs/schema/entity/classes/Cglowproperty.mdx)" />
+- <ApiParam name="m_flGlowBackfaceMult" type="float" />
+- <ApiParam name="m_fadeMinDist" type="float" />
+- <ApiParam name="m_fadeMaxDist" type="float" />
+- <ApiParam name="m_flFadeScale" type="float" />
+- <ApiParam name="m_flShadowStrength" type="float" />
+- <ApiParam name="m_nObjectCulling" type="uint8_t" />
+- <ApiParam name="m_vecViewOffset" type="[CNetworkViewOffsetVector](/docs/schema/entity/classes/Cnetworkviewoffsetvector.mdx)" />
+- <ApiParam name="m_bvDisabledHitGroups" type="uint32_t" />
+
+## Methods
+
+### GetModelName()
+
+Get model name.
+
+### GetEyePosition()
+
+Get eye position.
+
+### SetModel(pszModel)
+
+Set entity model.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszModel" type="const char*" />
+
+### FromIndex()
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type="index.Get()" />
+

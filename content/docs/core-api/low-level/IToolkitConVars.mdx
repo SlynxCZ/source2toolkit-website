@@ -1,0 +1,252 @@
+---
+title: IToolkitConVars
+---
+
+# IToolkitConVars
+
+## Methods
+
+### GetConvarAccessIndexByName(name)
+
+Retrieves access index of a ConVar by name.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" /> — ConVar name
+
+### GetConvarRef(accessIndex)
+
+Gets a ConVar reference wrapper.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+
+### GetName(accessIndex)
+
+Gets ConVar name.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+
+### GetHelpText(accessIndex)
+
+Gets help/description text.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+
+### GetType(accessIndex)
+
+Gets ConVar type.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+
+### GetFlags(accessIndex)
+
+Gets flags (FCVAR_*).
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+
+### SetFlags(accessIndex, flags)
+
+Sets flags (FCVAR_*).
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="flags" type="uint64" />
+
+### GetValueAddress(accessIndex, slot)
+
+Gets pointer to underlying value.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### GetString(accessIndex, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### GetBool(accessIndex, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### GetInt(accessIndex, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### GetFloat(accessIndex, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### GetDouble(accessIndex, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### SetString(accessIndex, value, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="const char*" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### SetBool(accessIndex, value, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="bool" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### SetInt(accessIndex, value, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="int32" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### SetFloat(accessIndex, value, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="float" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### SetDouble(accessIndex, value, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="double" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### GetVector2(accessIndex, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### GetVector3(accessIndex, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### GetVector4(accessIndex, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### GetQAngle(accessIndex, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### GetColor(accessIndex, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### SetVector2(accessIndex, value, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="const Vector2D&" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### SetVector3(accessIndex, value, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="const Vector&" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### SetVector4(accessIndex, value, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="const Vector4D&" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### SetQAngle(accessIndex, value, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="const QAngle&" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### SetColor(accessIndex, value, slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="const Color&" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### GetValue(accessIndex, outValue, slot)
+
+Gets value into user-provided buffer.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="outValue" type="void*" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### SetValue(accessIndex, value, slot)
+
+Sets value from user-provided buffer.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+- <ApiParam name="value" type="const void*" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+
+### DeleteConVar(accessIndex)
+
+Deletes a ConVar.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="accessIndex" type="uint16" />
+

@@ -1,0 +1,33 @@
+---
+title: CVoteController
+---
+
+# CVoteController
+
+**Inheritance**: CBaseEntity
+
+## Fields
+
+- <ApiParam name="m_iActiveIssueIndex" type="int32_t" />
+- <ApiParam name="m_iOnlyTeamToVote" type="int32_t" />
+- <ApiParam name="m_nVoteOptionCount" type="int32_t" />
+- <ApiParam name="m_nPotentialVotes" type="int32_t" />
+- <ApiParam name="m_bIsYesNoVote" type="bool" />
+- <ApiParam name="m_acceptingVotesTimer" type="CountdownTimer" />
+- <ApiParam name="m_executeCommandTimer" type="CountdownTimer" />
+- <ApiParam name="m_resetVoteTimer" type="CountdownTimer" />
+- <ApiParam name="m_nVotesCast" type="int32_t" />
+- <ApiParam name="m_playerHoldingVote" type="int32_t" />
+- <ApiParam name="m_playerOverrideForVote" type="int32_t" />
+- <ApiParam name="m_nHighestCountIndex" type="int32_t" />
+- <ApiParam name="m_potentialIssues" type="CUtlVector&lt;CBaseIssue*&gt;" />
+- <ApiParam name="m_VoteOptions" type="CUtlVector&lt;char*&gt;" />
+
+## Methods
+
+### FromIndex()
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type="index.Get()" />
+

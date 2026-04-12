@@ -1,0 +1,196 @@
+---
+title: IToolkitApi
+---
+
+# IToolkitAPI
+
+## Methods
+
+### Log(plugin, msg, )
+
+Logs a formatted message with plugin context.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="plugin" type="[IToolkitPlugin](/docs/core-api/low-level/IToolkitPlugin.mdx)*" /> — Plugin instance
+- <ApiParam name="msg" type="const char*" /> — Format string
+- <ApiParam type="..." />
+
+### ConPrint(msg)
+
+Prints message to console.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="const char*" />
+
+### ConPrintf(fmt, )
+
+Prints formatted message to console.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="fmt" type="const char*" />
+- <ApiParam type="..." />
+
+### AddListener(plugin, pListener)
+
+Registers a toolkit listener.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="plugin" type="[IToolkitPlugin](/docs/core-api/low-level/IToolkitPlugin.mdx)*" /> — Owner plugin
+- <ApiParam name="pListener" type="[IToolkitListener](/docs/core-api/low-level/IToolkitPlugin.mdx)*" /> — Listener instance
+
+### QueryInterface(fn, iface, min)
+
+Queries interface from factory.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="fn" type="CreateInterfaceFn" /> — Factory function
+- <ApiParam name="iface" type="const char*" /> — Interface name
+- <ApiParam name="min" type="int" /> — Minimum version (optional)
+
+### InterfaceSearch(fn, iface, max, ret)
+
+Searches for interface by iterating versions.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="fn" type="CreateInterfaceFn" />
+- <ApiParam name="iface" type="const char*" />
+- <ApiParam name="max" type="int" />
+- <ApiParam name="ret" type="int*" />
+
+### FormatIface(, maxlength)
+
+Formats interface name with version.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type="char iface[]" />
+- <ApiParam name="maxlength" type="size_t" />
+
+### GetEngineFactory(syn)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="syn" type="bool" />
+
+### GetPhysicsFactory(syn)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="syn" type="bool" />
+
+### GetFileSystemFactory(syn)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="syn" type="bool" />
+
+### GetServerFactory(syn)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="syn" type="bool" />
+
+### ToolkitFactory(iface, ret, id)
+
+Toolkit interface factory.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iface" type="const char*" />
+- <ApiParam name="ret" type="int*" />
+- <ApiParam name="id" type="PluginId*" />
+
+### MetaFactory(iface, ret, id)
+
+Metamod interface factory.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iface" type="const char*" />
+- <ApiParam name="ret" type="int*" />
+- <ApiParam name="id" type="PluginId*" />
+
+### Addresses()
+
+Access address/pattern system.
+
+### Commands()
+
+Access command system.
+
+### ConVars()
+
+Access ConVar system.
+
+### EntityIO()
+
+Access entity I/O system.
+
+### Events()
+
+Access event system.
+
+### GameConfig()
+
+Access game configuration system.
+
+### Scheduler()
+
+Access scheduler system.
+
+### Trace()
+
+Access tracing system.
+
+### GetGameEventManager()
+
+### GetGlobalVars()
+
+### GetCVar()
+
+### GetSource2Server()
+
+### GetEngineServer()
+
+### GetGameEventSystem()
+
+### GetNetworkMessages()
+
+### GetNetworkServerService()
+
+### GetEntitySystem()
+
+### GetSchemaSystem()
+
+### GetBaseDir()
+
+Returns base directory of the server.
+
+### Format(buffer, maxlength, format, )
+
+Formats string into buffer.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="buffer" type="char*" />
+- <ApiParam name="maxlength" type="size_t" />
+- <ApiParam name="format" type="const char*" />
+- <ApiParam type="..." />
+
+### FormatArgs(buffer, maxlength, format, ap)
+
+Formats string using va_list.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="buffer" type="char*" />
+- <ApiParam name="maxlength" type="size_t" />
+- <ApiParam name="format" type="const char*" />
+- <ApiParam name="ap" type="va_list" />
+

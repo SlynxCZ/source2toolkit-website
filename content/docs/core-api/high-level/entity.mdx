@@ -1,0 +1,26 @@
+---
+title: Entity
+---
+
+# entity
+
+## Functions
+
+### UTIL_FindPickerEntity(pPlayer, pGameRules)
+
+Finds the entity currently targeted by a player's crosshair.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pPlayer" type="CBasePlayerController*" /> — Player controller
+- <ApiParam name="pGameRules" type="CCSGameRules*" /> — Optional game rules
+
+### UTIL_FindEntityByClassname(pStart, name)
+
+Finds an entity by classname.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pStart" type="CEntityInstance*" /> — Starting entity (or nullptr for first)
+- <ApiParam name="name" type="const char*" /> — Classname (e.g. "weapon_ak47")
+
