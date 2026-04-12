@@ -9,3 +9,15 @@ export const gitConfig = {
   repo: 'source2toolkit',
   branch: 'main',
 };
+
+export const portfolioConfig = {
+  link: 'https://www.slynxdev.cz/en'
+}
+
+export const discordConfig = {
+  link: 'https://discord.com/users/784056738013773824',
+}
+
+export const steamConfig = {
+  link: 'https://steamcommunity.com/id/slynxcz/'
+}

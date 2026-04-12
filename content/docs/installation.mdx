@@ -1,0 +1,74 @@
+﻿---
+title: Installation
+---
+
+This guide will walk you through installing **Source2Toolkit** on your **Counter-Strike 2 server**.
+
+## Prerequisites
+
+* Latest **Source2Toolkit release**
+* [MetaMod:Source 2.X](https://www.metamodsource.net/downloads.php?branch=dev) *(Required)*
+
+<Callout type="note">
+  Source2Toolkit is loaded through <b>MetaMod:Source</b>.
+  Ensure your MetaMod build is compatible with your current CS2 server version.
+</Callout>
+
+## Installing Source2Toolkit
+
+1. Download the latest **Source2Toolkit release** for your operating system.
+2. Extract the archive. You will find the following directory:
+
+* `/addons/source2toolkit` — the **Source2Toolkit plugin**
+
+3. Copy the `/addons` directory to your server’s `/game/csgo/` folder.
+
+<Callout type="warning">
+  If this is your first time installing MetaMod, make sure it is properly installed before continuing.
+</Callout>
+
+## Installing MetaMod
+
+1. Download the latest [MetaMod:Source build](https://www.metamodsource.net/downloads.php?branch=dev) for your operating system.
+
+2. Extract the archive.
+
+3. Copy the `/addons/metamod/` directory to your server’s `/game/csgo/` folder.
+
+4. Locate your `gameinfo.gi` file inside `/game/csgo/` and open it.
+
+5. Find the line:
+
+```
+Game_LowViolence csgo_lv
+```
+
+and add the following line **below** it:
+
+```
+Game csgo/addons/metamod
+```
+
+6. Save the file and restart your server.
+
+7. Run the command `meta list` in your server console to verify MetaMod is loaded.
+
+## Verifying Source2Toolkit
+
+Once the server is running:
+
+1. Open the server console.
+2. Run:
+
+```
+meta list
+```
+
+3. Ensure **Source2Toolkit** appears in the plugin list.
+
+<Callout type="tip">
+  If the plugin does not appear, verify that files are located in <code>/addons/source2toolkit</code> and that MetaMod is loading correctly.
+</Callout>
+
+**You’re done!**
+Source2Toolkit is now installed and ready to use on your server.
