@@ -32,83 +32,126 @@ export default function HomePage() {
 
   return (
     <main className="flex flex-1 flex-col">
-      <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6 text-center md:text-left">
-            <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-              <span className="text-orange-400">Source2</span>
-              <span className="text-blue-400">Toolkit</span>
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400">
-              The ultimate Source 2 scripting layer for Metamod:Source
-            </p>
-            <p className="text-gray-500 max-w-xl">
-              Low-level power. High-level simplicity.
-              Build anything from simple plugins to advanced engine hooks with full access to Source 2 internals.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start pt-4">
-              <Link
-                href="/docs"
-                className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-md font-medium"
+      <section className="py-24 px-4 text-center">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <div className="relative w-[500px] h-[210px] mx-auto">
+            <Image
+              src={ToolkitLogo}
+              alt="Source2Toolkit Logo"
+              fill
+              className="object-cover"
+            />
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold leading-tight">
+            <span className="text-orange-400">Source2</span>
+            <span className="text-blue-400">Toolkit</span>
+          </h1>
+          <p className="text-xl text-gray-500">
+            Direct access to Source 2. No compromises.
+          </p>
+          <p className="text-gray-500 max-w-2xl mx-auto">
+            Build plugins that feel like native engine code.
+            From simple features to deep engine hooks — all in C++ with full control over Source 2 internals.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+            <Link
+              href="/docs"
+              className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-medium"
+            >
+              Read Docs
+            </Link>
+            <div className="relative" ref={downloadRef}>
+              <button
+                onClick={() => setDownloadOpen(v => !v)}
+                className="px-8 py-3 rounded-lg flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
               >
-                Get Started
-              </Link>
-              <div className="relative" ref={downloadRef}>
-                <button
-                  onClick={() => setDownloadOpen(v => !v)}
-                  className="border px-8 py-3 rounded-md flex items-center justify-center w-full gap-2 bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
+                <LuDownload className="w-4 h-4" />
+                Download
+              </button>
+              <div className={`absolute mt-2 bg-white dark:bg-neutral-900 border rounded-md shadow-xl ${
+                isDownloadOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}>
+                <a
+                  href="https://github.com/SlynxCZ/source2toolkit/releases"
+                  className="block px-4 py-3 hover:bg-neutral-100 dark:hover:bg-neutral-800"
                 >
-                  <LuDownload className="w-4 h-4" />
-                  Download
-                </button>
-                <div className={`absolute mt-2 bg-white dark:bg-neutral-900 border rounded-md shadow-xl ${
-                  isDownloadOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-                }`}>
-                  <a
-                    href="https://github.com/SlynxCZ/source2toolkit/releases"
-                    className="block px-4 py-3 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                  >
-                    Latest Release
-                  </a>
-                </div>
+                  Latest Release
+                </a>
               </div>
             </div>
           </div>
-          <div className="flex justify-center">
-            <Image src={ToolkitLogo} alt="Source2Toolkit Logo" width={500} height={500} />
+          <div className="pt-10 text-start">
+            <CodeBlock
+              title="Quick Example"
+              code={`
+#include "source2toolkit/IToolkitPlugin.h"
+#include "source2toolkit/IToolkitApi.h"
+
+class ExamplePlugin final : public IToolkitPlugin, IToolkitListener
+{
+public:
+    bool Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late) override
+    {
+        TOOLKIT_SAVEVARS();
+
+        api->AddListener(this, this);
+
+        TOOLKIT_LOG(this, "Hello World! We are loading!\\n");
+
+        return true;
+    }
+
+    bool Unload(char* error, size_t maxlen) override
+    {
+        TOOLKIT_LOG(this, "Hello World! We are unloading!\\n");
+        return true;
+    }
+
+private:
+    const char* GetName() override { return "Example: Hello World"; }
+    const char* GetVersion() override { return "1.0.0"; }
+    const char* GetAuthor() override { return "Slynx"; }
+    const char* GetDescription() override { return "A simple plugin that says hello world!"; }
+};
+
+ExamplePlugin g_Plugin;
+TOOLKIT_EXPOSE(source2toolkit_example, g_Plugin);
+            `}/>
           </div>
         </div>
       </section>
       <section className="py-20 px-4 bg-neutral-100 dark:bg-neutral-950/30">
-        <div className="max-w-7xl mx-auto text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4 text-orange-400">
-            Why Source2Toolkit?
-          </h2>
-          <p className="text-gray-500">
-            Designed for both beginners and hardcore engine hackers
-          </p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-          <div className="text-center space-y-4">
-            <LuCode className="mx-auto w-10 h-10 text-blue-400" />
-            <h3 className="text-xl font-semibold">High-Level API</h3>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 text-orange-400">
+              Why Source2Toolkit?
+            </h2>
             <p className="text-gray-500">
-              Easy-to-use abstractions for rapid plugin development.
+              Built for real engine-level development — not just scripting
             </p>
           </div>
-          <div className="text-center space-y-4">
-            <LuCpu className="mx-auto w-10 h-10 text-green-400" />
-            <h3 className="text-xl font-semibold">Low-Level Access</h3>
-            <p className="text-gray-500">
-              Full control over memory, hooks, entities and engine internals.
-            </p>
-          </div>
-          <div className="text-center space-y-4">
-            <LuWrench className="mx-auto w-10 h-10 text-purple-400" />
-            <h3 className="text-xl font-semibold">Metamod Ready</h3>
-            <p className="text-gray-500">
-              Built specifically for Metamod:Source with deep engine integration.
-            </p>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="p-6 border rounded-xl hover:bg-neutral-900/20 transition">
+              <LuCode className="w-8 h-8 text-blue-400 mb-4" />
+              <h3 className="text-lg font-semibold mb-2">High-Level API</h3>
+              <p className="text-gray-500 text-sm">
+                Clean abstractions for rapid plugin development without boilerplate.
+              </p>
+            </div>
+            <div className="p-6 border rounded-xl hover:bg-neutral-900/20 transition">
+              <LuCpu className="w-8 h-8 text-green-400 mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Low-Level Access</h3>
+              <p className="text-gray-500 text-sm">
+                Full control over memory, hooks, entities and engine internals.
+              </p>
+            </div>
+            <div className="p-6 border rounded-xl hover:bg-neutral-900/20 transition">
+              <LuWrench className="w-8 h-8 text-purple-400 mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Zero Overhead</h3>
+              <p className="text-gray-500 text-sm">
+                Designed for near-native performance with no unnecessary layers.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -117,22 +160,25 @@ export default function HomePage() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-4">
               <h3 className="text-3xl font-bold">
-                Full Engine Access
+                Work Like You're Inside The Engine
               </h3>
               <p className="text-gray-500 text-lg leading-relaxed">
-                Direct access to Source 2 internals through schema system.
-                Work with entities, memory and engine structures like you are inside the game itself.
+                Access entities, memory and schema data exactly like native code.
+                No wrappers. No limitations.
               </p>
               <ul className="text-gray-500 space-y-2">
                 <li>✓ Schema-based entity access</li>
                 <li>✓ Direct memory manipulation</li>
-                <li>✓ No wrappers or limitations</li>
-                <li>✓ Works exactly like native code</li>
+                <li>✓ Native-like workflow</li>
+                <li>✓ Full control</li>
               </ul>
             </div>
-            <CodeBlock
-              title="Entity Access"
-              code={`
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-xl rounded-2xl" />
+              <div className="relative border rounded-2xl bg-neutral-950/80 backdrop-blur shadow-xl">
+                <CodeBlock
+                  title="Entity Access"
+                  code={`
 auto player = CCSPlayerController::FromSlot(1);
 if (!player || player->IsBot())
     return;
@@ -145,12 +191,17 @@ if (!pawn || !player->m_bPawnIsAlive())
 
 pawn->m_iHealth = 1337; // With automatic SetStateChanged
 player->m_iPawnHealth() = 1337; // Without automatic SetStateChanged`}
-            />
+                />
+              </div>
+            </div>
           </div>
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <CodeBlock
-              title="Inline Hook (ProcessMovement)"
-              code={`
+            <div className="relative order-2 md:order-1">
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-500/20 to-blue-500/20 blur-xl rounded-2xl" />
+              <div className="relative border rounded-2xl bg-neutral-950/80 backdrop-blur shadow-xl">
+                <CodeBlock
+                  title="Inline Hook (ProcessMovement)"
+                  code={`
 uintptr_t addr = UTIL_FindPattern(g_ToolkitAPI->GetSource2Server(), UTIL_GetSignature("CCSPlayer_MovementServices_ProcessMovement"));
 m_ProcessMovement.Configure(reinterpret_cast<void(*)(CCSPlayer_MovementServices*, void*, void*)>(addr));
 
@@ -172,24 +223,22 @@ KHook::Return<void> Hook_ProcessMovementPre(CCSPlayer_MovementServices* pThis, v
 
     return { KHook::Action::Ignore };
 }`}
-            />
-            <div className="space-y-4">
+                />
+              </div>
+            </div>
+            <div className="space-y-4 order-1 md:order-2">
               <h3 className="text-3xl font-bold">
-                Hook Everything
+                Hook Anything
               </h3>
               <p className="text-gray-500 text-lg leading-relaxed">
-                Full control over the engine. Hook virtual functions, inline functions,
-                commands, events or anything you can find in memory.
+                Inline hooks, virtual hooks, commands, events — if it exists in memory, you can control it.
               </p>
               <ul className="text-gray-500 space-y-2">
-                <li>✓ Inline hooks (pattern scanning)</li>
+                <li>✓ Pattern scanning</li>
                 <li>✓ Virtual hooks</li>
                 <li>✓ Command & event hooks</li>
-                <li>✓ Signature scanning</li>
+                <li>✓ Full flexibility</li>
               </ul>
-              <p className="text-gray-400 text-sm">
-                No restrictions. If it exists in memory, you can hook it.
-              </p>
             </div>
           </div>
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -208,9 +257,13 @@ KHook::Return<void> Hook_ProcessMovementPre(CCSPlayer_MovementServices* pThis, v
                 <li>✓ Pre/Post execution control</li>
               </ul>
             </div>
-            <CodeBlock
-              title="Commands & Events"
-              code={`
+
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/20 to-blue-500/20 blur-xl rounded-2xl" />
+              <div className="relative border rounded-2xl bg-neutral-950/80 backdrop-blur shadow-xl">
+                <CodeBlock
+                  title="Commands & Events"
+                  code={`
 UTIL_RegConCommand("s2t_test", [](const CCommandContext& ctx, const CCommand&, Mode)
 {
     auto* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot());
@@ -249,34 +302,8 @@ UTIL_RegGameEvent("player_connect_full", [](IGameEvent* event, Mode, bool&)
     TOOLKIT_LOG(&g_Plugin, "Player: %s\\n", player->GetPlayerName());
     return Action::Ignore;
 }, Mode::Pre);`}
-            />
-          </div>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <CodeBlock
-              title="Scheduler"
-              code={`
-UTIL_NextFrame([]() {
-    TOOLKIT_LOG(&g_Plugin, "Next tick!");
-});
-
-UTIL_AddTimer(1.0f, []() {
-    TOOLKIT_LOG(&g_Plugin, "After 1 second!");
-});`}
-            />
-            <div>
-              <h3 className="text-3xl font-bold mb-4">
-                Built-in Systems
-              </h3>
-              <p className="text-gray-500 mb-4">
-                Everything you need is already included.
-              </p>
-              <ul className="text-gray-500 space-y-2">
-                <li>✓ GameConfig system</li>
-                <li>✓ Dynamic libraries</li>
-                <li>✓ Scheduler & timers</li>
-                <li>✓ ConVars & commands</li>
-                <li>✓ Trace system</li>
-              </ul>
+                />
+              </div>
             </div>
           </div>
         </div>
