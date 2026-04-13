@@ -93,11 +93,8 @@ public:
     bool Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late) override
     {
         TOOLKIT_SAVEVARS();
-
         api->AddListener(this, this);
-
         TOOLKIT_LOG(this, "Hello World! We are loading!\\n");
-
         return true;
     }
 

@@ -1,0 +1,178 @@
+﻿---
+title: SDK & Building
+---
+
+This guide explains how to use the **Source2Toolkit SDK** to build your own plugins.
+
+The SDK provides everything needed to compile plugins against Source2Toolkit, including:
+- HL2SDK (CS2)
+- Schema system headers
+- Hooking library
+- Build configuration
+
+---
+
+# Getting the SDK
+
+Clone the SDK repository with all required dependencies:
+
+```bash
+git clone --recurse-submodules https://github.com/SlynxCZ/source2toolkit-sdk.git
+cd source2toolkit-sdk
+```
+
+<Callout type="warning">
+  Always use <code>--recurse-submodules</code>.
+  The SDK depends on multiple external repositories (HL2SDK, Protobuf, KHook).
+</Callout>
+
+---
+
+# Project Setup
+
+A typical plugin project using the SDK looks like this:
+
+```
+my-plugin/
+├── CMakeLists.txt
+├── src/
+│   └── plugin.cpp
+└── vendor/
+    └── source2toolkit-sdk/
+```
+
+---
+
+# CMake Configuration
+
+To use the SDK, include it as a subdirectory and use the provided helper function.
+
+```cmake
+cmake_minimum_required(VERSION 3.18)
+project(my-plugin CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+
+add_subdirectory(vendor/source2toolkit-sdk)
+
+add_s2toolkit_plugin(my_plugin
+    src/plugin.cpp
+)
+```
+
+<Callout type="tip">
+  The <code>add_s2toolkit_plugin</code> function automatically configures linking, include paths, and output format.
+</Callout>
+
+---
+
+# Example Plugin
+
+Below is a minimal working plugin using the SDK:
+
+```cpp
+#include "source2toolkit/IToolkitPlugin.h"
+#include "source2toolkit/utils/log.h"
+
+class Plugin final : public IToolkitPlugin
+{
+public:
+    bool Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late) override
+    {
+        TOOLKIT_SAVEVARS();
+        api->AddListener(this, this);
+        TOOLKIT_LOG(this, "Hello World! Plugin loaded.\n");
+        return true;
+    }
+
+    bool Unload(char*, size_t) override
+    {
+        TOOLKIT_LOG(this, "Plugin unloaded.\n");
+        return true;
+    }
+
+private:
+    const char* GetName() override { return "My Plugin"; }
+    const char* GetVersion() override { return "1.0.0"; }
+    const char* GetAuthor() override { return "You"; }
+    const char* GetDescription() override { return "My first plugin"; }
+};
+
+Plugin g_Plugin;
+TOOLKIT_EXPOSE(my_plugin, g_Plugin);
+```
+
+---
+
+# Building the Plugin
+
+```bash
+mkdir build && cd build
+cmake ..
+cmake --build . --config Release
+```
+
+After building, you will get:
+
+```
+my_plugin.stx
+```
+
+---
+
+# Output
+
+The compiled plugin uses the `.stx` extension and is ready to be placed into:
+
+```
+/game/csgo/addons/source2toolkit/plugins/
+```
+
+---
+
+# What the SDK Handles
+
+The SDK automatically configures:
+
+- Platform-specific compiler flags
+- Linking against HL2SDK and engine libraries
+- Protobuf integration
+- ABI compatibility (Linux / Windows)
+- Include directories for Source 2 headers
+- Plugin output format (`.stx`)
+
+---
+
+# Platform Notes
+
+## Linux
+
+- Uses static linking for standard libraries
+- Enforces `_GLIBCXX_USE_CXX11_ABI=0`
+
+## Windows
+
+- Requires **MSVC compiler**
+- MinGW is not supported
+
+---
+
+# Summary
+
+Using the SDK is simple:
+
+```cmake
+add_subdirectory(source2toolkit-sdk)
+
+add_s2toolkit_plugin(my_plugin
+    src/plugin.cpp
+)
+```
+
+That’s it — you can now build fully featured Source2Toolkit plugins.
+
+---
+
+<Callout type="success">
+  You are now ready to start developing plugins with full access to Source 2 internals.
+</Callout>
