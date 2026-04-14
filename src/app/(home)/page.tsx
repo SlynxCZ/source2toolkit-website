@@ -170,8 +170,8 @@ TOOLKIT_EXPOSE(source2toolkit_example, g_Plugin);
                 <li>✓ Full control</li>
               </ul>
             </div>
-            <div className="relative">
-              <div className="absolute insert-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-xl rounded-2xl" />
+            <div className="relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-xl rounded-2xl" />
               <div className="relative border rounded-2xl bg-neutral-950/80 backdrop-blur shadow-xl">
                 <CodeBlock
                   title="Entity Access"
@@ -193,8 +193,8 @@ player->m_iPawnHealth() = 1337; // Without automatic SetStateChanged`}
             </div>
           </div>
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="relative order-2 md:order-1">
-              <div className="absolute -inset-1 bg-gradient-to-r from-purple-500/20 to-blue-500/20 blur-xl rounded-2xl" />
+            <div className="relative overflow-hidden order-2 md:order-1">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 blur-xl rounded-2xl" />
               <div className="relative border rounded-2xl bg-neutral-950/80 backdrop-blur shadow-xl">
                 <CodeBlock
                   title="Inline Hook (ProcessMovement)"
@@ -255,8 +255,8 @@ KHook::Return<void> Hook_ProcessMovementPre(CCSPlayer_MovementServices* pThis, v
               </ul>
             </div>
 
-            <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-orange-500/20 to-blue-500/20 blur-xl rounded-2xl" />
+            <div className="relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-blue-500/20 blur-xl rounded-2xl" />
               <div className="relative border rounded-2xl bg-neutral-950/80 backdrop-blur shadow-xl">
                 <CodeBlock
                   title="Commands & Events"
