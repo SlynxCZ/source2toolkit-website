@@ -34,7 +34,7 @@ export default function HomePage() {
     <main className="flex flex-1 flex-col">
       <section className="py-24 px-4 text-center">
         <div className="max-w-4xl mx-auto space-y-8">
-          <div className="relative w-[500px] h-[210px] mx-auto">
+          <div className="relative w-full max-w-[500px] h-[140px] sm:h-[180px] md:h-[210px] mx-auto">
             <Image
               src={ToolkitLogo}
               alt="Source2Toolkit Logo"
