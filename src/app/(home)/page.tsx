@@ -171,7 +171,7 @@ TOOLKIT_EXPOSE(source2toolkit_example, g_Plugin);
               </ul>
             </div>
             <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-xl rounded-2xl" />
+              <div className="absolute insert-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-xl rounded-2xl" />
               <div className="relative border rounded-2xl bg-neutral-950/80 backdrop-blur shadow-xl">
                 <CodeBlock
                   title="Entity Access"
