@@ -1,0 +1,119 @@
+---
+title: IToolkitMenus
+---
+
+# PostSelectAction
+
+## Methods
+
+### SetTitle(t)
+
+Sets menu title.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="t" type="std::string" /> — New title
+
+### GetPostSelectAction()
+
+Gets post-select behavior.
+
+### SetPostSelectAction(a)
+
+Sets post-select behavior.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="a" type="[PostSelectAction](/docs//enums/PostSelectAction)" /> — Behavior to apply after selection
+
+### GetExitButton()
+
+Gets exit button state.
+
+### SetExitButton(v)
+
+Sets exit button state.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="v" type="bool" /> — True to enable exit button
+
+**Inheritance**: [IMenu](/docs/core-api/low-level/IToolkitMenus)
+
+## Methods
+
+### Display()
+
+Displays the menu.
+
+### OnKeyPress(player, key)
+
+Handles key press input.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="player" type="CCSPlayerController *" /> — Player who triggered input
+- <ApiParam name="key" type="int" /> — Pressed key (1-9)
+
+### Close()
+
+Closes the menu.
+
+### MenuItemsPerPage()
+
+Menu items per page.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type=") const { return NumPerPage(" />
+
+### NumPerPage()
+
+Checks if next page exists.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type=") && (currentOffset_ + NumPerPage()) &lt; (int) opts.size(" />
+
+### HasExitButton()
+
+Checks if exit button is enabled.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type=") const { return menu_-&gt;GetExitButton(" />
+
+### MenuItemsPerPage()
+
+Advances to next page.
+
+**Inheritance**: [IBaseMenu](/docs/core-api/low-level/IToolkitMenus)
+
+## Methods
+
+### OpenCenterHtmlMenu(player, menu)
+
+Opens a CenterHtmlMenu for a player.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="player" type="CCSPlayerController *" /> — Target player
+- <ApiParam name="menu" type="[CenterHtmlMenu](/docs/core-api/low-level/IToolkitMenus) *" /> — Menu to open
+
+### CloseActiveMenu(player)
+
+Closes active menu for player.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="player" type="CCSPlayerController *" /> — Target player
+
+### OnKeyPress(player, key)
+
+Handles key press input.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="player" type="CCSPlayerController *" /> — Player who pressed key
+- <ApiParam name="key" type="int" /> — Pressed key (1-9)
+
