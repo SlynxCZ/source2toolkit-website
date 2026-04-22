@@ -8,15 +8,15 @@ title: CBasePlayerPawn
 
 ## Fields
 
-- <ApiParam name="m_pWeaponServices" type="CPlayer_WeaponServices*" />
-- <ApiParam name="m_pItemServices" type="CPlayer_ItemServices*" />
+- <ApiParam name="m_pWeaponServices" type="[CPlayer_WeaponServices](/docs/schema/entity/classes/Cplayer_weaponservices)*" />
+- <ApiParam name="m_pItemServices" type="[CPlayer_ItemServices](/docs/schema/entity/classes/Cplayer_itemservices)*" />
 - <ApiParam name="m_pAutoaimServices" type="[CPlayer_AutoaimServices](/docs/schema/entity/classes/Cplayer_autoaimservices)*" />
 - <ApiParam name="m_pObserverServices" type="[CPlayer_ObserverServices](/docs/schema/entity/classes/Cplayer_observerservices)*" />
 - <ApiParam name="m_pWaterServices" type="CPlayer_WaterServices*" />
-- <ApiParam name="m_pUseServices" type="CPlayer_UseServices*" />
+- <ApiParam name="m_pUseServices" type="[CPlayer_UseServices](/docs/schema/entity/classes/Cplayer_useservices)*" />
 - <ApiParam name="m_pFlashlightServices" type="[CPlayer_FlashlightServices](/docs/schema/entity/classes/Cplayer_flashlightservices)*" />
-- <ApiParam name="m_pCameraServices" type="[CPlayer_CameraServices](/docs/schema/entity/classes/Cplayer_cameraservices)*" />
-- <ApiParam name="m_pMovementServices" type="CPlayer_MovementServices*" />
+- <ApiParam name="m_pCameraServices" type="CPlayer_CameraServices*" />
+- <ApiParam name="m_pMovementServices" type="[CPlayer_MovementServices](/docs/schema/entity/classes/Cplayer_movementservices)*" />
 - <ApiParam name="m_ServerViewAngleChanges" type="CUtlVector&lt;ViewAngleServerChange_t&gt;" />
 - <ApiParam name="v_angle" type="QAngle" />
 - <ApiParam name="v_anglePrevious" type="QAngle" />
@@ -26,7 +26,7 @@ title: CBasePlayerPawn
 - <ApiParam name="m_flDeathTime" type="float" />
 - <ApiParam name="m_fNextSuicideTime" type="float" />
 - <ApiParam name="m_fInitHUD" type="bool" />
-- <ApiParam name="m_pExpresser" type="CAI_Expresser*" />
+- <ApiParam name="m_pExpresser" type="[CAI_Expresser](/docs/schema/entity/classes/Cai_expresser)*" />
 - <ApiParam name="m_hController" type="CHandle&lt;CBasePlayerController&gt;" />
 - <ApiParam name="m_hDefaultController" type="CHandle&lt;CBasePlayerController&gt;" />
 - <ApiParam name="m_fHltvReplayDelay" type="float" />
@@ -51,7 +51,7 @@ Remove weapon from player.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pWeapon" type="CBasePlayerWeapon*" />
+- <ApiParam name="pWeapon" type="[CBasePlayerWeapon](/docs/schema/entity/classes/Cbaseplayerweapon)*" />
 
 ### FromIndex()
 
