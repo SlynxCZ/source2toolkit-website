@@ -9,9 +9,8 @@ title: CBaseAnimGraphController
 ## Fields
 
 - <ApiParam name="m_nAnimationAlgorithm" type="AnimationAlgorithm_t" />
-- <ApiParam name="m_animGraphNetworkedVars" type="[CAnimGraphNetworkedVariables](/docs/schema/entity/classes/Canimgraphnetworkedvariables)" />
 - <ApiParam name="m_nNextExternalGraphHandle" type="[ExternalAnimGraphHandle_t](/docs/schema/entity/classes/ExternalAnimGraphHandle_t)" />
-- <ApiParam name="m_vecSecondarySkeletonNames" type="CUtlVector&lt;CGlobalSymbol&gt;" />
+- <ApiParam name="m_vecSecondarySkeletonSlotIDs" type="CUtlVector&lt;CGlobalSymbol&gt;" />
 - <ApiParam name="m_vecSecondarySkeletons" type="CUtlVector&lt;CHandle&lt;CBaseAnimGraph&gt;&gt;" />
 - <ApiParam name="m_nSecondarySkeletonMasterCount" type="int32_t" />
 - <ApiParam name="m_flSoundSyncTime" type="float" />
@@ -27,9 +26,10 @@ title: CBaseAnimGraphController
 - <ApiParam name="m_bLastUpdateSkipped" type="bool" />
 - <ApiParam name="m_bSequenceFinished" type="bool" />
 - <ApiParam name="m_nPrevAnimUpdateTick" type="int32_t" />
-- <ApiParam name="m_hGraphDefinitionAG2" type="CStrongHandle&lt; InfoForResourceTypeCNmGraphDefinition &gt;" />
-- <ApiParam name="m_serializedPoseRecipeAG2" type="CUtlVector&lt;uint8_t&gt;" />
-- <ApiParam name="m_nSerializePoseRecipeSizeAG2" type="int32_t" />
+- <ApiParam name="m_hGraphDefinitionAG2" type="CStrongHandle&lt;InfoForResourceTypeCNmGraphDefinition&gt;" />
+- <ApiParam name="m_SerializePoseRecipeAG2Slots" type="CUtlVector&lt;AnimGraph2SerializedPoseRecipeSlot_t&gt;" />
+- <ApiParam name="m_SerializePoseRecipeAG2Dynamic" type="CUtlVector&lt;uint8_t&gt;" />
+- <ApiParam name="m_nSerializePoseRecipeAG2ActiveSlot" type="uint32_t" />
 - <ApiParam name="m_nSerializePoseRecipeVersionAG2" type="int32_t" />
 - <ApiParam name="m_nServerGraphInstanceIteration" type="int32_t" />
 - <ApiParam name="m_nServerSerializationContextIteration" type="int32_t" />
@@ -37,5 +37,6 @@ title: CBaseAnimGraphController
 - <ApiParam name="m_vecExternalGraphIds" type="CUtlVector&lt;ResourceId_t&gt;" />
 - <ApiParam name="m_vecExternalClipIds" type="CUtlVector&lt;ResourceId_t&gt;" />
 - <ApiParam name="m_sAnimGraph2Identifier" type="CGlobalSymbol" />
+- <ApiParam name="m_pGraphInstanceAG2" type="[CNmGraphInstance](/docs/schema/entity/classes/Cnmgraphinstance)*" />
 - <ApiParam name="m_vecExternalGraphs" type="CUtlVector&lt;ExternalAnimGraph_t&gt;" />
 

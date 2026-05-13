@@ -8,6 +8,9 @@ title: CCSPlayer_MovementServices
 
 ## Fields
 
+- <ApiParam name="m_AnimationState" type="[CCSPlayerAnimationState](/docs/schema/entity/classes/Ccsplayeranimationstate)" />
+- <ApiParam name="m_bUsingGroundTopologyOffset" type="bool" />
+- <ApiParam name="m_flUsingGroundTopologyOffsetTransitionSmoothing" type="float" />
 - <ApiParam name="m_vecLadderNormal" type="Vector" />
 - <ApiParam name="m_nLadderSurfacePropIndex" type="int32_t" />
 - <ApiParam name="m_bDucked" type="bool" />
@@ -16,11 +19,10 @@ title: CCSPlayer_MovementServices
 - <ApiParam name="m_bDuckOverride" type="bool" />
 - <ApiParam name="m_bDesiresDuck" type="bool" />
 - <ApiParam name="m_bDucking" type="bool" />
-- <ApiParam name="m_flDuckOffset" type="float" />
-- <ApiParam name="m_nDuckTimeMsecs" type="uint32_t" />
-- <ApiParam name="m_nDuckJumpTimeMsecs" type="uint32_t" />
-- <ApiParam name="m_nJumpTimeMsecs" type="uint32_t" />
+- <ApiParam name="m_flDuckRootOffset" type="float" />
+- <ApiParam name="m_flDuckViewOffset" type="float" />
 - <ApiParam name="m_flLastDuckTime" type="float" />
+- <ApiParam name="m_flBombPlantViewOffset" type="float" />
 - <ApiParam name="m_vecLastPositionAtFullCrouchSpeed" type="Vector2D" />
 - <ApiParam name="m_duckUntilOnGround" type="bool" />
 - <ApiParam name="m_bHasWalkMovedSinceLastJump" type="bool" />
@@ -38,8 +40,9 @@ title: CCSPlayer_MovementServices
 - <ApiParam name="m_iFootsteps" type="int32_t" />
 - <ApiParam name="m_fStashGrenadeParameterWhen" type="float" />
 - <ApiParam name="m_nButtonDownMaskPrev" type="uint64_t" />
-- <ApiParam name="m_flOffsetTickCompleteTime" type="float" />
-- <ApiParam name="m_flOffsetTickStashedSpeed" type="float" />
+- <ApiParam name="m_bUseFrictionStashedSpeed" type="bool" />
+- <ApiParam name="m_flUseFrictionStashedSpeedUntilFrac" type="float" />
+- <ApiParam name="m_flFrictionStashedSpeed" type="float" />
 - <ApiParam name="m_flStamina" type="float" />
 - <ApiParam name="m_flHeightAtJumpStart" type="float" />
 - <ApiParam name="m_flMaxJumpHeightThisJump" type="float" />
@@ -55,5 +58,6 @@ title: CCSPlayer_MovementServices
 - <ApiParam name="m_bJumpApexPending" type="bool" />
 - <ApiParam name="m_flTicksSinceLastSurfingDetected" type="float" />
 - <ApiParam name="m_bWasSurfing" type="bool" />
-- <ApiParam name="m_vecInputRotated" type="Vector" />
+- <ApiParam name="m_vecWalkWishVel" type="Vector2D" />
+- <ApiParam name="m_bHasEverProcessedCommand" type="bool" />
 
