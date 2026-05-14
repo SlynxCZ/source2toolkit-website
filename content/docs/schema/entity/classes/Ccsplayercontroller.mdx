@@ -8,10 +8,10 @@ title: CCSPlayerController
 
 ## Fields
 
-- <ApiParam name="m_pInGameMoneyServices" type="[CCSPlayerController_InGameMoneyServices](/docs/schema/entity/classes/Ccsplayercontroller_ingamemoneyservices)*" />
+- <ApiParam name="m_pInGameMoneyServices" type="CCSPlayerController_InGameMoneyServices*" />
 - <ApiParam name="m_pInventoryServices" type="CCSPlayerController_InventoryServices*" />
-- <ApiParam name="m_pActionTrackingServices" type="[CCSPlayerController_ActionTrackingServices](/docs/schema/entity/classes/Ccsplayercontroller_actiontrackingservices)*" />
-- <ApiParam name="m_pDamageServices" type="[CCSPlayerController_DamageServices](/docs/schema/entity/classes/Ccsplayercontroller_damageservices)*" />
+- <ApiParam name="m_pActionTrackingServices" type="CCSPlayerController_ActionTrackingServices*" />
+- <ApiParam name="m_pDamageServices" type="CCSPlayerController_DamageServices*" />
 - <ApiParam name="m_iPing" type="uint32_t" />
 - <ApiParam name="m_bHasCommunicationAbuseMute" type="bool" />
 - <ApiParam name="m_uiCommunicationMuteFlags" type="uint32_t" />
@@ -42,7 +42,7 @@ title: CCSPlayerController
 - <ApiParam name="m_nEndMatchNextMapVote" type="int32_t" />
 - <ApiParam name="m_unActiveQuestId" type="uint16_t" />
 - <ApiParam name="m_rtActiveMissionPeriod" type="uint32_t" />
-- <ApiParam name="m_nQuestProgressReason" type="[QuestProgress__Reason](/docs/schema/entity/enums/enums/QuestProgress__Reason)" />
+- <ApiParam name="m_nQuestProgressReason" type="QuestProgress__Reason" />
 - <ApiParam name="m_unPlayerTvControlFlags" type="uint32_t" />
 - <ApiParam name="m_iDraftIndex" type="int32_t" />
 - <ApiParam name="m_msQueuedModeDisconnectionTimestamp" type="uint32_t" />
@@ -87,7 +87,7 @@ title: CCSPlayerController
 - <ApiParam name="m_iMVPs" type="int32_t" />
 - <ApiParam name="m_nUpdateCounter" type="int32_t" />
 - <ApiParam name="m_flSmoothedPing" type="float" />
-- <ApiParam name="m_lastHeldVoteTimer" type="[IntervalTimer](/docs/schema/entity/classes/Intervaltimer)" />
+- <ApiParam name="m_lastHeldVoteTimer" type="IntervalTimer" />
 - <ApiParam name="m_bShowHints" type="bool" />
 - <ApiParam name="m_iNextTimeCheck" type="int32_t" />
 - <ApiParam name="m_bJustDidTeamKill" type="bool" />
@@ -109,7 +109,7 @@ Get controller from pawn.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pPawn" type="[CCSPlayerPawn](/docs/schema/entity/classes/Ccsplayerpawn)*" />
+- <ApiParam name="pPawn" type="CCSPlayerPawn*" />
 
 ### FromSlot(iSlot)
 
