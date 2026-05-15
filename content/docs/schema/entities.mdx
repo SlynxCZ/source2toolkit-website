@@ -1,8 +1,8 @@
 ---
-title: Entity
+title: Entities
 ---
 
-# entity
+# entities
 
 ## Functions
 
@@ -23,4 +23,20 @@ Finds an entity by classname.
 
 - <ApiParam name="pStart" type="CEntityInstance*" /> — Starting entity (or nullptr for first)
 - <ApiParam name="name" type="const char*" /> — Classname (e.g. "weapon_ak47")
+
+### UTIL_AddEntityListener(pListener)
+
+Registers a listener for entity spawn, creation, deletion and parent change.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pListener" type="IEntityListener*" /> — Listener instance
+
+### UTIL_RemoveEntityListener(pListener)
+
+Removes listener for entity spawn, creation, deletion and parent change.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pListener" type="IEntityListener*" />
 
