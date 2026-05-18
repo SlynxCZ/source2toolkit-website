@@ -14,10 +14,15 @@ title: CBaseEntity
 - <ApiParam name="m_iCurrentThinkContext" type="int32_t" />
 - <ApiParam name="m_nLastThinkTick" type="int32_t" />
 - <ApiParam name="m_bDisabledContextThinks" type="bool" />
-- <ApiParam name="m_isSteadyState" type="uint8_t" />
+- <ApiParam name="m_isSteadyState" type="CTypedBitVec&lt;64&gt;" />
 - <ApiParam name="m_lastNetworkChange" type="float" />
+- <ApiParam name="m_think" type="BASEPTR" />
 - <ApiParam name="m_ResponseContexts" type="CUtlVector&lt;ResponseContext_t&gt;" />
 - <ApiParam name="m_iszResponseContext" type="CUtlSymbolLarge" />
+- <ApiParam name="m_pfnTouch" type="ENTITYFUNCPTR" />
+- <ApiParam name="m_pfnUse" type="USEPTR" />
+- <ApiParam name="m_pfnBlocked" type="ENTITYFUNCPTR" />
+- <ApiParam name="m_pfnMoveDone" type="BASEPTR" />
 - <ApiParam name="m_iHealth" type="int32_t" />
 - <ApiParam name="m_iMaxHealth" type="int32_t" />
 - <ApiParam name="m_lifeState" type="uint8_t" />
@@ -27,6 +32,7 @@ title: CBaseEntity
 - <ApiParam name="m_nPlatformType" type="EntityPlatformTypes_t" />
 - <ApiParam name="m_MoveCollide" type="MoveCollide_t" />
 - <ApiParam name="m_MoveType" type="MoveType_t" />
+- <ApiParam name="m_nPreviouslySetMoveType" type="MoveType_t" />
 - <ApiParam name="m_nActualMoveType" type="MoveType_t" />
 - <ApiParam name="m_nWaterTouch" type="uint8_t" />
 - <ApiParam name="m_nSlimeTouch" type="uint8_t" />
@@ -53,10 +59,10 @@ title: CBaseEntity
 - <ApiParam name="m_OnKilled" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 - <ApiParam name="m_fFlags" type="uint32_t" />
 - <ApiParam name="m_vecAbsVelocity" type="Vector" />
-- <ApiParam name="m_vecVelocity" type="[CNetworkVelocityVector](/docs/schema/entity/classes/Cnetworkvelocityvector)" />
+- <ApiParam name="m_vecVelocity" type="CNetworkVelocityVector" />
 - <ApiParam name="m_vecBaseVelocity" type="Vector" />
 - <ApiParam name="m_nPushEnumCount" type="int32_t" />
-- <ApiParam name="m_pCollision" type="[CCollisionProperty](/docs/schema/entity/classes/Ccollisionproperty)*" />
+- <ApiParam name="m_pCollision" type="CCollisionProperty*" />
 - <ApiParam name="m_hEffectEntity" type="CHandle&lt;CBaseEntity&gt;" />
 - <ApiParam name="m_hOwnerEntity" type="CHandle&lt;CBaseEntity&gt;" />
 - <ApiParam name="m_fEffects" type="uint32_t" />
@@ -87,7 +93,7 @@ title: CBaseEntity
 - <ApiParam name="m_flLocalTime" type="float" />
 - <ApiParam name="m_flVPhysicsUpdateLocalTime" type="float" />
 - <ApiParam name="m_nBloodType" type="BloodType" />
-- <ApiParam name="m_pPulseGraphInstance" type="[CPulseGraphInstance_ServerEntity](/docs/schema/entity/classes/Cpulsegraphinstance_serverentity)*" />
+- <ApiParam name="m_pPulseGraphInstance" type="CPulseGraphInstance_ServerEntity*" />
 
 ## Methods
 
@@ -130,7 +136,7 @@ Add signle entity IO listener.
 
 - <ApiParam name="pszOutput" type="const char*" />
 - <ApiParam name="callback" type="std::function&lt;Action(const char*,CEntityInstance*, CEntityInstance*, float, Mode)&gt;" />
-- <ApiParam name="mode" type="[Mode](/docs//enums/Mode)" />
+- <ApiParam name="mode" type="[Mode](/docs/enums/Mode)" />
 
 ### GetAbsOrigin()
 

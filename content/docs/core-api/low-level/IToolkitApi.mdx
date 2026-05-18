@@ -12,7 +12,7 @@ Logs a formatted message with plugin context.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="plugin" type="[IToolkitPlugin](/docs/core-api/low-level/IToolkitPlugin)*" /> — Plugin instance
+- <ApiParam name="plugin" type="IToolkitPlugin*" /> — Plugin instance
 - <ApiParam name="msg" type="const char*" /> — Format string
 - <ApiParam type="..." />
 
@@ -39,8 +39,8 @@ Registers a toolkit listener.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="plugin" type="[IToolkitPlugin](/docs/core-api/low-level/IToolkitPlugin)*" /> — Owner plugin
-- <ApiParam name="pListener" type="[IToolkitListener](/docs/core-api/low-level/IToolkitPlugin)*" /> — Listener instance
+- <ApiParam name="plugin" type="IToolkitPlugin*" /> — Owner plugin
+- <ApiParam name="pListener" type="IToolkitListener*" /> — Listener instance
 
 ### QueryInterface(fn, iface, min)
 
@@ -128,9 +128,9 @@ Access command system.
 
 Access ConVar system.
 
-### EntityIO()
+### Entities()
 
-Access entity I/O system.
+Access entities and Entity I/O system.
 
 ### Events()
 
@@ -139,6 +139,14 @@ Access event system.
 ### GameConfig()
 
 Access game configuration system.
+
+### Menus()
+
+Access menu system.
+
+### MySQL()
+
+Access mysql system.
 
 ### Scheduler()
 

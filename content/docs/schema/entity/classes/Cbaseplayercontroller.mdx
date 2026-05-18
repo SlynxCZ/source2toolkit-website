@@ -4,7 +4,7 @@ title: CBasePlayerController
 
 # CBasePlayerController
 
-**Inheritance**: CBaseEntity
+**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
 
 ## Fields
 
@@ -17,6 +17,7 @@ title: CBasePlayerController
 - <ApiParam name="m_hSplitScreenPlayers" type="CUtlVector&lt;CHandle&lt;CBasePlayerController&gt;&gt;" />
 - <ApiParam name="m_bIsHLTV" type="bool" />
 - <ApiParam name="m_iConnected" type="PlayerConnectedState" />
+- <ApiParam name="m_iMostConnected" type="PlayerConnectedState" />
 - <ApiParam name="m_iszPlayerName" type="char" />
 - <ApiParam name="m_szNetworkIDString" type="CUtlString" />
 - <ApiParam name="m_fLerpTime" type="float" />
@@ -41,7 +42,7 @@ Set pawn for controller.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pPawn" type="CBasePlayerPawn*" />
+- <ApiParam name="pPawn" type="[CBasePlayerPawn*](/docs/schema/entity/classes/Cbaseplayerpawn)" />
 
 ### FromIndex()
 

@@ -6,14 +6,17 @@ title: CTakeDamageResult
 
 ## Fields
 
-- <ApiParam name="m_pOriginatingInfo" type="[CTakeDamageInfo](/docs/schema/entity/classes/Ctakedamageinfo)*" />
+- <ApiParam name="m_pOriginatingInfo" type="[CTakeDamageInfo*](/docs/schema/entity/classes/Ctakedamageinfo)" />
+- <ApiParam name="m_DestructibleHitGroupRequests" type="CUtlLeanVector" />
 - <ApiParam name="m_nHealthLost" type="int32_t" />
 - <ApiParam name="m_nHealthBefore" type="int32_t" />
-- <ApiParam name="m_nDamageDealt" type="int32_t" />
+- <ApiParam name="m_flDamageDealt" type="float" />
 - <ApiParam name="m_flPreModifiedDamage" type="float" />
 - <ApiParam name="m_nTotalledHealthLost" type="int32_t" />
-- <ApiParam name="m_nTotalledDamageDealt" type="int32_t" />
+- <ApiParam name="m_flTotalledDamageDealt" type="float" />
 - <ApiParam name="m_flTotalledPreModifiedDamage" type="float" />
+- <ApiParam name="m_flNewDamageAccumulatorValue" type="float" />
+- <ApiParam name="m_nDamageFlags" type="TakeDamageFlags_t" />
 - <ApiParam name="m_bWasDamageSuppressed" type="bool" />
 - <ApiParam name="m_bSuppressFlinch" type="bool" />
 - <ApiParam name="m_nOverrideFlinchHitGroup" type="HitGroup_t" />

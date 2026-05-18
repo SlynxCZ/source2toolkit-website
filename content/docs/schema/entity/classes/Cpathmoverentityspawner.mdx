@@ -14,8 +14,13 @@ title: CPathMoverEntitySpawner
 - <ApiParam name="m_flSpawnFrequencySeconds" type="float" />
 - <ApiParam name="m_flSpawnFrequencyDistToNearestMover" type="float" />
 - <ApiParam name="m_nMaxActive" type="int32_t" />
+- <ApiParam name="m_nSpawnNum" type="int32_t" />
 - <ApiParam name="m_flLastSpawnTime" type="float" />
 - <ApiParam name="m_bEnabled" type="bool" />
+- <ApiParam name="m_bDestroyMoverOnArrivedAtEnd" type="bool" />
+- <ApiParam name="m_vecQueuedRemovals" type="CUtlVector&lt;CHandle&lt;CFuncMover&gt;&gt;" />
+- <ApiParam name="m_OnTemplateSpawned" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_OnTemplateGroupSpawned" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 
 ## Methods
 

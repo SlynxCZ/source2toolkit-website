@@ -1,0 +1,193 @@
+---
+title: IToolkitMySQL
+---
+
+# IToolkitMySQLRow
+
+## Methods
+
+### GetRowCount()
+
+Returns the total number of rows in the result set.
+
+### GetFieldCount()
+
+Returns the number of columns in the result set.
+
+### FieldNameToNum(name, columnId)
+
+Converts a field name into a column index.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" /> — Field name to search for.
+- <ApiParam name="columnId" type="unsigned int*" /> — Output column index.
+
+### FieldNumToName(colId)
+
+Returns the field name for a column index.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="colId" type="unsigned int" /> — Column index.
+
+### MoreRows()
+
+Checks whether additional rows are available.
+
+### FetchRow()
+
+Fetches the next row from the result set.
+
+### CurrentRow()
+
+Returns the currently active row.
+
+### Rewind()
+
+Rewinds the internal row cursor to the beginning.
+
+### GetFieldType(field)
+
+Returns the MySQL field type of a column.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="field" type="unsigned int" /> — Column index.
+
+### GetString(columnId, length)
+
+Retrieves a string value from a column.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="columnId" type="unsigned int" /> — Column index.
+- <ApiParam name="length" type="size_t*" /> — Optional output string length.
+
+### GetDataSize(columnId)
+
+Returns the raw data size of a column value.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="columnId" type="unsigned int" /> — Column index.
+
+### GetFloat(columnId)
+
+Retrieves a floating-point value from a column.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="columnId" type="unsigned int" /> — Column index.
+
+### GetInt(columnId)
+
+Retrieves an integer value from a column.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="columnId" type="unsigned int" /> — Column index.
+
+### GetInt64(columnId)
+
+Retrieves a 64-bit integer value from a column.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="columnId" type="unsigned int" /> — Column index.
+
+### IsNull(columnId)
+
+Checks whether a column contains a NULL value.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="columnId" type="unsigned int" /> — Column index.
+
+## Methods
+
+### GetResultSet()
+
+Returns the current result set.
+
+### FetchMoreResults()
+
+Advances to the next available result set.
+
+### GetInsertId()
+
+Returns the last inserted row ID.
+
+### GetAffectedRows()
+
+Returns the number of affected rows.
+
+## Methods
+
+### Connect(callback)
+
+Establishes a connection to the MySQL server.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="callback" type="ToolkitMySQLConnectCallbackFunc" /> — Callback invoked after connection attempt.
+
+### Query(query, callback)
+
+Executes a raw SQL query.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="query" type="char*" /> — SQL query string.
+- <ApiParam name="callback" type="ToolkitMySQLQueryCallbackFunc" /> — Callback invoked with query result.
+
+### Query(query, callback, )
+
+Executes a formatted SQL query.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="query" type="const char*" /> — SQL format string.
+- <ApiParam name="callback" type="ToolkitMySQLQueryCallbackFunc" /> — Callback invoked with query result.
+- <ApiParam type="..." />
+
+### ExecuteTransaction(txn, success, failure)
+
+Executes multiple queries as a transaction.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="txn" type="ToolkitMySQLTransaction" /> — Transaction query batch.
+- <ApiParam name="success" type="ToolkitMySQLTransactionSuccessCallbackFunc" /> — Callback invoked on success.
+- <ApiParam name="failure" type="ToolkitMySQLTransactionFailureCallbackFunc" /> — Callback invoked on failure.
+
+### Destroy()
+
+Destroys and releases the connection instance.
+
+### Escape(string)
+
+Escapes a mutable string for safe SQL usage.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="string" type="char*" /> — Input string.
+
+### Escape(string)
+
+Escapes a constant string for safe SQL usage.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="string" type="const char*" /> — Input string.
+
+## Methods
+
+### CreateConnection(info)
+
+Creates a new MySQL connection instance.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="info" type="ToolkitMySQLConnectionInfo" /> — Connection configuration data.
+

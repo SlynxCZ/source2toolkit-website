@@ -8,7 +8,7 @@ title: CRagdollProp
 
 ## Fields
 
-- <ApiParam name="m_ragdoll" type="ragdoll_t" />
+- <ApiParam name="m_ragdoll" type="[ragdoll_t](/docs/schema/entity/classes/ragdoll_t)" />
 - <ApiParam name="m_bStartDisabled" type="bool" />
 - <ApiParam name="m_ragEnabled" type="CUtlVector&lt;bool&gt;" />
 - <ApiParam name="m_ragPos" type="CUtlVector&lt;Vector&gt;" />
@@ -16,6 +16,10 @@ title: CRagdollProp
 - <ApiParam name="m_lastUpdateTickCount" type="uint32_t" />
 - <ApiParam name="m_allAsleep" type="bool" />
 - <ApiParam name="m_bFirstCollisionAfterLaunch" type="bool" />
+- <ApiParam name="m_nNavObstacleType" type="INavObstacle__NavObstacleType_t" />
+- <ApiParam name="m_bUpdateNavWhenMoving" type="bool" />
+- <ApiParam name="m_bForceNavObstacleCut" type="bool" />
+- <ApiParam name="m_bAttachedToReferenceFrame" type="bool" />
 - <ApiParam name="m_hDamageEntity" type="CHandle&lt;CBaseEntity&gt;" />
 - <ApiParam name="m_hKiller" type="CHandle&lt;CBaseEntity&gt;" />
 - <ApiParam name="m_hPhysicsAttacker" type="CHandle&lt;CBasePlayerPawn&gt;" />
@@ -34,6 +38,7 @@ title: CRagdollProp
 - <ApiParam name="m_ragdollMins" type="CUtlVector&lt;Vector&gt;" />
 - <ApiParam name="m_ragdollMaxs" type="CUtlVector&lt;Vector&gt;" />
 - <ApiParam name="m_bShouldDeleteActivationRecord" type="bool" />
+- <ApiParam name="m_vecNavObstacles" type="CUtlVector&lt;INavObstacle*&gt;" />
 
 ## Methods
 

@@ -4,13 +4,11 @@ title: CCSPlayer_WeaponServices
 
 # CCSPlayer_WeaponServices
 
-**Inheritance**: CPlayer_WeaponServices
+**Inheritance**: [CPlayer_WeaponServices](/docs/schema/entity/classes/Cplayer_weaponservices)
 
 ## Fields
 
 - <ApiParam name="m_flNextAttack" type="float" />
-- <ApiParam name="m_bIsLookingAtWeapon" type="bool" />
-- <ApiParam name="m_bIsHoldingLookAtWeapon" type="bool" />
 - <ApiParam name="m_hSavedWeapon" type="CHandle&lt;CBasePlayerWeapon&gt;" />
 - <ApiParam name="m_nTimeToMelee" type="int32_t" />
 - <ApiParam name="m_nTimeToSecondary" type="int32_t" />
@@ -23,4 +21,25 @@ title: CCSPlayer_WeaponServices
 - <ApiParam name="m_bIsPickingUpGroundWeapon" type="bool" />
 - <ApiParam name="m_networkAnimTiming" type="CUtlVector&lt;uint8_t&gt;" />
 - <ApiParam name="m_bBlockInspectUntilNextGraphUpdate" type="bool" />
+
+## Methods
+
+### DropWeapon(pWeapon, pVecTarget, pVelocity)
+
+Drop weapon.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pWeapon" type="CBasePlayerWeapon *" />
+- <ApiParam name="pVecTarget" type="Vector *" />
+- <ApiParam name="pVelocity" type="Vector *" />
+
+### SelectWeapon(pWeapon, unk1)
+
+Select weapon.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pWeapon" type="CBasePlayerWeapon *" />
+- <ApiParam name="unk1" type="int" />
 
