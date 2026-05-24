@@ -1,0 +1,208 @@
+---
+title: SDK & Building
+---
+
+This guide explains how to use the **Source2Toolkit SDK** to build your own plugins.
+
+The SDK provides everything needed to compile plugins against Source2Toolkit, including:
+- KHook headers (bundled as a submodule)
+- Build configuration and CMake helpers
+- HL2SDK (CS2) and Protobuf — resolved via environment variables
+
+---
+
+# Getting the SDK
+
+Clone the SDK repository:
+
+```bash
+git clone https://github.com/SlynxCZ/source2toolkit-sdk.git
+cd source2toolkit-sdk
+```
+
+<Callout type="info">
+  The SDK only includes **KHook** as a submodule (for headers).
+  **HL2SDK (CS2)** and **Protobuf** must be available on your system and resolved through environment variables — see below.
+</Callout>
+
+---
+
+# Dependencies
+
+The SDK uses `resolve_dep` to locate external dependencies at configure time:
+
+```cmake
+resolve_dep(KHOOK    KHOOK      ${CMAKE_CURRENT_SOURCE_DIR}/vendor/khook)
+resolve_dep(SOURCESDK HL2SDKCS2)
+resolve_dep(PROTOBUFS CSGO_PROTO)
+```
+
+`KHOOK` is bundled inside the SDK. The other two must be provided via environment variables:
+
+| Variable | Description |
+|---|---|
+| `HL2SDKCS2` | Path to your HL2SDK CS2 checkout |
+| `CSGO_PROTO` | Path to your CS:GO Protobuf headers |
+
+Set these before running CMake:
+
+```bash
+# Linux / macOS
+export HL2SDKCS2=/path/to/hl2sdk-cs2
+export CSGO_PROTO=/path/to/csgo-proto
+
+# Windows (PowerShell)
+$env:HL2SDKCS2 = "C:\path\to\hl2sdk-cs2"
+$env:CSGO_PROTO = "C:\path\to\csgo-proto"
+```
+
+---
+
+# Project Setup
+
+A typical plugin project using the SDK looks like this:
+
+```
+my-plugin/
+├── CMakeLists.txt
+├── src/
+│   └── plugin.cpp
+└── vendor/
+    └── source2toolkit-sdk/
+```
+
+---
+
+# CMake Configuration
+
+To use the SDK, include it as a subdirectory and use the provided helper function.
+
+```cmake
+cmake_minimum_required(VERSION 3.18)
+project(my-plugin CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+
+add_subdirectory(vendor/source2toolkit-sdk)
+
+add_s2toolkit_plugin(my_plugin
+    src/plugin.cpp
+)
+```
+
+<Callout type="tip">
+  The <code>add_s2toolkit_plugin</code> function automatically configures linking, include paths, and output format.
+</Callout>
+
+---
+
+# Example Plugin
+
+Below is a minimal working plugin using the SDK:
+
+```cpp
+#include "source2toolkit/IToolkitPlugin.h"
+#include "source2toolkit/utils/log.h"
+
+class Plugin final : public IToolkitPlugin
+{
+public:
+    bool Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late) override
+    {
+        TOOLKIT_SAVEVARS();
+        api->AddListener(this, this);
+        TOOLKIT_LOG(this, "Hello World! Plugin loaded.\n");
+        return true;
+    }
+
+    bool Unload(char*, size_t) override
+    {
+        TOOLKIT_LOG(this, "Plugin unloaded.\n");
+        return true;
+    }
+
+private:
+    const char* GetName() override { return "My Plugin"; }
+    const char* GetVersion() override { return "1.0.0"; }
+    const char* GetAuthor() override { return "You"; }
+    const char* GetDescription() override { return "My first plugin"; }
+};
+
+Plugin g_Plugin;
+TOOLKIT_EXPOSE(my_plugin, g_Plugin);
+```
+
+---
+
+# Building the Plugin
+
+```bash
+mkdir build && cd build
+cmake ..
+cmake --build . --config Release
+```
+
+After building, you will get:
+
+```
+my_plugin.stx
+```
+
+---
+
+# Output
+
+The compiled plugin uses the `.stx` extension and is ready to be placed into:
+
+```
+/game/csgo/addons/source2toolkit/plugins/
+```
+
+---
+
+# What the SDK Handles
+
+The SDK automatically configures:
+
+- Platform-specific compiler flags
+- Linking against HL2SDK and engine libraries
+- Protobuf integration
+- ABI compatibility (Linux / Windows)
+- Include directories for Source 2 and KHook headers
+- Plugin output format (`.stx`)
+
+---
+
+# Platform Notes
+
+## Linux
+
+- Uses static linking for standard libraries
+- Enforces `_GLIBCXX_USE_CXX11_ABI=0`
+
+## Windows
+
+- Requires **MSVC compiler**
+- MinGW is not supported
+
+---
+
+# Summary
+
+Using the SDK is simple:
+
+```cmake
+add_subdirectory(source2toolkit-sdk)
+
+add_s2toolkit_plugin(my_plugin
+    src/plugin.cpp
+)
+```
+
+Make sure `HL2SDKCS2` and `CSGO_PROTO` are set in your environment, then build — that's it.
+
+---
+
+<Callout type="success">
+  You are now ready to start developing plugins with full access to Source 2 internals.
+</Callout>
