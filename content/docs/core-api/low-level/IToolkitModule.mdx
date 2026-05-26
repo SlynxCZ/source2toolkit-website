@@ -1,0 +1,117 @@
+---
+title: IToolkitModule
+---
+
+# IToolkitModule
+
+## Methods
+
+### InitFromName(name, extension)
+
+Initialises the module from its name (without extension).
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" /> — Module name, e.g. "server" or "engine2".
+- <ApiParam name="extension" type="bool" /> — When true the platform extension is appended automatically.
+
+### InitFromMemory(ptr)
+
+Initialises the module from an address inside it.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="ptr" type="uintptr_t" /> — Any address that belongs to the target module.
+
+### FindPattern(pattern, startAddress)
+
+Scans the executable section for a byte-string pattern.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pattern" type="const char*" /> — IDA-style pattern string.
+- <ApiParam name="startAddress" type="IToolkitMemory" /> — Optional address to start scanning from.
+
+### FindPatternInSection(pattern, section, startAddress)
+
+Scans a named section for a byte-string pattern.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pattern" type="const char*" /> — IDA-style pattern string.
+- <ApiParam name="section" type="const char*" /> — Section name, e.g. ".text" or ".rdata".
+- <ApiParam name="startAddress" type="IToolkitMemory" /> — Optional address to start scanning from.
+
+### GetVirtualTableByName(name, decorated)
+
+Returns the address of a virtual table by mangled class name.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" /> — Class name (undecorated unless decorated is true).
+- <ApiParam name="decorated" type="bool" /> — Pass true when name is already a decorated symbol.
+
+### GetFunctionByName(name)
+
+Returns the address of an exported symbol by name.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+
+### GetSectionByName(name)
+
+Returns information about a named section.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+
+### GetModuleHandle()
+
+Returns the OS-native module handle (HMODULE / void*).
+
+### GetModuleBase()
+
+Returns the base load address of the module.
+
+### GetModulePath()
+
+Returns the absolute filesystem path of the module.
+
+### GetModuleName()
+
+Returns the filename component of the module path.
+
+### New(name)
+
+Creates a module wrapper by name (without extension).
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" /> — Module name, e.g. "server" or "tier0".
+
+### New(ptr)
+
+Creates a module wrapper from an address that belongs to the module.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="ptr" type="uintptr_t" /> — Any address inside the target module.
+
+### New(ptr)
+
+Creates a module wrapper from a void pointer inside the module.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="ptr" type="void*" />
+
+### New(mem)
+
+Creates a module wrapper from an IToolkitMemory address inside the module.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="mem" type="IToolkitMemory" />
+

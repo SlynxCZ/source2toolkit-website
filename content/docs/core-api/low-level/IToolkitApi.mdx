@@ -156,6 +156,30 @@ Access scheduler system.
 
 Access tracing system.
 
+### LoadModule(name)
+
+Creates and initialises a module wrapper by name.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" /> — Module name without extension (e.g. "server").
+
+### LoadModuleFromMemory(ptr)
+
+Creates and initialises a module wrapper from an address inside it.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="ptr" type="uintptr_t" /> — Any address that belongs to the target module.
+
+### FreeModule(module)
+
+Releases a module previously obtained from LoadModule() / LoadModuleFromMemory().
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="module" type="[IToolkitModule*](/docs/core-api/low-level/IToolkitModule)" />
+
 ### GetGameEventManager()
 
 ### GetGlobalVars()
