@@ -199,24 +199,29 @@ player->m_iPawnHealth() = 1337; // Without automatic SetStateChanged`}
                 <CodeBlock
                   title="Inline Hook (ProcessMovement)"
                   code={`
-uintptr_t addr = UTIL_FindPattern(g_ToolkitAPI->GetSource2Server(), UTIL_GetSignature("CCSPlayer_MovementServices_ProcessMovement"));
-m_ProcessMovement.Configure(reinterpret_cast<void(*)(CCSPlayer_MovementServices*, void*, void*)>(addr));
+CConVarRef<bool> sv_autobunnyhopping("sv_autobunnyhopping");
+IToolkitModule* libserver = IToolkitModule::New(g_pSource2Server);
 
-KHook::Return<void> Hook_ProcessMovementPre(CCSPlayer_MovementServices* pThis, void*, void*)
+uintptr_t addr = libserver->FindPattern(g_ToolkitAPI->GameConfig()->GetSignature("CCSPlayerLegacyJump_CheckJumpButtonLegacy"));
+m_CheckJumpButtonLegacy->Configure(reinterpret_cast<void(*)(CCSPlayerLegacyJump*, void*)>(addr));
+
+KHook::Return<void> Plugin::CCSPlayerLegacyJump_CheckJumpButtonLegacy(CCSPlayerLegacyJump* pThis, void* mv)
 {
-    if (!pThis)
-        return { KHook::Action::Ignore };
+    CCSPlayer_MovementServices* ms = pThis->m_pMovementServices;
+    CCSPlayerPawn* pawn = ms ? ms->GetPawn() : nullptr;
+    CCSPlayerController* player = pawn ? pawn->GetController() : nullptr;
 
-    auto* pawn = pThis->GetPlayerPawn();
-    if (!pawn)
-        return { KHook::Action::Ignore };
+    bool canBhop = true;
+    bool originalBhop = sv_autobunnyhopping.Get();
 
-    auto* player = pawn->GetController();
-    if (!player)
-        return { KHook::Action::Ignore };
+    if (canBhop && !originalBhop)
+    {
+        sv_autobunnyhopping.Set(true);
+        m_pGameServerSteamAPIActivated->CallOriginal(pThis, mv);
+        sv_autobunnyhopping.Set(false);
 
-    UTIL_SetConVarBool(UTIL_FindConVar("sv_autobunnyhopping"), true);
-    player->ReplicateConVar("sv_autobunnyhopping", "true");
+        return { KHook::Action::Supersede };
+    }
 
     return { KHook::Action::Ignore };
 }`}
@@ -261,7 +266,7 @@ KHook::Return<void> Hook_ProcessMovementPre(CCSPlayer_MovementServices* pThis, v
                 <CodeBlock
                   title="Commands & Events"
                   code={`
-UTIL_RegConCommand("s2t_test", [](const CCommandContext& ctx, const CCommand&, Mode)
+g_ToolkitAPI->Commands()->RegConCommand("s2t_test", [](const CCommandContext& ctx, const CCommand&, Mode)
 {
     auto* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot());
     if (!player)
@@ -270,7 +275,7 @@ UTIL_RegConCommand("s2t_test", [](const CCommandContext& ctx, const CCommand&, M
     player->PrintToChat("Hello!");
 });
 
-UTIL_RegConListener("jointeam", [](const CCommandContext& ctx, const CCommand&, Mode)
+g_ToolkitAPI->Commands()->RegConListener("jointeam", [](const CCommandContext& ctx, const CCommand&, Mode)
 {
     auto* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot());
     if (!player)
@@ -290,7 +295,7 @@ UTIL_RegConListener("jointeam", [](const CCommandContext& ctx, const CCommand&, 
     return Action::Ignore;
 });
 
-UTIL_RegGameEvent("player_connect_full", [](IGameEvent* event, Mode, bool&)
+g_ToolkitAPI->Events()->RegGameEvent("player_connect_full", [](IGameEvent* event, Mode, bool&)
 {
     auto* player = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
     if (!player)
