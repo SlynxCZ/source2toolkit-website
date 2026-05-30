@@ -24,7 +24,7 @@ title: CCSPlayer_WeaponServices
 
 ## Methods
 
-### CanUse(pWeapon)
+### bool CanUse(pWeapon)
 
 Checks if player can use weapon (fire and maybe acquire).
 
@@ -42,7 +42,7 @@ Drop weapon.
 - <ApiParam name="pVecTarget" type="Vector *" />
 - <ApiParam name="pVelocity" type="Vector *" />
 
-### BumpWeapon(pWeapon)
+### int BumpWeapon(pWeapon)
 
 Probably checks weapon validity after CCSPlayer_ItemServices::GiveNamedItem invoke, may return 2 if CSGameRules()-&gt;IsPlayingGunGameDeathmatch, meaning that pWeapon will be deleted.
 

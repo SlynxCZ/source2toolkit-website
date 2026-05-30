@@ -2,19 +2,19 @@
 title: IToolkitMySQL
 ---
 
-# IToolkitMySQLRow
+# IToolkitMySQL
 
-## Methods
+## IToolkitMySQLResult
 
-### GetRowCount()
+### int GetRowCount()
 
 Returns the total number of rows in the result set.
 
-### GetFieldCount()
+### int GetFieldCount()
 
 Returns the number of columns in the result set.
 
-### FieldNameToNum(name, columnId)
+### bool FieldNameToNum(name, columnId)
 
 Converts a field name into a column index.
 
@@ -23,7 +23,7 @@ Converts a field name into a column index.
 - <ApiParam name="name" type="const char*" /> — Field name to search for.
 - <ApiParam name="columnId" type="unsigned int*" /> — Output column index.
 
-### FieldNumToName(colId)
+### const char* FieldNumToName(colId)
 
 Returns the field name for a column index.
 
@@ -31,23 +31,23 @@ Returns the field name for a column index.
 
 - <ApiParam name="colId" type="unsigned int" /> — Column index.
 
-### MoreRows()
+### bool MoreRows()
 
 Checks whether additional rows are available.
 
-### FetchRow()
+### IToolkitMySQLRow* FetchRow()
 
 Fetches the next row from the result set.
 
-### CurrentRow()
+### IToolkitMySQLRow* CurrentRow()
 
 Returns the currently active row.
 
-### Rewind()
+### bool Rewind()
 
 Rewinds the internal row cursor to the beginning.
 
-### GetFieldType(field)
+### int GetFieldType(field)
 
 Returns the MySQL field type of a column.
 
@@ -55,7 +55,7 @@ Returns the MySQL field type of a column.
 
 - <ApiParam name="field" type="unsigned int" /> — Column index.
 
-### GetString(columnId, length)
+### const char* GetString(columnId, length)
 
 Retrieves a string value from a column.
 
@@ -64,7 +64,7 @@ Retrieves a string value from a column.
 - <ApiParam name="columnId" type="unsigned int" /> — Column index.
 - <ApiParam name="length" type="size_t*" /> — Optional output string length.
 
-### GetDataSize(columnId)
+### size_t GetDataSize(columnId)
 
 Returns the raw data size of a column value.
 
@@ -72,7 +72,7 @@ Returns the raw data size of a column value.
 
 - <ApiParam name="columnId" type="unsigned int" /> — Column index.
 
-### GetFloat(columnId)
+### float GetFloat(columnId)
 
 Retrieves a floating-point value from a column.
 
@@ -80,7 +80,7 @@ Retrieves a floating-point value from a column.
 
 - <ApiParam name="columnId" type="unsigned int" /> — Column index.
 
-### GetInt(columnId)
+### int GetInt(columnId)
 
 Retrieves an integer value from a column.
 
@@ -88,7 +88,7 @@ Retrieves an integer value from a column.
 
 - <ApiParam name="columnId" type="unsigned int" /> — Column index.
 
-### GetInt64(columnId)
+### int64_t GetInt64(columnId)
 
 Retrieves a 64-bit integer value from a column.
 
@@ -96,7 +96,7 @@ Retrieves a 64-bit integer value from a column.
 
 - <ApiParam name="columnId" type="unsigned int" /> — Column index.
 
-### IsNull(columnId)
+### bool IsNull(columnId)
 
 Checks whether a column contains a NULL value.
 
@@ -104,25 +104,25 @@ Checks whether a column contains a NULL value.
 
 - <ApiParam name="columnId" type="unsigned int" /> — Column index.
 
-## Methods
+## IToolkitMySQLQuery
 
-### GetResultSet()
+### IToolkitMySQLResult* GetResultSet()
 
 Returns the current result set.
 
-### FetchMoreResults()
+### bool FetchMoreResults()
 
 Advances to the next available result set.
 
-### GetInsertId()
+### unsigned int GetInsertId()
 
 Returns the last inserted row ID.
 
-### GetAffectedRows()
+### unsigned int GetAffectedRows()
 
 Returns the number of affected rows.
 
-## Methods
+## IToolkitMySQLConnection
 
 ### Connect(callback)
 
@@ -165,7 +165,7 @@ Executes multiple queries as a transaction.
 
 Destroys and releases the connection instance.
 
-### Escape(string)
+### std::string Escape(string)
 
 Escapes a mutable string for safe SQL usage.
 
@@ -173,7 +173,7 @@ Escapes a mutable string for safe SQL usage.
 
 - <ApiParam name="string" type="char*" /> — Input string.
 
-### Escape(string)
+### std::string Escape(string)
 
 Escapes a constant string for safe SQL usage.
 
@@ -181,9 +181,9 @@ Escapes a constant string for safe SQL usage.
 
 - <ApiParam name="string" type="const char*" /> — Input string.
 
-## Methods
+## IToolkitMySQL
 
-### CreateConnection(info)
+### IToolkitMySQLConnection* CreateConnection(info)
 
 Creates a new MySQL connection instance.
 

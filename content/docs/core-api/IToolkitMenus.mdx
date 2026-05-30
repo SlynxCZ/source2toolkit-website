@@ -2,11 +2,11 @@
 title: IToolkitMenus
 ---
 
-# PostSelectAction
+# IToolkitMenus
 
-## Methods
+## IMenu
 
-### GetPostSelectAction()
+### PostSelectAction GetPostSelectAction()
 
 Gets post-select behavior.
 
@@ -18,7 +18,7 @@ Sets post-select behavior.
 
 - <ApiParam name="a" type="[PostSelectAction](/docs/enums/PostSelectAction)" /> — Behavior to apply after selection
 
-### GetExitButton()
+### bool GetExitButton()
 
 Gets exit button state.
 
@@ -30,9 +30,11 @@ Sets exit button state.
 
 - <ApiParam name="v" type="bool" /> — True to enable exit button
 
-**Inheritance**: [IMenu](/docs/core-api/low-level/IToolkitMenus)
+## IBaseMenu
 
-## Methods
+**Inheritance**: [IMenu](/docs/core-api/IToolkitMenus)
+
+## IMenuInstance
 
 ### Display()
 
@@ -51,7 +53,7 @@ Handles key press input.
 
 Closes the menu.
 
-### MenuItemsPerPage()
+### int MenuItemsPerPage()
 
 Menu items per page.
 
@@ -59,7 +61,7 @@ Menu items per page.
 
 - <ApiParam type=") const { return NumPerPage(" />
 
-### NumPerPage()
+### return (int) opts.size() &gt; NumPerPage()
 
 Checks if next page exists.
 
@@ -67,7 +69,7 @@ Checks if next page exists.
 
 - <ApiParam type=") && (currentOffset_ + NumPerPage()) &lt; (int) opts.size(" />
 
-### HasExitButton()
+### bool HasExitButton()
 
 Checks if exit button is enabled.
 
@@ -75,13 +77,15 @@ Checks if exit button is enabled.
 
 - <ApiParam type=") const { return menu_-&gt;GetExitButton(" />
 
-### MenuItemsPerPage()
+### currentOffset_ += MenuItemsPerPage()
 
 Advances to next page.
 
-**Inheritance**: [IBaseMenu](/docs/core-api/low-level/IToolkitMenus)
+## CenterHtmlMenu
 
-## Methods
+**Inheritance**: [IBaseMenu](/docs/core-api/IToolkitMenus)
+
+## IToolkitMenus
 
 ### OpenCenterHtmlMenu(player, menu)
 
@@ -90,7 +94,7 @@ Opens a CenterHtmlMenu for a player.
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="player" type="CCSPlayerController *" /> — Target player
-- <ApiParam name="menu" type="[CenterHtmlMenu *](/docs/core-api/low-level/IToolkitMenus)" /> — Menu to open
+- <ApiParam name="menu" type="[CenterHtmlMenu *](/docs/core-api/IToolkitMenus)" /> — Menu to open
 
 ### CloseActiveMenu(player)
 

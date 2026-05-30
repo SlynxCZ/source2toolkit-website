@@ -10,7 +10,7 @@ title: CBaseModelEntity
 
 - <ApiParam name="m_CRenderComponent" type="[CRenderComponent*](/docs/schema/entity/classes/Crendercomponent)" />
 - <ApiParam name="m_CHitboxComponent" type="CHitboxComponent" />
-- <ApiParam name="m_pChoreoComponent" type="CChoreoComponent*" />
+- <ApiParam name="m_pChoreoComponent" type="[CChoreoComponent*](/docs/schema/entity/classes/Cchoreocomponent)" />
 - <ApiParam name="m_nDestructiblePartInitialStateDestructed0" type="HitGroup_t" />
 - <ApiParam name="m_nDestructiblePartInitialStateDestructed1" type="HitGroup_t" />
 - <ApiParam name="m_nDestructiblePartInitialStateDestructed2" type="HitGroup_t" />
@@ -44,16 +44,16 @@ title: CBaseModelEntity
 - <ApiParam name="m_flFadeScale" type="float" />
 - <ApiParam name="m_flShadowStrength" type="float" />
 - <ApiParam name="m_nObjectCulling" type="uint8_t" />
-- <ApiParam name="m_vecViewOffset" type="[CNetworkViewOffsetVector](/docs/schema/entity/classes/Cnetworkviewoffsetvector)" />
+- <ApiParam name="m_vecViewOffset" type="CNetworkViewOffsetVector" />
 - <ApiParam name="m_bvDisabledHitGroups" type="uint32_t" />
 
 ## Methods
 
-### GetModelName()
+### CUtlSymbolLarge GetModelName()
 
 Get model name.
 
-### GetEyePosition()
+### Vector GetEyePosition()
 
 Get eye position.
 
@@ -65,7 +65,7 @@ Set entity model.
 
 - <ApiParam name="pszModel" type="const char*" />
 
-### FromIndex()
+### return FromIndex()
 
 <ApiLabel>Parameters</ApiLabel>
 

@@ -6,7 +6,7 @@ title: IToolkitGameConfig
 
 ## Methods
 
-### GetLibrary(pchName)
+### const char* GetLibrary(pchName)
 
 Gets library/module name.
 
@@ -14,7 +14,7 @@ Gets library/module name.
 
 - <ApiParam name="pchName" type="const char*" /> — Config entry name
 
-### GetSignature(pchName)
+### const char* GetSignature(pchName)
 
 Gets signature (pattern).
 
@@ -22,7 +22,7 @@ Gets signature (pattern).
 
 - <ApiParam name="pchName" type="const char*" /> — Config entry name
 
-### GetSymbol(pchName)
+### const char* GetSymbol(pchName)
 
 Gets symbol name.
 
@@ -30,7 +30,7 @@ Gets symbol name.
 
 - <ApiParam name="pchName" type="const char*" /> — Config entry name
 
-### GetPatch(pchName)
+### const char* GetPatch(pchName)
 
 Gets patch definition.
 
@@ -38,7 +38,7 @@ Gets patch definition.
 
 - <ApiParam name="pchName" type="const char*" /> — Config entry name
 
-### GetOffset(pchName)
+### int GetOffset(pchName)
 
 Gets integer offset.
 

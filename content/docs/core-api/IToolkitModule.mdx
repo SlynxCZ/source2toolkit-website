@@ -6,7 +6,7 @@ title: IToolkitModule
 
 ## Methods
 
-### InitFromName(name, extension)
+### bool InitFromName(name, extension)
 
 Initialises the module from its name (without extension).
 
@@ -15,7 +15,7 @@ Initialises the module from its name (without extension).
 - <ApiParam name="name" type="const char*" /> — Module name, e.g. "server" or "engine2".
 - <ApiParam name="extension" type="bool" /> — When true the platform extension is appended automatically.
 
-### InitFromMemory(ptr)
+### bool InitFromMemory(ptr)
 
 Initialises the module from an address inside it.
 
@@ -23,7 +23,7 @@ Initialises the module from an address inside it.
 
 - <ApiParam name="ptr" type="uintptr_t" /> — Any address that belongs to the target module.
 
-### FindPattern(pattern, startAddress)
+### ] virtual IToolkitMemory FindPattern(pattern, startAddress)
 
 Scans the executable section for a byte-string pattern.
 
@@ -32,7 +32,7 @@ Scans the executable section for a byte-string pattern.
 - <ApiParam name="pattern" type="const char*" /> — IDA-style pattern string.
 - <ApiParam name="startAddress" type="IToolkitMemory" /> — Optional address to start scanning from.
 
-### FindPatternInSection(pattern, section, startAddress)
+### ] virtual IToolkitMemory FindPatternInSection(pattern, section, startAddress)
 
 Scans a named section for a byte-string pattern.
 
@@ -42,7 +42,7 @@ Scans a named section for a byte-string pattern.
 - <ApiParam name="section" type="const char*" /> — Section name, e.g. ".text" or ".rdata".
 - <ApiParam name="startAddress" type="IToolkitMemory" /> — Optional address to start scanning from.
 
-### GetVirtualTableByName(name, decorated)
+### ] virtual IToolkitMemory GetVirtualTableByName(name, decorated)
 
 Returns the address of a virtual table by mangled class name.
 
@@ -51,7 +51,7 @@ Returns the address of a virtual table by mangled class name.
 - <ApiParam name="name" type="const char*" /> — Class name (undecorated unless decorated is true).
 - <ApiParam name="decorated" type="bool" /> — Pass true when name is already a decorated symbol.
 
-### GetFunctionByName(name)
+### ] virtual IToolkitMemory GetFunctionByName(name)
 
 Returns the address of an exported symbol by name.
 
@@ -59,7 +59,7 @@ Returns the address of an exported symbol by name.
 
 - <ApiParam name="name" type="const char*" />
 
-### GetSectionByName(name)
+### ] virtual SectionInfo GetSectionByName(name)
 
 Returns information about a named section.
 
@@ -67,23 +67,23 @@ Returns information about a named section.
 
 - <ApiParam name="name" type="const char*" />
 
-### GetModuleHandle()
+### ] virtual void* GetModuleHandle()
 
 Returns the OS-native module handle (HMODULE / void*).
 
-### GetModuleBase()
+### ] virtual IToolkitMemory GetModuleBase()
 
 Returns the base load address of the module.
 
-### GetModulePath()
+### ] virtual const char* GetModulePath()
 
 Returns the absolute filesystem path of the module.
 
-### GetModuleName()
+### ] virtual const char* GetModuleName()
 
 Returns the filename component of the module path.
 
-### New(name)
+### IToolkitModule* New(name)
 
 Creates a module wrapper by name (without extension).
 
@@ -91,7 +91,7 @@ Creates a module wrapper by name (without extension).
 
 - <ApiParam name="name" type="const char*" /> — Module name, e.g. "server" or "tier0".
 
-### New(ptr)
+### IToolkitModule* New(ptr)
 
 Creates a module wrapper from an address that belongs to the module.
 
@@ -99,7 +99,7 @@ Creates a module wrapper from an address that belongs to the module.
 
 - <ApiParam name="ptr" type="uintptr_t" /> — Any address inside the target module.
 
-### New(ptr)
+### IToolkitModule* New(ptr)
 
 Creates a module wrapper from a void pointer inside the module.
 
@@ -107,7 +107,7 @@ Creates a module wrapper from a void pointer inside the module.
 
 - <ApiParam name="ptr" type="void*" />
 
-### New(mem)
+### IToolkitModule* New(mem)
 
 Creates a module wrapper from an IToolkitMemory address inside the module.
 

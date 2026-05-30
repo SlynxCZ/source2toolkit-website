@@ -170,7 +170,7 @@ title: CCSGameRules
 - <ApiParam name="m_bSwitchingTeamsAtRoundReset" type="bool" />
 - <ApiParam name="m_pGameModeRules" type="[CCSGameModeRules*](/docs/schema/entity/classes/Ccsgamemoderules)" />
 - <ApiParam name="m_hPlayerResource" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_RetakeRules" type="[CRetakeGameRules](/docs/schema/entity/classes/Cretakegamerules)" />
+- <ApiParam name="m_RetakeRules" type="CRetakeGameRules" />
 - <ApiParam name="m_arrTeamUniqueKillWeaponsMatch" type="CUtlVector&lt;int32_t&gt;" />
 - <ApiParam name="m_bTeamLastKillUsedUniqueWeaponMatch" type="bool" />
 - <ApiParam name="m_nMatchEndCount" type="uint8_t" />
@@ -208,7 +208,7 @@ Terminate round.
 - <ApiParam name="flDelay" type="float" />
 - <ApiParam name="eRoundEndReason" type="int32_t" />
 
-### FindPickerEntity(pPlayer)
+### CBaseEntity* FindPickerEntity(pPlayer)
 
 Find entity player is aiming at.
 
@@ -216,11 +216,11 @@ Find entity player is aiming at.
 
 - <ApiParam name="pPlayer" type="[CBasePlayerController*](/docs/schema/entity/classes/Cbaseplayercontroller)" />
 
-### GetClientAimTarget(pPlayer)
+### CCSPlayerController* GetClientAimTarget(pPlayer)
 
 Get aim target.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pPlayer" type="[CCSPlayerController*](/docs/schema/entity/classes/Ccsplayercontroller)" />
+- <ApiParam name="pPlayer" type="CCSPlayerController*" />
 

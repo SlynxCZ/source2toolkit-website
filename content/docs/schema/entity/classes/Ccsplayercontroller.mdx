@@ -9,9 +9,9 @@ title: CCSPlayerController
 ## Fields
 
 - <ApiParam name="m_pInGameMoneyServices" type="CCSPlayerController_InGameMoneyServices*" />
-- <ApiParam name="m_pInventoryServices" type="CCSPlayerController_InventoryServices*" />
+- <ApiParam name="m_pInventoryServices" type="[CCSPlayerController_InventoryServices*](/docs/schema/entity/classes/Ccsplayercontroller_inventoryservices)" />
 - <ApiParam name="m_pActionTrackingServices" type="[CCSPlayerController_ActionTrackingServices*](/docs/schema/entity/classes/Ccsplayercontroller_actiontrackingservices)" />
-- <ApiParam name="m_pDamageServices" type="CCSPlayerController_DamageServices*" />
+- <ApiParam name="m_pDamageServices" type="[CCSPlayerController_DamageServices*](/docs/schema/entity/classes/Ccsplayercontroller_damageservices)" />
 - <ApiParam name="m_iPing" type="uint32_t" />
 - <ApiParam name="m_bHasCommunicationAbuseMute" type="bool" />
 - <ApiParam name="m_uiCommunicationMuteFlags" type="uint32_t" />
@@ -42,7 +42,7 @@ title: CCSPlayerController
 - <ApiParam name="m_nEndMatchNextMapVote" type="int32_t" />
 - <ApiParam name="m_unActiveQuestId" type="uint16_t" />
 - <ApiParam name="m_rtActiveMissionPeriod" type="uint32_t" />
-- <ApiParam name="m_nQuestProgressReason" type="[QuestProgress__Reason](/docs/schema/entity/enums/enums/QuestProgress__Reason)" />
+- <ApiParam name="m_nQuestProgressReason" type="QuestProgress__Reason" />
 - <ApiParam name="m_unPlayerTvControlFlags" type="uint32_t" />
 - <ApiParam name="m_iDraftIndex" type="int32_t" />
 - <ApiParam name="m_msQueuedModeDisconnectionTimestamp" type="uint32_t" />
@@ -87,7 +87,7 @@ title: CCSPlayerController
 - <ApiParam name="m_iMVPs" type="int32_t" />
 - <ApiParam name="m_nUpdateCounter" type="int32_t" />
 - <ApiParam name="m_flSmoothedPing" type="float" />
-- <ApiParam name="m_lastHeldVoteTimer" type="IntervalTimer" />
+- <ApiParam name="m_lastHeldVoteTimer" type="[IntervalTimer](/docs/schema/entity/classes/Intervaltimer)" />
 - <ApiParam name="m_bShowHints" type="bool" />
 - <ApiParam name="m_iNextTimeCheck" type="int32_t" />
 - <ApiParam name="m_bJustDidTeamKill" type="bool" />
@@ -103,15 +103,15 @@ title: CCSPlayerController
 
 ## Methods
 
-### FromPawn(pPawn)
+### CCSPlayerController* FromPawn(pPawn)
 
 Get controller from pawn.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pPawn" type="CCSPlayerPawn*" />
+- <ApiParam name="pPawn" type="[CCSPlayerPawn*](/docs/schema/entity/classes/Ccsplayerpawn)" />
 
-### FromSlot(iSlot)
+### CCSPlayerController* FromSlot(iSlot)
 
 Get controller from slot.
 
@@ -119,7 +119,7 @@ Get controller from slot.
 
 - <ApiParam name="iSlot" type="int" />
 
-### FromSlot(slot)
+### CCSPlayerController* FromSlot(slot)
 
 Get controller from slot.
 
@@ -127,7 +127,7 @@ Get controller from slot.
 
 - <ApiParam name="slot" type="CPlayerSlot" />
 
-### FromUserId(iUserId)
+### CCSPlayerController* FromUserId(iUserId)
 
 Get controller from user id.
 
@@ -135,7 +135,7 @@ Get controller from user id.
 
 - <ApiParam name="iUserId" type="int" />
 
-### FromUserId(userId)
+### CCSPlayerController* FromUserId(userId)
 
 Get controller from user id.
 
@@ -143,7 +143,7 @@ Get controller from user id.
 
 - <ApiParam name="userId" type="CPlayerUserId" />
 
-### FromSteamId(uSteamId)
+### CCSPlayerController* FromSteamId(uSteamId)
 
 Get controller from steam id.
 
@@ -151,7 +151,7 @@ Get controller from steam id.
 
 - <ApiParam name="uSteamId" type="uint64" />
 
-### FromSteamId(steamId)
+### CCSPlayerController* FromSteamId(steamId)
 
 Get controller from steam id.
 
@@ -208,7 +208,7 @@ Take damage from player
 
 - <ApiParam name="pAttacker" type="[CCSPlayerController*](/docs/schema/entity/classes/Ccsplayercontroller)" />
 - <ApiParam name="iDamage" type="int" />
-- <ApiParam name="bitsDamageType" type="[DamageTypes_t](/docs/schema/entity/enums/enums/DamageTypes_t)" />
+- <ApiParam name="bitsDamageType" type="DamageTypes_t" />
 
 ### Respawn()
 
@@ -230,7 +230,7 @@ Change team like jointeam.
 
 - <ApiParam name="nTeam" type="int" />
 
-### IsBot()
+### bool IsBot()
 
 Is bot.
 
@@ -258,51 +258,51 @@ Execute command from server.
 
 - <ApiParam name="pszCommand" type="const char*" />
 
-### GetPawn()
+### CCSPlayerPawn* GetPawn()
 
 Get pawn.
 
-### GetPlayerPawn()
+### CCSPlayerPawn* GetPlayerPawn()
 
 Get player pawn.
 
-### GetObserverPawn()
+### CCSObserverPawn* GetObserverPawn()
 
 Get observer pawn.
 
-### GetPlayerIndex()
+### CEntityIndex GetPlayerIndex()
 
 Get player index.
 
-### GetSlot()
+### int GetSlot()
 
 Get slot.
 
-### GetPlayerSlot()
+### CPlayerSlot GetPlayerSlot()
 
 Get player slot.
 
-### GetUserID()
+### int GetUserID()
 
 Get steamid.
 
-### GetPlayerUserID()
+### CPlayerUserId GetPlayerUserID()
 
 Get player userid.
 
-### GetSteamID()
+### uint64 GetSteamID()
 
 Get steamid.
 
-### GetPlayerSteamID()
+### CSteamID GetPlayerSteamID()
 
 Get player steamid.
 
-### GetPlayerName()
+### const char* GetPlayerName()
 
 Get player name.
 
-### GetIpAddress()
+### CUtlString GetIpAddress()
 
 Get IP address.
 
@@ -323,7 +323,7 @@ Fires gameEvent to client's legacy listener.
 
 - <ApiParam name="pEvent" type="IGameEvent*" />
 
-### FromIndex()
+### return FromIndex()
 
 <ApiLabel>Parameters</ApiLabel>
 

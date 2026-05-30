@@ -2,9 +2,9 @@
 title: IToolkitScheduler
 ---
 
-# Timer
+# IToolkitScheduler
 
-## Methods
+## IToolkitScheduler
 
 ### NextFrame(task)
 
@@ -14,7 +14,7 @@ Executes a task on the next frame.
 
 - <ApiParam name="task" type="std::function&lt;void()&gt;&&" /> — Callback function
 
-### AddTimer(interval, callback, flags)
+### Timer* AddTimer(interval, callback, flags)
 
 Adds a timer.
 
@@ -30,5 +30,5 @@ Removes a timer.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="timer" type="[Timer*](/docs/core-api/low-level/IToolkitScheduler)" /> — Timer instance
+- <ApiParam name="timer" type="[Timer*](/docs/core-api/IToolkitScheduler)" /> — Timer instance
 

@@ -4,33 +4,33 @@ title: IToolkitPlugin
 
 # IToolkitPlugin
 
-## Methods
+## IToolkitPlugin
 
-### Load(id, api, error, maxlen, late)
+### bool Load(id, api, error, maxlen, late)
 
 Called when plugin is loaded.
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="id" type="PluginId" /> — Plugin identifier
-- <ApiParam name="api" type="IToolkitAPI*" /> — Toolkit API instance
+- <ApiParam name="api" type="[IToolkitAPI*](/docs/core-api/IToolkitApi)" /> — Toolkit API instance
 - <ApiParam name="error" type="char*" /> — Buffer for error message
 - <ApiParam name="maxlen" type="size_t" /> — Error buffer size
 - <ApiParam name="late" type="bool" /> — True if loaded after server start
 
-### GetAuthor()
+### const char* GetAuthor()
 
 Called when plugin is unloaded.Plugin author name
 
-### GetName()
+### const char* GetName()
 
 Plugin name
 
-### GetDescription()
+### const char* GetDescription()
 
 Plugin description
 
-### GetVersion()
+### const char* GetVersion()
 
 Plugin version
 

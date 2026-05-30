@@ -6,7 +6,7 @@ title: IToolkitConVars
 
 ## Methods
 
-### GetConvarAccessIndexByName(name)
+### uint16 GetConvarAccessIndexByName(name)
 
 Retrieves access index of a ConVar by name.
 
@@ -14,7 +14,7 @@ Retrieves access index of a ConVar by name.
 
 - <ApiParam name="name" type="const char*" /> — ConVar name
 
-### GetConvarRef(accessIndex)
+### ConVarRefAbstract GetConvarRef(accessIndex)
 
 Gets a ConVar reference wrapper.
 
@@ -22,7 +22,7 @@ Gets a ConVar reference wrapper.
 
 - <ApiParam name="accessIndex" type="uint16" />
 
-### GetName(accessIndex)
+### const char* GetName(accessIndex)
 
 Gets ConVar name.
 
@@ -30,7 +30,7 @@ Gets ConVar name.
 
 - <ApiParam name="accessIndex" type="uint16" />
 
-### GetHelpText(accessIndex)
+### const char* GetHelpText(accessIndex)
 
 Gets help/description text.
 
@@ -38,7 +38,7 @@ Gets help/description text.
 
 - <ApiParam name="accessIndex" type="uint16" />
 
-### GetType(accessIndex)
+### EConVarType GetType(accessIndex)
 
 Gets ConVar type.
 
@@ -46,7 +46,7 @@ Gets ConVar type.
 
 - <ApiParam name="accessIndex" type="uint16" />
 
-### GetFlags(accessIndex)
+### uint64 GetFlags(accessIndex)
 
 Gets flags (FCVAR_*).
 
@@ -63,7 +63,7 @@ Sets flags (FCVAR_*).
 - <ApiParam name="accessIndex" type="uint16" />
 - <ApiParam name="flags" type="uint64" />
 
-### GetValueAddress(accessIndex, slot)
+### void* GetValueAddress(accessIndex, slot)
 
 Gets pointer to underlying value.
 
@@ -72,35 +72,35 @@ Gets pointer to underlying value.
 - <ApiParam name="accessIndex" type="uint16" />
 - <ApiParam name="slot" type="CSplitScreenSlot" />
 
-### GetString(accessIndex, slot)
+### const char* GetString(accessIndex, slot)
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="accessIndex" type="uint16" />
 - <ApiParam name="slot" type="CSplitScreenSlot" />
 
-### GetBool(accessIndex, slot)
+### bool GetBool(accessIndex, slot)
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="accessIndex" type="uint16" />
 - <ApiParam name="slot" type="CSplitScreenSlot" />
 
-### GetInt(accessIndex, slot)
+### int32 GetInt(accessIndex, slot)
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="accessIndex" type="uint16" />
 - <ApiParam name="slot" type="CSplitScreenSlot" />
 
-### GetFloat(accessIndex, slot)
+### float GetFloat(accessIndex, slot)
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="accessIndex" type="uint16" />
 - <ApiParam name="slot" type="CSplitScreenSlot" />
 
-### GetDouble(accessIndex, slot)
+### double GetDouble(accessIndex, slot)
 
 <ApiLabel>Parameters</ApiLabel>
 
@@ -147,35 +147,35 @@ Gets pointer to underlying value.
 - <ApiParam name="value" type="double" />
 - <ApiParam name="slot" type="CSplitScreenSlot" />
 
-### GetVector2(accessIndex, slot)
+### Vector2D GetVector2(accessIndex, slot)
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="accessIndex" type="uint16" />
 - <ApiParam name="slot" type="CSplitScreenSlot" />
 
-### GetVector3(accessIndex, slot)
+### Vector GetVector3(accessIndex, slot)
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="accessIndex" type="uint16" />
 - <ApiParam name="slot" type="CSplitScreenSlot" />
 
-### GetVector4(accessIndex, slot)
+### Vector4D GetVector4(accessIndex, slot)
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="accessIndex" type="uint16" />
 - <ApiParam name="slot" type="CSplitScreenSlot" />
 
-### GetQAngle(accessIndex, slot)
+### QAngle GetQAngle(accessIndex, slot)
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="accessIndex" type="uint16" />
 - <ApiParam name="slot" type="CSplitScreenSlot" />
 
-### GetColor(accessIndex, slot)
+### Color GetColor(accessIndex, slot)
 
 <ApiLabel>Parameters</ApiLabel>
 

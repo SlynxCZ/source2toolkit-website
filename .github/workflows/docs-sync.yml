@@ -34,16 +34,17 @@ jobs:
       - name: Install dependencies
         run: pip install pyyaml
 
-      - name: Run docs generator
-        run: cd source2toolkit-sdk/tools/docsgen && python generator.py
-
       - name: Remove old API docs
         run: |
-          rm -rf website/content/docs/core-api/*
-          rm -rf website/content/docs/schema/*
+          rm -rf website/content/docs/core-api
+          rm -rf website/content/docs/schema
+          rm -rf website/content/docs/enums
 
-      - name: Copy new API docs
-        run: cp -r source2toolkit-sdk/docs/* website/content/docs/
+      - name: Run docs generator
+        run: |
+          python source2toolkit-sdk/tools/docsgen/generator.py \
+            source2toolkit-sdk/public \
+            website/content/docs
 
       - name: Check for changes and commit
         working-directory: website
