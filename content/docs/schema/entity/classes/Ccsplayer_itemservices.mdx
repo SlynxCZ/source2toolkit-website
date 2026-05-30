@@ -1,0 +1,39 @@
+---
+title: CCSPlayer_ItemServices
+---
+
+# CCSPlayer_ItemServices
+
+**Inheritance**: CPlayer_ItemServices
+
+## Fields
+
+- <ApiParam name="m_bHasDefuser" type="bool" />
+- <ApiParam name="m_bHasHelmet" type="bool" />
+
+## Methods
+
+### DropActivePlayerWeapon(pActiveWeapon)
+
+Drop active weapon, recommended to use DropWeapon instead (parameter is ignored here).
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pActiveWeapon" type="CBasePlayerWeapon*" />
+
+### RemoveWeapons(bRemoveSuit)
+
+Remove all weapons.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="bRemoveSuit" type="bool" />
+
+### GiveNamedItem(pszItem)
+
+Give item.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszItem" type="const char*" />
+
