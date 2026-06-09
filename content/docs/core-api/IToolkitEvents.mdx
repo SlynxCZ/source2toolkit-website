@@ -6,7 +6,7 @@ title: IToolkitEvents
 
 ## Methods
 
-### RegGameEvent(owner, pchName, handler, mode)
+### HookGameEvent(owner, pchName, handler, mode)
 
 Registers a listener for a game event.
 
@@ -15,5 +15,5 @@ Registers a listener for a game event.
 - <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the listener
 - <ApiParam name="pchName" type="const char*" /> — Event name (e.g. "player_death")
 - <ApiParam name="handler" type="GameEventHandler" /> — Callback function
-- <ApiParam name="mode" type="[Mode](/docs/enums/Mode)" /> — Execution mode:
+- <ApiParam name="mode" type="Mode" /> — Execution mode:
 

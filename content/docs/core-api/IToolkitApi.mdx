@@ -12,7 +12,7 @@ Logs a formatted message with plugin context.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="plugin" type="[IToolkitPlugin*](/docs/core-api/IToolkitPlugin)" /> — Plugin instance
+- <ApiParam name="plugin" type="IToolkitPlugin*" /> — Plugin instance
 - <ApiParam name="msg" type="const char*" /> — Format string
 - <ApiParam type="..." />
 
@@ -39,8 +39,8 @@ Registers a toolkit listener.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="plugin" type="[IToolkitPlugin*](/docs/core-api/IToolkitPlugin)" /> — Owner plugin
-- <ApiParam name="pListener" type="[IToolkitListener*](/docs/core-api/IToolkitPlugin)" /> — Listener instance
+- <ApiParam name="plugin" type="IToolkitPlugin*" /> — Owner plugin
+- <ApiParam name="pListener" type="IToolkitListener*" /> — Listener instance
 
 ### void* QueryInterface(fn, iface, min)
 
@@ -147,6 +147,10 @@ Access menu system.
 ### IToolkitMySQL* MySQL()
 
 Access mysql system.
+
+### IToolkitNetworkMessages* NetworkMessages()
+
+Access network messages system.
 
 ### IToolkitScheduler* Scheduler()
 

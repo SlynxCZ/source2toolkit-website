@@ -151,16 +151,6 @@ Executes a formatted SQL query.
 - <ApiParam name="callback" type="ToolkitMySQLQueryCallbackFunc" /> — Callback invoked with query result.
 - <ApiParam type="..." />
 
-### ExecuteTransaction(txn, success, failure)
-
-Executes multiple queries as a transaction.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="txn" type="ToolkitMySQLTransaction" /> — Transaction query batch.
-- <ApiParam name="success" type="ToolkitMySQLTransactionSuccessCallbackFunc" /> — Callback invoked on success.
-- <ApiParam name="failure" type="ToolkitMySQLTransactionFailureCallbackFunc" /> — Callback invoked on failure.
-
 ### Destroy()
 
 Destroys and releases the connection instance.
