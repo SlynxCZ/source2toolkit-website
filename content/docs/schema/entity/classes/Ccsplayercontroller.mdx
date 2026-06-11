@@ -4,13 +4,13 @@ title: CCSPlayerController
 
 # CCSPlayerController
 
-**Inheritance**: CBasePlayerController
+**Inheritance**: [CBasePlayerController](/docs/schema/entity/classes/Cbaseplayercontroller)
 
 ## Fields
 
 - <ApiParam name="m_pInGameMoneyServices" type="CCSPlayerController_InGameMoneyServices*" />
-- <ApiParam name="m_pInventoryServices" type="[CCSPlayerController_InventoryServices*](/docs/schema/entity/classes/Ccsplayercontroller_inventoryservices)" />
-- <ApiParam name="m_pActionTrackingServices" type="CCSPlayerController_ActionTrackingServices*" />
+- <ApiParam name="m_pInventoryServices" type="CCSPlayerController_InventoryServices*" />
+- <ApiParam name="m_pActionTrackingServices" type="[CCSPlayerController_ActionTrackingServices*](/docs/schema/entity/classes/Ccsplayercontroller_actiontrackingservices)" />
 - <ApiParam name="m_pDamageServices" type="CCSPlayerController_DamageServices*" />
 - <ApiParam name="m_iPing" type="uint32_t" />
 - <ApiParam name="m_bHasCommunicationAbuseMute" type="bool" />
@@ -42,7 +42,7 @@ title: CCSPlayerController
 - <ApiParam name="m_nEndMatchNextMapVote" type="int32_t" />
 - <ApiParam name="m_unActiveQuestId" type="uint16_t" />
 - <ApiParam name="m_rtActiveMissionPeriod" type="uint32_t" />
-- <ApiParam name="m_nQuestProgressReason" type="QuestProgress__Reason" />
+- <ApiParam name="m_nQuestProgressReason" type="[QuestProgress__Reason](/docs/schema/entity/enums/enums/QuestProgress__Reason)" />
 - <ApiParam name="m_unPlayerTvControlFlags" type="uint32_t" />
 - <ApiParam name="m_iDraftIndex" type="int32_t" />
 - <ApiParam name="m_msQueuedModeDisconnectionTimestamp" type="uint32_t" />
@@ -109,7 +109,7 @@ Get controller from pawn.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pPawn" type="[CCSPlayerPawn*](/docs/schema/entity/classes/Ccsplayerpawn)" />
+- <ApiParam name="pPawn" type="CCSPlayerPawn*" />
 
 ### CCSPlayerController* FromSlot(iSlot)
 
@@ -208,7 +208,7 @@ Take damage from player
 
 - <ApiParam name="pAttacker" type="[CCSPlayerController*](/docs/schema/entity/classes/Ccsplayercontroller)" />
 - <ApiParam name="iDamage" type="int" />
-- <ApiParam name="bitsDamageType" type="DamageTypes_t" />
+- <ApiParam name="bitsDamageType" type="[DamageTypes_t](/docs/schema/entity/enums/enums/DamageTypes_t)" />
 
 ### Respawn()
 
