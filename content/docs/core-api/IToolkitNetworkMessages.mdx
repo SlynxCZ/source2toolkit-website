@@ -1,0 +1,680 @@
+---
+title: IToolkitNetworkMessages
+---
+
+# IToolkitNetworkMessages
+
+## Methods
+
+### void* AllocateNetMessageByID(msgid)
+
+Allocates a network message by its numeric ID.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msgid" type="int" /> — Message ID.
+
+### void* AllocateNetMessageByPartialName(name)
+
+Allocates a network message by a partial name match.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" /> — Partial name string (e.g. "CSVCMsg_UserMessage").
+
+### DeallocateNetMessage(msg)
+
+Deallocates a previously allocated network message.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" /> — Message pointer returned by Allocate*.
+
+### bool HasField(msg, fieldName)
+
+Returns true if a singular field is set on the message.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### int GetInt32(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### int GetRepeatedInt32(msg, fieldName, index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### SetInt32(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="int" />
+
+### SetRepeatedInt32(msg, fieldName, index, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+- <ApiParam name="value" type="int" />
+
+### AddInt32(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="int" />
+
+### int64_t GetInt64(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### int64_t GetRepeatedInt64(msg, fieldName, index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### SetInt64(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="int64_t" />
+
+### SetRepeatedInt64(msg, fieldName, index, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+- <ApiParam name="value" type="int64_t" />
+
+### AddInt64(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="int64_t" />
+
+### uint32_t GetUInt32(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### uint32_t GetRepeatedUInt32(msg, fieldName, index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### SetUInt32(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="uint32_t" />
+
+### SetRepeatedUInt32(msg, fieldName, index, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+- <ApiParam name="value" type="uint32_t" />
+
+### AddUInt32(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="uint32_t" />
+
+### uint64_t GetUInt64(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### uint64_t GetRepeatedUInt64(msg, fieldName, index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### SetUInt64(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="uint64_t" />
+
+### SetRepeatedUInt64(msg, fieldName, index, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+- <ApiParam name="value" type="uint64_t" />
+
+### AddUInt64(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="uint64_t" />
+
+### bool GetBool(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### bool GetRepeatedBool(msg, fieldName, index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### SetBool(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="bool" />
+
+### SetRepeatedBool(msg, fieldName, index, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+- <ApiParam name="value" type="bool" />
+
+### AddBool(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="bool" />
+
+### float GetFloat(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### float GetRepeatedFloat(msg, fieldName, index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### SetFloat(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="float" />
+
+### SetRepeatedFloat(msg, fieldName, index, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+- <ApiParam name="value" type="float" />
+
+### AddFloat(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="float" />
+
+### double GetDouble(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### double GetRepeatedDouble(msg, fieldName, index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### SetDouble(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="double" />
+
+### SetRepeatedDouble(msg, fieldName, index, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+- <ApiParam name="value" type="double" />
+
+### AddDouble(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="double" />
+
+### std::string GetString(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### std::string GetRepeatedString(msg, fieldName, index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### SetString(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="const char*" />
+
+### SetRepeatedString(msg, fieldName, index, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+- <ApiParam name="value" type="const char*" />
+
+### AddString(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="const char*" />
+
+### Vector2D GetVector2D(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### Vector2D GetRepeatedVector2D(msg, fieldName, index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### SetVector2D(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="Vector2D" />
+
+### SetRepeatedVector2D(msg, fieldName, index, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+- <ApiParam name="value" type="Vector2D" />
+
+### AddVector2D(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="Vector2D" />
+
+### Vector GetVector(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### Vector GetRepeatedVector(msg, fieldName, index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### SetVector(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="Vector" />
+
+### SetRepeatedVector(msg, fieldName, index, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+- <ApiParam name="value" type="Vector" />
+
+### AddVector(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="Vector" />
+
+### Color GetColor(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### Color GetRepeatedColor(msg, fieldName, index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### SetColor(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="Color" />
+
+### SetRepeatedColor(msg, fieldName, index, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+- <ApiParam name="value" type="Color" />
+
+### AddColor(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="Color" />
+
+### QAngle GetQAngle(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### QAngle GetRepeatedQAngle(msg, fieldName, index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### SetQAngle(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="QAngle" />
+
+### SetRepeatedQAngle(msg, fieldName, index, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+- <ApiParam name="value" type="QAngle" />
+
+### AddQAngle(msg, fieldName, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="QAngle" />
+
+### int GetBytes(out, msg, fieldName)
+
+Copies a bytes field into @p out.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="out" type="uint8_t*" />
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### int GetRepeatedBytes(out, msg, fieldName, index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="out" type="uint8_t*" />
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### SetBytes(msg, fieldName, value, valueLength)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="const char*" />
+- <ApiParam name="valueLength" type="int" />
+
+### SetRepeatedBytes(msg, fieldName, index, value, valueLength)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+- <ApiParam name="value" type="const char*" />
+- <ApiParam name="valueLength" type="int" />
+
+### AddBytes(msg, fieldName, value, valueLength)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="value" type="const char*" />
+- <ApiParam name="valueLength" type="int" />
+
+### void* GetNestedMessage(msg, fieldName)
+
+Returns a mutable pointer to a singular nested message field.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### void* GetRepeatedNestedMessage(msg, fieldName, index)
+
+Returns a mutable pointer to a repeated nested message element.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+- <ApiParam name="index" type="int" />
+
+### void* AddNestedMessage(msg, fieldName)
+
+Appends a new element to a repeated nested message field and returns it.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### int GetRepeatedFieldSize(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### ClearRepeatedField(msg, fieldName)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+- <ApiParam name="fieldName" type="const char*" />
+
+### Clear(msg)
+
+Clears all fields on the message.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" />
+
+### SendMessage(msg, msgid, slot)
+
+Sends a network message to a single player.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" /> — Allocated message to send (not freed by this call).
+- <ApiParam name="msgid" type="int" /> — Message ID matching the allocation.
+- <ApiParam name="slot" type="CPlayerSlot" />
+
+### SendMessageToPlayers(msg, msgid, playermask)
+
+Sends a network message to a set of players.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="msg" type="void*" /> — Allocated message to send (not freed by this call).
+- <ApiParam name="msgid" type="int" /> — Message ID matching the allocation.
+- <ApiParam name="playermask" type="uint64_t" /> — 64-bit bitmask; bit N = slot N.
+
+### uint64_t AddServerHook(callback)
+
+Registers a hook for outgoing server-to-client messages.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="callback" type="NetMessageServerHook" />
+
+### RemoveServerHook(callbackID)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="callbackID" type="uint64_t" />
+
+### uint64_t AddClientHook(callback)
+
+Registers a hook for incoming client-to-server messages.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="callback" type="NetMessageClientHook" />
+
+### RemoveClientHook(callbackID)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="callbackID" type="uint64_t" />
+
+### uint64_t AddServerInternalHook(callback)
+
+Registers a hook for internal server-side message sends (per-client).
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="callback" type="NetMessageClientHook" />
+
+### RemoveServerInternalHook(callbackID)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="callbackID" type="uint64_t" />
+

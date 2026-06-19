@@ -6,6 +6,18 @@ title: IToolkitMenus
 
 ## IMenu
 
+### const std::string& Title()
+
+Gets menu title.
+
+### std::vector&lt;ChatMenuOption&gt;& Options()
+
+Gets menu options.
+
+### const std::vector&lt;ChatMenuOption&gt;& Options()
+
+Gets menu options (const).
+
 ### PostSelectAction GetPostSelectAction()
 
 Gets post-select behavior.
@@ -46,7 +58,7 @@ Handles key press input.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="player" type="CCSPlayerController *" /> — Player who triggered input
+- <ApiParam name="player" type="CCSPlayerController*" /> — Player who triggered input
 - <ApiParam name="key" type="int" /> — Pressed key (1-9)
 
 ### Close()
@@ -61,13 +73,13 @@ Menu items per page.
 
 - <ApiParam type=") const { return NumPerPage(" />
 
-### return (int) opts.size() &gt; NumPerPage()
+### return (int)opts.size() &gt; NumPerPage()
 
 Checks if next page exists.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type=") && (currentOffset_ + NumPerPage()) &lt; (int) opts.size(" />
+- <ApiParam type=") && (currentOffset_ + NumPerPage()) &lt; (int)opts.size(" />
 
 ### bool HasExitButton()
 
@@ -93,8 +105,16 @@ Opens a CenterHtmlMenu for a player.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="player" type="CCSPlayerController *" /> — Target player
-- <ApiParam name="menu" type="[CenterHtmlMenu *](/docs/core-api/IToolkitMenus)" /> — Menu to open
+- <ApiParam name="player" type="CCSPlayerController*" /> — Target player
+- <ApiParam name="menu" type="[CenterHtmlMenu*](/docs/core-api/IToolkitMenus)" /> — Menu to open
+
+### IMenuInstance* GetActiveMenu(player)
+
+Gets active menu instance for player.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="player" type="CCSPlayerController*" /> — Target player
 
 ### CloseActiveMenu(player)
 
@@ -102,7 +122,7 @@ Closes active menu for player.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="player" type="CCSPlayerController *" /> — Target player
+- <ApiParam name="player" type="CCSPlayerController*" /> — Target player
 
 ### OnKeyPress(player, key)
 
@@ -110,6 +130,6 @@ Handles key press input.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="player" type="CCSPlayerController *" /> — Player who pressed key
+- <ApiParam name="player" type="CCSPlayerController*" /> — Player who pressed key
 - <ApiParam name="key" type="int" /> — Pressed key (1-9)
 

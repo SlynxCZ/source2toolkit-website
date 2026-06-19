@@ -23,24 +23,21 @@ Initialises the module from an address inside it.
 
 - <ApiParam name="ptr" type="uintptr_t" /> — Any address that belongs to the target module.
 
-### ] virtual IToolkitMemory FindPattern(pattern, startAddress)
+### IToolkitMemory startAddress = IToolkitMemory()
 
 Scans the executable section for a byte-string pattern.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pattern" type="const char*" /> — IDA-style pattern string.
-- <ApiParam name="startAddress" type="IToolkitMemory" /> — Optional address to start scanning from.
+- <ApiParam type=")" />
 
-### ] virtual IToolkitMemory FindPatternInSection(pattern, section, startAddress)
+### IToolkitMemory startAddress = IToolkitMemory()
 
 Scans a named section for a byte-string pattern.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pattern" type="const char*" /> — IDA-style pattern string.
-- <ApiParam name="section" type="const char*" /> — Section name, e.g. ".text" or ".rdata".
-- <ApiParam name="startAddress" type="IToolkitMemory" /> — Optional address to start scanning from.
+- <ApiParam type=")" />
 
 ### ] virtual IToolkitMemory GetVirtualTableByName(name, decorated)
 
@@ -113,5 +110,5 @@ Creates a module wrapper from an IToolkitMemory address inside the module.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="mem" type="IToolkitMemory" />
+- <ApiParam name="mem" type="[IToolkitMemory](/docs/core-api/IToolkitMemory)" />
 
