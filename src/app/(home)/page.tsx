@@ -202,7 +202,7 @@ player->m_iPawnHealth() = 1337; // Without automatic SetStateChanged`}
 CConVarRef<bool> sv_autobunnyhopping("sv_autobunnyhopping");
 IToolkitModule* libserver = IToolkitModule::New(g_pSource2Server);
 
-uintptr_t addr = libserver->FindPattern(g_ToolkitAPI->GameConfig()->GetSignature("CCSPlayerLegacyJump_CheckJumpButtonLegacy"));
+uintptr_t addr = libserver->FindPattern(GAMECONFIG_SIGNATURE("CCSPlayerLegacyJump_CheckJumpButtonLegacy"));
 m_CheckJumpButtonLegacy->Configure(reinterpret_cast<void(*)(CCSPlayerLegacyJump*, void*)>(addr));
 
 KHook::Return<void> Plugin::CCSPlayerLegacyJump_CheckJumpButtonLegacy(CCSPlayerLegacyJump* pThis, void* mv)
@@ -266,7 +266,7 @@ KHook::Return<void> Plugin::CCSPlayerLegacyJump_CheckJumpButtonLegacy(CCSPlayerL
                 <CodeBlock
                   title="Commands & Events"
                   code={`
-g_ToolkitAPI->Commands()->RegConCommand("s2t_test", [](const CCommandContext& ctx, const CCommand&, Mode)
+REG_CON_COMMAND("s2t_test", [](const CCommandContext& ctx, const CCommand&, Mode)
 {
     auto* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot());
     if (!player)
@@ -275,7 +275,7 @@ g_ToolkitAPI->Commands()->RegConCommand("s2t_test", [](const CCommandContext& ct
     player->PrintToChat("Hello!");
 });
 
-g_ToolkitAPI->Commands()->RegConListener("jointeam", [](const CCommandContext& ctx, const CCommand&, Mode)
+REG_CON_LISTENER("jointeam", [](const CCommandContext& ctx, const CCommand& args, Mode) -> Action
 {
     auto* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot());
     if (!player)
@@ -293,9 +293,9 @@ g_ToolkitAPI->Commands()->RegConListener("jointeam", [](const CCommandContext& c
     }
 
     return Action::Ignore;
-});
+}, Mode::Pre);
 
-g_ToolkitAPI->Events()->RegGameEvent("player_connect_full", [](IGameEvent* event, Mode, bool&)
+HOOK_GAME_EVENT("player_connect_full", [](IGameEvent* event, Mode, bool&) -> Action
 {
     auto* player = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
     if (!player)
