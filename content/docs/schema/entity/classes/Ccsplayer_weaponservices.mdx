@@ -4,7 +4,7 @@ title: CCSPlayer_WeaponServices
 
 # CCSPlayer_WeaponServices
 
-**Inheritance**: [CPlayer_WeaponServices](/docs/schema/entity/classes/Cplayer_weaponservices)
+**Inheritance**: CPlayer_WeaponServices
 
 ## Fields
 
@@ -30,7 +30,7 @@ Checks if player can use weapon (fire and maybe acquire).
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pWeapon" type="CBasePlayerWeapon *" />
+- <ApiParam name="pWeapon" type="[CBasePlayerWeapon *](/docs/schema/entity/classes/Cbaseplayerweapon)" />
 
 ### DropWeapon(pWeapon, pVecTarget, pVelocity)
 
@@ -38,7 +38,7 @@ Drop weapon.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pWeapon" type="CBasePlayerWeapon *" />
+- <ApiParam name="pWeapon" type="[CBasePlayerWeapon *](/docs/schema/entity/classes/Cbaseplayerweapon)" />
 - <ApiParam name="pVecTarget" type="Vector *" />
 - <ApiParam name="pVelocity" type="Vector *" />
 
@@ -48,7 +48,7 @@ Probably checks weapon validity after CCSPlayer_ItemServices::GiveNamedItem invo
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pWeapon" type="CBasePlayerWeapon *" />
+- <ApiParam name="pWeapon" type="[CBasePlayerWeapon *](/docs/schema/entity/classes/Cbaseplayerweapon)" />
 
 ### SelectItem(pWeapon, unk1)
 
@@ -56,7 +56,7 @@ Select weapon, If unk1 is equal to 3 some code will be executed.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pWeapon" type="CBasePlayerWeapon *" />
+- <ApiParam name="pWeapon" type="[CBasePlayerWeapon *](/docs/schema/entity/classes/Cbaseplayerweapon)" />
 - <ApiParam name="unk1" type="int" />
 
 ### Destroy(pWeapon)
@@ -65,5 +65,5 @@ Remove and destroy weapon from player.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pWeapon" type="CBasePlayerWeapon *" />
+- <ApiParam name="pWeapon" type="[CBasePlayerWeapon *](/docs/schema/entity/classes/Cbaseplayerweapon)" />
 
