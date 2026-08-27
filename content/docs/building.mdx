@@ -5,7 +5,7 @@ title: SDK & Building
 This guide explains how to use the **Source2Toolkit SDK** to build your own plugins.
 
 The SDK provides everything needed to compile plugins against Source2Toolkit, including:
-- KHook headers (bundled as a submodule)
+- SourceHook headers (bundled as a submodule)
 - Build configuration and CMake helpers
 - HL2SDK (CS2) and Protobuf — resolved via environment variables
 
@@ -21,7 +21,7 @@ cd source2toolkit-sdk
 ```
 
 <Callout type="info">
-  The SDK only includes **KHook** as a submodule (for headers).
+  The SDK only includes **SourceHook** as a submodule (for headers).
   **HL2SDK (CS2)** and **Protobuf** must be available on your system and resolved through environment variables — see below.
 </Callout>
 
@@ -32,12 +32,12 @@ cd source2toolkit-sdk
 The SDK uses `resolve_dep` to locate external dependencies at configure time:
 
 ```cmake
-resolve_dep(KHOOK    KHOOK      ${CMAKE_CURRENT_SOURCE_DIR}/vendor/khook)
-resolve_dep(SOURCESDK HL2SDKCS2)
-resolve_dep(PROTOBUFS CSGO_PROTO)
+resolve_dep(SOURCEHOOK SOURCEHOOK ${CMAKE_CURRENT_SOURCE_DIR}/vendor/sourcehook)
+resolve_dep(SOURCESDK  HL2SDKCS2)
+resolve_dep(PROTOBUFS  CSGO_PROTO)
 ```
 
-`KHOOK` is bundled inside the SDK. The other two must be provided via environment variables:
+`SOURCEHOOK` is bundled inside the SDK. The other two must be provided via environment variables:
 
 | Variable | Description |
 |---|---|
@@ -168,7 +168,7 @@ The SDK automatically configures:
 - Linking against HL2SDK and engine libraries
 - Protobuf integration
 - ABI compatibility (Linux / Windows)
-- Include directories for Source 2 and KHook headers
+- Include directories for Source 2 and SourceHook headers
 - Plugin output format (`.stx`)
 
 ---

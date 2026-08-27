@@ -199,14 +199,19 @@ player->m_iPawnHealth() = 1337; // Without automatic SetStateChanged`}
                 <CodeBlock
                   title="Inline Hook (ProcessMovement)"
                   code={`
+SH_DECL_INLINEHOOK1_void(CheckJumpButtonLegacy, CCSPlayerLegacyJump, void*);
+
 CConVarRef<bool> sv_autobunnyhopping("sv_autobunnyhopping");
 IToolkitModule* libserver = IToolkitModule::New(g_pSource2Server);
 
-uintptr_t addr = libserver->FindPattern(GAMECONFIG_SIGNATURE("CCSPlayerLegacyJump_CheckJumpButtonLegacy"));
-m_CheckJumpButtonLegacy->Configure(reinterpret_cast<void(*)(CCSPlayerLegacyJump*, void*)>(addr));
+m_addr = libserver->FindPattern(GAMECONFIG_SIGNATURE("CCSPlayerLegacyJump_CheckJumpButtonLegacy"));
+m_iHookID = SH_ADD_INLINEHOOK(CheckJumpButtonLegacy, m_addr,
+                              SH_MEMBER(this, &Plugin::Hook_CheckJumpButtonLegacy), false);
 
-KHook::Return<void> Plugin::CCSPlayerLegacyJump_CheckJumpButtonLegacy(CCSPlayerLegacyJump* pThis, void* mv)
+void Plugin::Hook_CheckJumpButtonLegacy(void* mv)
 {
+    CCSPlayerLegacyJump* pThis = META_IFACEPTR(CCSPlayerLegacyJump);
+
     CCSPlayer_MovementServices* ms = pThis->m_pMovementServices;
     CCSPlayerPawn* pawn = ms ? ms->GetPawn() : nullptr;
     CCSPlayerController* player = pawn ? pawn->GetController() : nullptr;
@@ -217,13 +222,13 @@ KHook::Return<void> Plugin::CCSPlayerLegacyJump_CheckJumpButtonLegacy(CCSPlayerL
     if (canBhop && !originalBhop)
     {
         sv_autobunnyhopping.Set(true);
-        m_pGameServerSteamAPIActivated->CallOriginal(pThis, mv);
+        SH_CALL(CheckJumpButtonLegacy, m_addr, pThis)(mv);
         sv_autobunnyhopping.Set(false);
 
-        return { KHook::Action::Supersede };
+        RETURN_META(MRES_SUPERCEDE);
     }
 
-    return { KHook::Action::Ignore };
+    RETURN_META(MRES_IGNORED);
 }`}
                 />
               </div>

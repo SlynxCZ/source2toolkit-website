@@ -1,0 +1,37 @@
+---
+title: META_MODE
+---
+
+# META_MODE
+
+When a listener runs relative to the function it is attached to.
+
+Used by the toolkit's own listener registration — `HookGameEvent`,
+`RegConListener`, `AddEntityIOListener` and friends — to say whether your
+callback fires before or after the underlying call.
+
+## Enums
+
+### META_MODE
+
+#### Values
+
+- `MMODE_PRE` = 0 — runs before the real function
+- `MMODE_POST` — runs after the real function has returned
+
+## Aliases
+
+`SHMODE_PRE` and `SHMODE_POST` are the same values under SH-branded names,
+matching `SH_IFACEPTR` / `RETURN_SH`. Both spellings work everywhere; prefer
+`SHMODE_` in new code.
+
+```cpp
+g_pToolkitEvents->HookGameEvent(g_PluginID, "player_death",
+                                OnPlayerDeath, SHMODE_POST);
+```
+
+<Callout type="info">
+  A post listener cannot change the outcome — by the time it runs the original
+  has already executed. Register `MMODE_PRE` if you need to block or rewrite
+  anything.
+</Callout>
