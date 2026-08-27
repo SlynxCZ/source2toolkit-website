@@ -184,25 +184,45 @@ Releases a module previously obtained from LoadModule() / LoadModuleFromMemory()
 
 - <ApiParam name="module" type="IToolkitModule*" />
 
-### IGameEventManager2* GetGameEventManager()
+### ISource2Server* GetSource2Server()
 
-### CGlobalVars* GetGlobalVars()
+### ISource2ServerConfig* GetSource2ServerConfig()
+
+### ISource2GameClients* GetSource2GameClients()
+
+### ISource2GameEntities* GetSource2GameEntities()
+
+### IVEngineServer2* GetEngineServer()
 
 ### ICvar* GetCVar()
 
-### ISource2Server* GetSource2Server()
+### CSchemaSystem* GetSchemaSystem()
 
-### IVEngineServer* GetEngineServer()
-
-### IGameEventSystem* GetGameEventSystem()
-
-### INetworkMessages* GetNetworkMessages()
+### IGameResourceService* GetGameResourceService()
 
 ### INetworkServerService* GetNetworkServerService()
 
+### INetworkSystem* GetNetworkSystem()
+
+### INetworkMessages* GetNetworkMessages()
+
+### INetworkStringTableContainer* GetNetworkStringTableServer()
+
+### IEngineServiceMgr* GetEngineServiceMgr()
+
+### IHostStateMgr* GetHostStateMgr()
+
+### ILocalize* GetLocalize()
+
+### IFileSystem* GetFileSystem()
+
+### IGameEventSystem* GetGameEventSystem()
+
+### IGameEventManager2* GetGameEventManager()
+
 ### CGameEntitySystem* GetEntitySystem()
 
-### CSchemaSystem* GetSchemaSystem()
+### CGlobalVars* GetGlobalVars()
 
 ### const char* GetBaseDir()
 
