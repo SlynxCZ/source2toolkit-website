@@ -271,7 +271,7 @@ void Plugin::Hook_CheckJumpButtonLegacy(void* mv)
                 <CodeBlock
                   title="Commands & Events"
                   code={`
-REG_CON_COMMAND("s2t_test", [](const CCommandContext& ctx, const CCommand&, META_MODE)
+REG_CON_COMMAND("s2t_test", [](const CCommandContext& ctx, const CCommand&, bool)
 {
     auto* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot());
     if (!player)
@@ -280,7 +280,7 @@ REG_CON_COMMAND("s2t_test", [](const CCommandContext& ctx, const CCommand&, META
     player->PrintToChat("Hello!");
 });
 
-REG_CON_LISTENER("jointeam", [](const CCommandContext& ctx, const CCommand& args, META_MODE) -> META_RES
+REG_CON_LISTENER("jointeam", [](const CCommandContext& ctx, const CCommand& args, bool) -> META_RES
 {
     auto* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot());
     if (!player)
@@ -298,9 +298,9 @@ REG_CON_LISTENER("jointeam", [](const CCommandContext& ctx, const CCommand& args
     }
 
     return MRES_IGNORED;
-}, MMODE_PRE);
+}, false);
 
-HOOK_GAME_EVENT("player_connect_full", [](IGameEvent* event, META_MODE, bool&) -> META_RES
+HOOK_GAME_EVENT("player_connect_full", [](IGameEvent* event, bool post, bool&) -> META_RES
 {
     auto* player = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
     if (!player)
@@ -308,7 +308,7 @@ HOOK_GAME_EVENT("player_connect_full", [](IGameEvent* event, META_MODE, bool&) -
 
     TOOLKIT_LOG(&g_Plugin, "Player: %s\\n", player->GetPlayerName());
     return MRES_IGNORED;
-}, MMODE_PRE);`}
+}, false);`}
                 />
               </div>
             </div>
