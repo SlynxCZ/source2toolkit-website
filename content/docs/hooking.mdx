@@ -153,7 +153,22 @@ RETURN_META(MRES_SUPERCEDE);              // void handlers
 RETURN_META_VALUE(MRES_OVERRIDE, false);  // handlers with a return type
 ```
 
-See [META_RES](/docs/enums/META_RES) for what each result does.
+`META_RES` comes from SourceHook, so it is the same vocabulary Metamod
+plugins already use — the toolkit does not wrap it in a type of its own:
+
+| `META_RES` | meaning |
+|---|---|
+| `MRES_IGNORED` | the handler did nothing |
+| `MRES_HANDLED` | the handler did something, but the original still runs |
+| `MRES_OVERRIDE` | the original still runs, but your return value is used |
+| `MRES_SUPERCEDE` | the original is skipped entirely, your return value is used |
+
+<Callout type="warn">
+  `MRES_SUPERCEDE` skips the original **for every remaining handler too**. If
+  you called the original yourself and only want to stop SourceHook calling it
+  a second time, supersede is still the right answer — but hooks registered
+  after yours will not see it run.
+</Callout>
 
 ---
 
