@@ -18,10 +18,10 @@ title: CBaseDoor
 - <ApiParam name="m_bNoNPCs" type="bool" />
 - <ApiParam name="m_eSpawnPosition" type="[FuncDoorSpawnPos_t](/docs/schema/entity/enums/enums/FuncDoorSpawnPos_t)" />
 - <ApiParam name="m_flBlockDamage" type="float" />
-- <ApiParam name="m_NoiseMoving" type="CUtlSymbolLarge" />
-- <ApiParam name="m_NoiseArrived" type="CUtlSymbolLarge" />
-- <ApiParam name="m_NoiseMovingClosed" type="CUtlSymbolLarge" />
-- <ApiParam name="m_NoiseArrivedClosed" type="CUtlSymbolLarge" />
+- <ApiParam name="m_NoiseMoving" type="CGameSoundEventName" />
+- <ApiParam name="m_NoiseArrived" type="CGameSoundEventName" />
+- <ApiParam name="m_NoiseMovingClosed" type="CGameSoundEventName" />
+- <ApiParam name="m_NoiseArrivedClosed" type="CGameSoundEventName" />
 - <ApiParam name="m_ChainTarget" type="CUtlSymbolLarge" />
 - <ApiParam name="m_OnBlockedClosing" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 - <ApiParam name="m_OnBlockedOpening" type="[CEntityIOOutput](/docs/schema/Entityio)" />
@@ -34,6 +34,7 @@ title: CBaseDoor
 - <ApiParam name="m_OnLockedUse" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 - <ApiParam name="m_bLoopMoveSound" type="bool" />
 - <ApiParam name="m_bCreateNavObstacle" type="bool" />
+- <ApiParam name="m_flSpeed" type="float" />
 - <ApiParam name="m_isChaining" type="bool" />
 - <ApiParam name="m_bIsUsable" type="bool" />
 

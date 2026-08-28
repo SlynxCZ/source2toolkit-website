@@ -51,7 +51,6 @@ title: CBaseEntity
 - <ApiParam name="m_iTeamNum" type="uint8_t" />
 - <ApiParam name="m_iGlobalname" type="CUtlSymbolLarge" />
 - <ApiParam name="m_iSentToClients" type="int32_t" />
-- <ApiParam name="m_flSpeed" type="float" />
 - <ApiParam name="m_sUniqueHammerID" type="CUtlString" />
 - <ApiParam name="m_spawnflags" type="uint32_t" />
 - <ApiParam name="m_nNextThinkTick" type="int32_t" />
@@ -128,7 +127,7 @@ Add delayed entity IO event.
 - <ApiParam name="pszValue" type="const char*" />
 - <ApiParam name="flDelay" type="float" />
 
-### CEntityIOListenerHandle* AddSingleEntityIOListener(pszOutput, callback, mode)
+### CEntityIOListenerHandle* AddSingleEntityIOListener(pszOutput, callback, post)
 
 Add signle entity IO listener.
 
