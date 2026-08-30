@@ -1,0 +1,24 @@
+---
+title: IToolkitGameSystems
+---
+
+# IToolkitGameSystems
+
+## Methods
+
+### bool IsAvailable()
+
+Whether the factory list head was found.
+
+### CBaseGameSystemFactory** GetFactoryListHead()
+
+The engine's game system factory list head.
+
+### IGameSystem* FindByName(name)
+
+Finds an already-registered game system by the name it was
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" /> — Registration name, e.g. "MyPlugin_GameSystem".
+

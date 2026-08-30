@@ -232,6 +232,23 @@ Gets value into user-provided buffer.
 - <ApiParam name="outValue" type="void*" />
 - <ApiParam name="slot" type="CSplitScreenSlot" />
 
+### HookConVarChange(owner, handler)
+
+Registers a listener for every ConVar value change.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the listener
+- <ApiParam name="handler" type="ConVarChangeHandler" /> — Callback function
+
+### UnhookConVarChange(owner)
+
+Drops every change listener a plugin registered.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" /> — Plugin ID whose listeners to drop
+
 ### SetValue(accessIndex, value, slot)
 
 Sets value from user-provided buffer.
