@@ -17,6 +17,74 @@ title: CCSCustomHudLayout
 
 ## Methods
 
+### CCSCustomHudLayout* Create(pszLayout, pszTargetName)
+
+Creates and spawns a custom_hud_layout for a panorama layout, e.g. "my_panel" for panorama/layout/custom_game/my_panel.vxml_c.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszLayout" type="const char*" />
+- <ApiParam name="pszTargetName" type="const char*" />
+
+### CCSCustomHudLayoutState& GetLayoutState(pController)
+
+Gets the layout state of one player, or the global state when no controller is given.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pController" type="CCSPlayerController*" />
+
+### SetHasClass(pszPanelId, pszClassName, bHasClass, pController)
+
+Adds or removes a CSS class on a panel of the layout.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszPanelId" type="const char*" />
+- <ApiParam name="pszClassName" type="const char*" />
+- <ApiParam name="bHasClass" type="bool" />
+- <ApiParam name="pController" type="CCSPlayerController*" />
+
+### SetDialogVariableString(pszPanelId, pszVariableName, pszValue, pController)
+
+Sets a dialog variable string on a panel of the layout.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszPanelId" type="const char*" />
+- <ApiParam name="pszVariableName" type="const char*" />
+- <ApiParam name="pszValue" type="const char*" />
+- <ApiParam name="pController" type="CCSPlayerController*" />
+
+### SetInputCaptureEnabled(bEnable, pController)
+
+Enables or disables mouse input capture, without which the player cannot click the layout.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="bEnable" type="bool" />
+- <ApiParam name="pController" type="CCSPlayerController*" />
+
+### bool IsInputCaptureEnabled(pController)
+
+Whether mouse input capture is enabled.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pController" type="CCSPlayerController*" />
+
+### AddClickCallback(callback)
+
+Registers a callback fired when a player clicks a panel of this layout, keyed by the panel's id attribute.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="callback" type="std::function&lt;void(CCSPlayerController*, CCSCustomHudLayout*, const char*)&gt;" />
+
+### RemoveClickCallbacks()
+
+Drops every click callback registered for this layout.
+
 ### return FromIndex()
 
 <ApiLabel>Parameters</ApiLabel>
