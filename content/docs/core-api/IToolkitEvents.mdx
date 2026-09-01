@@ -17,3 +17,13 @@ Registers a listener for a game event.
 - <ApiParam name="handler" type="GameEventHandler" /> — Callback function
 - <ApiParam name="post" type="bool" /> — false to be called before the engine processes the event,
 
+### UnhookGameEvent(owner, pchName, post)
+
+Drops one of this plugin's event hooks.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the listener
+- <ApiParam name="pchName" type="const char*" /> — Event name the hook was registered under
+- <ApiParam name="post" type="bool" /> — Which of the two hooks to drop
+

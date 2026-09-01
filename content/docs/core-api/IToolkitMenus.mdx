@@ -10,6 +10,14 @@ title: IToolkitMenus
 
 Gets menu title.
 
+### SetTitle(t)
+
+Sets the menu title.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="t" type="std::string" /> — New title
+
 ### std::vector&lt;ChatMenuOption&gt;& Options()
 
 Gets menu options.
@@ -45,6 +53,22 @@ Sets exit button state.
 ## IBaseMenu
 
 **Inheritance**: [IMenu](/docs/core-api/IToolkitMenus)
+
+### SetTitle(title_)
+
+Constructs a menu.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="title_" type="std::string t) override {" />
+
+### ClearOptions()
+
+Drops every option, for a menu that is rebuilt in place.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam type=") { options_.clear(" />
 
 ## IMenuInstance
 

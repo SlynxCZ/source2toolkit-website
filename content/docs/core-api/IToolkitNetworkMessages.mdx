@@ -636,45 +636,54 @@ Sends a network message to a set of players.
 - <ApiParam name="msgid" type="int" /> — Message ID matching the allocation.
 - <ApiParam name="playermask" type="uint64_t" /> — 64-bit bitmask; bit N = slot N.
 
-### uint64_t AddServerHook(callback)
+### HookServerMessage(owner, handler)
 
-Registers a hook for outgoing server-to-client messages.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="callback" type="NetMessageServerHook" />
-
-### RemoveServerHook(callbackID)
+Hooks outgoing server-to-client messages.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="callbackID" type="uint64_t" />
+- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the hook
+- <ApiParam name="handler" type="NetMessageServerHook" /> — Callback, or nullptr to unhook
 
-### uint64_t AddClientHook(callback)
+### UnhookServerMessage(owner)
 
-Registers a hook for incoming client-to-server messages.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="callback" type="NetMessageClientHook" />
-
-### RemoveClientHook(callbackID)
+Drops this plugin's outgoing-message hook.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="callbackID" type="uint64_t" />
+- <ApiParam name="owner" type="PluginId" />
 
-### uint64_t AddServerInternalHook(callback)
+### HookClientMessage(owner, handler)
 
-Registers a hook for internal server-side message sends (per-client).
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="callback" type="NetMessageClientHook" />
-
-### RemoveServerInternalHook(callbackID)
+Hooks incoming client-to-server messages.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="callbackID" type="uint64_t" />
+- <ApiParam name="owner" type="PluginId" />
+- <ApiParam name="handler" type="NetMessageClientHook" />
+
+### UnhookClientMessage(owner)
+
+Drops this plugin's incoming-message hook.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" />
+
+### HookServerInternalMessage(owner, handler)
+
+Hooks internal server-side message sends (per-client).
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" />
+- <ApiParam name="handler" type="NetMessageClientHook" />
+
+### UnhookServerInternalMessage(owner)
+
+Drops this plugin's internal-send hook.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" />
 

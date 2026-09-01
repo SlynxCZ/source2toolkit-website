@@ -26,15 +26,17 @@ Sets model on entity.
 
 Assigns pawn to player controller.
 
-### CGameRules_TerminateRound_t CGameRules_TerminateRound()
+### CBasePlayerPawn_SnapViewAngles_t CBasePlayerPawn_SnapViewAngles()
 
-Terminates current round.
+Snaps a pawn's view angles, as the engine does on teleport.
+
+### CGameRules_TerminateRound_t CGameRules_TerminateRound()
 
 ### CCSPlayer_WeaponServices_Destroy_t CCSPlayer_WeaponServices_Destroy()
 
 Destroys weapon from player pawn.
 
-### CCSPlayerController_LegacyGameEventListener_t CCSPlayerController_LegacyGameEventListener()
+### LegacyGameEventListener_t LegacyGameEventListener()
 
 Retrieves legacy game event listener.
 
@@ -67,4 +69,78 @@ Finds entity by name.
 Constructs CTakeDamageInfo with valid members.
 
 ### INetworkMessageProcessingPreFilter_FilterMessage_t INetworkMessageProcessingPreFilter_FilterMessage()
+
+### CEntityIdentity_AcceptInput_t CEntityIdentity_AcceptInput()
+
+### CCSPlayer_ItemServices_CanAcquire_t CCSPlayer_ItemServices_CanAcquire()
+
+### CCSPlayerPawn_CanMove_t CCSPlayerPawn_CanMove()
+
+### CCSPlayerController_ProcessUserCmd_t CCSPlayerController_ProcessUserCmd()
+
+### CBasePlayerController_OnSimulateUserCommands_t CBasePlayerController_OnSimulateUserCommands()
+
+### CCSPlayer_MovementServices_AirAccelerate_t CCSPlayer_MovementServices_AirAccelerate()
+
+### CCSPlayer_MovementServices_AirMove_t CCSPlayer_MovementServices_AirMove()
+
+### CCSPlayer_MovementServices_CanUnduck_t CCSPlayer_MovementServices_CanUnduck()
+
+### CCSPlayer_MovementServices_CategorizePosition_t CCSPlayer_MovementServices_CategorizePosition()
+
+### CCSPlayer_MovementServices_CheckFalling_t CCSPlayer_MovementServices_CheckFalling()
+
+### CCSPlayer_MovementServices_CheckParameters_t CCSPlayer_MovementServices_CheckParameters()
+
+### CCSPlayer_MovementServices_CheckVelocity_t CCSPlayer_MovementServices_CheckVelocity()
+
+### CCSPlayer_MovementServices_CheckWater_t CCSPlayer_MovementServices_CheckWater()
+
+### CCSPlayer_MovementServices_Duck_t CCSPlayer_MovementServices_Duck()
+
+### CCSPlayer_MovementServices_Friction_t CCSPlayer_MovementServices_Friction()
+
+### CCSPlayer_MovementServices_FullWalkMove_t CCSPlayer_MovementServices_FullWalkMove()
+
+### CCSPlayer_MovementServices_GroundAccelerate_t CCSPlayer_MovementServices_GroundAccelerate()
+
+### CCSPlayer_MovementServices_LadderMove_t CCSPlayer_MovementServices_LadderMove()
+
+### CCSPlayer_MovementServices_MoveInit_t CCSPlayer_MovementServices_MoveInit()
+
+### CCSPlayer_MovementServices_PlayerMove_t CCSPlayer_MovementServices_PlayerMove()
+
+### CCSPlayer_MovementServices_ProcessMovement_t CCSPlayer_MovementServices_ProcessMovement()
+
+### CCSPlayer_MovementServices_SetupMove_t CCSPlayer_MovementServices_SetupMove()
+
+### CCSPlayer_MovementServices_TryPlayerMove_t CCSPlayer_MovementServices_TryPlayerMove()
+
+### CCSPlayer_MovementServices_WalkMove_t CCSPlayer_MovementServices_WalkMove()
+
+### CCSPlayer_MovementServices_WaterMove_t CCSPlayer_MovementServices_WaterMove()
+
+### CCSPlayer_MovementServices_OnJumpLegacy_t CCSPlayer_MovementServices_OnJumpLegacy()
+
+The jump handlers take the jump object, not the movement services.
+
+### CCSPlayer_MovementServices_OnJumpModern_t CCSPlayer_MovementServices_OnJumpModern()
+
+### CCSPlayer_MovementServices_CheckJumpButtonLegacy_t CCSPlayer_MovementServices_CheckJumpButtonLegacy()
+
+### CCSPlayer_MovementServices_CheckJumpButtonModern_t CCSPlayer_MovementServices_CheckJumpButtonModern()
+
+### CAttributeList_SetOrAddAttributeValueByName_t CAttributeList_SetOrAddAttributeValueByName()
+
+### CDecoyProjectile_EmitGrenade_t CDecoyProjectile_EmitGrenade()
+
+C&lt;Type&gt;Projectile::EmitGrenade -- spawns a live grenade.
+
+### CFlashbangProjectile_EmitGrenade_t CFlashbangProjectile_EmitGrenade()
+
+### CHEGrenadeProjectile_EmitGrenade_t CHEGrenadeProjectile_EmitGrenade()
+
+### CMolotovProjectile_EmitGrenade_t CMolotovProjectile_EmitGrenade()
+
+### CSmokeGrenadeProjectile_EmitGrenade_t CSmokeGrenadeProjectile_EmitGrenade()
 

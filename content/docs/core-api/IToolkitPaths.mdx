@@ -1,0 +1,40 @@
+---
+title: IToolkitPaths
+---
+
+# IToolkitPaths
+
+## Methods
+
+### const char* GameDirectory()
+
+The game directory, e.g. ".../game/csgo".
+
+### const char* RootDirectory()
+
+addons/source2toolkit.
+
+### const char* ConfigsDirectory()
+
+addons/source2toolkit/configs.
+
+### const char* GamedataDirectory()
+
+addons/source2toolkit/gamedata.
+
+### const char* PluginsDirectory()
+
+addons/source2toolkit/plugins, where the .stx files live.
+
+### const char* SharedDirectory()
+
+addons/source2toolkit/shared, for data more than one plugin reads.
+
+### const char* PluginConfigDirectory(owner)
+
+This plugin's own config directory, configs/&lt;PluginName&gt;.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" /> — Plugin ID to look up
+

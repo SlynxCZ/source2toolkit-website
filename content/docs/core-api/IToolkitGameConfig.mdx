@@ -46,3 +46,19 @@ Gets integer offset.
 
 - <ApiParam name="pchName" type="const char*" /> — Config entry name
 
+### bool IsSymbol(pchName)
+
+Whether the entry is a symbol name rather than a byte pattern.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pchName" type="const char*" />
+
+### void* ResolveSignature(pchName)
+
+Resolves a gamedata entry to an address.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pchName" type="const char*" /> — Gamedata entry name.
+

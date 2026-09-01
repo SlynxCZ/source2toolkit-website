@@ -267,3 +267,47 @@ Deletes a ConVar.
 
 - <ApiParam name="accessIndex" type="uint16" />
 
+## Functions
+
+### UTIL_SetConVar(pszName, v, slot, , lot)
+
+Sets a ConVar by name.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszName" type="const char*" />
+- <ApiParam name="v" type="double" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+- <ApiParam type="static_cast&lt;float64&gt;(v)" />
+- <ApiParam name="lot" type="s" />
+
+### UTIL_SetConVar(pszName, v, slot, , lot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszName" type="const char*" />
+- <ApiParam name="v" type="float" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+- <ApiParam type="static_cast&lt;float32&gt;(v)" />
+- <ApiParam name="lot" type="s" />
+
+### UTIL_SetConVar(pszName, v, slot, , lot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszName" type="const char*" />
+- <ApiParam name="v" type="int" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+- <ApiParam type="static_cast&lt;int32&gt;(v)" />
+- <ApiParam name="lot" type="s" />
+
+### UTIL_SetConVar(pszName, v, slot, , lot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszName" type="const char*" />
+- <ApiParam name="v" type="unsigned" />
+- <ApiParam name="slot" type="CSplitScreenSlot" />
+- <ApiParam type="static_cast&lt;uint32&gt;(v)" />
+- <ApiParam name="lot" type="s" />
+

@@ -73,7 +73,7 @@ Whether mouse input capture is enabled.
 
 - <ApiParam name="pController" type="CCSPlayerController*" />
 
-### AddClickCallback(callback)
+### HookClick(callback)
 
 Registers a callback fired when a player clicks a panel of this layout, keyed by the panel's id attribute.
 
@@ -81,7 +81,7 @@ Registers a callback fired when a player clicks a panel of this layout, keyed by
 
 - <ApiParam name="callback" type="std::function&lt;void(CCSPlayerController*, CCSCustomHudLayout*, const char*)&gt;" />
 
-### RemoveClickCallbacks()
+### UnhookClicks()
 
 Drops every click callback registered for this layout.
 

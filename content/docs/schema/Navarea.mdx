@@ -1,0 +1,119 @@
+---
+title: Navarea
+---
+
+# CCSNavArea
+
+## Methods
+
+### uint32_t Id()
+
+Nav area identifier.
+
+### const Vector& Center()
+
+Centre of the area.
+
+### const Vector& Normal()
+
+Surface normal, which is what gives the area its slope.
+
+### Vector Min()
+
+Corner with the smaller components on every axis.
+
+### Vector Max()
+
+Corner with the larger components on every axis.
+
+### float Width()
+
+Extent along X.
+
+### float Height()
+
+Extent along Y.
+
+### float Area2D()
+
+Width times height; the area ignoring slope.
+
+### float GetHeightAtPosition(x, y)
+
+Height of the area's surface directly under a world position.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="x" type="float" />
+- <ApiParam name="y" type="float" />
+
+### bool ContainsPoint(vecPosition, flZTolerance)
+
+Whether a position sits on this area, within flZTolerance of its surface.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="vecPosition" type="const Vector&" />
+- <ApiParam name="flZTolerance" type="float" />
+
+### bool ContainsBox(vecMins, vecMaxs, flZTolerance)
+
+Whether a box sits entirely on this area.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="vecMins" type="const Vector&" />
+- <ApiParam name="vecMaxs" type="const Vector&" />
+- <ApiParam name="flZTolerance" type="float" />
+
+### bool IntersectsBox(vecMins, vecMaxs, flZTolerance)
+
+Whether a box overlaps this area at all.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="vecMins" type="const Vector&" />
+- <ApiParam name="vecMaxs" type="const Vector&" />
+- <ApiParam name="flZTolerance" type="float" />
+
+### Vector GetClosestPoint(vecPosition)
+
+Point of this area nearest a world position.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="vecPosition" type="const Vector&" />
+
+### float GetDistanceToPoint(vecPosition)
+
+Distance from a world position to this area.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="vecPosition" type="const Vector&" />
+
+### float GetDistanceSquaredToPoint(vecPosition)
+
+Squared distance, for comparing without the square root.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="vecPosition" type="const Vector&" />
+
+### std::vector&lt;CCSNavArea*&gt; GetAllNavAreas()
+
+Every area of the current nav mesh, or empty when there is none.
+
+### CCSNavArea* GetClosestNavArea(vecPosition, flMaximumDistance)
+
+Area nearest a position, or null when the mesh is missing or nothing is in range. Search limit; zero or less means no limit.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="vecPosition" type="const Vector&" />
+- <ApiParam name="flMaximumDistance" type="float" />
+
+### bool IsValidNavMesh()
+
+As above, and writes the distance it found to pflDistanceOut. Whether the game has a nav mesh loaded.
+

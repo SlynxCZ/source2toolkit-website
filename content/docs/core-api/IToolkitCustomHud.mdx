@@ -6,7 +6,7 @@ title: IToolkitCustomHud
 
 ## Methods
 
-### AddClickCallback(owner, pLayout, handler)
+### HookCustomHudClick(owner, pLayout, handler)
 
 Registers a click callback for one layout entity.
 
@@ -16,7 +16,7 @@ Registers a click callback for one layout entity.
 - <ApiParam name="pLayout" type="CCSCustomHudLayout*" /> — Layout to listen on
 - <ApiParam name="handler" type="CustomHudClickHandler" /> — Callback function
 
-### RemoveClickCallbacks(pLayout)
+### UnhookCustomHudClick(pLayout)
 
 Drops every callback registered for a layout.
 
