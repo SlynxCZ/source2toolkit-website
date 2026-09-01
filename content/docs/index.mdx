@@ -24,18 +24,35 @@ The toolkit focuses on:
 
 A list of features:
 
-* **Commands**: Register and handle console or chat commands with full control over execution.
-* **ConVars**: Access, modify and replicate console variables across clients.
-* **Entity System**: Work with entities using schema-based access and native structures.
-* **Events**: Hook engine and game-level events with pre/post execution control.
-* **GameEvents**: Fully typed game event system for safe and predictable handling.
-* **Memory**: Direct memory access and manipulation for advanced use cases.
-* **Hooks**: SourceHook engine — virtual, DVP, manual and inline hooking with pattern scanning support.
+### Engine access
+
 * **Schema System**: Access Source 2 SDK classes, offsets and fields through schema.
-* **Scheduler**: Timers and next-frame execution utilities.
-* **Tracing**: Built-in trace utilities for raycasts and collision queries.
+* **Entity System**: Work with entities using schema-based access and native structures.
+* **Hooks**: SourceHook engine — virtual, DVP, manual and inline hooking with pattern scanning support.
+* **Memory**: Direct memory access and manipulation for advanced use cases.
+* **Addresses**: Resolved engine functions — spawn, take damage, set model, set pawn and more — ready to call.
+* **Game Systems**: Find and register `IGameSystem` implementations on the engine's factory list.
 * **GameConfig**: Signature and offset management system for cross-version compatibility.
 * **Dynamic Libraries**: Load and interact with external modules and engine interfaces.
+
+### Gameplay
+
+* **Commands**: Register and handle console or chat commands with full control over execution.
+* **ConVars**: Access, modify and replicate console variables across clients.
+* **Events**: Hook engine and game-level events with pre/post execution control.
+* **GameEvents**: Fully typed game event system for safe and predictable handling.
+* **Network Messages**: Allocate, send and hook Source 2 net messages by ID or by name.
+* **Menus**: Build chat menus with options, titles and per-player state.
+* **Custom HUD**: Hook click callbacks on custom HUD layout entities.
+* **Scheduler**: Timers and next-frame execution utilities.
+* **Tracing**: Built-in trace utilities for raycasts and collision queries.
+
+### Services
+
+* **HTTP**: Asynchronous requests through Steam's HTTP client, with availability and queue reporting.
+* **JSON**: Parse and build JSON values without pulling in a dependency of your own.
+* **MySQL**: Query the database and walk typed result sets by column name or index.
+* **Paths**: Resolved paths for the game, the toolkit root, configs, gamedata and plugins.
 
 ---
 

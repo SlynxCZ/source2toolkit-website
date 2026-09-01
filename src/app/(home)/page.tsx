@@ -1,89 +1,27 @@
-"use client";
-
 import Link from 'next/link';
 import Image from 'next/image';
-import ToolkitLogo from "./logo.png";
-import { useEffect, useRef, useState } from 'react';
-import { LuDownload, LuCpu, LuCode, LuWrench } from 'react-icons/lu';
+import ToolkitLogo from './logo.png';
+import {
+  Activity,
+  ArrowRight,
+  Boxes,
+  Braces,
+  GitBranch,
+  LayoutList,
+  MemoryStick,
+  Radio,
+  ScanLine,
+  Terminal,
+} from 'lucide-react';
+import { LuGithub } from 'react-icons/lu';
 import { CodeBlock } from '@/components/code-block';
+import { CodeShowcase } from '@/components/home/code-showcase';
+import { DownloadMenu } from '@/components/home/download-menu';
+import { docsRoute, gitConfig } from '@/lib/shared';
 
-export default function HomePage() {
-  const [isDownloadOpen, setDownloadOpen] = useState(false);
-  const downloadRef = useRef<HTMLDivElement>(null);
+const repoUrl = `https://github.com/${gitConfig.user}/${gitConfig.repo}`;
 
-  useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
-      if (!downloadRef.current?.contains(event.target as Node)) {
-        setDownloadOpen(false);
-      }
-    };
-
-    const handleKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setDownloadOpen(false);
-    };
-
-    window.addEventListener('mousedown', handleClick);
-    window.addEventListener('keyup', handleKey);
-    return () => {
-      window.removeEventListener('mousedown', handleClick);
-      window.removeEventListener('keyup', handleKey);
-    };
-  }, []);
-
-  return (
-    <main className="flex flex-1 flex-col">
-      <section className="py-24 px-4 text-center">
-        <div className="max-w-4xl mx-auto space-y-8">
-          <div className="relative w-full max-w-[500px] h-[140px] sm:h-[180px] md:h-[210px] mx-auto">
-            <Image
-              src={ToolkitLogo}
-              alt="Source2Toolkit Logo"
-              fill
-              className="object-cover"
-            />
-          </div>
-          <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-            <span className="text-orange-400">Source2</span>
-            <span className="text-blue-400">Toolkit</span>
-          </h1>
-          <p className="text-xl text-gray-500">
-            Direct access to Source 2. No compromises.
-          </p>
-          <p className="text-gray-500 max-w-2xl mx-auto">
-            Build plugins that feel like native engine code.
-            From simple features to deep engine hooks — all in C++ with full control over Source 2 internals.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
-            <Link
-              href="/docs"
-              className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-medium"
-            >
-              Read Docs
-            </Link>
-            <div className="relative" ref={downloadRef}>
-              <button
-                onClick={() => setDownloadOpen(v => !v)}
-                className="px-8 py-3 rounded-lg flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
-              >
-                <LuDownload className="w-4 h-4" />
-                Download
-              </button>
-              <div className={`absolute mt-2 bg-white dark:bg-neutral-900 border rounded-md shadow-xl ${
-                isDownloadOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-              }`}>
-                <a
-                  href="https://github.com/SlynxCZ/source2toolkit/releases"
-                  className="block px-4 py-3 hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                >
-                  Latest Release
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="pt-10 text-start">
-            <CodeBlock
-              title="Quick Example"
-              code={`
+const heroCode = `
 #include "source2toolkit/IToolkitPlugin.h"
 #include "source2toolkit/IToolkitApi.h"
 
@@ -113,213 +51,339 @@ private:
 
 ExamplePlugin g_Plugin;
 TOOLKIT_EXPOSE(source2toolkit_example, g_Plugin);
-            `}/>
-          </div>
-        </div>
-      </section>
-      <section className="py-20 px-4 bg-neutral-100 dark:bg-neutral-950/30">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-orange-400">
-              Why Source2Toolkit?
-            </h2>
-            <p className="text-gray-500">
-              Built for real engine-level development — not just scripting
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="p-6 border rounded-xl hover:bg-neutral-900/20 transition">
-              <LuCode className="w-8 h-8 text-blue-400 mb-4" />
-              <h3 className="text-lg font-semibold mb-2">High-Level API</h3>
-              <p className="text-gray-500 text-sm">
-                Clean abstractions for rapid plugin development without boilerplate.
-              </p>
-            </div>
-            <div className="p-6 border rounded-xl hover:bg-neutral-900/20 transition">
-              <LuCpu className="w-8 h-8 text-green-400 mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Low-Level Access</h3>
-              <p className="text-gray-500 text-sm">
-                Full control over memory, hooks, entities and engine internals.
-              </p>
-            </div>
-            <div className="p-6 border rounded-xl hover:bg-neutral-900/20 transition">
-              <LuWrench className="w-8 h-8 text-purple-400 mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Zero Overhead</h3>
-              <p className="text-gray-500 text-sm">
-                Designed for near-native performance with no unnecessary layers.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="py-20 px-4">
-        <div className="max-w-7xl mx-auto space-y-24">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-4">
-              <h3 className="text-3xl font-bold">
-                Work Like You're Inside The Engine
-              </h3>
-              <p className="text-gray-500 text-lg leading-relaxed">
-                Access entities, memory and schema data exactly like native code.
-                No wrappers. No limitations.
-              </p>
-              <ul className="text-gray-500 space-y-2">
-                <li>✓ Schema-based entity access</li>
-                <li>✓ Direct memory manipulation</li>
-                <li>✓ Native-like workflow</li>
-                <li>✓ Full control</li>
-              </ul>
-            </div>
-            <div className="relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 blur-xl rounded-2xl" />
-              <div className="relative border rounded-2xl bg-neutral-950/80 backdrop-blur shadow-xl">
-                <CodeBlock
-                  title="Entity Access"
-                  code={`
-auto player = CCSPlayerController::FromSlot(1);
-if (!player || player->IsBot())
-    return;
+`;
 
-player->PrintToCenterHtml("Hello from Source2Toolkit!");
+const specs = [
+  { label: 'Language', value: 'C++' },
+  { label: 'Runs on', value: 'MetaMod:Source' },
+  { label: 'Target', value: 'Counter-Strike 2' },
+  { label: 'Overhead', value: 'Near-native' },
+];
 
-auto pawn = player->GetPlayerPawn();
-if (!pawn || !player->m_bPawnIsAlive())
-    return;
+const marquee = [
+  'schema system',
+  'inline hooks',
+  'virtual hooks',
+  'pattern scanning',
+  'game events',
+  'net messages',
+  'convars',
+  'chat menus',
+  'custom hud',
+  'scheduler',
+  'tracing',
+  'gameconfig',
+  'memory access',
+  'http & json',
+  'mysql',
+  'dynamic libraries',
+];
 
-pawn->m_iHealth = 1337; // With automatic SetStateChanged
-player->m_iPawnHealth() = 1337; // Without automatic SetStateChanged`}
+const capabilities = [
+  {
+    icon: Boxes,
+    title: 'Schema system',
+    body: 'Entities, offsets and fields resolved through the schema the game itself ships — not through headers that rot on the next update.',
+  },
+  {
+    icon: GitBranch,
+    title: 'Hooks on SourceHook',
+    body: 'Virtual, DVP, manual and inline hooks on one private SourceHook engine, so the core and every plugin compose correctly.',
+  },
+  {
+    icon: Terminal,
+    title: 'Commands & ConVars',
+    body: 'Console and chat commands, listeners on commands the game already owns, typed ConVar refs with replication.',
+  },
+  {
+    icon: Activity,
+    title: 'Events & GameEvents',
+    body: 'A fully typed game event system on top of engine-level events, hooked pre or post with the usual META_RES vocabulary.',
+  },
+  {
+    icon: MemoryStick,
+    title: 'Memory & addresses',
+    body: 'Raw pointers, module handles, GameConfig signatures and resolved engine functions like spawn, set model and take damage.',
+  },
+  {
+    icon: ScanLine,
+    title: 'Scheduler & tracing',
+    body: 'Timers, next-frame execution, and ray and collision trace utilities shipped with the toolkit.',
+  },
+  {
+    icon: LayoutList,
+    title: 'Menus & custom HUD',
+    body: 'Chat menus with options, titles and per-player state, plus click callbacks on custom HUD layout entities.',
+  },
+  {
+    icon: Radio,
+    title: 'Network messages',
+    body: 'Allocate, send and hook Source 2 net messages by numeric ID or by partial name — protobuf included.',
+  },
+  {
+    icon: Braces,
+    title: 'HTTP, JSON & MySQL',
+    body: 'Async requests through Steam, a JSON value API and typed MySQL result sets, so you do not vendor three libraries first.',
+  },
+];
+
+const steps = [
+  {
+    title: 'Install MetaMod:Source',
+    body: 'Source2Toolkit loads through MetaMod. Drop it into /game/csgo/ and register it in gameinfo.gi.',
+    code: 'Game csgo/addons/metamod',
+  },
+  {
+    title: 'Drop in the toolkit',
+    body: 'Extract the release and copy the /addons directory into your server /game/csgo/ folder.',
+    code: '/game/csgo/addons/source2toolkit',
+  },
+  {
+    title: 'Verify and build',
+    body: 'Restart the server, confirm the plugin is loaded, then start writing against the API.',
+    code: 'meta list',
+  },
+];
+
+export default function HomePage() {
+  return (
+    <main className="flex flex-1 flex-col">
+      {/* ------------------------------------------------------------ hero */}
+      <section className="relative overflow-hidden border-b border-fd-border">
+        <div className="s2-grid pointer-events-none absolute inset-0 opacity-50 [mask-image:radial-gradient(ellipse_at_top_left,black,transparent_75%)]" />
+        <div className="pointer-events-none absolute -top-40 -left-32 size-[36rem] rounded-full bg-ember/10 blur-3xl" />
+
+        <div className="relative mx-auto max-w-6xl border-fd-border px-6 py-20 md:border-x md:py-28">
+          <div className="grid items-start gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
+            <div className="min-w-0">
+              <div className="flex items-center gap-3">
+                <Image
+                  src={ToolkitLogo}
+                  alt="Source2Toolkit"
+                  width={44}
+                  height={44}
+                  priority
+                  className="rounded-[4px] ring-1 ring-fd-border"
                 />
+                <p className="s2-eyebrow flex items-center gap-2 text-fd-muted-foreground">
+                  <span className="s2-dot inline-block size-1.5 bg-ember" />
+                  Source 2 · C++ · Server side
+                </p>
               </div>
-            </div>
-          </div>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="relative overflow-hidden order-2 md:order-1">
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 blur-xl rounded-2xl" />
-              <div className="relative border rounded-2xl bg-neutral-950/80 backdrop-blur shadow-xl">
-                <CodeBlock
-                  title="Inline Hook (ProcessMovement)"
-                  code={`
-SH_DECL_INLINEHOOK1_void(CheckJumpButtonLegacy, CCSPlayerLegacyJump, void*);
 
-CConVarRef<bool> sv_autobunnyhopping("sv_autobunnyhopping");
-IToolkitModule* libserver = IToolkitModule::New(g_pSource2Server);
+              <h1 className="mt-8 text-[2.75rem] leading-[1.02] font-semibold sm:text-6xl">
+                Direct access
+                <br />
+                to Source 2.
+                <br />
+                <span className="text-ember">No compromises.</span>
+              </h1>
 
-m_addr = libserver->FindPattern(GAMECONFIG_SIGNATURE("CCSPlayerLegacyJump_CheckJumpButtonLegacy"));
-m_iHookID = SH_ADD_INLINEHOOK(CheckJumpButtonLegacy, m_addr,
-                              SH_MEMBER(this, &Plugin::Hook_CheckJumpButtonLegacy), false);
-
-void Plugin::Hook_CheckJumpButtonLegacy(void* mv)
-{
-    CCSPlayerLegacyJump* pThis = META_IFACEPTR(CCSPlayerLegacyJump);
-
-    CCSPlayer_MovementServices* ms = pThis->m_pMovementServices;
-    CCSPlayerPawn* pawn = ms ? ms->GetPawn() : nullptr;
-    CCSPlayerController* player = pawn ? pawn->GetController() : nullptr;
-
-    bool canBhop = true;
-    bool originalBhop = sv_autobunnyhopping.Get();
-
-    if (canBhop && !originalBhop)
-    {
-        sv_autobunnyhopping.Set(true);
-        SH_CALL(CheckJumpButtonLegacy, m_addr, pThis)(mv);
-        sv_autobunnyhopping.Set(false);
-
-        RETURN_META(MRES_SUPERCEDE);
-    }
-
-    RETURN_META(MRES_IGNORED);
-}`}
-                />
-              </div>
-            </div>
-            <div className="space-y-4 order-1 md:order-2">
-              <h3 className="text-3xl font-bold">
-                Hook Anything
-              </h3>
-              <p className="text-gray-500 text-lg leading-relaxed">
-                Inline hooks, virtual hooks, commands, events — if it exists in memory, you can control it.
+              <p className="mt-7 max-w-xl text-lg leading-relaxed text-fd-muted-foreground">
+                A plugin framework for Counter-Strike 2 that keeps you at engine
+                level. Schema-based entities, SourceHook detours and native
+                events — in C++, with nothing between your code and the game.
               </p>
-              <ul className="text-gray-500 space-y-2">
-                <li>✓ Pattern scanning</li>
-                <li>✓ Virtual hooks</li>
-                <li>✓ Command & event hooks</li>
-                <li>✓ Full flexibility</li>
-              </ul>
-            </div>
-          </div>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-4">
-              <h3 className="text-3xl font-bold">
-                Commands & Events
-              </h3>
-              <p className="text-gray-500 text-lg leading-relaxed">
-                High-level API for common tasks like commands and game events.
-                Clean, simple and powerful.
-              </p>
-              <ul className="text-gray-500 space-y-2">
-                <li>✓ Register commands in seconds</li>
-                <li>✓ Hook console and chat</li>
-                <li>✓ Hook game events</li>
-                <li>✓ Pre/Post execution control</li>
-              </ul>
-            </div>
 
-            <div className="relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-blue-500/20 blur-xl rounded-2xl" />
-              <div className="relative border rounded-2xl bg-neutral-950/80 backdrop-blur shadow-xl">
-                <CodeBlock
-                  title="Commands & Events"
-                  code={`
-REG_CON_COMMAND("s2t_test", [](const CCommandContext& ctx, const CCommand&, bool)
-{
-    auto* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot());
-    if (!player)
-        return;
-
-    player->PrintToChat("Hello!");
-});
-
-REG_CON_LISTENER("jointeam", [](const CCommandContext& ctx, const CCommand& args, bool) -> META_RES
-{
-    auto* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot());
-    if (!player)
-        return MRES_IGNORED;
-
-    int team = args.ArgC() > 1 ? atoi(args.Arg(1)) : 0;
-
-    if (team == 3)
-    {
-        if (!CanBeCt(player) || player->m_iTeamNum() == team)
-            return MRES_SUPERCEDE;
-
-        MoveToTeam(player, team);
-        return MRES_SUPERCEDE;
-    }
-
-    return MRES_IGNORED;
-}, false);
-
-HOOK_GAME_EVENT("player_connect_full", [](IGameEvent* event, bool post, bool&) -> META_RES
-{
-    auto* player = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
-    if (!player)
-        return MRES_IGNORED;
-
-    TOOLKIT_LOG(&g_Plugin, "Player: %s\\n", player->GetPlayerName());
-    return MRES_IGNORED;
-}, false);`}
-                />
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href={docsRoute}
+                  className="flex items-center justify-center gap-2 bg-ember px-6 py-3 text-sm font-semibold text-fd-primary-foreground transition-opacity hover:opacity-90"
+                >
+                  Read the docs
+                  <ArrowRight className="size-4" />
+                </Link>
+                <DownloadMenu />
               </div>
+
+              <dl className="mt-12 grid grid-cols-2 gap-px border border-fd-border bg-fd-border sm:grid-cols-4">
+                {specs.map((spec) => (
+                  <div key={spec.label} className="bg-fd-background px-4 py-3">
+                    <dt className="s2-eyebrow text-fd-muted-foreground">
+                      {spec.label}
+                    </dt>
+                    <dd className="mt-1.5 text-sm font-medium">{spec.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
+            <div className="relative min-w-0 lg:mt-3">
+              <div className="pointer-events-none absolute -inset-3 bg-gradient-to-br from-ember/15 via-transparent to-transparent blur-2xl" />
+              <CodeBlock
+                className="relative shadow-2xl shadow-black/10"
+                title="hello_world.cpp"
+                code={heroCode}
+              />
             </div>
           </div>
         </div>
       </section>
-      <section className="py-12 text-center border-t">
-        <p className="text-sm text-gray-500">
-          Source2Toolkit is not affiliated with Valve Corporation.
-        </p>
+
+      {/* --------------------------------------------------------- marquee */}
+      <section className="border-b border-fd-border">
+        <div className="mx-auto max-w-6xl border-fd-border md:border-x">
+          <div className="overflow-hidden bg-fd-muted/40 py-3.5 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+            <div className="s2-marquee-track flex w-max">
+              {[0, 1].map((copy) => (
+                <div key={copy} className="flex shrink-0 items-center">
+                  {marquee.map((item) => (
+                    <span
+                      key={item + copy}
+                      className="s2-eyebrow flex items-center gap-7 px-7 text-fd-muted-foreground"
+                    >
+                      {item}
+                      <span
+                        className="size-1 rotate-45 bg-ember/70"
+                        aria-hidden
+                      />
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </section>
+
+      {/* ---------------------------------------------------- capabilities */}
+      <section className="border-b border-fd-border">
+        <div className="mx-auto max-w-6xl border-fd-border px-6 py-20 md:border-x md:py-24">
+          <p className="s2-eyebrow text-ember">01 — Capabilities</p>
+          <h2 className="mt-5 max-w-2xl text-3xl font-semibold sm:text-4xl">
+            Built for engine-level development, not scripting
+          </h2>
+          <p className="mt-4 max-w-2xl text-fd-muted-foreground">
+            Every subsystem is a thin, deliberate layer over the engine, and all
+            of them ship in the box. Use the high-level API where it saves you
+            time, and drop straight to memory where it does not.
+          </p>
+
+          <div className="mt-12 grid gap-px border border-fd-border bg-fd-border sm:grid-cols-2 lg:grid-cols-3">
+            {capabilities.map((item, index) => (
+              <article
+                key={item.title}
+                className="group relative bg-fd-background p-7 transition-colors hover:bg-fd-muted/50"
+              >
+                <span
+                  className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-ember transition-transform duration-300 group-hover:scale-x-100"
+                  aria-hidden
+                />
+                <div className="flex items-center justify-between">
+                  <item.icon className="size-5 text-ember" />
+                  <span className="s2-eyebrow text-fd-muted-foreground/60">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                </div>
+                <h3 className="mt-6 text-lg font-semibold">{item.title}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-fd-muted-foreground">
+                  {item.body}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* -------------------------------------------------------- showcase */}
+      <section className="border-b border-fd-border bg-fd-muted/25">
+        <div className="mx-auto max-w-6xl border-fd-border px-6 py-20 md:border-x md:py-24">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="s2-eyebrow text-ember">02 — In practice</p>
+              <h2 className="mt-5 max-w-2xl text-3xl font-semibold sm:text-4xl">
+                The same API you would have written yourself
+              </h2>
+            </div>
+            <Link
+              href={docsRoute}
+              className="group flex items-center gap-2 text-sm font-medium text-fd-muted-foreground hover:text-fd-foreground"
+            >
+              Browse the full API
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+            </Link>
+          </div>
+
+          <div className="mt-12">
+            <CodeShowcase />
+          </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------ quickstart */}
+      <section className="border-b border-fd-border">
+        <div className="mx-auto max-w-6xl border-fd-border px-6 py-20 md:border-x md:py-24">
+          <p className="s2-eyebrow text-ember">03 — Quickstart</p>
+          <h2 className="mt-5 max-w-2xl text-3xl font-semibold sm:text-4xl">
+            Three steps to a loaded plugin
+          </h2>
+
+          <ol className="mt-12 grid gap-px border border-fd-border bg-fd-border md:grid-cols-3">
+            {steps.map((step, index) => (
+              <li key={step.title} className="bg-fd-background p-7">
+                <span className="s2-eyebrow inline-flex size-8 items-center justify-center border border-fd-border text-ember">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <h3 className="mt-6 text-lg font-semibold">{step.title}</h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-fd-muted-foreground">
+                  {step.body}
+                </p>
+                <code className="mt-5 block overflow-x-auto border border-fd-border bg-fd-muted/60 px-3 py-2 font-mono text-xs whitespace-nowrap text-fd-foreground">
+                  {step.code}
+                </code>
+              </li>
+            ))}
+          </ol>
+
+          <Link
+            href={`${docsRoute}/installation`}
+            className="group mt-8 inline-flex items-center gap-2 text-sm font-medium text-ember"
+          >
+            Full installation guide
+            <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </div>
+      </section>
+
+      {/* -------------------------------------------------------------- cta */}
+      <section className="relative overflow-hidden border-b border-fd-border">
+        <div className="s2-grid pointer-events-none absolute inset-0 opacity-50 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]" />
+        <div className="pointer-events-none absolute -bottom-40 right-0 size-[32rem] rounded-full bg-ember/10 blur-3xl" />
+
+        <div className="relative mx-auto max-w-6xl border-fd-border px-6 py-24 text-center md:border-x">
+          <h2 className="mx-auto max-w-2xl text-3xl font-semibold sm:text-4xl">
+            Stop fighting the engine. Start using it.
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-fd-muted-foreground">
+            Open source, actively developed, and built by people running real
+            servers.
+          </p>
+          <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
+            <Link
+              href={docsRoute}
+              className="flex items-center justify-center gap-2 bg-ember px-6 py-3 text-sm font-semibold text-fd-primary-foreground transition-opacity hover:opacity-90"
+            >
+              Get started
+              <ArrowRight className="size-4" />
+            </Link>
+            <a
+              href={repoUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center justify-center gap-2 border border-fd-border bg-fd-card px-6 py-3 text-sm font-medium transition-colors hover:border-ember/60 hover:bg-fd-muted"
+            >
+              <LuGithub className="size-4" />
+              View on GitHub
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ----------------------------------------------------------- footer */}
+      <footer className="mx-auto flex w-full max-w-6xl flex-col gap-3 border-fd-border px-6 py-10 text-xs text-fd-muted-foreground sm:flex-row sm:items-center sm:justify-between md:border-x">
+        <p className="font-mono">Source2Toolkit — built by Slynx</p>
+        <p>Not affiliated with Valve Corporation.</p>
+      </footer>
     </main>
   );
 }
