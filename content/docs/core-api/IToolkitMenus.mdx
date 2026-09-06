@@ -54,21 +54,49 @@ Sets exit button state.
 
 **Inheritance**: [IMenu](/docs/core-api/IToolkitMenus)
 
-### SetTitle(title_)
+### explicit IBaseMenu(title)
 
 Constructs a menu.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="title_" type="std::string t) override {" />
+- <ApiParam name="title" type="std::string" /> — Menu title
+
+### const std::string& Title()
+
+### SetTitle(t)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="t" type="std::string" />
+
+### std::vector&lt;ChatMenuOption&gt;& Options()
+
+### const std::vector&lt;ChatMenuOption&gt;& Options()
 
 ### ClearOptions()
 
 Drops every option, for a menu that is rebuilt in place.
 
+### PostSelectAction GetPostSelectAction()
+
+### SetPostSelectAction(a)
+
+Sets post-select behavior.
+
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type=") { options_.clear(" />
+- <ApiParam name="a" type="[PostSelectAction](/docs/enums/PostSelectAction)" /> — Behavior to apply
+
+### bool GetExitButton()
+
+### SetExitButton(v)
+
+Sets exit button state.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="v" type="bool" /> — True to enable exit button
 
 ## IMenuInstance
 
@@ -85,50 +113,71 @@ Handles key press input.
 - <ApiParam name="player" type="CCSPlayerController*" /> — Player who triggered input
 - <ApiParam name="key" type="int" /> — Pressed key (1-9)
 
+### Reset()
+
+Resets menu state.
+
 ### Close()
 
 Closes the menu.
+
+### IMenu* Menu()
+
+Gets underlying menu.
+
+### CCSPlayerController* Player()
+
+Gets owning player.
+
+### int NumPerPage()
+
+Number of items per page.
 
 ### int MenuItemsPerPage()
 
 Menu items per page.
 
-<ApiLabel>Parameters</ApiLabel>
+### bool HasPrevButton()
 
-- <ApiParam type=") const { return NumPerPage(" />
+Checks if previous page exists.
 
-### return (int)opts.size() &gt; NumPerPage()
+### bool HasNextButton()
 
 Checks if next page exists.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam type=") && (currentOffset_ + NumPerPage()) &lt; (int)opts.size(" />
 
 ### bool HasExitButton()
 
 Checks if exit button is enabled.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam type=") const { return menu_-&gt;GetExitButton(" />
-
-### currentOffset_ += MenuItemsPerPage()
+### NextPage()
 
 Advances to next page.
+
+### PrevPage()
+
+Goes back to previous page.
 
 ## CenterHtmlMenu
 
 **Inheritance**: [IBaseMenu](/docs/core-api/IToolkitMenus)
 
+### explicit CenterHtmlMenu(title)
+
+Constructs center HTML menu.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="title" type="std::string" /> — Menu title
+
 ## IToolkitMenus
 
-### OpenCenterHtmlMenu(player, menu)
+### OpenCenterHtmlMenu(owner, player, menu)
 
 Opens a CenterHtmlMenu for a player.
 
 <ApiLabel>Parameters</ApiLabel>
 
+- <ApiParam name="owner" type="PluginId" /> — Plugin the menu belongs to
 - <ApiParam name="player" type="CCSPlayerController*" /> — Target player
 - <ApiParam name="menu" type="[CenterHtmlMenu*](/docs/core-api/IToolkitMenus)" /> — Menu to open
 

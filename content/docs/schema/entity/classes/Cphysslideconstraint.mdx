@@ -17,13 +17,25 @@ title: CPhysSlideConstraint
 - <ApiParam name="m_flMotorFrequency" type="float" />
 - <ApiParam name="m_flMotorDampingRatio" type="float" />
 - <ApiParam name="m_bUseEntityPivot" type="bool" />
-- <ApiParam name="m_soundInfo" type="ConstraintSoundInfo" />
+- <ApiParam name="m_soundInfo" type="[ConstraintSoundInfo](/docs/schema/entity/classes/Constraintsoundinfo)" />
 
 ## Methods
 
-### return FromIndex()
+### CPhysSlideConstraint* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPhysSlideConstraint* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPhysSlideConstraint* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

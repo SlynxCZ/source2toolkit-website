@@ -4,7 +4,7 @@ title: COmniLight
 
 # COmniLight
 
-**Inheritance**: [CBarnLight](/docs/schema/entity/classes/Cbarnlight)
+**Inheritance**: CBarnLight
 
 ## Fields
 
@@ -14,9 +14,21 @@ title: COmniLight
 
 ## Methods
 
-### return FromIndex()
+### COmniLight* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### COmniLight* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### COmniLight* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

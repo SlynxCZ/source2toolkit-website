@@ -4,7 +4,7 @@ title: CEnvGlobal
 
 # CEnvGlobal
 
-**Inheritance**: CLogicalEntity
+**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
 
 ## Fields
 
@@ -15,9 +15,21 @@ title: CEnvGlobal
 
 ## Methods
 
-### return FromIndex()
+### CEnvGlobal* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CEnvGlobal* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CEnvGlobal* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

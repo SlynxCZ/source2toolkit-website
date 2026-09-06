@@ -4,7 +4,7 @@ title: CEconWearable
 
 # CEconWearable
 
-**Inheritance**: [CEconEntity](/docs/schema/entity/classes/Ceconentity)
+**Inheritance**: CEconEntity
 
 ## Fields
 
@@ -13,9 +13,21 @@ title: CEconWearable
 
 ## Methods
 
-### return FromIndex()
+### CEconWearable* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CEconWearable* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CEconWearable* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

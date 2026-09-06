@@ -4,7 +4,7 @@ title: CGamePlayerZone
 
 # CGamePlayerZone
 
-**Inheritance**: [CRuleBrushEntity](/docs/schema/entity/classes/Crulebrushentity)
+**Inheritance**: CRuleBrushEntity
 
 ## Fields
 
@@ -13,9 +13,21 @@ title: CGamePlayerZone
 
 ## Methods
 
-### return FromIndex()
+### CGamePlayerZone* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CGamePlayerZone* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CGamePlayerZone* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

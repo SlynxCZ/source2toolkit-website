@@ -4,7 +4,7 @@ title: CSoundEventSphereEntity
 
 # CSoundEventSphereEntity
 
-**Inheritance**: [CSoundEventEntity](/docs/schema/entity/classes/Csoundevententity)
+**Inheritance**: CSoundEventEntity
 
 ## Fields
 
@@ -12,9 +12,21 @@ title: CSoundEventSphereEntity
 
 ## Methods
 
-### return FromIndex()
+### CSoundEventSphereEntity* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CSoundEventSphereEntity* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CSoundEventSphereEntity* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

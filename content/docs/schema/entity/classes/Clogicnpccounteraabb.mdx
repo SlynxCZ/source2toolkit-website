@@ -4,7 +4,7 @@ title: CLogicNPCCounterAABB
 
 # CLogicNPCCounterAABB
 
-**Inheritance**: [CLogicNPCCounter](/docs/schema/entity/classes/Clogicnpccounter)
+**Inheritance**: CLogicNPCCounter
 
 ## Fields
 
@@ -15,9 +15,21 @@ title: CLogicNPCCounterAABB
 
 ## Methods
 
-### return FromIndex()
+### CLogicNPCCounterAABB* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CLogicNPCCounterAABB* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CLogicNPCCounterAABB* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

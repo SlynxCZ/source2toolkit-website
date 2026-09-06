@@ -4,7 +4,7 @@ title: CPlayerVisibility
 
 # CPlayerVisibility
 
-**Inheritance**: CBaseEntity
+**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
 
 ## Fields
 
@@ -17,9 +17,21 @@ title: CPlayerVisibility
 
 ## Methods
 
-### return FromIndex()
+### CPlayerVisibility* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPlayerVisibility* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPlayerVisibility* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

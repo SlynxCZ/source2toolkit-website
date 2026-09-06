@@ -4,7 +4,7 @@ title: CMathCounter
 
 # CMathCounter
 
-**Inheritance**: CLogicalEntity
+**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
 
 ## Fields
 
@@ -20,9 +20,21 @@ title: CMathCounter
 
 ## Methods
 
-### return FromIndex()
+### CMathCounter* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CMathCounter* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CMathCounter* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

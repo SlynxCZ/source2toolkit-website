@@ -4,7 +4,7 @@ title: CFuncPlat
 
 # CFuncPlat
 
-**Inheritance**: [CBasePlatTrain](/docs/schema/entity/classes/Cbaseplattrain)
+**Inheritance**: CBasePlatTrain
 
 ## Fields
 
@@ -13,9 +13,21 @@ title: CFuncPlat
 
 ## Methods
 
-### return FromIndex()
+### CFuncPlat* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CFuncPlat* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CFuncPlat* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

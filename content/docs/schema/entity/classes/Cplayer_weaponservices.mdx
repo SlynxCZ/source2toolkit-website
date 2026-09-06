@@ -4,7 +4,7 @@ title: CPlayer_WeaponServices
 
 # CPlayer_WeaponServices
 
-**Inheritance**: CPlayerPawnComponent
+**Inheritance**: [CPlayerPawnComponent](/docs/schema/entity/classes/Cplayerpawncomponent)
 
 ## Fields
 
@@ -13,4 +13,49 @@ title: CPlayer_WeaponServices
 - <ApiParam name="m_hLastWeapon" type="CHandle&lt;CBasePlayerWeapon&gt;" />
 - <ApiParam name="m_iAmmo" type="uint16_t" />
 - <ApiParam name="m_bPreventWeaponPickup" type="bool" />
+
+## Methods
+
+### bool CanUse(pWeapon)
+
+Checks if player can use weapon (fire and maybe acquire).
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pWeapon" type="[CBasePlayerWeapon *](/docs/schema/entity/classes/Cbaseplayerweapon)" />
+
+### DropWeapon(pWeapon, pVecTarget, pVelocity)
+
+Drop weapon.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pWeapon" type="[CBasePlayerWeapon *](/docs/schema/entity/classes/Cbaseplayerweapon)" />
+- <ApiParam name="pVecTarget" type="Vector *" />
+- <ApiParam name="pVelocity" type="Vector *" />
+
+### int BumpWeapon(pWeapon)
+
+Probably checks weapon validity after CPlayer_ItemServices::GiveNamedItem invoke, may return 2 if CSGameRules()-&gt;IsPlayingGunGameDeathmatch, meaning that pWeapon will be deleted.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pWeapon" type="[CBasePlayerWeapon *](/docs/schema/entity/classes/Cbaseplayerweapon)" />
+
+### SelectItem(pWeapon, unk1)
+
+Select weapon, If unk1 is equal to 3 some code will be executed.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pWeapon" type="[CBasePlayerWeapon *](/docs/schema/entity/classes/Cbaseplayerweapon)" />
+- <ApiParam name="unk1" type="int" />
+
+### Destroy(pWeapon)
+
+Remove and destroy weapon from player.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pWeapon" type="[CBasePlayerWeapon *](/docs/schema/entity/classes/Cbaseplayerweapon)" />
 

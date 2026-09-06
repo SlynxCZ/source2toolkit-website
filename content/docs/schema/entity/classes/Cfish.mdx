@@ -4,7 +4,7 @@ title: CFish
 
 # CFish
 
-**Inheritance**: [CBaseAnimGraph](/docs/schema/entity/classes/Cbaseanimgraph)
+**Inheritance**: CBaseAnimGraph
 
 ## Fields
 
@@ -35,9 +35,21 @@ title: CFish
 
 ## Methods
 
-### return FromIndex()
+### CFish* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CFish* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CFish* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

@@ -4,7 +4,7 @@ title: CSoundOpvarSetBoxEntity
 
 # CSoundOpvarSetBoxEntity
 
-**Inheritance**: CSoundOpvarSetPointEntity
+**Inheritance**: [CSoundOpvarSetPointEntity](/docs/schema/entity/classes/Csoundopvarsetpointentity)
 
 ## Fields
 
@@ -20,9 +20,21 @@ title: CSoundOpvarSetBoxEntity
 
 ## Methods
 
-### return FromIndex()
+### CSoundOpvarSetBoxEntity* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CSoundOpvarSetBoxEntity* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CSoundOpvarSetBoxEntity* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

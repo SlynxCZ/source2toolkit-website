@@ -4,7 +4,7 @@ title: CItemDefuser
 
 # CItemDefuser
 
-**Inheritance**: CItem
+**Inheritance**: [CItem](/docs/schema/entity/classes/Citem)
 
 ## Fields
 
@@ -13,9 +13,21 @@ title: CItemDefuser
 
 ## Methods
 
-### return FromIndex()
+### CItemDefuser* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CItemDefuser* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CItemDefuser* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

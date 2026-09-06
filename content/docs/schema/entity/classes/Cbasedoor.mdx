@@ -4,13 +4,13 @@ title: CBaseDoor
 
 # CBaseDoor
 
-**Inheritance**: [CBaseToggle](/docs/schema/entity/classes/Cbasetoggle)
+**Inheritance**: CBaseToggle
 
 ## Fields
 
 - <ApiParam name="m_angMoveEntitySpace" type="QAngle" />
 - <ApiParam name="m_vecMoveDirParentSpace" type="Vector" />
-- <ApiParam name="m_ls" type="[locksound_t](/docs/schema/entity/classes/locksound_t)" />
+- <ApiParam name="m_ls" type="locksound_t" />
 - <ApiParam name="m_bForceClosed" type="bool" />
 - <ApiParam name="m_bDoorGroup" type="bool" />
 - <ApiParam name="m_bLocked" type="bool" />
@@ -40,9 +40,21 @@ title: CBaseDoor
 
 ## Methods
 
-### return FromIndex()
+### CBaseDoor* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CBaseDoor* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CBaseDoor* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

@@ -12,7 +12,7 @@ title: CHostage
 - <ApiParam name="m_OnFirstPickedUp" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 - <ApiParam name="m_OnDroppedNotRescued" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 - <ApiParam name="m_OnRescued" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_entitySpottedState" type="EntitySpottedState_t" />
+- <ApiParam name="m_entitySpottedState" type="[EntitySpottedState_t](/docs/schema/entity/classes/EntitySpottedState_t)" />
 - <ApiParam name="m_nSpotRules" type="int32_t" />
 - <ApiParam name="m_uiHostageSpawnExclusionGroupMask" type="uint32_t" />
 - <ApiParam name="m_nHostageSpawnRandomFactor" type="uint32_t" />
@@ -50,9 +50,21 @@ title: CHostage
 
 ## Methods
 
-### return FromIndex()
+### CHostage* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CHostage* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CHostage* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

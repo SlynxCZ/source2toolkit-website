@@ -4,13 +4,25 @@ title: CLogicalEntity
 
 # CLogicalEntity
 
-**Inheritance**: [CServerOnlyEntity](/docs/schema/entity/classes/Cserveronlyentity)
+**Inheritance**: CServerOnlyEntity
 
 ## Methods
 
-### return FromIndex()
+### CLogicalEntity* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CLogicalEntity* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CLogicalEntity* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

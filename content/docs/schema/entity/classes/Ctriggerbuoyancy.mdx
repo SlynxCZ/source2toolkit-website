@@ -4,18 +4,30 @@ title: CTriggerBuoyancy
 
 # CTriggerBuoyancy
 
-**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
+**Inheritance**: CBaseTrigger
 
 ## Fields
 
-- <ApiParam name="m_BuoyancyHelper" type="[CBuoyancyHelper](/docs/schema/entity/classes/Cbuoyancyhelper)" />
+- <ApiParam name="m_BuoyancyHelper" type="CBuoyancyHelper" />
 - <ApiParam name="m_flFluidDensity" type="float" />
 
 ## Methods
 
-### return FromIndex()
+### CTriggerBuoyancy* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CTriggerBuoyancy* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CTriggerBuoyancy* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

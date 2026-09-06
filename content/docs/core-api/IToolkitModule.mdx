@@ -23,23 +23,7 @@ Initialises the module from an address inside it.
 
 - <ApiParam name="ptr" type="uintptr_t" /> — Any address that belongs to the target module.
 
-### IToolkitMemory startAddress = IToolkitMemory()
-
-Scans the executable section for a byte-string pattern.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam type=")" />
-
-### IToolkitMemory startAddress = IToolkitMemory()
-
-Scans a named section for a byte-string pattern.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam type=")" />
-
-### ] virtual IToolkitMemory GetVirtualTableByName(name, decorated)
+### IToolkitMemory GetVirtualTableByName(name, decorated)
 
 Returns the address of a virtual table by mangled class name.
 
@@ -48,7 +32,7 @@ Returns the address of a virtual table by mangled class name.
 - <ApiParam name="name" type="const char*" /> — Class name (undecorated unless decorated is true).
 - <ApiParam name="decorated" type="bool" /> — Pass true when name is already a decorated symbol.
 
-### ] virtual IToolkitMemory GetFunctionByName(name)
+### IToolkitMemory GetFunctionByName(name)
 
 Returns the address of an exported symbol by name.
 
@@ -56,7 +40,7 @@ Returns the address of an exported symbol by name.
 
 - <ApiParam name="name" type="const char*" />
 
-### ] virtual SectionInfo GetSectionByName(name)
+### SectionInfo GetSectionByName(name)
 
 Returns information about a named section.
 
@@ -64,19 +48,19 @@ Returns information about a named section.
 
 - <ApiParam name="name" type="const char*" />
 
-### ] virtual void* GetModuleHandle()
+### void* GetModuleHandle()
 
 Returns the OS-native module handle (HMODULE / void*).
 
-### ] virtual IToolkitMemory GetModuleBase()
+### IToolkitMemory GetModuleBase()
 
 Returns the base load address of the module.
 
-### ] virtual const char* GetModulePath()
+### const char* GetModulePath()
 
 Returns the absolute filesystem path of the module.
 
-### ] virtual const char* GetModuleName()
+### const char* GetModuleName()
 
 Returns the filename component of the module path.
 
@@ -110,5 +94,5 @@ Creates a module wrapper from an IToolkitMemory address inside the module.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="mem" type="IToolkitMemory" />
+- <ApiParam name="mem" type="[IToolkitMemory](/docs/core-api/IToolkitMemory)" />
 

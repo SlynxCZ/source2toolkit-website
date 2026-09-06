@@ -4,7 +4,7 @@ title: CTriggerLerpObject
 
 # CTriggerLerpObject
 
-**Inheritance**: CBaseTrigger
+**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
 
 ## Fields
 
@@ -26,9 +26,21 @@ title: CTriggerLerpObject
 
 ## Methods
 
-### return FromIndex()
+### CTriggerLerpObject* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CTriggerLerpObject* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CTriggerLerpObject* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

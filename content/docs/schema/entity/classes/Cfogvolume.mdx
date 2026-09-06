@@ -4,7 +4,7 @@ title: CFogVolume
 
 # CFogVolume
 
-**Inheritance**: [CServerOnlyModelEntity](/docs/schema/entity/classes/Cserveronlymodelentity)
+**Inheritance**: CServerOnlyModelEntity
 
 ## Fields
 
@@ -16,9 +16,21 @@ title: CFogVolume
 
 ## Methods
 
-### return FromIndex()
+### CFogVolume* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CFogVolume* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CFogVolume* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

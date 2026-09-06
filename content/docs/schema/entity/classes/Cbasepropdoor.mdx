@@ -4,7 +4,7 @@ title: CBasePropDoor
 
 # CBasePropDoor
 
-**Inheritance**: CDynamicProp
+**Inheritance**: [CDynamicProp](/docs/schema/entity/classes/Cdynamicprop)
 
 ## Fields
 
@@ -50,9 +50,21 @@ title: CBasePropDoor
 
 ## Methods
 
-### return FromIndex()
+### CBasePropDoor* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CBasePropDoor* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CBasePropDoor* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

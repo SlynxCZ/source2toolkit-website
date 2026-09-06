@@ -4,7 +4,7 @@ title: CPointWorldText
 
 # CPointWorldText
 
-**Inheritance**: CModelPointEntity
+**Inheritance**: [CModelPointEntity](/docs/schema/entity/classes/Cmodelpointentity)
 
 ## Fields
 
@@ -27,9 +27,21 @@ title: CPointWorldText
 
 ## Methods
 
-### return FromIndex()
+### CPointWorldText* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPointWorldText* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPointWorldText* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

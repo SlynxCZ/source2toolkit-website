@@ -4,7 +4,7 @@ title: CPointProximitySensor
 
 # CPointProximitySensor
 
-**Inheritance**: CPointEntity
+**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
 
 ## Fields
 
@@ -13,9 +13,21 @@ title: CPointProximitySensor
 
 ## Methods
 
-### return FromIndex()
+### CPointProximitySensor* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPointProximitySensor* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPointProximitySensor* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

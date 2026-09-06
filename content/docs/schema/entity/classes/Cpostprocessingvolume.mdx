@@ -4,7 +4,7 @@ title: CPostProcessingVolume
 
 # CPostProcessingVolume
 
-**Inheritance**: CBaseTrigger
+**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
 
 ## Fields
 
@@ -23,9 +23,21 @@ title: CPostProcessingVolume
 
 ## Methods
 
-### return FromIndex()
+### CPostProcessingVolume* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPostProcessingVolume* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPostProcessingVolume* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

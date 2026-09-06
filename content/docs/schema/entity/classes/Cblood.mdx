@@ -4,7 +4,7 @@ title: CBlood
 
 # CBlood
 
-**Inheritance**: CPointEntity
+**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
 
 ## Fields
 
@@ -15,9 +15,21 @@ title: CBlood
 
 ## Methods
 
-### return FromIndex()
+### CBlood* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CBlood* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CBlood* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

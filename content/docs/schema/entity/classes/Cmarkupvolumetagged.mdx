@@ -4,7 +4,7 @@ title: CMarkupVolumeTagged
 
 # CMarkupVolumeTagged
 
-**Inheritance**: CMarkupVolume
+**Inheritance**: [CMarkupVolume](/docs/schema/entity/classes/Cmarkupvolume)
 
 ## Fields
 
@@ -18,9 +18,21 @@ title: CMarkupVolumeTagged
 
 ## Methods
 
-### return FromIndex()
+### CMarkupVolumeTagged* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CMarkupVolumeTagged* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CMarkupVolumeTagged* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

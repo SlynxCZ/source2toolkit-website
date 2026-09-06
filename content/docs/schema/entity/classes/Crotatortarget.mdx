@@ -4,7 +4,7 @@ title: CRotatorTarget
 
 # CRotatorTarget
 
-**Inheritance**: CPointEntity
+**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
 
 ## Fields
 
@@ -13,9 +13,21 @@ title: CRotatorTarget
 
 ## Methods
 
-### return FromIndex()
+### CRotatorTarget* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CRotatorTarget* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CRotatorTarget* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

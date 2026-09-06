@@ -4,7 +4,7 @@ title: CFuncPlatRot
 
 # CFuncPlatRot
 
-**Inheritance**: CFuncPlat
+**Inheritance**: [CFuncPlat](/docs/schema/entity/classes/Cfuncplat)
 
 ## Fields
 
@@ -13,9 +13,21 @@ title: CFuncPlatRot
 
 ## Methods
 
-### return FromIndex()
+### CFuncPlatRot* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CFuncPlatRot* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CFuncPlatRot* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

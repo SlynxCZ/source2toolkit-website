@@ -92,7 +92,7 @@ title: CBaseEntity
 - <ApiParam name="m_flLocalTime" type="float" />
 - <ApiParam name="m_flVPhysicsUpdateLocalTime" type="float" />
 - <ApiParam name="m_nBloodType" type="BloodType" />
-- <ApiParam name="m_pPulseGraphInstance" type="CPulseGraphInstance_ServerEntity*" />
+- <ApiParam name="m_pPulseGraphInstance" type="[CPulseGraphInstance_ServerEntity*](/docs/schema/entity/classes/Cpulsegraphinstance_serverentity)" />
 
 ## Methods
 
@@ -104,9 +104,33 @@ Creates entity by classname.
 
 - <ApiParam name="pszClassName" type="const char*" />
 
+### T* New(pszClassName)
+
+Create entity by classname.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszClassName" type="const char*" />
+
+### T* FromIndex(iIndex)
+
+Get entity by index.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### T* FromIndex(index)
+
+Get entity by entity index.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
+
 ### AcceptInput(pszInput, pActivator, pCaller, pszValue)
 
-Create entity by classname. Get entity by index. Get entity by entity index. Accepts entity input.
+Accepts entity input.
 
 <ApiLabel>Parameters</ApiLabel>
 

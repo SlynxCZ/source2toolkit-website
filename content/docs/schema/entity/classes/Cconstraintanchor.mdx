@@ -4,7 +4,7 @@ title: CConstraintAnchor
 
 # CConstraintAnchor
 
-**Inheritance**: [CBaseAnimGraph](/docs/schema/entity/classes/Cbaseanimgraph)
+**Inheritance**: CBaseAnimGraph
 
 ## Fields
 
@@ -12,9 +12,21 @@ title: CConstraintAnchor
 
 ## Methods
 
-### return FromIndex()
+### CConstraintAnchor* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CConstraintAnchor* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CConstraintAnchor* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

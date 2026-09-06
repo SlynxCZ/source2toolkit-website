@@ -4,7 +4,7 @@ title: CRulePointEntity
 
 # CRulePointEntity
 
-**Inheritance**: [CRuleEntity](/docs/schema/entity/classes/Cruleentity)
+**Inheritance**: CRuleEntity
 
 ## Fields
 
@@ -12,9 +12,21 @@ title: CRulePointEntity
 
 ## Methods
 
-### return FromIndex()
+### CRulePointEntity* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CRulePointEntity* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CRulePointEntity* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

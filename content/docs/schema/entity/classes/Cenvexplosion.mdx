@@ -4,7 +4,7 @@ title: CEnvExplosion
 
 # CEnvExplosion
 
-**Inheritance**: CModelPointEntity
+**Inheritance**: [CModelPointEntity](/docs/schema/entity/classes/Cmodelpointentity)
 
 ## Fields
 
@@ -26,9 +26,21 @@ title: CEnvExplosion
 
 ## Methods
 
-### return FromIndex()
+### CEnvExplosion* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CEnvExplosion* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CEnvExplosion* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

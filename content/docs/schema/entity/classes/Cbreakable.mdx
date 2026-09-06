@@ -4,11 +4,11 @@ title: CBreakable
 
 # CBreakable
 
-**Inheritance**: CBaseModelEntity
+**Inheritance**: [CBaseModelEntity](/docs/schema/entity/classes/Cbasemodelentity)
 
 ## Fields
 
-- <ApiParam name="m_CPropDataComponent" type="CPropDataComponent" />
+- <ApiParam name="m_CPropDataComponent" type="[CPropDataComponent](/docs/schema/entity/classes/Cpropdatacomponent)" />
 - <ApiParam name="m_Material" type="Materials" />
 - <ApiParam name="m_hBreaker" type="CHandle&lt;CBaseEntity&gt;" />
 - <ApiParam name="m_Explosion" type="Explosions" />
@@ -26,9 +26,21 @@ title: CBreakable
 
 ## Methods
 
-### return FromIndex()
+### CBreakable* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CBreakable* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CBreakable* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

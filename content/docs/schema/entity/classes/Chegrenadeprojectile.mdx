@@ -8,9 +8,33 @@ title: CHEGrenadeProjectile
 
 ## Methods
 
-### return FromIndex()
+### CHEGrenadeProjectile* EmitGrenade(vecPosition, angAngle, vecVelocity, pOwner, nItemDefIndex)
+
+Spawns a live grenade of this type. Ported from SwiftlyS2.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="vecPosition" type="const Vector&" />
+- <ApiParam name="angAngle" type="const QAngle&" />
+- <ApiParam name="vecVelocity" type="const Vector&" />
+- <ApiParam name="pOwner" type="[CBaseEntity*](/docs/schema/entity/classes/Cbaseentity)" />
+- <ApiParam name="nItemDefIndex" type="uint32_t" />
+
+### CHEGrenadeProjectile* New(className)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="className" type="const char*" />
+
+### CHEGrenadeProjectile* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CHEGrenadeProjectile* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

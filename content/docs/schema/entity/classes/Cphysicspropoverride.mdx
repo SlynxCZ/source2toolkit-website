@@ -4,13 +4,25 @@ title: CPhysicsPropOverride
 
 # CPhysicsPropOverride
 
-**Inheritance**: [CPhysicsProp](/docs/schema/entity/classes/Cphysicsprop)
+**Inheritance**: CPhysicsProp
 
 ## Methods
 
-### return FromIndex()
+### CPhysicsPropOverride* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPhysicsPropOverride* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPhysicsPropOverride* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

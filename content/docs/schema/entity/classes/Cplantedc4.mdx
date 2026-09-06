@@ -13,7 +13,7 @@ title: CPlantedC4
 - <ApiParam name="m_nBombSite" type="int32_t" />
 - <ApiParam name="m_nSourceSoundscapeHash" type="int32_t" />
 - <ApiParam name="m_bAbortDetonationBecauseWorldIsFrozen" type="bool" />
-- <ApiParam name="m_AttributeManager" type="CAttributeContainer" />
+- <ApiParam name="m_AttributeManager" type="[CAttributeContainer](/docs/schema/entity/classes/Cattributecontainer)" />
 - <ApiParam name="m_OnBombDefused" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 - <ApiParam name="m_OnBombBeginDefuse" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 - <ApiParam name="m_OnBombDefuseAborted" type="[CEntityIOOutput](/docs/schema/Entityio)" />
@@ -38,9 +38,21 @@ title: CPlantedC4
 
 ## Methods
 
-### return FromIndex()
+### CPlantedC4* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPlantedC4* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPlantedC4* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

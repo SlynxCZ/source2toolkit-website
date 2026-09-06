@@ -4,7 +4,7 @@ title: CBasePlatTrain
 
 # CBasePlatTrain
 
-**Inheritance**: [CBaseToggle](/docs/schema/entity/classes/Cbasetoggle)
+**Inheritance**: CBaseToggle
 
 ## Fields
 
@@ -16,9 +16,21 @@ title: CBasePlatTrain
 
 ## Methods
 
-### return FromIndex()
+### CBasePlatTrain* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CBasePlatTrain* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CBasePlatTrain* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

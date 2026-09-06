@@ -4,7 +4,7 @@ title: CBaseProp
 
 # CBaseProp
 
-**Inheritance**: [CBaseAnimGraph](/docs/schema/entity/classes/Cbaseanimgraph)
+**Inheritance**: CBaseAnimGraph
 
 ## Fields
 
@@ -15,9 +15,21 @@ title: CBaseProp
 
 ## Methods
 
-### return FromIndex()
+### CBaseProp* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CBaseProp* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CBaseProp* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

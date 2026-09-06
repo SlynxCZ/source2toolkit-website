@@ -8,13 +8,25 @@ title: CHostageExpresserShim
 
 ## Fields
 
-- <ApiParam name="m_pExpresser" type="[CAI_Expresser*](/docs/schema/entity/classes/Cai_expresser)" />
+- <ApiParam name="m_pExpresser" type="CAI_Expresser*" />
 
 ## Methods
 
-### return FromIndex()
+### CHostageExpresserShim* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CHostageExpresserShim* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CHostageExpresserShim* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

@@ -18,13 +18,14 @@ Creates entity by classname.
 
 - <ApiParam name="pszClassName" type="const char*" />
 
-### AddEntityListener(pListener)
+### AddEntityListener(owner, pListener)
 
 Adds listener for entity spawn, creation, deletion and parent change.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pListener" type="IEntityListener*" />
+- <ApiParam name="owner" type="PluginId" /> — Plugin the listener belongs to
+- <ApiParam name="pListener" type="IEntityListener*" /> — Listener object
 
 ### RemoveEntityListener(pListener)
 
@@ -33,4 +34,14 @@ Removes listener for entity spawn, creation, deletion and parent change.
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="pListener" type="IEntityListener*" />
+
+## Functions
+
+### UTIL_FindAllEntitiesByDesignerName(pszDesignerName)
+
+Every entity whose designer name matches, cast to T.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszDesignerName" type="const char*" /> — Designer name to match, exactly.
 

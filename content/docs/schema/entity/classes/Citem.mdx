@@ -4,7 +4,7 @@ title: CItem
 
 # CItem
 
-**Inheritance**: [CBaseAnimGraph](/docs/schema/entity/classes/Cbaseanimgraph)
+**Inheritance**: CBaseAnimGraph
 
 ## Fields
 
@@ -19,9 +19,21 @@ title: CItem
 
 ## Methods
 
-### return FromIndex()
+### CItem* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CItem* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CItem* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

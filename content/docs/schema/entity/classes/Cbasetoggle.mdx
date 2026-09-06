@@ -4,7 +4,7 @@ title: CBaseToggle
 
 # CBaseToggle
 
-**Inheritance**: CBaseModelEntity
+**Inheritance**: [CBaseModelEntity](/docs/schema/entity/classes/Cbasemodelentity)
 
 ## Fields
 
@@ -27,9 +27,21 @@ title: CBaseToggle
 
 ## Methods
 
-### return FromIndex()
+### CBaseToggle* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CBaseToggle* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CBaseToggle* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

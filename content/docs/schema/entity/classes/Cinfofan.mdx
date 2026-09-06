@@ -4,7 +4,7 @@ title: CInfoFan
 
 # CInfoFan
 
-**Inheritance**: CPointEntity
+**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
 
 ## Fields
 
@@ -15,9 +15,21 @@ title: CInfoFan
 
 ## Methods
 
-### return FromIndex()
+### CInfoFan* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CInfoFan* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CInfoFan* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

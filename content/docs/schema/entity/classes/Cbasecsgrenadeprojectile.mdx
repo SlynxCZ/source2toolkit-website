@@ -4,7 +4,7 @@ title: CBaseCSGrenadeProjectile
 
 # CBaseCSGrenadeProjectile
 
-**Inheritance**: [CBaseGrenade](/docs/schema/entity/classes/Cbasegrenade)
+**Inheritance**: CBaseGrenade
 
 ## Fields
 
@@ -27,9 +27,21 @@ title: CBaseCSGrenadeProjectile
 
 ## Methods
 
-### return FromIndex()
+### CBaseCSGrenadeProjectile* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CBaseCSGrenadeProjectile* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CBaseCSGrenadeProjectile* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

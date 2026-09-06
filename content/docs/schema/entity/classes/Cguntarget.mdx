@@ -4,7 +4,7 @@ title: CGunTarget
 
 # CGunTarget
 
-**Inheritance**: [CBaseToggle](/docs/schema/entity/classes/Cbasetoggle)
+**Inheritance**: CBaseToggle
 
 ## Fields
 
@@ -15,9 +15,21 @@ title: CGunTarget
 
 ## Methods
 
-### return FromIndex()
+### CGunTarget* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CGunTarget* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CGunTarget* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

@@ -9,7 +9,7 @@ title: CBaseModelEntity
 ## Fields
 
 - <ApiParam name="m_CRenderComponent" type="[CRenderComponent*](/docs/schema/entity/classes/Crendercomponent)" />
-- <ApiParam name="m_CHitboxComponent" type="CHitboxComponent" />
+- <ApiParam name="m_CHitboxComponent" type="[CHitboxComponent](/docs/schema/entity/classes/Chitboxcomponent)" />
 - <ApiParam name="m_pChoreoComponent" type="[CChoreoComponent*](/docs/schema/entity/classes/Cchoreocomponent)" />
 - <ApiParam name="m_nDestructiblePartInitialStateDestructed0" type="HitGroup_t" />
 - <ApiParam name="m_nDestructiblePartInitialStateDestructed1" type="HitGroup_t" />
@@ -36,7 +36,7 @@ title: CBaseModelEntity
 - <ApiParam name="m_vecRenderAttributes" type="CUtlVector&lt;EntityRenderAttribute_t&gt;" />
 - <ApiParam name="m_bRenderToCubemaps" type="bool" />
 - <ApiParam name="m_bNoInterpolate" type="bool" />
-- <ApiParam name="m_Collision" type="[CCollisionProperty](/docs/schema/entity/classes/Ccollisionproperty)" />
+- <ApiParam name="m_Collision" type="CCollisionProperty" />
 - <ApiParam name="m_Glow" type="[CGlowProperty](/docs/schema/entity/classes/Cglowproperty)" />
 - <ApiParam name="m_flGlowBackfaceMult" type="float" />
 - <ApiParam name="m_fadeMinDist" type="float" />
@@ -44,7 +44,7 @@ title: CBaseModelEntity
 - <ApiParam name="m_flFadeScale" type="float" />
 - <ApiParam name="m_flShadowStrength" type="float" />
 - <ApiParam name="m_nObjectCulling" type="uint8_t" />
-- <ApiParam name="m_vecViewOffset" type="CNetworkViewOffsetVector" />
+- <ApiParam name="m_vecViewOffset" type="[CNetworkViewOffsetVector](/docs/schema/entity/classes/Cnetworkviewoffsetvector)" />
 - <ApiParam name="m_bvDisabledHitGroups" type="uint32_t" />
 
 ## Methods
@@ -74,9 +74,21 @@ Switch a bodygroup on the model.
 - <ApiParam name="pszName" type="const char*" />
 - <ApiParam name="nValue" type="int" />
 
-### return FromIndex()
+### CBaseModelEntity* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CBaseModelEntity* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CBaseModelEntity* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

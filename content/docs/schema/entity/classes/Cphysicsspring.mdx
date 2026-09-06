@@ -4,7 +4,7 @@ title: CPhysicsSpring
 
 # CPhysicsSpring
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+**Inheritance**: CBaseEntity
 
 ## Fields
 
@@ -20,9 +20,21 @@ title: CPhysicsSpring
 
 ## Methods
 
-### return FromIndex()
+### CPhysicsSpring* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPhysicsSpring* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPhysicsSpring* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

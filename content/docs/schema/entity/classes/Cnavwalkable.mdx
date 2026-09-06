@@ -4,13 +4,25 @@ title: CNavWalkable
 
 # CNavWalkable
 
-**Inheritance**: CPointEntity
+**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
 
 ## Methods
 
-### return FromIndex()
+### CNavWalkable* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CNavWalkable* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CNavWalkable* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

@@ -4,7 +4,7 @@ title: CCommentaryAuto
 
 # CCommentaryAuto
 
-**Inheritance**: CBaseEntity
+**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
 
 ## Fields
 
@@ -14,9 +14,21 @@ title: CCommentaryAuto
 
 ## Methods
 
-### return FromIndex()
+### CCommentaryAuto* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CCommentaryAuto* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CCommentaryAuto* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

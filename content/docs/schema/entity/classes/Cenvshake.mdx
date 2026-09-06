@@ -4,7 +4,7 @@ title: CEnvShake
 
 # CEnvShake
 
-**Inheritance**: CPointEntity
+**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
 
 ## Fields
 
@@ -17,14 +17,26 @@ title: CEnvShake
 - <ApiParam name="m_nextShake" type="float" />
 - <ApiParam name="m_currentAmp" type="float" />
 - <ApiParam name="m_maxForce" type="Vector" />
-- <ApiParam name="m_pShakeController" type="IPhysicsMotionController*" />
+- <ApiParam name="m_pShakeController" type="[IPhysicsMotionController*](/docs/schema/entity/classes/Iphysicsmotioncontroller)" />
 - <ApiParam name="m_shakeCallback" type="CPhysicsShake" />
 
 ## Methods
 
-### return FromIndex()
+### CEnvShake* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CEnvShake* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CEnvShake* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

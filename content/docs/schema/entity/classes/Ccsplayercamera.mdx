@@ -4,7 +4,7 @@ title: CCSPlayerCamera
 
 # CCSPlayerCamera
 
-**Inheritance**: CBaseEntity
+**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
 
 ## Fields
 
@@ -14,9 +14,21 @@ title: CCSPlayerCamera
 
 ## Methods
 
-### return FromIndex()
+### CCSPlayerCamera* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CCSPlayerCamera* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CCSPlayerCamera* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

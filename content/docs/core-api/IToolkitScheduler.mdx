@@ -6,20 +6,22 @@ title: IToolkitScheduler
 
 ## IToolkitScheduler
 
-### NextFrame(task)
+### NextFrame(owner, task)
 
 Executes a task on the next frame.
 
 <ApiLabel>Parameters</ApiLabel>
 
+- <ApiParam name="owner" type="PluginId" /> — Plugin the task belongs to
 - <ApiParam name="task" type="std::function&lt;void()&gt;&&" /> — Callback function
 
-### Timer* AddTimer(interval, callback, flags)
+### Timer* AddTimer(owner, interval, callback, flags)
 
 Adds a timer.
 
 <ApiLabel>Parameters</ApiLabel>
 
+- <ApiParam name="owner" type="PluginId" /> — Plugin the timer belongs to
 - <ApiParam name="interval" type="float" /> — Time in seconds between executions
 - <ApiParam name="callback" type="TimerCallback" /> — Function to execute
 - <ApiParam name="flags" type="int" /> — Timer behavior flags

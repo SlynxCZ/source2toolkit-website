@@ -4,7 +4,7 @@ title: CPointGamestatsCounter
 
 # CPointGamestatsCounter
 
-**Inheritance**: CPointEntity
+**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
 
 ## Fields
 
@@ -13,9 +13,21 @@ title: CPointGamestatsCounter
 
 ## Methods
 
-### return FromIndex()
+### CPointGamestatsCounter* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPointGamestatsCounter* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPointGamestatsCounter* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

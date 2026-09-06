@@ -4,7 +4,7 @@ title: CTriggerVolume
 
 # CTriggerVolume
 
-**Inheritance**: CBaseModelEntity
+**Inheritance**: [CBaseModelEntity](/docs/schema/entity/classes/Cbasemodelentity)
 
 ## Fields
 
@@ -13,9 +13,21 @@ title: CTriggerVolume
 
 ## Methods
 
-### return FromIndex()
+### CTriggerVolume* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CTriggerVolume* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CTriggerVolume* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

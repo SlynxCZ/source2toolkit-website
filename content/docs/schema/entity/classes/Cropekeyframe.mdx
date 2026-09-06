@@ -4,7 +4,7 @@ title: CRopeKeyframe
 
 # CRopeKeyframe
 
-**Inheritance**: CBaseModelEntity
+**Inheritance**: [CBaseModelEntity](/docs/schema/entity/classes/Cbasemodelentity)
 
 ## Fields
 
@@ -30,9 +30,21 @@ title: CRopeKeyframe
 
 ## Methods
 
-### return FromIndex()
+### CRopeKeyframe* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CRopeKeyframe* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CRopeKeyframe* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

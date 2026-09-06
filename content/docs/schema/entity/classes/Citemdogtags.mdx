@@ -4,7 +4,7 @@ title: CItemDogtags
 
 # CItemDogtags
 
-**Inheritance**: CItem
+**Inheritance**: [CItem](/docs/schema/entity/classes/Citem)
 
 ## Fields
 
@@ -13,9 +13,21 @@ title: CItemDogtags
 
 ## Methods
 
-### return FromIndex()
+### CItemDogtags* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CItemDogtags* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CItemDogtags* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

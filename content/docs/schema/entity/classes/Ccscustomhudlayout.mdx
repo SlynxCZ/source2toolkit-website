@@ -10,7 +10,7 @@ title: CCSCustomHudLayout
 
 - <ApiParam name="m_strLayout" type="CUtlSymbolLarge" />
 - <ApiParam name="m_vecPlayerLayoutStates" type="CUtlVector&lt;CCSCustomHudLayoutState&gt;" />
-- <ApiParam name="m_globalLayoutState" type="CCSCustomHudLayoutState" />
+- <ApiParam name="m_globalLayoutState" type="[CCSCustomHudLayoutState](/docs/schema/entity/classes/Ccscustomhudlayoutstate)" />
 - <ApiParam name="m_vecPanelIds" type="CUtlVector&lt;CUtlString&gt;" />
 - <ApiParam name="m_vecClassNames" type="CUtlVector&lt;CUtlString&gt;" />
 - <ApiParam name="m_vecDialogVariableNames" type="CUtlVector&lt;CUtlString&gt;" />
@@ -85,9 +85,21 @@ Registers a callback fired when a player clicks a panel of this layout, keyed by
 
 Drops every click callback registered for this layout.
 
-### return FromIndex()
+### CCSCustomHudLayout* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CCSCustomHudLayout* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CCSCustomHudLayout* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

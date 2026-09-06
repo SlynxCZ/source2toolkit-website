@@ -4,13 +4,25 @@ title: CItemKevlar
 
 # CItemKevlar
 
-**Inheritance**: CItem
+**Inheritance**: [CItem](/docs/schema/entity/classes/Citem)
 
 ## Methods
 
-### return FromIndex()
+### CItemKevlar* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CItemKevlar* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CItemKevlar* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

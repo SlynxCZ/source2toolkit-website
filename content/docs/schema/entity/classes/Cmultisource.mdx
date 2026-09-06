@@ -4,7 +4,7 @@ title: CMultiSource
 
 # CMultiSource
 
-**Inheritance**: CLogicalEntity
+**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
 
 ## Fields
 
@@ -16,9 +16,21 @@ title: CMultiSource
 
 ## Methods
 
-### return FromIndex()
+### CMultiSource* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CMultiSource* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CMultiSource* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

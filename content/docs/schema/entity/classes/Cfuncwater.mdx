@@ -8,13 +8,25 @@ title: CFuncWater
 
 ## Fields
 
-- <ApiParam name="m_BuoyancyHelper" type="[CBuoyancyHelper](/docs/schema/entity/classes/Cbuoyancyhelper)" />
+- <ApiParam name="m_BuoyancyHelper" type="CBuoyancyHelper" />
 
 ## Methods
 
-### return FromIndex()
+### CFuncWater* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CFuncWater* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CFuncWater* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

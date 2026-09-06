@@ -4,7 +4,7 @@ title: CGameMoney
 
 # CGameMoney
 
-**Inheritance**: CRulePointEntity
+**Inheritance**: [CRulePointEntity](/docs/schema/entity/classes/Crulepointentity)
 
 ## Fields
 
@@ -15,9 +15,21 @@ title: CGameMoney
 
 ## Methods
 
-### return FromIndex()
+### CGameMoney* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CGameMoney* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CGameMoney* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

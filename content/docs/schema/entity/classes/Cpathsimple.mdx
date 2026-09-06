@@ -8,15 +8,27 @@ title: CPathSimple
 
 ## Fields
 
-- <ApiParam name="m_CPathQueryComponent" type="[CPathQueryComponent](/docs/schema/entity/classes/Cpathquerycomponent)" />
+- <ApiParam name="m_CPathQueryComponent" type="CPathQueryComponent" />
 - <ApiParam name="m_pathString" type="CUtlString" />
 - <ApiParam name="m_bClosedLoop" type="bool" />
 
 ## Methods
 
-### return FromIndex()
+### CPathSimple* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPathSimple* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPathSimple* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

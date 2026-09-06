@@ -4,7 +4,7 @@ title: CFuncNavObstruction
 
 # CFuncNavObstruction
 
-**Inheritance**: CBaseModelEntity
+**Inheritance**: [CBaseModelEntity](/docs/schema/entity/classes/Cbasemodelentity)
 
 ## Fields
 
@@ -13,9 +13,21 @@ title: CFuncNavObstruction
 
 ## Methods
 
-### return FromIndex()
+### CFuncNavObstruction* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CFuncNavObstruction* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CFuncNavObstruction* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

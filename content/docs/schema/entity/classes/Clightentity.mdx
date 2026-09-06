@@ -4,7 +4,7 @@ title: CLightEntity
 
 # CLightEntity
 
-**Inheritance**: [CBaseModelEntity](/docs/schema/entity/classes/Cbasemodelentity)
+**Inheritance**: CBaseModelEntity
 
 ## Fields
 
@@ -12,9 +12,21 @@ title: CLightEntity
 
 ## Methods
 
-### return FromIndex()
+### CLightEntity* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CLightEntity* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CLightEntity* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

@@ -4,7 +4,7 @@ title: CChangeLevel
 
 # CChangeLevel
 
-**Inheritance**: CBaseTrigger
+**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
 
 ## Fields
 
@@ -18,9 +18,21 @@ title: CChangeLevel
 
 ## Methods
 
-### return FromIndex()
+### CChangeLevel* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CChangeLevel* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CChangeLevel* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

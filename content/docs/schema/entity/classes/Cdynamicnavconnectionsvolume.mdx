@@ -4,7 +4,7 @@ title: CDynamicNavConnectionsVolume
 
 # CDynamicNavConnectionsVolume
 
-**Inheritance**: [CTriggerMultiple](/docs/schema/entity/classes/Ctriggermultiple)
+**Inheritance**: CTriggerMultiple
 
 ## Fields
 
@@ -18,9 +18,21 @@ title: CDynamicNavConnectionsVolume
 
 ## Methods
 
-### return FromIndex()
+### CDynamicNavConnectionsVolume* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CDynamicNavConnectionsVolume* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CDynamicNavConnectionsVolume* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

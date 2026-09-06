@@ -4,7 +4,7 @@ title: CRotDoor
 
 # CRotDoor
 
-**Inheritance**: CBaseDoor
+**Inheritance**: [CBaseDoor](/docs/schema/entity/classes/Cbasedoor)
 
 ## Fields
 
@@ -12,9 +12,21 @@ title: CRotDoor
 
 ## Methods
 
-### return FromIndex()
+### CRotDoor* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CRotDoor* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CRotDoor* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

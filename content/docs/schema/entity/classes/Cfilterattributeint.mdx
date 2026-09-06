@@ -4,7 +4,7 @@ title: CFilterAttributeInt
 
 # CFilterAttributeInt
 
-**Inheritance**: [CBaseFilter](/docs/schema/entity/classes/Cbasefilter)
+**Inheritance**: CBaseFilter
 
 ## Fields
 
@@ -12,9 +12,21 @@ title: CFilterAttributeInt
 
 ## Methods
 
-### return FromIndex()
+### CFilterAttributeInt* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CFilterAttributeInt* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CFilterAttributeInt* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

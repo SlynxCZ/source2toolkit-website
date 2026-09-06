@@ -4,7 +4,7 @@ title: CCSPlace
 
 # CCSPlace
 
-**Inheritance**: [CServerOnlyModelEntity](/docs/schema/entity/classes/Cserveronlymodelentity)
+**Inheritance**: CServerOnlyModelEntity
 
 ## Fields
 
@@ -12,9 +12,21 @@ title: CCSPlace
 
 ## Methods
 
-### return FromIndex()
+### CCSPlace* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CCSPlace* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CCSPlace* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

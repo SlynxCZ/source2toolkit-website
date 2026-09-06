@@ -4,7 +4,7 @@ title: CRevertSaved
 
 # CRevertSaved
 
-**Inheritance**: CModelPointEntity
+**Inheritance**: [CModelPointEntity](/docs/schema/entity/classes/Cmodelpointentity)
 
 ## Fields
 
@@ -14,9 +14,21 @@ title: CRevertSaved
 
 ## Methods
 
-### return FromIndex()
+### CRevertSaved* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CRevertSaved* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CRevertSaved* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

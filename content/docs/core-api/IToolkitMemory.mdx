@@ -6,17 +6,61 @@ title: IToolkitMemory
 
 ## Methods
 
-### return ResolveRelativeAddress(pcodeOffset, extInstructionOffset)
+### operator uintptr_t()
+
+### explicit inline operator bool()
+
+### uintptr_t GetPtr()
+
+### IToolkitMemory Offset(offset)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pcodeOffset" type="o" />
-- <ApiParam name="extInstructionOffset" type="n" />
+- <ApiParam name="offset" type="ptrdiff_t" />
 
-### return ResolveRelativeAddressSelf(pcodeOffset, extInstructionOffset)
+### IToolkitMemory& OffsetSelf(offset)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pcodeOffset" type="o" />
-- <ApiParam name="extInstructionOffset" type="n" />
+- <ApiParam name="offset" type="ptrdiff_t" />
+
+### IToolkitMemory Deref(deref)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="deref" type="int" />
+
+### IToolkitMemory& DerefSelf(deref)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="deref" type="int" />
+
+### IToolkitMemory FollowNearCall(opcodeOffset, nextInstructionOffset)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="opcodeOffset" type="const ptrdiff_t" />
+- <ApiParam name="nextInstructionOffset" type="const ptrdiff_t" />
+
+### IToolkitMemory& FollowNearCallSelf(opcodeOffset, nextInstructionOffset)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="opcodeOffset" type="const ptrdiff_t" />
+- <ApiParam name="nextInstructionOffset" type="const ptrdiff_t" />
+
+### IToolkitMemory ResolveRelativeAddress(registerOffset, nextInstructionOffset)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="registerOffset" type="const ptrdiff_t" />
+- <ApiParam name="nextInstructionOffset" type="const ptrdiff_t" />
+
+### IToolkitMemory& ResolveRelativeAddressSelf(registerOffset, nextInstructionOffset)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="registerOffset" type="const ptrdiff_t" />
+- <ApiParam name="nextInstructionOffset" type="const ptrdiff_t" />
 

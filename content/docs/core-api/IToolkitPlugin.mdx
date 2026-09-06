@@ -6,6 +6,8 @@ title: IToolkitPlugin
 
 ## IToolkitPlugin
 
+### int GetApiVersion()
+
 ### bool Load(id, api, error, maxlen, late)
 
 Called when plugin is loaded.
@@ -18,9 +20,18 @@ Called when plugin is loaded.
 - <ApiParam name="maxlen" type="size_t" /> — Error buffer size
 - <ApiParam name="late" type="bool" /> — True if loaded after server start
 
+### bool Unload(error, maxlen)
+
+Called when plugin is unloaded.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="error" type="char*" />
+- <ApiParam name="maxlen" type="size_t" />
+
 ### const char* GetAuthor()
 
-Called when plugin is unloaded.Plugin author name
+Plugin author name
 
 ### const char* GetName()
 
@@ -36,12 +47,65 @@ Plugin version
 
 ## IToolkitListener
 
-### return OnToolkitQuery(face, et)
+### OnPluginLoad(id)
+
+Called when another toolkit plugin (.stx) is loaded. The id is a toolkit plugin id -- the one "toolkit list" shows.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="id" type="PluginId" />
+
+### OnPluginUnload(id)
+
+Called when another toolkit plugin (.stx) is unloaded.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="id" type="PluginId" />
+
+### OnMetamodPluginLoad(id)
+
+Called when a Metamod:Source plugin is loaded.  The id is Metamod's, from a different numbering than the toolkit's -- which is why this is not the same callback as OnPluginLoad().
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="id" type="PluginId" />
+
+### OnMetamodPluginUnload(id)
+
+Called when a Metamod:Source plugin is unloaded.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="id" type="PluginId" />
+
+### OnAllToolkitPluginsLoaded()
+
+Called when all toolkit plugins are loaded
+
+### OnAllMetamodPluginsLoaded()
+
+Called when all Metamod plugins are loaded
+
+### OnLevelShutdown()
+
+Called when a map is initialized.Called when a map is shutting down
+
+### void* OnToolkitQuery(iface, ret)
+
+Called when an interface is requested from toolkit.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iface" type="const char*" />
+- <ApiParam name="ret" type="int*" />
+
+### void* OnMetamodQuery(iface, ret)
 
 Called when a Metamod:Source plugin asks for an interface.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="face" type="i" />
-- <ApiParam name="et" type="r" />
+- <ApiParam name="iface" type="const char*" />
+- <ApiParam name="ret" type="int*" />
 

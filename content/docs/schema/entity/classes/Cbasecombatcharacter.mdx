@@ -4,7 +4,7 @@ title: CBaseCombatCharacter
 
 # CBaseCombatCharacter
 
-**Inheritance**: [CBaseAnimGraph](/docs/schema/entity/classes/Cbaseanimgraph)
+**Inheritance**: CBaseAnimGraph
 
 ## Fields
 
@@ -21,9 +21,21 @@ title: CBaseCombatCharacter
 
 ## Methods
 
-### return FromIndex()
+### CBaseCombatCharacter* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CBaseCombatCharacter* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CBaseCombatCharacter* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

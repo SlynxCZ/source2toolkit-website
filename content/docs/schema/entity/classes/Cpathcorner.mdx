@@ -4,7 +4,7 @@ title: CPathCorner
 
 # CPathCorner
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+**Inheritance**: CPointEntity
 
 ## Fields
 
@@ -15,9 +15,21 @@ title: CPathCorner
 
 ## Methods
 
-### return FromIndex()
+### CPathCorner* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPathCorner* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPathCorner* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

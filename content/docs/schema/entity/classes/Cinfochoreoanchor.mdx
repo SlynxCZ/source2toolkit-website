@@ -4,7 +4,7 @@ title: CInfoChoreoAnchor
 
 # CInfoChoreoAnchor
 
-**Inheritance**: CPointEntity
+**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
 
 ## Fields
 
@@ -13,9 +13,21 @@ title: CInfoChoreoAnchor
 
 ## Methods
 
-### return FromIndex()
+### CInfoChoreoAnchor* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CInfoChoreoAnchor* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CInfoChoreoAnchor* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

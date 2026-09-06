@@ -42,11 +42,144 @@ Set pawn for controller.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam name="pPawn" type="[CBasePlayerPawn*](/docs/schema/entity/classes/Cbaseplayerpawn)" />
+- <ApiParam name="pPawn" type="CBasePlayerPawn*" />
 
-### return FromIndex()
+### CCSPlayerPawn* GetPawn()
+
+Get pawn.
+
+### PrintToConsole(pszMessage)
+
+Print to console.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="pszMessage" type="const char*" />
+
+### PrintToChat(pszMessage)
+
+Print to chat.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszMessage" type="const char*" />
+
+### PrintToCenter(pszMessage)
+
+Print to center.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszMessage" type="const char*" />
+
+### PrintToCenterAlert(pszMessage)
+
+Print alert.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszMessage" type="const char*" />
+
+### bool IsBot()
+
+Is bot.
+
+### Disconnect(eReason)
+
+Disconnect player.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="eReason" type="ENetworkDisconnectionReason" />
+
+### ExecuteClientCommand(pszCommand)
+
+Execute client command.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszCommand" type="const char*" />
+
+### ExecuteClientCommandFromServer(pszCommand)
+
+Execute command from server.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszCommand" type="const char*" />
+
+### CServerSideClient* GetServerSideClient()
+
+Get server side engine client.
+
+### CEntityIndex GetPlayerIndex()
+
+Get player index.
+
+### int GetSlot()
+
+Get slot.
+
+### CPlayerSlot GetPlayerSlot()
+
+Get player slot.
+
+### int GetUserID()
+
+Get steamid.
+
+### CPlayerUserId GetPlayerUserID()
+
+Get player userid.
+
+### uint64 GetSteamID()
+
+Get steamid.
+
+### CSteamID GetPlayerSteamID()
+
+Get player steamid.
+
+### const char* GetPlayerName()
+
+Get player name.
+
+### CUtlString GetIpAddress()
+
+Get IP address.
+
+### ReplicateConVar(pszConVar, pszValue)
+
+Replicate convar.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszConVar" type="const char*" />
+- <ApiParam name="pszValue" type="const char*" />
+
+### FireEventToClient(pEvent)
+
+Fires gameEvent to client's legacy listener.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pEvent" type="IGameEvent*" />
+
+### CBasePlayerController* New(className)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="className" type="const char*" />
+
+### CBasePlayerController* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CBasePlayerController* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

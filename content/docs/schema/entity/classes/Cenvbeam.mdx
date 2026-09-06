@@ -4,7 +4,7 @@ title: CEnvBeam
 
 # CEnvBeam
 
-**Inheritance**: CBeam
+**Inheritance**: [CBeam](/docs/schema/entity/classes/Cbeam)
 
 ## Fields
 
@@ -30,9 +30,21 @@ title: CEnvBeam
 
 ## Methods
 
-### return FromIndex()
+### CEnvBeam* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CEnvBeam* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CEnvBeam* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

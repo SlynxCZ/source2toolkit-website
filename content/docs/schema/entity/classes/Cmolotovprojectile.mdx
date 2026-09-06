@@ -10,13 +10,37 @@ title: CMolotovProjectile
 
 - <ApiParam name="m_bIsIncGrenade" type="bool" />
 - <ApiParam name="m_bDetonated" type="bool" />
-- <ApiParam name="m_stillTimer" type="IntervalTimer" />
+- <ApiParam name="m_stillTimer" type="[IntervalTimer](/docs/schema/entity/classes/Intervaltimer)" />
 
 ## Methods
 
-### return FromIndex()
+### CMolotovProjectile* EmitGrenade(vecPosition, angAngle, vecVelocity, pOwner, nItemDefIndex)
+
+Spawns a live grenade of this type. Ported from SwiftlyS2.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="vecPosition" type="const Vector&" />
+- <ApiParam name="angAngle" type="const QAngle&" />
+- <ApiParam name="vecVelocity" type="const Vector&" />
+- <ApiParam name="pOwner" type="CBaseEntity*" />
+- <ApiParam name="nItemDefIndex" type="uint32_t" />
+
+### CMolotovProjectile* New(className)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="className" type="const char*" />
+
+### CMolotovProjectile* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CMolotovProjectile* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

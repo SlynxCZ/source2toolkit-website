@@ -4,7 +4,7 @@ title: CBombTarget
 
 # CBombTarget
 
-**Inheritance**: CBaseTrigger
+**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
 
 ## Fields
 
@@ -20,9 +20,21 @@ title: CBombTarget
 
 ## Methods
 
-### return FromIndex()
+### CBombTarget* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CBombTarget* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CBombTarget* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

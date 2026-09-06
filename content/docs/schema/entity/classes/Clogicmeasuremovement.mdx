@@ -4,7 +4,7 @@ title: CLogicMeasureMovement
 
 # CLogicMeasureMovement
 
-**Inheritance**: CLogicalEntity
+**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
 
 ## Fields
 
@@ -20,9 +20,21 @@ title: CLogicMeasureMovement
 
 ## Methods
 
-### return FromIndex()
+### CLogicMeasureMovement* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CLogicMeasureMovement* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CLogicMeasureMovement* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

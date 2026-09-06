@@ -4,7 +4,7 @@ title: CGenericConstraint
 
 # CGenericConstraint
 
-**Inheritance**: [CPhysConstraint](/docs/schema/entity/classes/Cphysconstraint)
+**Inheritance**: CPhysConstraint
 
 ## Fields
 
@@ -60,9 +60,21 @@ title: CGenericConstraint
 
 ## Methods
 
-### return FromIndex()
+### CGenericConstraint* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CGenericConstraint* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CGenericConstraint* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

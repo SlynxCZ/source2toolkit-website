@@ -4,7 +4,7 @@ title: CBuyZone
 
 # CBuyZone
 
-**Inheritance**: CBaseTrigger
+**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
 
 ## Fields
 
@@ -12,9 +12,21 @@ title: CBuyZone
 
 ## Methods
 
-### return FromIndex()
+### CBuyZone* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CBuyZone* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CBuyZone* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

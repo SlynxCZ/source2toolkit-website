@@ -4,13 +4,25 @@ title: CPushable
 
 # CPushable
 
-**Inheritance**: [CBreakable](/docs/schema/entity/classes/Cbreakable)
+**Inheritance**: CBreakable
 
 ## Methods
 
-### return FromIndex()
+### CPushable* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPushable* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPushable* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

@@ -4,7 +4,7 @@ title: CLogicCollisionPair
 
 # CLogicCollisionPair
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+**Inheritance**: CLogicalEntity
 
 ## Fields
 
@@ -18,9 +18,21 @@ title: CLogicCollisionPair
 
 ## Methods
 
-### return FromIndex()
+### CLogicCollisionPair* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CLogicCollisionPair* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CLogicCollisionPair* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

@@ -4,7 +4,7 @@ title: CPointClientUIDialog
 
 # CPointClientUIDialog
 
-**Inheritance**: [CBaseClientUIEntity](/docs/schema/entity/classes/Cbaseclientuientity)
+**Inheritance**: CBaseClientUIEntity
 
 ## Fields
 
@@ -13,9 +13,21 @@ title: CPointClientUIDialog
 
 ## Methods
 
-### return FromIndex()
+### CPointClientUIDialog* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPointClientUIDialog* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPointClientUIDialog* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

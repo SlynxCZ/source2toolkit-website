@@ -4,7 +4,7 @@ title: CFilterMassGreater
 
 # CFilterMassGreater
 
-**Inheritance**: CBaseFilter
+**Inheritance**: [CBaseFilter](/docs/schema/entity/classes/Cbasefilter)
 
 ## Fields
 
@@ -12,9 +12,21 @@ title: CFilterMassGreater
 
 ## Methods
 
-### return FromIndex()
+### CFilterMassGreater* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CFilterMassGreater* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CFilterMassGreater* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

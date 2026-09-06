@@ -4,7 +4,7 @@ title: CColorCorrection
 
 # CColorCorrection
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+**Inheritance**: CBaseEntity
 
 ## Fields
 
@@ -28,9 +28,21 @@ title: CColorCorrection
 
 ## Methods
 
-### return FromIndex()
+### CColorCorrection* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CColorCorrection* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CColorCorrection* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

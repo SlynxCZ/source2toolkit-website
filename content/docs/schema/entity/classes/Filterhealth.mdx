@@ -4,7 +4,7 @@ title: FilterHealth
 
 # FilterHealth
 
-**Inheritance**: [CBaseFilter](/docs/schema/entity/classes/Cbasefilter)
+**Inheritance**: CBaseFilter
 
 ## Fields
 
@@ -14,9 +14,21 @@ title: FilterHealth
 
 ## Methods
 
-### return FromIndex()
+### FilterHealth* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### FilterHealth* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### FilterHealth* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

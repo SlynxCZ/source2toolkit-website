@@ -4,13 +4,25 @@ title: CHostageRescueZone
 
 # CHostageRescueZone
 
-**Inheritance**: [CHostageRescueZoneShim](/docs/schema/entity/classes/Chostagerescuezoneshim)
+**Inheritance**: CHostageRescueZoneShim
 
 ## Methods
 
-### return FromIndex()
+### CHostageRescueZone* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CHostageRescueZone* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CHostageRescueZone* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

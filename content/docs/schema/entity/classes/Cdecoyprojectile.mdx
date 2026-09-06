@@ -15,9 +15,33 @@ title: CDecoyProjectile
 
 ## Methods
 
-### return FromIndex()
+### CDecoyProjectile* EmitGrenade(vecPosition, angAngle, vecVelocity, pOwner, nItemDefIndex)
+
+Spawns a live grenade of this type. Ported from SwiftlyS2.
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="vecPosition" type="const Vector&" />
+- <ApiParam name="angAngle" type="const QAngle&" />
+- <ApiParam name="vecVelocity" type="const Vector&" />
+- <ApiParam name="pOwner" type="CBaseEntity*" />
+- <ApiParam name="nItemDefIndex" type="uint32_t" />
+
+### CDecoyProjectile* New(className)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="className" type="const char*" />
+
+### CDecoyProjectile* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CDecoyProjectile* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

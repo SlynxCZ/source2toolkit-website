@@ -4,7 +4,7 @@ title: CFuncTrackTrain
 
 # CFuncTrackTrain
 
-**Inheritance**: [CBaseModelEntity](/docs/schema/entity/classes/Cbasemodelentity)
+**Inheritance**: CBaseModelEntity
 
 ## Fields
 
@@ -49,9 +49,21 @@ title: CFuncTrackTrain
 
 ## Methods
 
-### return FromIndex()
+### CFuncTrackTrain* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CFuncTrackTrain* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CFuncTrackTrain* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

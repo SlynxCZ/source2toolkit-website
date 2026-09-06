@@ -4,7 +4,7 @@ title: CTriggerImpact
 
 # CTriggerImpact
 
-**Inheritance**: [CTriggerMultiple](/docs/schema/entity/classes/Ctriggermultiple)
+**Inheritance**: CTriggerMultiple
 
 ## Fields
 
@@ -14,9 +14,21 @@ title: CTriggerImpact
 
 ## Methods
 
-### return FromIndex()
+### CTriggerImpact* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CTriggerImpact* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CTriggerImpact* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

@@ -4,7 +4,7 @@ title: CPhysLength
 
 # CPhysLength
 
-**Inheritance**: [CPhysConstraint](/docs/schema/entity/classes/Cphysconstraint)
+**Inheritance**: CPhysConstraint
 
 ## Fields
 
@@ -16,9 +16,21 @@ title: CPhysLength
 
 ## Methods
 
-### return FromIndex()
+### CPhysLength* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPhysLength* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPhysLength* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

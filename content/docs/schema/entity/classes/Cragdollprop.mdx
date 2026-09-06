@@ -8,7 +8,7 @@ title: CRagdollProp
 
 ## Fields
 
-- <ApiParam name="m_CPropDataComponent" type="CPropDataComponent" />
+- <ApiParam name="m_CPropDataComponent" type="[CPropDataComponent](/docs/schema/entity/classes/Cpropdatacomponent)" />
 - <ApiParam name="m_ragdoll" type="[ragdoll_t](/docs/schema/entity/classes/ragdoll_t)" />
 - <ApiParam name="m_bStartDisabled" type="bool" />
 - <ApiParam name="m_massScale" type="float" />
@@ -45,9 +45,21 @@ title: CRagdollProp
 
 ## Methods
 
-### return FromIndex()
+### CRagdollProp* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CRagdollProp* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CRagdollProp* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

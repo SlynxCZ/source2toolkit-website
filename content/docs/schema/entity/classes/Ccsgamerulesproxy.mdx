@@ -8,13 +8,25 @@ title: CCSGameRulesProxy
 
 ## Fields
 
-- <ApiParam name="m_pGameRules" type="CCSGameRules*" />
+- <ApiParam name="m_pGameRules" type="[CCSGameRules*](/docs/schema/entity/classes/Ccsgamerules)" />
 
 ## Methods
 
-### return FromIndex()
+### CCSGameRulesProxy* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CCSGameRulesProxy* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CCSGameRulesProxy* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

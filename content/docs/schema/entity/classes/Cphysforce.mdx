@@ -4,11 +4,11 @@ title: CPhysForce
 
 # CPhysForce
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+**Inheritance**: CPointEntity
 
 ## Fields
 
-- <ApiParam name="m_pController" type="[IPhysicsMotionController*](/docs/schema/entity/classes/Iphysicsmotioncontroller)" />
+- <ApiParam name="m_pController" type="IPhysicsMotionController*" />
 - <ApiParam name="m_nameAttach" type="CUtlSymbolLarge" />
 - <ApiParam name="m_force" type="float" />
 - <ApiParam name="m_forceTime" type="float" />
@@ -18,9 +18,21 @@ title: CPhysForce
 
 ## Methods
 
-### return FromIndex()
+### CPhysForce* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CPhysForce* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CPhysForce* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

@@ -4,7 +4,7 @@ title: CKnife
 
 # CKnife
 
-**Inheritance**: CCSWeaponBase
+**Inheritance**: [CCSWeaponBase](/docs/schema/entity/classes/Ccsweaponbase)
 
 ## Fields
 
@@ -12,9 +12,21 @@ title: CKnife
 
 ## Methods
 
-### return FromIndex()
+### CKnife* New(className)
 
 <ApiLabel>Parameters</ApiLabel>
 
-- <ApiParam type="index.Get()" />
+- <ApiParam name="className" type="const char*" />
+
+### CKnife* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CKnife* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
 

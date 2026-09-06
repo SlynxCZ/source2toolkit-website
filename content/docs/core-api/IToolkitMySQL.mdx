@@ -171,13 +171,38 @@ Escapes a constant string for safe SQL usage.
 
 - <ApiParam name="string" type="const char*" /> — Input string.
 
+## IToolkitMySQLServerless
+
+### Query(query, callback)
+
+Runs one query on a connection of its own.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="query" type="const char*" /> — SQL to run.
+- <ApiParam name="callback" type="ToolkitMySQLServerlessCallbackFunc" /> — Callback invoked with the result, on the main thread.
+
+### Destroy()
+
+Drops these details and cancels what they still have queued. A
+
 ## IToolkitMySQL
 
-### IToolkitMySQLConnection* CreateConnection(info)
+### IToolkitMySQLConnection* CreateConnection(owner, info)
 
 Creates a new MySQL connection instance.
 
 <ApiLabel>Parameters</ApiLabel>
 
+- <ApiParam name="owner" type="PluginId" /> — Plugin the connection belongs to.
 - <ApiParam name="info" type="ToolkitMySQLConnectionInfo" /> — Connection configuration data.
+
+### IToolkitMySQLServerless* CreateServerless(owner, info)
+
+Creates a handle that runs each of its queries on a connection of
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" /> — Plugin the handle belongs to.
+- <ApiParam name="info" type="ToolkitMySQLConnectionInfo" /> — Connection configuration data. Copied, strings included --
 
