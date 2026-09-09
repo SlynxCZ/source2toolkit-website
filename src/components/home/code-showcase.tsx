@@ -42,7 +42,7 @@ player->m_iPawnHealth() = 1337; // Without automatic SetStateChanged`,
     file: 'movement_hook.cpp',
     title: 'Hook anything that exists in memory',
     description:
-      'Pattern scan a module, point a KHook function hook at the address and take over the call. KHook is Metamod's own engine, so it is the same vocabulary Metamod plugins already use.',
+      'Pattern scan a module, point a KHook function hook at the address and take over the call. KHook is the engine Metamod itself runs, so it is the same vocabulary Metamod plugins already use.',
     bullets: ['Pattern scanning', 'Virtual & function hooks', 'KHook::Action control'],
     code: `
 KHook::Member<CCSPlayerLegacyJump, void, void*>* m_hCheckJumpButtonLegacy = nullptr;
