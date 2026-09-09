@@ -87,8 +87,8 @@ const capabilities = [
   },
   {
     icon: GitBranch,
-    title: 'Hooks on SourceHook',
-    body: 'Virtual, DVP, manual and inline hooks on one private SourceHook engine, so the core and every plugin compose correctly.',
+    title: 'Hooks on KHook',
+    body: 'Virtual, vtable and function detours on the one KHook engine Metamod runs, so the core, every plugin and Metamod itself compose correctly.',
   },
   {
     icon: Terminal,
@@ -98,7 +98,7 @@ const capabilities = [
   {
     icon: Activity,
     title: 'Events & GameEvents',
-    body: 'A fully typed game event system on top of engine-level events, hooked pre or post with the usual META_RES vocabulary.',
+    body: 'A fully typed game event system on top of engine-level events, hooked pre or post with the usual KHook::Action vocabulary.',
   },
   {
     icon: MemoryStick,
@@ -181,7 +181,7 @@ export default function HomePage() {
 
               <p className="mt-7 max-w-xl text-lg leading-relaxed text-fd-muted-foreground">
                 A plugin framework for Counter-Strike 2 that keeps you at engine
-                level. Schema-based entities, SourceHook detours and native
+                level. Schema-based entities, KHook detours and native
                 events — in C++, with nothing between your code and the game.
               </p>
 

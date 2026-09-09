@@ -2,24 +2,26 @@
 title: Hooking
 ---
 
-Source2Toolkit runs **SourceHook** — the same hooking engine Metamod:Source
-uses, extended with inline hooks. If you have written a Metamod plugin, you
-already know the API.
+Source2Toolkit hooks with **KHook** — Metamod:Source's own detour library, on
+the one engine Metamod runs for the whole server. If you have written a
+Metamod 2.0 plugin, you already know the API.
 
 ---
 
-# The engine is shared, and that matters
+# One engine for everyone
 
-The toolkit does **not** reuse Metamod's SourceHook instance. It creates its
-own private engine, and hands that one to every plugin.
+The toolkit does **not** run a hook engine of its own. It takes KHook from
+Metamod when it loads and hands that same engine to every plugin through
+`TOOLKIT_KHOOK_INTERFACE`.
 
-This is deliberate. `SH_CALL` and `SH_GET_INLINEHOOK_ORIGINAL` walk the
-handler chain of the engine that owns the patch. Two independent engines
-patching the same address cannot see through each other — one of them silently
-calls the other's trampoline instead of the real original. One instance means
-the core's hooks and every plugin's hooks compose correctly.
+This is deliberate. `CallOriginal` and `Supersede` walk the handler chain of
+the engine that owns the patch. Two independent engines patching the same
+address cannot see through each other — one of them silently calls the other's
+trampoline instead of the real original. One engine means one chain per
+address, so the core's hooks, your plugin's hooks and the hooks of the Metamod
+plugins next to you compose correctly.
 
-You never construct it. `TOOLKIT_EXPOSE` declares the globals and
+You never fetch it. `TOOLKIT_EXPOSE` declares the globals and
 `TOOLKIT_SAVEVARS` fills them:
 
 ```cpp
@@ -28,100 +30,146 @@ TOOLKIT_EXPOSE(my_plugin, g_Plugin);
 
 bool Plugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late)
 {
-    TOOLKIT_SAVEVARS();   // g_SHPtr and g_PLID are live from here on
+    TOOLKIT_SAVEVARS();   // KHook is live from here on
     ...
 }
 ```
 
-<Callout type="warn">
-  Do not include `sourcehook_metamod_shared.h` or
-  `sourcehook_metamod_override.h` in a plugin. The core owns the engine; your
-  plugin just receives the pointer.
-</Callout>
+---
+
+# A hook is an object
+
+Every hook is an object holding the hooked function, a context (your plugin)
+and a Pre and a Post callback. Its type spells out the class, the return type
+and the arguments. The callbacks are members of your class: they take the
+hooked object as their first parameter and return `KHook::Return<T>`.
+
+Keep hooks behind plain pointers. A KHook hook only comes down in its
+destructor, so it is `new` in the constructor and `delete` in `Unload()`.
+`KHOOK_NEW` (from `IToolkitTypes.h`) writes the mem-initializer without
+repeating the type — MSVC cannot deduce it from the arguments.
+
+```cpp
+class Plugin final : public IToolkitPlugin
+{
+public:
+    Plugin();
+    bool Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late) override;
+    bool Unload(char* error, size_t maxlen) override;
+
+    KHook::Return<void> Hook_GameFrame(ISource2Server* pThis, bool simulating, bool bFirstTick, bool bLastTick);
+    KHook::Return<bool> Hook_FireEvent(IGameEventManager2* pThis, IGameEvent* event, bool bDontBroadcast);
+
+private:
+    KHook::Virtual<ISource2Server, void, bool, bool, bool>* m_hGameFrame = nullptr;
+    KHook::Virtual<IGameEventManager2, bool, IGameEvent*, bool>* m_hFireEvent = nullptr;
+};
+
+Plugin::Plugin() :
+    KHOOK_NEW(m_hGameFrame, &ISource2Server::GameFrame, this, nullptr, &Plugin::Hook_GameFrame),    // Post only
+    KHOOK_NEW(m_hFireEvent, &IGameEventManager2::FireEvent, this, &Plugin::Hook_FireEvent, nullptr) // Pre only
+{
+}
+```
+
+The two callback slots are Pre and Post. Pass both if you need both sides;
+`nullptr` leaves a side empty.
 
 ---
 
 # Virtual hooks
 
 The common case: you have an interface pointer and want one of its virtual
-methods.
-
-Declare the hook once at file scope, with the argument count in the macro name
-and `_void` when there is no return value:
+methods. The hook takes the index out of the member function pointer, so
+nothing is written down by hand. Attach it to the instance:
 
 ```cpp
-SH_DECL_HOOK3_void(IServerGameDLL, GameFrame, SH_NOATTRIB, 0, bool, bool, bool);
-SH_DECL_HOOK2(IGameEventManager2, FireEvent, SH_NOATTRIB, 0, bool, IGameEvent*, bool);
+bool Plugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late)
+{
+    TOOLKIT_SAVEVARS();
+
+    m_hGameFrame->Add(g_pSource2Server);
+    m_hFireEvent->Add(g_pGameEventManager);
+    return true;
+}
 ```
-
-Then register, keeping the returned id:
-
-```cpp
-m_iGameFrameHookID = SH_ADD_HOOK(IServerGameDLL, GameFrame, g_pSource2Server,
-                                 SH_MEMBER(this, &Plugin::Hook_GameFrame), true);
-```
-
-The last argument is the mode: `true` for post, `false` for pre. Register the
-same hook twice with both if you need both sides.
 
 ---
 
-# DVP hooks
+# Hooking a whole vtable
 
-When you have a vtable pointer but no interface to hang it on, use
-`SH_ADD_DVPHOOK`. It takes the pointer **as** the vtable:
+When you have a vtable but no instance — engine classes resolved by RTTI
+name — `AddGlobal` reads the vtable off an object and covers every instance
+that shares it. It only ever looks at the first pointer, so a plain pointer
+holding the vtable is a valid stand-in:
 
 ```cpp
-SH_DECL_HOOK2(CServerSideClient, SendNetMessage, SH_NOATTRIB, 0, bool,
-              const CNetMessage*, NetChannelBufType_t);
+KHook::Virtual<CServerSideClientBase, bool, const CNetMessage*, NetChannelBufType_t>* m_hSendNetMessage = nullptr;
+void* m_pCServerSideClientVTable = nullptr;
 
-void* pVTable = libengine->GetVirtualTableByName("CServerSideClient");
-
-m_iSendNetMessageHookID = SH_ADD_DVPHOOK(CServerSideClient, SendNetMessage, pVTable,
-                                         SH_MEMBER(this, &Plugin::Hook_SendNetMessage), false);
+// Load()
+m_pCServerSideClientVTable = libengine->GetVirtualTableByName("CServerSideClient").RCast<void*>();
+m_hSendNetMessage->AddGlobal(reinterpret_cast<CServerSideClientBase*>(&m_pCServerSideClientVTable));
 ```
 
 This hooks the class, not one instance — every client goes through it, and
-`META_IFACEPTR` tells you which one.
+`pThis` tells you which one.
+
+When the index only exists in gamedata, construct the hook with a placeholder
+index and `Configure` it once the offset is known:
+
+```cpp
+KHOOK_NEW(m_hRespawn, 0u, this, &Plugin::Hook_Respawn, nullptr)
+
+// Load()
+const int offset = GAMECONFIG_OFFSET("CCSPlayerController::Respawn");
+if (offset >= 0)
+{
+    m_hRespawn->Configure(offset);
+    m_hRespawn->AddGlobal(reinterpret_cast<CCSPlayerController*>(&m_pCCSPlayerControllerVTable));
+}
+```
+
+<Callout type="warn">
+  Refuse a missing offset. `GetOffset` answers `-1` for an unknown key, and a
+  hook configured at `-1` lands one slot **before** the vtable — on the
+  typeinfo pointer, which corrupts every later by-name vtable lookup on that
+  class.
+</Callout>
 
 ---
 
-# Inline hooks
+# Function hooks
 
-Inline hooks patch a raw address, so anything a signature scan can find is
-hookable. No vtable, no interface.
-
-Declare with the argument count **excluding `this`**, the class the function
-belongs to, then the return type (omit it and use `_void` when there is none):
+Anything a signature scan can find is hookable — no vtable, no interface.
+`KHook::Member` is for a function with a `this`, `KHook::Function` for a free
+function. The type spells out the class, the return type, then the arguments
+**excluding `this`**:
 
 ```cpp
 // bool INetworkMessageProcessingPreFilter::FilterMessage(const CNetMessage*, INetChannel*)
-SH_DECL_INLINEHOOK2(FilterMessage, INetworkMessageProcessingPreFilterCustom,
-                    bool, const CNetMessage*, INetChannel*);
+KHook::Member<INetworkMessageProcessingPreFilterCustom, bool, const CNetMessage*, INetChannel*>* m_hFilterMessage = nullptr;
 
 // void CEntityIOOutput::FireOutputInternal(CEntityInstance*, CEntityInstance*, void*, float, void*, void*)
-SH_DECL_INLINEHOOK6_void(FireOutputInternal, CEntityIOOutput,
-                         CEntityInstance*, CEntityInstance*, void*, float, void*, void*);
+KHook::Member<CEntityIOOutput, void, CEntityInstance*, CEntityInstance*, void*, float, void*, void*>* m_hFireOutputInternal = nullptr;
+
+Plugin::Plugin() :
+    KHOOK_NEW(m_hFilterMessage, this, &Plugin::Hook_FilterMessage, nullptr),
+    KHOOK_NEW(m_hFireOutputInternal, this, &Plugin::Hook_FireOutputInternal, nullptr)
+{
+}
 ```
 
-Register against the address:
+`Configure` places the detour; whatever your signature scan produced goes in
+directly:
 
 ```cpp
-m_iHookID = SH_ADD_INLINEHOOK(FilterMessage, pAddress,
-                              SH_MEMBER(this, &Plugin::Hook_FilterMessage), false);
-```
-
-`SH_ADD_INLINEHOOK` accepts a `void*`, a `uintptr_t` or a typed function
-pointer, so whatever your signature scan produced can go in directly.
-
-To call the original from inside the handler, `SH_CALL` takes the same address:
-
-```cpp
-SH_CALL(FireOutputInternal, pAddress, pThis)(pActivator, pCaller, variantValue, delay, unk01, unk02);
+if (void* addr = GAMECONFIG_RESOLVE("INetworkMessageProcessingPreFilter::FilterMessage"))
+    m_hFilterMessage->Configure(addr);
 ```
 
 <Callout type="info">
-  Inline hooks are the answer when a class has a **non-primary** vtable —
+  Function hooks are the answer when a class has a **non-primary** vtable —
   a secondary vtable is a separate table elsewhere in `.rodata`, and a
   by-name lookup only ever finds the primary one. That is exactly why the
   toolkit hooks `FilterMessage` by signature rather than by vtable.
@@ -131,86 +179,120 @@ SH_CALL(FireOutputInternal, pAddress, pThis)(pActivator, pCaller, variantValue, 
 
 # Inside a handler
 
-Your handler is a member of *your* class, registered with `SH_MEMBER`. The
-object that was actually called comes from `META_IFACEPTR`:
+The object that was actually called arrives as the first parameter; the rest
+are the function's own arguments:
 
 ```cpp
-void Plugin::Hook_FireOutputInternal(CEntityInstance* pActivator, CEntityInstance* pCaller,
-                                     void* variantValue, float delay, void* unk01, void* unk02)
+KHook::Return<void> Plugin::Hook_FireOutputInternal(CEntityIOOutput* pThis, CEntityInstance* pActivator, CEntityInstance* pCaller,
+                                                    void* variantValue, float delay, void* unk01, void* unk02)
 {
-    CEntityIOOutput* pThis = META_IFACEPTR(CEntityIOOutput);
-
     const char* outputName = pThis->m_pDesc->m_pName;
     ...
-    RETURN_META(MRES_IGNORED);
+    return { KHook::Action::Ignore };
 }
 ```
 
-Return through the macros, never with a plain `return`:
+A handler returns `KHook::Return<T>`: the action, plus the value when the
+hooked function returns one:
 
 ```cpp
-RETURN_META(MRES_SUPERCEDE);              // void handlers
-RETURN_META_VALUE(MRES_OVERRIDE, false);  // handlers with a return type
+return { KHook::Action::Supersede };          // void handlers
+return { KHook::Action::Override, false };    // handlers with a return type
 ```
 
-`META_RES` comes from SourceHook, so it is the same vocabulary Metamod
-plugins already use — the toolkit does not wrap it in a type of its own:
-
-| `META_RES` | meaning |
+| `KHook::Action` | meaning |
 |---|---|
-| `MRES_IGNORED` | the handler did nothing |
-| `MRES_HANDLED` | the handler did something, but the original still runs |
-| `MRES_OVERRIDE` | the original still runs, but your return value is used |
-| `MRES_SUPERCEDE` | the original is skipped entirely, your return value is used |
+| `Ignore` | the handler did nothing |
+| `Override` | the original still runs, but your return value is used (Pre only) |
+| `Supersede` | the original is skipped entirely, your return value is used (Pre only) |
+
+The toolkit's own listeners — `REG_CON_LISTENER`, `HOOK_GAME_EVENT`, net
+message hooks, entity output listeners — return `Action`, which is the same
+type: `IToolkitTypes.h` aliases it to `KHook::Action`.
 
 <Callout type="warn">
-  `MRES_SUPERCEDE` skips the original **for every remaining handler too**. If
-  you called the original yourself and only want to stop SourceHook calling it
-  a second time, supersede is still the right answer — but hooks registered
+  `Supersede` skips the original **for every remaining Pre handler too**. If
+  you called the original yourself and only want to stop KHook calling it a
+  second time, supersede is still the right answer — but hooks registered
   after yours will not see it run.
 </Callout>
 
 ---
 
+# Calling the original
+
+From a Pre handler, `CallOriginal` runs the real function with the arguments
+you give it — then supersede, so KHook does not run it a second time:
+
+```cpp
+sv_autobunnyhopping.Set(true);
+m_hCheckJumpButtonLegacy->CallOriginal(pThis, mv);
+sv_autobunnyhopping.Set(false);
+
+return { KHook::Action::Supersede };
+```
+
+In a Post handler the original has already run; its result is a call away:
+
+```cpp
+unsigned long id = KHook::GetOriginalReturn<unsigned long>();
+```
+
+---
+
 # Removing hooks
 
-Every id — virtual, DVP, manual and inline — is removed the same way:
+Detach what you attached, then delete — deleting is what takes the detour
+down:
 
 ```cpp
 bool Plugin::Unload(char* error, size_t maxlen)
 {
-    SH_REMOVE_HOOK_ID(m_iGameFrameHookID);
-    SH_REMOVE_HOOK_ID(m_iHookID);
+    m_hGameFrame->Remove(g_pSource2Server);
+    m_hFireEvent->Remove(g_pGameEventManager);
+
+    if (m_pCServerSideClientVTable)
+        m_hSendNetMessage->RemoveGlobal(reinterpret_cast<CServerSideClientBase*>(&m_pCServerSideClientVTable));
+
+    delete m_hGameFrame;
+    delete m_hFireEvent;
+    delete m_hSendNetMessage;
+    delete m_hFilterMessage;
+    m_hGameFrame = nullptr;
+    m_hFireEvent = nullptr;
+    m_hSendNetMessage = nullptr;
+    m_hFilterMessage = nullptr;
     return true;
 }
 ```
 
-The typed and inline id ranges are disjoint, so one call handles both.
-
 <Callout type="warn">
-  Remove every hook you placed before your plugin unloads. A live hook pointing
+  Delete every hook you placed before your plugin unloads. A live hook pointing
   into an unmapped library crashes the server on the next call.
 </Callout>
 
 ---
 
-# Coming from KHook
+# Coming from SourceHook
 
-Early Source2Toolkit builds used KHook. The mapping is:
+Earlier Source2Toolkit builds ran a private SourceHook engine. The mapping is:
 
-| KHook | SourceHook |
+| SourceHook | KHook |
 |---|---|
-| `KHook::Virtual<...>` | `SH_DECL_HOOK*` + `SH_ADD_HOOK` |
-| `KHook::Function<...>` | `SH_DECL_INLINEHOOK*` + `SH_ADD_INLINEHOOK` |
-| `KHook::Return<T>` | `RETURN_META` / `RETURN_META_VALUE` |
-| `KHook::Action::Ignore` | `MRES_IGNORED` |
-| `KHook::Action::Override` | `MRES_OVERRIDE` |
-| `KHook::Action::Supersede` | `MRES_SUPERCEDE` |
-| `hook->CallOriginal(...)` | `SH_CALL(...)` |
+| `SH_DECL_HOOK*` + `SH_ADD_HOOK` | `KHook::Virtual<...>` + `Add` |
+| `SH_ADD_DVPHOOK` / `SH_ADD_MANUALDVPHOOK` | `AddGlobal` on a vtable stand-in, `Configure(index)` for a gamedata index |
+| `SH_DECL_INLINEHOOK*` + `SH_ADD_INLINEHOOK` | `KHook::Member<...>` / `KHook::Function<...>` + `Configure(addr)` |
+| `META_IFACEPTR` / `SH_IFACEPTR` | the first handler parameter |
+| `RETURN_META` / `RETURN_META_VALUE` | `return { action }` / `return { action, value }` |
+| `MRES_IGNORED` / `MRES_HANDLED` | `KHook::Action::Ignore` |
+| `MRES_OVERRIDE` | `KHook::Action::Override` |
+| `MRES_SUPERCEDE` | `KHook::Action::Supersede` |
+| `SH_CALL(...)` | `hook->CallOriginal(pThis, ...)` |
+| `SH_RESULT_ORIG_RET(T)` | `KHook::GetOriginalReturn<T>()` |
+| `SH_REMOVE_HOOK_ID` | `Remove` / `RemoveGlobal`, then `delete` |
 
 <Callout type="warn">
-  `Action` and `META_RES` are **not** numerically compatible — `META_RES` has
-  an extra `MRES_HANDLED` at 1, which shifts everything after it. Do not cast
-  between them; a `Supercede` would come out as `MRES_OVERRIDE` and let a
-  blocked command run.
+  `KHook::Action` and `META_RES` are **not** numerically compatible — `META_RES`
+  has an extra `MRES_HANDLED` at 1, which shifts everything after it. There is
+  nothing left to cast between: the toolkit's `Action` *is* `KHook::Action`.
 </Callout>

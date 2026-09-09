@@ -42,22 +42,24 @@ player->m_iPawnHealth() = 1337; // Without automatic SetStateChanged`,
     file: 'movement_hook.cpp',
     title: 'Hook anything that exists in memory',
     description:
-      'Pattern scan a module, point an inline hook at the address and take over the call. SourceHook is the engine, so it is the same vocabulary Metamod plugins already use.',
-    bullets: ['Pattern scanning', 'Virtual & inline hooks', 'META_RES control'],
+      'Pattern scan a module, point a KHook function hook at the address and take over the call. KHook is Metamod's own engine, so it is the same vocabulary Metamod plugins already use.',
+    bullets: ['Pattern scanning', 'Virtual & function hooks', 'KHook::Action control'],
     code: `
-SH_DECL_INLINEHOOK1_void(CheckJumpButtonLegacy, CCSPlayerLegacyJump, void*);
+KHook::Member<CCSPlayerLegacyJump, void, void*>* m_hCheckJumpButtonLegacy = nullptr;
+
+Plugin::Plugin() :
+    KHOOK_NEW(m_hCheckJumpButtonLegacy, this, &Plugin::Hook_CheckJumpButtonLegacy, nullptr)
+{
+}
 
 CConVarRef<bool> sv_autobunnyhopping("sv_autobunnyhopping");
 IToolkitModule* libserver = IToolkitModule::New(g_pSource2Server);
 
-m_addr = libserver->FindPattern(GAMECONFIG_SIGNATURE("CCSPlayerLegacyJump_CheckJumpButtonLegacy"));
-m_iHookID = SH_ADD_INLINEHOOK(CheckJumpButtonLegacy, m_addr,
-                              SH_MEMBER(this, &Plugin::Hook_CheckJumpButtonLegacy), false);
+if (void* addr = libserver->FindPattern(GAMECONFIG_SIGNATURE("CCSPlayerLegacyJump_CheckJumpButtonLegacy")))
+    m_hCheckJumpButtonLegacy->Configure(addr);
 
-void Plugin::Hook_CheckJumpButtonLegacy(void* mv)
+KHook::Return<void> Plugin::Hook_CheckJumpButtonLegacy(CCSPlayerLegacyJump* pThis, void* mv)
 {
-    CCSPlayerLegacyJump* pThis = META_IFACEPTR(CCSPlayerLegacyJump);
-
     CCSPlayer_MovementServices* ms = pThis->m_pMovementServices;
     CCSPlayerPawn* pawn = ms ? ms->GetPawn() : nullptr;
     CCSPlayerController* player = pawn ? pawn->GetController() : nullptr;
@@ -68,13 +70,13 @@ void Plugin::Hook_CheckJumpButtonLegacy(void* mv)
     if (canBhop && !originalBhop)
     {
         sv_autobunnyhopping.Set(true);
-        SH_CALL(CheckJumpButtonLegacy, m_addr, pThis)(mv);
+        m_hCheckJumpButtonLegacy->CallOriginal(pThis, mv);
         sv_autobunnyhopping.Set(false);
 
-        RETURN_META(MRES_SUPERCEDE);
+        return { KHook::Action::Supersede };
     }
 
-    RETURN_META(MRES_IGNORED);
+    return { KHook::Action::Ignore };
 }`,
   },
   {
@@ -95,24 +97,24 @@ REG_CON_COMMAND("s2t_test", [](const CCommandContext& ctx, const CCommand&, bool
     player->PrintToChat("Hello!");
 });
 
-REG_CON_LISTENER("jointeam", [](const CCommandContext& ctx, const CCommand& args, bool) -> META_RES
+REG_CON_LISTENER("jointeam", [](const CCommandContext& ctx, const CCommand& args, bool) -> Action
 {
     auto* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot());
     if (!player)
-        return MRES_IGNORED;
+        return Action::Ignore;
 
     int team = args.ArgC() > 1 ? atoi(args.Arg(1)) : 0;
 
     if (team == 3)
     {
         if (!CanBeCt(player) || player->m_iTeamNum() == team)
-            return MRES_SUPERCEDE;
+            return Action::Supersede;
 
         MoveToTeam(player, team);
-        return MRES_SUPERCEDE;
+        return Action::Supersede;
     }
 
-    return MRES_IGNORED;
+    return Action::Ignore;
 }, false);`,
   },
   {
@@ -124,14 +126,14 @@ REG_CON_LISTENER("jointeam", [](const CCommandContext& ctx, const CCommand& args
       'Subscribe to any game event, pull typed data straight out of it and decide what the engine gets to do next. The trailing bool picks pre or post.',
     bullets: ['Every game event', 'Pre/Post timing', 'Typed accessors'],
     code: `
-HOOK_GAME_EVENT("player_connect_full", [](IGameEvent* event, bool post, bool&) -> META_RES
+HOOK_GAME_EVENT("player_connect_full", [](IGameEvent* event, bool post, bool&) -> Action
 {
     auto* player = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
     if (!player)
-        return MRES_IGNORED;
+        return Action::Ignore;
 
     TOOLKIT_LOG(&g_Plugin, "Player: %s\n", player->GetPlayerName());
-    return MRES_IGNORED;
+    return Action::Ignore;
 }, false);`,
   },
 ];

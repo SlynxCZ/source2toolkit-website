@@ -5,7 +5,7 @@ title: SDK & Building
 This guide explains how to use the **Source2Toolkit SDK** to build your own plugins.
 
 The SDK provides everything needed to compile plugins against Source2Toolkit, including:
-- SourceHook headers (bundled as a submodule)
+- KHook headers — Metamod:Source's own detour library, taken from your Metamod checkout
 - Build configuration and CMake helpers
 - HL2SDK (CS2) and Protobuf — resolved via environment variables
 
@@ -21,7 +21,7 @@ cd source2toolkit-sdk
 ```
 
 <Callout type="info">
-  The SDK only includes **SourceHook** as a submodule (for headers).
+  The SDK bundles nothing but its own sources. **Metamod:Source** (for KHook),
   **HL2SDK (CS2)** and **Protobuf** must be available on your system and resolved through environment variables — see below.
 </Callout>
 
@@ -32,15 +32,16 @@ cd source2toolkit-sdk
 The SDK uses `resolve_dep` to locate external dependencies at configure time:
 
 ```cmake
-resolve_dep(SOURCEHOOK SOURCEHOOK ${CMAKE_CURRENT_SOURCE_DIR}/vendor/sourcehook)
-resolve_dep(SOURCESDK  HL2SDKCS2)
-resolve_dep(PROTOBUFS  CSGO_PROTO)
+resolve_dep(METAMOD   MMSOURCE_DEV)
+resolve_dep(SOURCESDK HL2SDKCS2)
+resolve_dep(PROTOBUFS CSGO_PROTO)
 ```
 
-`SOURCEHOOK` is bundled inside the SDK. The other two must be provided via environment variables:
+All three are provided via environment variables:
 
 | Variable | Description |
 |---|---|
+| `MMSOURCE_DEV` | Path to your Metamod:Source checkout — KHook lives in its `third_party/khook` |
 | `HL2SDKCS2` | Path to your HL2SDK CS2 checkout |
 | `CSGO_PROTO` | Path to your CS:GO Protobuf headers |
 
@@ -48,10 +49,12 @@ Set these before running CMake:
 
 ```bash
 # Linux / macOS
+export MMSOURCE_DEV=/path/to/metamod-source
 export HL2SDKCS2=/path/to/hl2sdk-cs2
 export CSGO_PROTO=/path/to/csgo-proto
 
 # Windows (PowerShell)
+$env:MMSOURCE_DEV = "C:\path\to\metamod-source"
 $env:HL2SDKCS2 = "C:\path\to\hl2sdk-cs2"
 $env:CSGO_PROTO = "C:\path\to\csgo-proto"
 ```
@@ -168,7 +171,7 @@ The SDK automatically configures:
 - Linking against HL2SDK and engine libraries
 - Protobuf integration
 - ABI compatibility (Linux / Windows)
-- Include directories for Source 2 and SourceHook headers
+- Include directories for Source 2 and KHook headers
 - Plugin output format (`.stx`)
 
 ---
