@@ -267,9 +267,9 @@ Notify collision rules changed.
 
 Get entity index.
 
-### CHandle&lt;CBaseEntity&gt; GetHandle()
+### CHandle&lt;T&gt; GetHandle()
 
-Get entity handle.
+Get entity handle. Templated the same way New() is: every generated entity class shadows it with a plain GetHandle() returning CHandle of its own type, so player-&gt;GetHandle() on a CCSPlayerController* is a CHandle.
 
 ### const char* GetName()
 
