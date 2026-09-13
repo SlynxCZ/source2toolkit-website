@@ -51,8 +51,7 @@ class Plugin final : public IToolkitPlugin
 
     // One line: the type comes from the handler, the address from gamedata,
     // KHOOK_INIT() in Load() places the detour, KHOOK_DESTRUCT() removes it.
-    KHOOK_MEMBER(m_hCheckJumpButtonLegacy, "CCSPlayerLegacyJump::CheckJumpButtonLegacy",
-                 &Plugin::Hook_CheckJumpButtonLegacy, nullptr);
+    KHOOK_MEMBER(m_hCheckJumpButtonLegacy, "CCSPlayerLegacyJump::CheckJumpButtonLegacy", &Plugin::Hook_CheckJumpButtonLegacy, nullptr);
 };
 
 CConVarRef<bool> sv_autobunnyhopping("sv_autobunnyhopping");
@@ -131,7 +130,7 @@ HOOK_GAME_EVENT("player_connect_full", [](IGameEvent* event, bool post, bool&) -
     if (!player)
         return Action::Ignore;
 
-    TOOLKIT_LOG(&g_Plugin, "Player: %s\n", player->GetPlayerName());
+    TOOLKIT_LOG(&g_Plugin, "Player: %s\\n", player->GetPlayerName());
     return Action::Ignore;
 }, false);`,
   },
