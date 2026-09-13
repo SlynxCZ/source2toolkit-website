@@ -45,18 +45,17 @@ player->m_iPawnHealth() = 1337; // Without automatic SetStateChanged`,
       'Pattern scan a module, point a KHook function hook at the address and take over the call. KHook is the engine Metamod itself runs, so it is the same vocabulary Metamod plugins already use.',
     bullets: ['Pattern scanning', 'Virtual & function hooks', 'KHook::Action control'],
     code: `
-KHook::Member<CCSPlayerLegacyJump, void, void*>* m_hCheckJumpButtonLegacy = nullptr;
-
-Plugin::Plugin() :
-    KHOOK_NEW(m_hCheckJumpButtonLegacy, this, &Plugin::Hook_CheckJumpButtonLegacy, nullptr)
+class Plugin final : public IToolkitPlugin
 {
-}
+    KHook::Return<void> Hook_CheckJumpButtonLegacy(CCSPlayerLegacyJump* pThis, void* mv);
+
+    // One line: the type comes from the handler, the address from gamedata,
+    // KHOOK_INIT() in Load() places the detour, KHOOK_DESTRUCT() removes it.
+    KHOOK_MEMBER(m_hCheckJumpButtonLegacy, "CCSPlayerLegacyJump::CheckJumpButtonLegacy",
+                 &Plugin::Hook_CheckJumpButtonLegacy, nullptr);
+};
 
 CConVarRef<bool> sv_autobunnyhopping("sv_autobunnyhopping");
-IToolkitModule* libserver = IToolkitModule::New(g_pSource2Server);
-
-if (void* addr = libserver->FindPattern(GAMECONFIG_SIGNATURE("CCSPlayerLegacyJump_CheckJumpButtonLegacy")))
-    m_hCheckJumpButtonLegacy->Configure(addr);
 
 KHook::Return<void> Plugin::Hook_CheckJumpButtonLegacy(CCSPlayerLegacyJump* pThis, void* mv)
 {
