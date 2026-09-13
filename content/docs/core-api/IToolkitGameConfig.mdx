@@ -56,11 +56,7 @@ Whether the entry is a symbol name rather than a byte pattern.
 
 ### IToolkitMemory ResolveSignature(pchName)
 
-Resolves a gamedata entry to an address. Looks the entry's "library" up among
-the loaded modules, then finds it by exported symbol when the entry is
-"@"-prefixed, or by pattern scan otherwise. A null `IToolkitMemory` when the
-module, symbol or pattern is missing; it converts to `void*` on its own, use
-`RCast<T>()` for a typed function pointer.
+Resolves a gamedata entry to an address.
 
 <ApiLabel>Parameters</ApiLabel>
 
