@@ -156,8 +156,9 @@ arguments). The **target** is where the address comes from:
   which reads the entry's library and finds it by exported symbol or by
   pattern, whichever the entry uses;
 - an `IToolkitMemory` address you already have;
-- a capture-less lambda returning the address, called at `KHOOK_INIT()` — for
-  what the toolkit already resolved, so nothing is scanned twice;
+- an `ADDR_*` getter — what the toolkit already resolved, so nothing is scanned
+  twice. The target is evaluated at `KHOOK_INIT()`, not when your object is
+  constructed, so the getter may sit right in the macro;
 - `nullptr` — you place it yourself with `m_hX.Init(address)`.
 
 ```cpp
@@ -166,7 +167,7 @@ KHook::Return<bool> Hook_FilterMessage(INetworkMessageProcessingPreFilterCustom*
 KHook::Return<int64_t> Hook_TakeDamageOld(CBaseEntity* pThis, CTakeDamageInfo* pInfo, CTakeDamageResult* pResult);
 
 KHOOK_MEMBER(m_hFilterMessage, "INetworkMessageProcessingPreFilter::FilterMessage", &Plugin::Hook_FilterMessage, nullptr);
-KHOOK_MEMBER(m_hTakeDamageOld, [] { return ADDR_TAKE_DAMAGE_OLD(); }, &Plugin::Hook_TakeDamageOld, nullptr);
+KHOOK_MEMBER(m_hTakeDamageOld, ADDR_TAKE_DAMAGE_OLD(), &Plugin::Hook_TakeDamageOld, nullptr);
 ```
 
 <Callout type="info">
@@ -292,7 +293,7 @@ Earlier Source2Toolkit builds ran a private SourceHook engine. The mapping is:
 |---|---|
 | `SH_DECL_HOOK*` + `SH_ADD_HOOK` | `KHOOK_VIRTUAL(..., &pInstance, ...)` |
 | `SH_ADD_DVPHOOK` / `SH_ADD_MANUALDVPHOOK` | `KHOOK_VIRTUAL(..., KHOOK_VTABLE(module, class), ...)`, with a gamedata offset name or an index as the function |
-| `SH_DECL_INLINEHOOK*` + `SH_ADD_INLINEHOOK` | `KHOOK_MEMBER` / `KHOOK_FUNCTION` with a gamedata name, an address or a lambda |
+| `SH_DECL_INLINEHOOK*` + `SH_ADD_INLINEHOOK` | `KHOOK_MEMBER` / `KHOOK_FUNCTION` with a gamedata name, an address or an `ADDR_*` getter |
 | `META_IFACEPTR` / `SH_IFACEPTR` | the first handler parameter |
 | `RETURN_META` / `RETURN_META_VALUE` | `return { action }` / `return { action, value }` |
 | `MRES_IGNORED` / `MRES_HANDLED` | `KHook::Action::Ignore` |

@@ -31,7 +31,7 @@ hooked object first, then the function's own arguments.
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="member" type="identifier" /> — Member name.
-- <ApiParam name="target" type="const char* | IToolkitMemory | lambda | nullptr" /> — A gamedata entry name, an address, a capture-less lambda returning the address (called at `KHOOK_INIT()`), or `nullptr` for a manual `Init(address)`.
+- <ApiParam name="target" type="const char* | IToolkitMemory | function pointer | nullptr" /> — A gamedata entry name, an address, a typed function pointer such as an `ADDR_*` getter returns, or `nullptr` for a manual `Init(address)`. Evaluated at `KHOOK_INIT()`, not when the object is constructed.
 - <ApiParam name="pre" type="&Self::Handler | nullptr" /> — Callback before the original.
 - <ApiParam name="post" type="&Self::Handler | nullptr" /> — Callback after the original.
 
