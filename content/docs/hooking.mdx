@@ -135,9 +135,8 @@ public:
     KHook::Return<void> Hook_PostThink(CCSPlayerPawn* pThis, double flFrameTime, float flUnknown);
 
 private:
-    KHOOK_VIRTUAL(m_hGameFrame, &ISource2Server::GameFrame, &g_pSource2Server, nullptr, &Plugin::Hook_GameFrame);   // Post only
-    KHOOK_VIRTUAL(m_hFireEvent, &IGameEventManager2::FireEvent, KHOOK_VTABLE("server", "CGameEventManager"),
-                  &Plugin::Hook_FireEvent, nullptr);                                                             // Pre only
+    KHOOK_VIRTUAL(m_hGameFrame, &ISource2Server::GameFrame, &g_pSource2Server, nullptr, &Plugin::Hook_GameFrame); // Post only
+    KHOOK_VIRTUAL(m_hFireEvent, &IGameEventManager2::FireEvent, KHOOK_VTABLE("server", "CGameEventManager"), &Plugin::Hook_FireEvent, nullptr); // Pre only
     KHOOK_MEMBER(m_hPostThink, "CCSPlayerPawn::PostThink", &Plugin::Hook_PostThink, nullptr);
 };
 ```
@@ -300,8 +299,7 @@ public:
     KHook::Return<void> Hook_ClientCommand(ISource2GameClients* pThis, CPlayerSlot slot, const CCommand& args);
 
 private:
-    KHOOK_VIRTUAL(m_hClientCommand, &ISource2GameClients::ClientCommand, &g_pSource2GameClients,
-                  &CChatFilter::Hook_ClientCommand, nullptr);
+    KHOOK_VIRTUAL(m_hClientCommand, &ISource2GameClients::ClientCommand, &g_pSource2GameClients, &CChatFilter::Hook_ClientCommand, nullptr);
 };
 
 auto* pFilter = new CChatFilter();   // the hook goes in here
@@ -355,8 +353,7 @@ are the function's own arguments. A `KHOOK_FUNCTION` handler has no object,
 only the arguments.
 
 ```cpp
-KHook::Return<void> Plugin::Hook_FireOutputInternal(CEntityIOOutput* pThis, CEntityInstance* pActivator, CEntityInstance* pCaller,
-                                                    void* variantValue, float delay, void* unk01, void* unk02)
+KHook::Return<void> Plugin::Hook_FireOutputInternal(CEntityIOOutput* pThis, CEntityInstance* pActivator, CEntityInstance* pCaller, void* variantValue, float delay, void* unk01, void* unk02)
 {
     const char* outputName = pThis->m_pDesc->m_pName;
     ...
@@ -380,10 +377,7 @@ return { KHook::Action::Supersede, false };   // the original is skipped, false 
 For example, turning a connection away before the game sees it:
 
 ```cpp
-KHook::Return<bool> Plugin::Hook_ClientConnect(ISource2GameClients* pThis, CPlayerSlot slot,
-                                               const char* pszName, uint64 xuid,
-                                               const char* pszNetworkID, bool unk1,
-                                               CBufferString* pRejectReason)
+KHook::Return<bool> Plugin::Hook_ClientConnect(ISource2GameClients* pThis, CPlayerSlot slot, const char* pszName, uint64 xuid, const char* pszNetworkID, bool unk1, CBufferString* pRejectReason)
 {
     if (IsBanned(xuid))
         return { KHook::Action::Supersede, false };   // the game never sees this connection
@@ -519,16 +513,11 @@ likely never call them, but knowing what they do explains how the classes
 behave.
 
 ```cpp
-HookID_t KHook::SetupHook(void* function, void* context, void* removed_function,
-                          void* pre, void* post, void* make_return, void* make_call_original,
-                          unsigned int stack_size, bool async = false);
+HookID_t KHook::SetupHook(void* function, void* context, void* removed_function, void* pre, void* post, void* make_return, void* make_call_original, unsigned int stack_size, bool async = false);
 
-HookID_t KHook::SetupVirtualHook(void** vtable, int index, void* context, void* removed_function,
-                                 void* pre, void* post, void* make_return, void* make_call_original,
-                                 unsigned int stack_size, bool async = false);
+HookID_t KHook::SetupVirtualHook(void** vtable, int index, void* context, void* removed_function, void* pre, void* post, void* make_return, void* make_call_original, unsigned int stack_size, bool async = false);
 
-void KHook::RemoveHook(HookID_t id, bool async = false,
-                       void (*hook_removal_fn)(HookID_t, void*) = nullptr, void* context = nullptr);
+void KHook::RemoveHook(HookID_t id, bool async = false, void (*hook_removal_fn)(HookID_t, void*) = nullptr, void* context = nullptr);
 ```
 
 | parameter | meaning |
