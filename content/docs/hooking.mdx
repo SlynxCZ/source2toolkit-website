@@ -1,5 +1,6 @@
 ---
 title: Hooking
+description: Detouring virtual and regular functions with KHook and the toolkit's KHOOK_* macros.
 ---
 
 Source2Toolkit hooks with **KHook** — Metamod:Source's own detour library, on
@@ -8,9 +9,38 @@ Metamod 2.0 plugin, you already know the API. The SDK wraps it in a set of
 `KHOOK_*` macros so a hook is one line in your class, and the toolkit does the
 resolving, attaching and tearing down for you.
 
+This page goes from the ground up: what KHook is and how a hooked call runs,
+then the toolkit's macros with examples, then everything underneath them for
+the cases the macros do not cover.
+
 ---
 
-# One engine for everyone
+## KHook in one minute
+
+A detour library lets you run your own code before and after a function of the
+game or the engine — or instead of it. Metamod ships one and hands it to every
+plugin, so that all plugins on a server patch functions through the **same**
+backend. Two libraries patching the same function independently cannot see
+each other, and that ends in crashes that are very hard to trace.
+
+For twenty years that library was **SourceHook**. It was built to solve
+conflicts between virtual table hooks, and its whole API revolves around
+virtual functions. Source 2 plugins need much more than that — plenty of what
+is worth hooking is a plain function found by signature — so plugins started
+bringing their own detour libraries, and the old conflicts came back.
+
+**KHook** is the successor, written for Metamod 2.0. It detours both vtable
+entries and plain function addresses, it is thread-safe, and the goal is for
+every Metamod 2.0 plugin to use it so Metamod owns detouring again. Updating
+SourceHook in place was considered, but most of its internals would have had
+to be rewritten anyway, and Metamod's major version bump was the moment to
+break the API once.
+
+The KHook library itself is documented in its
+[README](https://github.com/Kenzzer/KHook/blob/master/README.md); this page
+covers it as far as a Source2Toolkit plugin needs it.
+
+### One engine for everyone
 
 The toolkit does **not** run a hook engine of its own. It takes KHook from
 Metamod when it loads and hands that same engine to every plugin through
@@ -37,9 +67,54 @@ bool Plugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, boo
 }
 ```
 
+The KHook headers come from the SDK's `vendor/khook` submodule. The SDK stamps
+that commit into your binary and `TOOLKIT_SAVEVARS()` refuses the load when it
+differs from the one the core was built with, so a plugin built against one
+KHook never hooks through another.
+
 ---
 
-# A hook is one line
+## How a hooked call runs
+
+Once a function is detoured, every call to it goes through the same loop:
+
+1. Every **Pre** callback runs, with the function's own arguments.
+2. Each callback reports an **action**. KHook settles on one for the call.
+3. Unless a Pre callback **superseded** it, the original function runs.
+4. Every **Post** callback runs — the original has already returned by now.
+5. The call returns: the original's value, or the one a callback supplied.
+
+| `KHook::Action` | meaning |
+|---|---|
+| `Ignore` | the callback did nothing |
+| `Override` | the original still runs, but the callback's return value is used |
+| `Supersede` | the original is skipped, the callback's return value is used |
+
+Two things follow from that loop:
+
+- `Supersede` in a **Post** callback cannot stop the original — it has already
+  run.
+- When several hooks want to decide the return value, the **first**
+  `Override` or `Supersede` wins. KHook makes no attempt to resolve such
+  conflicts, so do not rely on being the one that wins.
+
+---
+
+## Three layers
+
+| layer | what it is | use it when |
+|---|---|---|
+| `KHOOK_*` macros (`IToolkitHooks.h`) | one line per hook, resolved and installed by the toolkit | almost always |
+| `KHook::Virtual` / `Member` / `Function` | KHook's own class templates | a hook the macros do not fit |
+| `KHook::SetupHook` / `SetupVirtualHook` | the raw C-style API the classes are built on | practically never |
+
+The rest of the page follows that order.
+
+---
+
+## The `KHOOK_*` macros
+
+### A hook is one line
 
 Every hook is a member of your class, declared with a macro from
 `IToolkitHooks.h` (pulled in by `IToolkitPlugin.h`). The macro takes the
@@ -70,6 +145,8 @@ private:
 The last two arguments are always the Pre and the Post callback. Pass both if
 you need both sides; `nullptr` leaves a side empty.
 
+### Installing and removing everything
+
 `KHOOK_INIT()` in `Load()` resolves and installs every hook the plugin
 declared this way, `KHOOK_DESTRUCT()` in `Unload()` takes them all down:
 
@@ -94,8 +171,8 @@ bool Plugin::Unload(char* error, size_t maxlen)
 ```
 
 A hook whose target cannot be resolved — a gamedata entry that is missing, a
-vtable not found — is logged and skipped; the rest still go in, and
-`KHOOK_INIT()` returns `false` so you know.
+vtable not found, an instance still null — is logged and skipped; the rest
+still go in, and `KHOOK_INIT()` returns `false` so you know.
 
 <Callout type="info">
   Order matters: `KHOOK_INIT()` reads the instance pointers and calls the
@@ -103,9 +180,7 @@ vtable not found — is logged and skipped; the rest still go in, and
   globals your virtual hooks name.
 </Callout>
 
----
-
-# Virtual hooks
+### Virtual hooks
 
 `KHOOK_VIRTUAL(member, function, target, pre, post)`. The **function** says
 where in the vtable the hook goes:
@@ -120,7 +195,9 @@ The **target** says what it attaches to:
 
 - `&pInstance` — a pointer to the instance pointer (`&g_pSource2Server`).
   It is read at `KHOOK_INIT()`, not when the hook is constructed, so the
-  global may still be null at that point;
+  global may still be null at that point. The hook fires for **that object
+  only**: KHook patches the vtable the object points at and checks `this` on
+  every call;
 - `KHOOK_VTABLE(module, class)` — a whole vtable by RTTI name, covering every
   object that shares it. The module is a name (`"server"`, `"engine2"`) or a
   pointer to an `IToolkitModule*` you fill in at load (`&modules::server`);
@@ -143,9 +220,16 @@ A vtable hook hooks the class, not one instance — every client goes through
   a negative index and logs the key instead of installing the hook.
 </Callout>
 
----
+<Callout type="warn">
+  A vtable hook only sees calls that **go through the vtable**. Inside one
+  library the compiler often knows the exact class and calls the function
+  directly, and such a call never reaches your hook. Calls from another
+  library — the engine calling into `libserver`, say — always go through the
+  vtable. If a virtual hook stays silent, look at how the function is actually
+  called before blaming the index.
+</Callout>
 
-# Function hooks
+### Function hooks
 
 Anything a signature scan can find is hookable — no vtable, no interface.
 `KHOOK_MEMBER` is for a function with a `this` (the handler's first parameter),
@@ -170,19 +254,105 @@ KHOOK_MEMBER(m_hFilterMessage, "INetworkMessageProcessingPreFilter::FilterMessag
 KHOOK_MEMBER(m_hTakeDamageOld, ADDR_TAKE_DAMAGE_OLD(), &Plugin::Hook_TakeDamageOld, nullptr);
 ```
 
-<Callout type="info">
-  Function hooks are the answer when a class has a **non-primary** vtable —
-  a secondary vtable is a separate table elsewhere in `.rodata`, and a
-  by-name lookup only ever finds the primary one. That is exactly why the
-  toolkit hooks `FilterMessage` by signature rather than by vtable.
+### Secondary vtables
+
+A class with several bases has several vtables. A by-name lookup
+(`KHOOK_VTABLE`) only ever finds the **primary** one, so an interface that is
+not the first base cannot be hooked that way. Two ways around it:
+
+- a **function hook** on the implementation, by signature — that is why the
+  toolkit hooks `FilterMessage` by signature rather than by vtable;
+- a **virtual hook on the instance**, when you can get the interface pointer
+  itself. That pointer already points at the secondary table, and `&pInstance`
+  hooks exactly the table the object uses:
+
+```cpp
+// GetHLTVDirector() returns the IHLTVDirector sub-object, whose vptr is the
+// secondary vtable -- KHOOK_VTABLE("server", "CCSHLTVDirector") would hit the primary one.
+// IHLTVDirector here is your own CS2 declaration; hl2sdk only forward-declares it.
+g_pHLTVDirector = g_pSource2GameClients->GetHLTVDirector();
+
+KHOOK_VIRTUAL(m_hRecordingStarted, &IHLTVDirector::OnRecordingStarted, &g_pHLTVDirector, nullptr, &Plugin::Hook_RecordingStarted);
+```
+
+The class declaration the member function pointer comes from has to match the
+game's vtable **slot for slot**. Headers carried over from older games often
+do not; check the indices against the binary before you trust one.
+
+### Hooks installed later
+
+`KHOOK_INIT()` installs the hooks that exist **when it runs**. Every wrapper
+registers itself in the plugin's hook list as it is constructed, and
+`KHOOK_INIT()` walks that list once. A hook that is a member of an object you
+create after `Load()` is in the list but not installed — install it yourself
+with `m_hX.Init()`, typically in that object's constructor (the members are
+built before the constructor body runs):
+
+```cpp
+class CChatFilter
+{
+public:
+    CChatFilter()
+    {
+        m_hClientCommand.Init();   // KHOOK_INIT() ran long ago
+    }
+
+    KHook::Return<void> Hook_ClientCommand(ISource2GameClients* pThis, CPlayerSlot slot, const CCommand& args);
+
+private:
+    KHOOK_VIRTUAL(m_hClientCommand, &ISource2GameClients::ClientCommand, &g_pSource2GameClients,
+                  &CChatFilter::Hook_ClientCommand, nullptr);
+};
+
+auto* pFilter = new CChatFilter();   // the hook goes in here
+...
+delete pFilter;                       // and comes out here
+```
+
+`Init()` resolves the target the macro was given exactly as `KHOOK_INIT()`
+would: it reads `&pInstance` now, looks the vtable up, resolves the gamedata
+entry or calls the `ADDR_*` getter. It returns `false` and logs when that
+fails, and it can simply be called again — a hook waiting for an instance that
+does not exist yet goes in with the first call that finds it. On a hook that
+is already installed it does nothing; `m_hX.IsInstalled()` tells you which is
+which. A hook declared with a `nullptr` target is attached the explicit way:
+`m_hX.Init(pInstance)`, `m_hX.InitGlobal(vtable)`, or `m_hX.Init(address)` for
+function hooks.
+
+### Removing hooks
+
+`KHOOK_DESTRUCT()` detaches every hook and deletes it — deleting is what takes
+the detour down. One hook can also go on its own: `m_hX.Destruct()`. That is
+final: the wrapper no longer owns a KHook object, so it cannot be installed
+again — to hook the same thing later, create a new owner.
+
+Destroying the owner does the same. Each wrapper's destructor calls
+`Destruct()` and takes itself off the plugin's hook list, so deleting an object
+removes its hooks, and a later `KHOOK_DESTRUCT()` never touches a hook that is
+already gone. `Destruct()` is safe to call twice: an object still alive at
+`Unload()` is covered by `KHOOK_DESTRUCT()`, and deleting it afterwards is
+harmless.
+
+<Callout type="warn">
+  Install and remove hooks on the game thread, and never destroy an owner from
+  inside one of its own handlers — removing a hook synchronously under its own
+  callback can deadlock or crash. Defer it to the next frame.
+</Callout>
+
+<Callout type="warn">
+  Take every hook down before your plugin unloads. A live hook pointing into an
+  unmapped library crashes the server on the next call.
 </Callout>
 
 ---
 
-# Inside a handler
+## Writing handlers
+
+### The signature
 
 The object that was actually called arrives as the first parameter; the rest
-are the function's own arguments:
+are the function's own arguments. A `KHOOK_FUNCTION` handler has no object,
+only the arguments.
 
 ```cpp
 KHook::Return<void> Plugin::Hook_FireOutputInternal(CEntityIOOutput* pThis, CEntityInstance* pActivator, CEntityInstance* pCaller,
@@ -194,39 +364,44 @@ KHook::Return<void> Plugin::Hook_FireOutputInternal(CEntityIOOutput* pThis, CEnt
 }
 ```
 
+### Returning an action
+
 A handler returns `KHook::Return<T>`: the action, plus the value when the
-hooked function returns one:
+hooked function returns one. What KHook does with the value is the table in
+[How a hooked call runs](#how-a-hooked-call-runs).
 
 ```cpp
-return { KHook::Action::Supersede };          // void handlers
-return { KHook::Action::Override, false };    // handlers with a return type
+return { KHook::Action::Ignore };             // void handlers
+return { KHook::Action::Ignore, true };       // the value is not used with Ignore
+return { KHook::Action::Override, false };    // the original runs, false is returned
+return { KHook::Action::Supersede, false };   // the original is skipped, false is returned
 ```
 
-| `KHook::Action` | meaning |
-|---|---|
-| `Ignore` | the handler did nothing |
-| `Override` | the original still runs, but your return value is used (Pre only) |
-| `Supersede` | the original is skipped entirely, your return value is used (Pre only) |
+For example, turning a connection away before the game sees it:
+
+```cpp
+KHook::Return<bool> Plugin::Hook_ClientConnect(ISource2GameClients* pThis, CPlayerSlot slot,
+                                               const char* pszName, uint64 xuid,
+                                               const char* pszNetworkID, bool unk1,
+                                               CBufferString* pRejectReason)
+{
+    if (IsBanned(xuid))
+        return { KHook::Action::Supersede, false };   // the game never sees this connection
+
+    return { KHook::Action::Ignore, true };
+}
+```
 
 The toolkit's own listeners — `REG_CON_LISTENER`, `HOOK_GAME_EVENT`, net
 message hooks, entity output listeners — return `Action`, which is the same
 type: `IToolkitTypes.h` aliases it to `KHook::Action`.
 
-<Callout type="warn">
-  `Supersede` skips the original **for every remaining Pre handler too**. If
-  you called the original yourself and only want to stop KHook calling it a
-  second time, supersede is still the right answer — but hooks registered
-  after yours will not see it run.
-</Callout>
-
----
-
-# Calling the original
+### Calling the original
 
 From a Pre handler, `CallOriginal` runs the real function with the arguments
-you give it — then supersede, so KHook does not run it a second time. The
-member declared by the macro forwards `->` to the KHook object underneath, so
-everything KHook offers is a `->` away:
+you give it, bypassing every hook — then supersede, so KHook does not run it
+a second time. The member declared by the macro forwards `->` to the KHook
+object underneath, so everything KHook offers is a `->` away:
 
 ```cpp
 sv_autobunnyhopping.Set(true);
@@ -236,33 +411,75 @@ sv_autobunnyhopping.Set(false);
 return { KHook::Action::Supersede };
 ```
 
-In a Post handler the original has already run; its result is a call away:
-
-```cpp
-unsigned long id = KHook::GetOriginalReturn<unsigned long>();
-```
-
----
-
-# Removing hooks
-
-`KHOOK_DESTRUCT()` detaches every hook and deletes it — deleting is what takes
-the detour down. One hook can also go on its own: `m_hX.Destruct()`.
+Outside a handler, `KHook::CallOriginal(&Class::Method, pThis, args...)` does
+the same for any function — hooked by you or by someone else — which is the
+way to call a function without re-entering the hooks on it.
 
 <Callout type="warn">
-  Take every hook down before your plugin unloads. A live hook pointing into an
-  unmapped library crashes the server on the next call.
+  `Supersede` skips the original **for every remaining Pre handler too**. If
+  you called the original yourself and only want to stop KHook calling it a
+  second time, supersede is still the right answer — but hooks registered
+  after yours will not see it run.
 </Callout>
+
+### Reading the return value in Post
+
+In a Post handler the original has already run. These are only valid inside a
+Post handler:
+
+```cpp
+bool original  = KHook::GetOriginalReturn<bool>();   // what the original returned
+bool overriden = KHook::GetOverrideReturn<bool>();   // what a Pre handler overrode it with
+bool final     = KHook::GetCurrentReturn<bool>();    // what the call is going to return
+bool skipped   = KHook::WasOriginalFunctionSkipped(); // did a Pre handler supersede it
+```
+
+`GetOriginalReturn` is meaningless when the original was superseded — check
+`WasOriginalFunctionSkipped()` first.
+
+### Changing the arguments
+
+`KHook::Recall` carries the call on with **new arguments**: the hooks after
+yours, the original and every Post handler see them instead of the ones the
+caller passed. Your own handler is not called again — the call picks up right
+after it. The action you pass is your handler's action as usual, so
+`Ignore` lets the original run with the new arguments. `Recall` hands that
+return back, so it is the whole of the handler's `return`:
+
+```cpp
+// void CBaseModelEntity::SetModel(const char* pszModel), hooked
+KHook::Return<void> Plugin::Hook_SetModel(CBaseModelEntity* pThis, const char* pszModel)
+{
+    if (V_strcmp(pszModel, "models/weapons/old.vmdl"))
+        return { KHook::Action::Ignore };
+
+    const char* pszReplacement = "models/weapons/new.vmdl";
+    return KHook::Recall(&CBaseModelEntity::SetModel, KHook::Return<void>{ KHook::Action::Ignore }, pThis, pszReplacement);
+}
+```
+
+This is SourceHook's `RETURN_META_NEWPARAMS`. Only call it from inside a
+handler — KHook aborts on a recall made anywhere else.
+
+### Threads and context
+
+The handler's context is the object that declared the hook, so handlers are
+ordinary member functions with access to your state. KHook itself is
+thread-safe, but your handler runs on whatever thread called the hooked
+function — engine code does not always run on the game thread. Keep a handler
+that can be reached from elsewhere free of anything that is not thread-safe,
+or hand the work to the game thread.
 
 ---
 
-# Under the hood
+## KHook classes, without the macros
 
 The macros wrap plain KHook objects — `KHook::Virtual`, `KHook::Member`,
 `KHook::Function` — in `CToolkitVirtualHook`, `CToolkitMemberHook` and
 `CToolkitFunctionHook`. Each wrapper owns its KHook object, registers itself in
 a per-plugin list that `KHOOK_INIT()` / `KHOOK_DESTRUCT()` walk, and remembers
-its target until the toolkit is ready to resolve it.
+its target until the toolkit is ready to resolve it. `m_hX.Get()` hands you the
+KHook object underneath.
 
 You can still hold a raw KHook object where the wrapper does not fit.
 `KHOOK_NEW` (`IToolkitTypes.h`) writes its mem-initializer without repeating
@@ -280,12 +497,72 @@ Plugin::Plugin() :
 m_hGameFrame->Add(g_pSource2Server);
 ```
 
-A raw hook is yours to attach (`Add`, `AddGlobal` on a vtable stand-in,
-`Configure(addr)`), detach and delete.
+A raw hook is yours to configure, attach, detach and delete:
+
+| class | where it goes | attach / detach |
+|---|---|---|
+| `KHook::Virtual<CLASS, RET, ARGS...>` | `Configure(&CLASS::Method)` or `Configure(index)` | `Add(pThis)` / `Remove(pThis)` for one object, `AddGlobal(pThis)` / `RemoveGlobal(pThis)` for every object sharing `pThis`'s vtable |
+| `KHook::Member<CLASS, RET, ARGS...>` | `Configure(address)` or `Configure(&CLASS::Method)` | configuring places the detour |
+| `KHook::Function<RET, ARGS...>` | `Configure(address)` or `Configure(&Function)` | configuring places the detour |
+
+The constructors take the function (or nothing, and you `Configure` later), an
+optional context object, and the Pre and Post callbacks. With a context the
+callbacks are members of the context's class — what the macros always use;
+without one they are free functions. Deleting the object removes the detour.
 
 ---
 
-# Coming from SourceHook
+## The low-level API
+
+Everything above is built on a handful of C-style functions. You will very
+likely never call them, but knowing what they do explains how the classes
+behave.
+
+```cpp
+HookID_t KHook::SetupHook(void* function, void* context, void* removed_function,
+                          void* pre, void* post, void* make_return, void* make_call_original,
+                          unsigned int stack_size, bool async = false);
+
+HookID_t KHook::SetupVirtualHook(void** vtable, int index, void* context, void* removed_function,
+                                 void* pre, void* post, void* make_return, void* make_call_original,
+                                 unsigned int stack_size, bool async = false);
+
+void KHook::RemoveHook(HookID_t id, bool async = false,
+                       void (*hook_removal_fn)(HookID_t, void*) = nullptr, void* context = nullptr);
+```
+
+| parameter | meaning |
+|---|---|
+| `function` / `vtable` + `index` | what to detour: an address, or a vtable slot |
+| `context` | any pointer; inside the callbacks `KHook::GetContext<T>()` returns it |
+| `removed_function` | called when the hook has been removed — the place to clean up |
+| `pre`, `post` | the callbacks, with exactly the detoured function's signature |
+| `make_call_original` | may be called to run the original and store its return value |
+| `make_return` | called on the hook chosen to produce the final return value |
+| `stack_size` | the stack size in bytes for the detoured function — the classes compute it from the argument types |
+| `async` | add (or remove) the hook asynchronously; done synchronously from inside the hooked function it can deadlock |
+
+A callback at this level does not *return* its result — KHook restores the
+registers around every callback and ignores what it returns. It reports
+through `KHook::SaveReturnValue(action, pValue, size, init_op, deinit_op, original)`
+instead: the action, a pointer to the value to copy, its size, and two
+functions KHook may use to construct and destruct its own copy
+(`KHook::init_operator<T>` / `KHook::deinit_operator<T>`). `make_call_original`
+fetches the real function with `KHook::GetOriginalFunction()`, calls it and
+saves the result with `original = true`; `make_return` reads the chosen value
+with `KHook::GetCurrentValuePtr(true)` and must end with
+`KHook::DestroyReturnValue()`, which frees that copy and tells KHook the call
+is over.
+
+<Callout type="warn">
+  The raw API is full of footguns — a missed `DestroyReturnValue` leaks and
+  leaves KHook mid-call, a wrong `stack_size` corrupts the arguments. The
+  classes and macros exist so nobody has to write this by hand.
+</Callout>
+
+---
+
+## Coming from SourceHook
 
 Earlier Source2Toolkit builds ran a private SourceHook engine. The mapping is:
 
@@ -293,18 +570,37 @@ Earlier Source2Toolkit builds ran a private SourceHook engine. The mapping is:
 |---|---|
 | `SH_DECL_HOOK*` + `SH_ADD_HOOK` | `KHOOK_VIRTUAL(..., &pInstance, ...)` |
 | `SH_ADD_DVPHOOK` / `SH_ADD_MANUALDVPHOOK` | `KHOOK_VIRTUAL(..., KHOOK_VTABLE(module, class), ...)`, with a gamedata offset name or an index as the function |
+| `SH_DECL_MANUALHOOK*` + `SH_MANUALHOOK_RECONFIGURE` | `KHOOK_VIRTUAL` with an index or a gamedata offset name; raw: `KHook::Virtual<CLASS, RET, ARGS...>` + `Configure(index)` |
 | `SH_DECL_INLINEHOOK*` + `SH_ADD_INLINEHOOK` | `KHOOK_MEMBER` / `KHOOK_FUNCTION` with a gamedata name, an address or an `ADDR_*` getter |
+| `SH_MEMBER(this, &Class::Handler)` | the context — the macros always use the enclosing object |
 | `META_IFACEPTR` / `SH_IFACEPTR` | the first handler parameter |
 | `RETURN_META` / `RETURN_META_VALUE` | `return { action }` / `return { action, value }` |
+| `RETURN_META_NEWPARAMS` | `return KHook::Recall(&Class::Method, { action, value }, pThis, args...)` |
 | `MRES_IGNORED` / `MRES_HANDLED` | `KHook::Action::Ignore` |
 | `MRES_OVERRIDE` | `KHook::Action::Override` |
 | `MRES_SUPERCEDE` | `KHook::Action::Supersede` |
-| `SH_CALL(...)` | `m_hX->CallOriginal(pThis, ...)` |
-| `SH_RESULT_ORIG_RET(T)` | `KHook::GetOriginalReturn<T>()` |
-| `SH_REMOVE_HOOK_ID` | `KHOOK_DESTRUCT()` / `m_hX.Destruct()` |
+| `SH_CALL(...)` | `m_hX->CallOriginal(pThis, ...)` / `KHook::CallOriginal(&Class::Method, pThis, ...)` |
+| `META_RESULT_ORIG_RET(T)` | `KHook::GetOriginalReturn<T>()` |
+| `META_RESULT_OVERRIDE_RET(T)` | `KHook::GetOverrideReturn<T>()` |
+| `SH_REMOVE_HOOK` / `SH_REMOVE_HOOK_ID` | `KHOOK_DESTRUCT()` / `m_hX.Destruct()` / deleting the owner |
 
 <Callout type="warn">
   `KHook::Action` and `META_RES` are **not** numerically compatible — `META_RES`
   has an extra `MRES_HANDLED` at 1, which shifts everything after it. There is
   nothing left to cast between: the toolkit's `Action` *is* `KHook::Action`.
 </Callout>
+
+---
+
+## Checklist
+
+- Set every global a virtual hook names **before** `KHOOK_INIT()`.
+- Declare the handler **above** the macro that names it.
+- A missing gamedata offset is refused, not installed at `-1` — read the log.
+- `KHOOK_VTABLE` finds the primary vtable only; hook a secondary one through
+  the instance or by signature.
+- A silent virtual hook is often a direct call that never goes through the
+  vtable.
+- Hooks on objects created after `Load()` need `m_hX.Init()`.
+- `Destruct()` is final; never destroy a hook's owner from its own handler.
+- Every hook comes down before the plugin unloads.
