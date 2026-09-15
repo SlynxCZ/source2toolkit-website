@@ -64,6 +64,26 @@ Returns the absolute filesystem path of the module.
 
 Returns the filename component of the module path.
 
+### IToolkitMemory GetVirtualTableByOffset(name, offset, decorated)
+
+Returns the virtual table of the sub-object at an offset inside a class.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" /> — Class name (undecorated unless decorated is true).
+- <ApiParam name="offset" type="std::ptrdiff_t" /> — Offset of the sub-object in bytes.
+- <ApiParam name="decorated" type="bool" /> — Pass true when name is already a decorated symbol.
+
+### IToolkitMemory GetVirtualTableByBase(name, baseName, decorated)
+
+Returns the virtual table of a base class sub-object, located through the RTTI.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" /> — Class name (undecorated unless decorated is true).
+- <ApiParam name="baseName" type="const char*" /> — Base class name.
+- <ApiParam name="decorated" type="bool" /> — Pass true when both names are already decorated symbols.
+
 ### IToolkitModule* New(name)
 
 Creates a module wrapper by name (without extension).

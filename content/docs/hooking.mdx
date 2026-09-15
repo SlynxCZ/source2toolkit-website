@@ -200,6 +200,8 @@ The **target** says what it attaches to:
 - `KHOOK_VTABLE(module, class)` — a whole vtable by RTTI name, covering every
   object that shares it. The module is a name (`"server"`, `"engine2"`) or a
   pointer to an `IToolkitModule*` you fill in at load (`&modules::server`);
+- `KHOOK_VTABLE_BASE(module, class, base)` — the table of a base further in,
+  see [Secondary vtables](#secondary-vtables);
 - `nullptr` — you attach it yourself: `m_hX.Init(pInstance)` or
   `m_hX.InitGlobal(vtable)`.
 
@@ -255,12 +257,27 @@ KHOOK_MEMBER(m_hTakeDamageOld, ADDR_TAKE_DAMAGE_OLD(), &Plugin::Hook_TakeDamageO
 
 ### Secondary vtables
 
-A class with several bases has several vtables. A by-name lookup
-(`KHOOK_VTABLE`) only ever finds the **primary** one, so an interface that is
-not the first base cannot be hooked that way. Two ways around it:
+A class with several bases has several vtables: the **primary** one, shared
+with the first base, and one more for every base further in. `KHOOK_VTABLE`
+finds the primary one. For an interface that is not the first base, name the
+base too — `KHOOK_VTABLE_BASE(module, class, base)` reads where the base sits
+out of the RTTI and hooks that table:
 
-- a **function hook** on the implementation, by signature — that is why the
-  toolkit hooks `FilterMessage` by signature rather than by vtable;
+```cpp
+// IHLTVDirector is CCSHLTVDirector's third base, 32 bytes into the object.
+KHOOK_VIRTUAL(m_hRecordingStarted, &IHLTVDirector::OnRecordingStarted, KHOOK_VTABLE_BASE("server", "CCSHLTVDirector", "IHLTVDirector"), nullptr, &Plugin::Hook_RecordingStarted);
+```
+
+The same lookups are on `IToolkitModule` for your own use:
+`GetVirtualTableByBase(class, base)`, and `GetVirtualTableByOffset(class, offset)`
+when you know the byte offset instead. An offset moves whenever the class is
+laid out anew, so prefer the base. Only non-virtual bases can be looked up, and
+both need a core that has them.
+
+Two other ways around it:
+
+- a **function hook** on the implementation, by signature — that is how the
+  toolkit hooks `FilterMessage`;
 - a **virtual hook on the instance**, when you can get the interface pointer
   itself. That pointer already points at the secondary table, and `&pInstance`
   hooks exactly the table the object uses:
@@ -586,8 +603,8 @@ Earlier Source2Toolkit builds ran a private SourceHook engine. The mapping is:
 - Set every global a virtual hook names **before** `KHOOK_INIT()`.
 - Declare the handler **above** the macro that names it.
 - A missing gamedata offset is refused, not installed at `-1` — read the log.
-- `KHOOK_VTABLE` finds the primary vtable only; hook a secondary one through
-  the instance or by signature.
+- `KHOOK_VTABLE` finds the primary vtable only; for a base further in use
+  `KHOOK_VTABLE_BASE`.
 - A silent virtual hook is often a direct call that never goes through the
   vtable.
 - Hooks on objects created after `Load()` need `m_hX.Init()`.

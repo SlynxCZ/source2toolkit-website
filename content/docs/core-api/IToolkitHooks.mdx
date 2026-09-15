@@ -75,16 +75,17 @@ Installs the hook on a whole vtable -- every object sharing it.
 
 - <ApiParam name="vtable" type="IToolkitMemory" />
 
-### bool InitGlobal(pModule, pszClass)
+### bool InitGlobal(pModule, pszClass, pszBase)
 
-Installs the hook on the vtable of an RTTI class name in a module.
+Installs the hook on the vtable of an RTTI class name in a module, or of its base pszBase.
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="pModule" type="IToolkitModule*" />
 - <ApiParam name="pszClass" type="const char*" />
+- <ApiParam name="pszBase" type="const char*" />
 
-### bool InitGlobal(pszModule, pszClass)
+### bool InitGlobal(pszModule, pszClass, pszBase)
 
 Same, with the module loaded by name for the lookup.
 
@@ -92,6 +93,7 @@ Same, with the module loaded by name for the lookup.
 
 - <ApiParam name="pszModule" type="const char*" />
 - <ApiParam name="pszClass" type="const char*" />
+- <ApiParam name="pszBase" type="const char*" />
 
 ### Destruct()
 
