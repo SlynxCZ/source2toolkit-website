@@ -1,0 +1,401 @@
+---
+title: IToolkitSounds
+---
+
+# IToolkitSounds
+
+## IToolkitSound
+
+### SetName(name)
+
+Sets the sound event to play, e.g. "Weapon_AK47.Single".
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+
+### const char* GetName()
+
+Sound event name, or "" when only its hash is known.
+
+### SetNameHash(hash)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="hash" type="uint32_t" />
+
+### uint32_t GetNameHash()
+
+### SoundGuid GetGuid()
+
+Guid of the sound. Assigned by the engine for a hooked sound, by
+
+### SetSourceEntityIndex(index)
+
+Entity index the sound plays from and follows, or
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="int" />
+
+### int GetSourceEntityIndex()
+
+### SetSourceEntity(entity)
+
+Plays the sound from an entity. nullptr is SOUND_SOURCE_LISTENER.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" />
+
+### SetPosition(position)
+
+Plays the sound at a point in the world: SOUND_SOURCE_WORLD plus
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="position" type="const Vector&" />
+
+### SetVolume(volume)
+
+"public.volume". 1.0 is the sound event's own volume.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="volume" type="float" />
+
+### float GetVolume()
+
+### SetPitch(pitch)
+
+"public.pitch". 1.0 is unchanged.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pitch" type="float" />
+
+### float GetPitch()
+
+### SetChannel(channel)
+
+Volume channel this sound belongs to, or nullptr/"" for none.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="channel" type="const char*" />
+
+### const char* GetChannel()
+
+### bool HasParam(name)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+
+### SoundParamType GetParamType(name)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+
+### RemoveParam(name)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+
+### ClearParams()
+
+### SetBool(name, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="value" type="bool" />
+
+### SetInt32(name, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="value" type="int32_t" />
+
+### SetUInt32(name, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="value" type="uint32_t" />
+
+### SetUInt64(name, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="value" type="uint64_t" />
+
+### SetFloat(name, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="value" type="float" />
+
+### SetFloat3(name, value)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="value" type="const Vector&" />
+
+### bool GetBool(name, def)
+
+Typed getters. @p def comes back when the parameter is missing or
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="def" type="bool" />
+
+### int32_t GetInt32(name, def)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="def" type="int32_t" />
+
+### uint32_t GetUInt32(name, def)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="def" type="uint32_t" />
+
+### uint64_t GetUInt64(name, def)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="def" type="uint64_t" />
+
+### float GetFloat(name, def)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="def" type="float" />
+
+### Vector GetFloat3(name, def)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="def" type="const Vector&" />
+
+### AddRecipient(slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="slot" type="CPlayerSlot" />
+
+### RemoveRecipient(slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="slot" type="CPlayerSlot" />
+
+### bool HasRecipient(slot)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="slot" type="CPlayerSlot" />
+
+### AddAllRecipients()
+
+Every player connected at the moment of the call.
+
+### ClearRecipients()
+
+### SetRecipients(mask)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="mask" type="SoundRecipients" />
+
+### SoundRecipients GetRecipients()
+
+### SoundGuid Emit()
+
+Sends the sound to its recipients.
+
+## IToolkitSounds
+
+### IToolkitSound* CreateSound(owner, name)
+
+Creates a sound: listener-sourced, volume and pitch 1, no recipients.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the sound
+- <ApiParam name="name" type="const char*" /> — Sound event name, may be set later
+
+### DestroySound(sound)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="sound" type="[IToolkitSound*](/docs/core-api/IToolkitSounds)" />
+
+### SoundGuid EmitSoundToPlayer(slot, name, volume, pitch, channel)
+
+Plays a sound for one player only, at the listener.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="slot" type="CPlayerSlot" />
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="volume" type="float" />
+- <ApiParam name="pitch" type="float" />
+- <ApiParam name="channel" type="const char*" />
+
+### SoundGuid EmitSoundToPlayers(recipients, name, volume, pitch, channel)
+
+Plays a sound for a set of players, at each listener.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="recipients" type="SoundRecipients" />
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="volume" type="float" />
+- <ApiParam name="pitch" type="float" />
+- <ApiParam name="channel" type="const char*" />
+
+### SoundGuid EmitSoundToAll(name, volume, pitch, channel)
+
+Plays a sound for everybody, at each listener.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="volume" type="float" />
+- <ApiParam name="pitch" type="float" />
+- <ApiParam name="channel" type="const char*" />
+
+### SoundGuid EmitSoundFromEntity(entity, name, volume, pitch, recipients, channel)
+
+Plays a sound from an entity, for @p recipients (everybody by default).
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" />
+- <ApiParam name="name" type="const char*" />
+- <ApiParam name="volume" type="float" />
+- <ApiParam name="pitch" type="float" />
+- <ApiParam name="recipients" type="SoundRecipients" />
+- <ApiParam name="channel" type="const char*" />
+
+### StopSound(guid)
+
+Stops a sound at once, for everybody it was sent to.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="guid" type="SoundGuid" />
+
+### StopSoundForPlayers(guid, recipients)
+
+Stops a sound for some of its recipients; it keeps playing for the rest.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="guid" type="SoundGuid" />
+- <ApiParam name="recipients" type="SoundRecipients" />
+
+### StopSoundByName(name, sourceEntityIndex, recipients)
+
+Stops a sound by name, including one the game started.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" /> — Sound event name
+- <ApiParam name="sourceEntityIndex" type="int" /> — Entity the sound plays from, SOUND_SOURCE_LISTENER
+- <ApiParam name="recipients" type="SoundRecipients" /> — Who to stop it for, everybody by default
+
+### SetSoundVolume(guid, volume)
+
+Changes the volume of a playing sound. Channel volumes still apply.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="guid" type="SoundGuid" />
+- <ApiParam name="volume" type="float" />
+
+### UpdateSoundParams(guid, params, recipients)
+
+Sends the parameters of @p params to a playing sound.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="guid" type="SoundGuid" />
+- <ApiParam name="params" type="const IToolkitSound*" />
+- <ApiParam name="recipients" type="SoundRecipients" /> — Who to send to, 0 for everybody the sound went to
+
+### SetPlayerVolume(slot, channel, volume)
+
+Sets one player's volume for a channel (0 mutes, 1 is unchanged).
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="slot" type="CPlayerSlot" />
+- <ApiParam name="channel" type="const char*" />
+- <ApiParam name="volume" type="float" />
+
+### float GetPlayerVolume(slot, channel)
+
+A player's volume for a channel, 1.0 when never set.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="slot" type="CPlayerSlot" />
+- <ApiParam name="channel" type="const char*" />
+
+### ResetPlayerVolumes(slot)
+
+Puts all of a player's channels back to 1.0.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="slot" type="CPlayerSlot" />
+
+### uint32_t HashSoundName(name)
+
+Hash a sound event name travels as, for matching a hooked sound:
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" />
+
+### const char* LookupSoundName(hash)
+
+Name for a hash, nullptr when the toolkit has not seen it.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="hash" type="uint32_t" />
+
+### HookSound(owner, handler)
+
+Hooks the sounds the game sends to clients.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the hook
+- <ApiParam name="handler" type="SoundHook" /> — Callback, or nullptr to unhook
+
+### UnhookSound(owner)
+
+Drops this plugin's sound hook.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" />
+
