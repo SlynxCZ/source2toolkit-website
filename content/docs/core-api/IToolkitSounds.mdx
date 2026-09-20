@@ -228,6 +228,14 @@ Every player connected at the moment of the call.
 
 Sends the sound to its recipients.
 
+### IToolkitSound* New(name)
+
+Creates a sound: listener-sourced, volume and pitch 1, no recipients.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="name" type="const char*" /> — Sound event name, may be set later with SetName().
+
 ## IToolkitSounds
 
 ### IToolkitSound* CreateSound(owner, name)
