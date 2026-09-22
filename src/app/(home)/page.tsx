@@ -6,12 +6,14 @@ import {
   ArrowRight,
   Boxes,
   Braces,
+  EyeOff,
   GitBranch,
   LayoutList,
   MemoryStick,
   Radio,
   ScanLine,
   Terminal,
+  Volume2,
 } from 'lucide-react';
 import { LuGithub } from 'react-icons/lu';
 import { CodeBlock } from '@/components/code-block';
@@ -72,6 +74,8 @@ const marquee = [
   'custom hud',
   'scheduler',
   'tracing',
+  'sounds',
+  'transmit',
   'gameconfig',
   'memory access',
   'http & json',
@@ -119,6 +123,16 @@ const capabilities = [
     icon: Radio,
     title: 'Network messages',
     body: 'Allocate, send and hook Source 2 net messages by numeric ID or by partial name — protobuf included.',
+  },
+  {
+    icon: Volume2,
+    title: 'Sounds',
+    body: 'Sound events sent to exactly the players you pick, stopped or re-parametrised by guid, per-player volume channels, and a hook on every sound the game sends.',
+  },
+  {
+    icon: EyeOff,
+    title: 'Transmit',
+    body: 'Per-viewer entity visibility: hide players and entities from some clients and not others, owner-following, and a CheckTransmit hook for the rest.',
   },
   {
     icon: Braces,

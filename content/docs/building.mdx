@@ -5,59 +5,70 @@ title: SDK & Building
 This guide explains how to use the **Source2Toolkit SDK** to build your own plugins.
 
 The SDK provides everything needed to compile plugins against Source2Toolkit, including:
-- KHook headers — Metamod:Source's own detour library, taken from your Metamod checkout
+- KHook headers — Metamod:Source's own detour library, as the `vendor/khook` submodule, pinned to the commit Metamod was built with
 - Build configuration and CMake helpers
-- HL2SDK (CS2) and Protobuf — resolved via environment variables
+- HL2SDK (CS2) and Protobuf — a checkout you already have, or one the SDK downloads for you
 
 ---
 
 # Getting the SDK
 
-Clone the SDK repository:
+Clone the SDK repository with its submodules:
 
 ```bash
-git clone https://github.com/SlynxCZ/source2toolkit-sdk.git
+git clone --recursive https://github.com/SlynxCZ/source2toolkit-sdk.git
 cd source2toolkit-sdk
 ```
-
-<Callout type="info">
-  The SDK bundles nothing but its own sources. **Metamod:Source** (for KHook),
-  **HL2SDK (CS2)** and **Protobuf** must be available on your system and resolved through environment variables — see below.
-</Callout>
 
 ---
 
 # Dependencies
 
-The SDK uses `resolve_dep` to locate external dependencies at configure time:
+The SDK compiles against two things it does not carry in git: **hl2sdk-cs2** (the `cs2` branch of AlliedModders' hl2sdk) and the **Protobufs** (the `csgo/` folder of SteamDatabase/Protobufs). `tools/deps.py` sets them up once and keeps them current afterwards:
 
-```cmake
-resolve_dep(METAMOD   MMSOURCE_DEV)
-resolve_dep(SOURCESDK HL2SDKCS2)
-resolve_dep(PROTOBUFS CSGO_PROTO)
+```bash
+python tools/deps.py init
 ```
 
-All three are provided via environment variables:
+`init` asks, for each of the two, whether to use a checkout you already have — found through the `HL2SDKCS2` / `CSGO_PROTO` environment variable, or a path you type — or to download it into `vendor/`. The answer is saved in `deps.json` next to the SDK (ignored by git), and from then on one command brings everything up to date the same way every time:
+
+```bash
+python tools/deps.py update
+```
+
+The full walkthrough, flags included, is on the [SDK dependencies](/docs/sdk-dependencies) page. In short: `update` pulls the two checkouts (a checkout with local changes is left alone), moves `vendor/khook` to the KHook commit that `alliedmodders/metamod-source` master pins — the toolkit core is built against that one, and a plugin built against any other KHook refuses to load — and moves `vendor/hl2sdk-manifests` to its latest. `python tools/deps.py status` shows what is configured and which commits are checked out.
+
+The questions can be answered up front, which is what a CI script wants:
+
+```bash
+python tools/deps.py init --hl2sdk download --protobufs download
+python tools/deps.py init --hl2sdk env --protobufs env
+```
+
+<Callout type="info">
+  A downloaded dependency wins over the environment variable: `deps.py` writes `deps.cmake`, which CMake includes before it looks at `HL2SDKCS2` and `CSGO_PROTO`. Without `deps.json` the SDK behaves as before — the environment variables, then `vendor/hl2sdk-cs2` and `vendor/Protobufs/csgo` if they exist.
+</Callout>
+
+## By hand
+
+If you would rather not use the script, set the two variables before running CMake:
 
 | Variable | Description |
 |---|---|
-| `MMSOURCE_DEV` | Path to your Metamod:Source checkout — KHook lives in its `third_party/khook` |
-| `HL2SDKCS2` | Path to your HL2SDK CS2 checkout |
-| `CSGO_PROTO` | Path to your CS:GO Protobuf headers |
-
-Set these before running CMake:
+| `HL2SDKCS2` | Path to your hl2sdk-cs2 checkout |
+| `CSGO_PROTO` | Path to the `csgo/` folder of a SteamDatabase/Protobufs checkout |
 
 ```bash
 # Linux / macOS
-export MMSOURCE_DEV=/path/to/metamod-source
 export HL2SDKCS2=/path/to/hl2sdk-cs2
-export CSGO_PROTO=/path/to/csgo-proto
+export CSGO_PROTO=/path/to/Protobufs/csgo
 
 # Windows (PowerShell)
-$env:MMSOURCE_DEV = "C:\path\to\metamod-source"
 $env:HL2SDKCS2 = "C:\path\to\hl2sdk-cs2"
-$env:CSGO_PROTO = "C:\path\to\csgo-proto"
+$env:CSGO_PROTO = "C:\path\to\Protobufs\csgo"
 ```
+
+KHook needs nothing from you: it is the `vendor/khook` submodule. `MMSOURCE_DEV` is only read when building the toolkit core itself.
 
 ---
 
@@ -202,7 +213,7 @@ add_s2toolkit_plugin(my_plugin
 )
 ```
 
-Make sure `HL2SDKCS2` and `CSGO_PROTO` are set in your environment, then build — that's it.
+Run `python tools/deps.py init` once (or set `HL2SDKCS2` and `CSGO_PROTO` yourself), then build — that's it.
 
 ---
 

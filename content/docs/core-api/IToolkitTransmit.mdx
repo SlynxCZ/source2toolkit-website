@@ -1,0 +1,183 @@
+---
+title: IToolkitTransmit
+---
+
+# IToolkitTransmit
+
+## IToolkitTransmitInfo
+
+### CPlayerSlot GetPlayerSlot()
+
+The player this transmit set belongs to.
+
+### bool IsFullUpdate()
+
+True when the player is being sent everything from scratch
+
+### bool IsTransmitting(entityIndex)
+
+Whether the entity is currently in the set.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entityIndex" type="int" />
+
+### BlockTransmit(entityIndex)
+
+Takes an entity out of the set, and lets the client keep track
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entityIndex" type="int" />
+
+### BlockTransmit(entity)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" />
+
+### AllowTransmit(entityIndex)
+
+Puts an entity (back) into the set.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entityIndex" type="int" />
+
+### AllowTransmit(entity)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" />
+
+### CBitVec&lt;MAX_EDICTS&gt;* GetTransmitEntity()
+
+The four bit sets of CCheckTransmitInfo, for whatever the
+
+### CBitVec&lt;MAX_EDICTS&gt;* GetTransmitNonPlayers()
+
+### CBitVec&lt;MAX_EDICTS&gt;* GetTransmitOutOfPVS()
+
+### CBitVec&lt;MAX_EDICTS&gt;* GetTransmitAlways()
+
+## IToolkitTransmit
+
+### bool HookEntity(owner, entity, defaultVisible)
+
+Puts an entity under this interface's control.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the hook
+- <ApiParam name="entity" type="CEntityInstance*" /> — Entity to hook
+- <ApiParam name="defaultVisible" type="bool" /> — Whether viewers see it until told otherwise. false
+
+### UnhookEntity(entity)
+
+Forgets an entity: sent as the engine decides from now on.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" />
+
+### bool IsEntityHooked(entity)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" />
+
+### bool SetVisible(entity, viewer, visible, channel)
+
+Shows or hides a hooked entity for one viewer.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" /> — Hooked entity
+- <ApiParam name="viewer" type="CPlayerSlot" /> — The player it is shown to / hidden from
+- <ApiParam name="visible" type="bool" /> — false hides it on @p channel; true withdraws that
+- <ApiParam name="channel" type="int" /> — Channel 0..TRANSMIT_MAX_CHANNELS-1, or
+
+### bool SetVisibleToAll(entity, visible, channel)
+
+SetVisible() for every player slot at once.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" />
+- <ApiParam name="visible" type="bool" />
+- <ApiParam name="channel" type="int" />
+
+### bool IsVisible(entity, viewer)
+
+Whether a viewer would receive the entity, the channels, the
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" />
+- <ApiParam name="viewer" type="CPlayerSlot" />
+
+### bool IsHiddenOnChannel(entity, viewer, channel)
+
+Whether one channel hides the entity from the viewer.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" />
+- <ApiParam name="viewer" type="CPlayerSlot" />
+- <ApiParam name="channel" type="int" />
+
+### bool SetBlockAll(entity, block)
+
+Hides a hooked entity from everybody, whatever the channels say.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" />
+- <ApiParam name="block" type="bool" />
+
+### bool GetBlockAll(entity)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" />
+
+### bool SetOwner(entity, owner)
+
+Ties a hooked entity to an owner: wherever the owner is hidden,
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" />
+- <ApiParam name="owner" type="CEntityInstance*" /> — Owner entity, nullptr to untie
+
+### CEntityInstance* GetOwner(entity)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="entity" type="CEntityInstance*" />
+
+### ResetViewer(viewer)
+
+Puts every hooked entity back to its default for one viewer.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="viewer" type="CPlayerSlot" />
+
+### HookCheckTransmit(owner, handler)
+
+Hooks CheckTransmit itself.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the hook
+- <ApiParam name="handler" type="CheckTransmitHook" /> — Callback, or nullptr to unhook
+
+### UnhookCheckTransmit(owner)
+
+Drops this plugin's CheckTransmit hook.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="owner" type="PluginId" />
+
