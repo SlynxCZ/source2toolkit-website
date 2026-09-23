@@ -12,10 +12,10 @@ title: CFuncRotator
 - <ApiParam name="m_bIsRotating" type="bool" />
 - <ApiParam name="m_eSolidType" type="SolidType_t" />
 - <ApiParam name="m_flSpeed" type="float" />
+- <ApiParam name="m_flRotationDistanceDegrees" type="float" />
 - <ApiParam name="m_flTimeToCompleteRotation" type="float" />
 - <ApiParam name="m_hRotatorTarget" type="CHandle&lt;CBaseEntity&gt;" />
 - <ApiParam name="m_strRotatorTarget" type="CUtlSymbolLarge" />
-- <ApiParam name="m_vecLocalRotationHistory" type="CUtlVector&lt;Quaternion&gt;" />
 - <ApiParam name="m_OnRotationStarted" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 - <ApiParam name="m_OnRotationCompleted" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 - <ApiParam name="m_OnOscillate" type="[CEntityIOOutput](/docs/schema/Entityio)" />
@@ -32,12 +32,9 @@ title: CFuncRotator
 - <ApiParam name="m_flTimeRotationStop" type="float" />
 - <ApiParam name="m_flStartSpeed" type="float" />
 - <ApiParam name="m_qSpawnOrientation" type="Quaternion" />
-- <ApiParam name="m_bRecordHistory" type="bool" />
-- <ApiParam name="m_bReturningToPreviousRotation" type="bool" />
 - <ApiParam name="m_bReturningToInitialRotation" type="bool" />
 - <ApiParam name="m_flMinYawRotation" type="float" />
 - <ApiParam name="m_flMaxYawRotation" type="float" />
-- <ApiParam name="m_nOscillationCount" type="int32_t" />
 - <ApiParam name="m_bOscillationFromStart" type="bool" />
 - <ApiParam name="m_iszStartSound" type="CGameSoundEventName" />
 - <ApiParam name="m_iszLoopSound" type="CGameSoundEventName" />
@@ -46,6 +43,7 @@ title: CFuncRotator
 - <ApiParam name="m_flCurrentAngle" type="float" />
 - <ApiParam name="m_eRotationAxis" type="CFuncRotator__RotationAxis_t" />
 - <ApiParam name="m_flSpeedDriftFromOverRotate" type="float" />
+- <ApiParam name="m_bQueueStop" type="bool" />
 
 ## Methods
 

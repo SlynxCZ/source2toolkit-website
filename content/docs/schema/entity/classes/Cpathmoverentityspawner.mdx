@@ -4,11 +4,14 @@ title: CPathMoverEntitySpawner
 
 # CPathMoverEntitySpawner
 
-**Inheritance**: CLogicalEntity
+**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
 
 ## Fields
 
+- <ApiParam name="m_eTemplateChoiceStrategy" type="CPathMoverEntitySpawner__TemplateChoiceStrategy_t" />
 - <ApiParam name="m_szSpawnTemplates" type="CUtlSymbolLarge" />
+- <ApiParam name="m_szSpawnTemplateParams" type="int32_t" />
+- <ApiParam name="m_szSpawnTemplateCount" type="int32_t" />
 - <ApiParam name="m_nSpawnIndex" type="int32_t" />
 - <ApiParam name="m_hPathMover" type="CHandle&lt;CPathMover&gt;" />
 - <ApiParam name="m_flSpawnFrequencySeconds" type="float" />
@@ -23,6 +26,9 @@ title: CPathMoverEntitySpawner
 - <ApiParam name="m_OnTemplateGroupSpawned" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 - <ApiParam name="m_iszPathMoverName" type="CUtlSymbolLarge" />
 - <ApiParam name="m_bPrepopulateOnSpawn" type="bool" />
+- <ApiParam name="m_iszPathNodeStartName" type="CUtlSymbolLarge" />
+- <ApiParam name="m_vMoverSpawnPos" type="Vector" />
+- <ApiParam name="m_bRunningDebugThink" type="bool" />
 
 ## Methods
 

@@ -1,0 +1,64 @@
+---
+title: CSoundOpvarSetDomeEntity
+---
+
+# CSoundOpvarSetDomeEntity
+
+**Inheritance**: [CSoundOpvarSetPointEntity](/docs/schema/entity/classes/Csoundopvarsetpointentity)
+
+## Fields
+
+- <ApiParam name="m_arDirections" type="CUtlVector&lt;Vector&gt;" />
+- <ApiParam name="m_arOpenness" type="CUtlVector&lt;float&gt;" />
+- <ApiParam name="m_arNeighbors" type="CUtlVector&lt;int32_t&gt;" />
+- <ApiParam name="m_nCurrentIndex" type="int32_t" />
+- <ApiParam name="m_arClusterParent" type="CUtlVector&lt;int32_t&gt;" />
+- <ApiParam name="m_arClusterSize" type="CUtlVector&lt;int32_t&gt;" />
+- <ApiParam name="m_arClusterWeight" type="CUtlVector&lt;float&gt;" />
+- <ApiParam name="m_arClusterDirSum" type="CUtlVector&lt;Vector&gt;" />
+- <ApiParam name="m_nClusterIndex" type="int32_t" />
+- <ApiParam name="m_flClusteredOpenness" type="float" />
+- <ApiParam name="m_vClusterDirection" type="Vector" />
+- <ApiParam name="m_vSmoothedOpenDir" type="Vector" />
+- <ApiParam name="m_nDirWarmupThinksRemaining" type="int32_t" />
+- <ApiParam name="m_vLastTraceOrigin" type="Vector" />
+- <ApiParam name="m_bTraceOriginValid" type="bool" />
+- <ApiParam name="m_nCatchUpThinksRemaining" type="int32_t" />
+- <ApiParam name="m_bDiscontinuityPending" type="bool" />
+- <ApiParam name="m_flSmoothedOpenness" type="float" />
+- <ApiParam name="m_flLastSmoothTime" type="float" />
+- <ApiParam name="m_flSize" type="float" />
+- <ApiParam name="m_nTotalDirections" type="int32_t" />
+- <ApiParam name="m_nTracesPerFrame" type="int32_t" />
+- <ApiParam name="m_bDomeMode" type="bool" />
+- <ApiParam name="m_bMultiWall" type="bool" />
+- <ApiParam name="m_flWallTransmission" type="float" />
+- <ApiParam name="m_nClusterK" type="int32_t" />
+- <ApiParam name="m_flClusterP" type="float" />
+- <ApiParam name="m_flClusterBlend" type="float" />
+- <ApiParam name="m_flOpennessExponent" type="float" />
+- <ApiParam name="m_flShoulderExponent" type="float" />
+- <ApiParam name="m_flSmoothHalfLife" type="float" />
+
+## Methods
+
+### CSoundOpvarSetDomeEntity* New(className)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="className" type="const char*" />
+
+### CSoundOpvarSetDomeEntity* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CSoundOpvarSetDomeEntity* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
+
+### CHandle&lt;CSoundOpvarSetDomeEntity&gt; GetHandle()
+

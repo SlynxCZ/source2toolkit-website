@@ -1,0 +1,38 @@
+---
+title: CSoundEventMultiPointEntity
+---
+
+# CSoundEventMultiPointEntity
+
+**Inheritance**: [CSoundEventEntity](/docs/schema/entity/classes/Csoundevententity)
+
+## Fields
+
+- <ApiParam name="m_iCountMax" type="int32_t" />
+- <ApiParam name="m_flDistanceMax" type="float" />
+- <ApiParam name="m_flDistMaxSqr" type="float" />
+- <ApiParam name="m_flDotProductMax" type="float" />
+- <ApiParam name="m_bPlaying" type="bool" />
+
+## Methods
+
+### CSoundEventMultiPointEntity* New(className)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="className" type="const char*" />
+
+### CSoundEventMultiPointEntity* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CSoundEventMultiPointEntity* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
+
+### CHandle&lt;CSoundEventMultiPointEntity&gt; GetHandle()
+

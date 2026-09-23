@@ -1,0 +1,44 @@
+---
+title: CSkyCameraVolume
+---
+
+# CSkyCameraVolume
+
+**Inheritance**: CBaseEntity
+
+## Fields
+
+- <ApiParam name="m_vBoxMins" type="Vector" />
+- <ApiParam name="m_vBoxMaxs" type="Vector" />
+- <ApiParam name="m_hTarget" type="CHandle&lt;CSkyCameraVolumeTarget&gt;" />
+- <ApiParam name="m_nPriority" type="int32_t" />
+- <ApiParam name="m_bIsEnabled" type="bool" />
+- <ApiParam name="m_bSkyboxBlurEffect" type="bool" />
+- <ApiParam name="m_vBlurOrigin" type="Vector" />
+- <ApiParam name="m_bSkyboxReceivesWorldCsm" type="bool" />
+- <ApiParam name="m_bWorldReceivesSkyboxCsm" type="bool" />
+- <ApiParam name="m_bStartDisabled" type="bool" />
+- <ApiParam name="m_iszTargetName" type="CUtlSymbolLarge" />
+
+## Methods
+
+### CSkyCameraVolume* New(className)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="className" type="const char*" />
+
+### CSkyCameraVolume* FromIndex(iIndex)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="iIndex" type="int" />
+
+### CSkyCameraVolume* FromIndex(index)
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="index" type="CEntityIndex" />
+
+### CHandle&lt;CSkyCameraVolume&gt; GetHandle()
+

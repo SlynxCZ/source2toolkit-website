@@ -35,6 +35,7 @@ title: CSceneEntity
 - <ApiParam name="m_flCurrentTime" type="float" />
 - <ApiParam name="m_flFrameTime" type="float" />
 - <ApiParam name="m_bCancelAtNextInterrupt" type="bool" />
+- <ApiParam name="m_bRemoveOnCompletion" type="bool" />
 - <ApiParam name="m_fPitch" type="float" />
 - <ApiParam name="m_bAutomated" type="bool" />
 - <ApiParam name="m_nAutomatedAction" type="int32_t" />
@@ -57,9 +58,15 @@ title: CSceneEntity
 - <ApiParam name="m_OnPaused" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 - <ApiParam name="m_OnResumed" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 - <ApiParam name="m_OnPulseRequirement" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+- <ApiParam name="m_TargetNameMap" type="CUtlDict" />
+- <ApiParam name="m_AnchorNameMap" type="CUtlDict" />
+- <ApiParam name="m_ActorGraphMap" type="CUtlDict" />
+- <ApiParam name="m_ActorClipMap" type="CUtlDict" />
 - <ApiParam name="m_ActorMap" type="CUtlVector&lt;ActorMapping_t&gt;" />
 - <ApiParam name="m_hInterruptScene" type="CHandle&lt;CSceneEntity&gt;" />
 - <ApiParam name="m_nInterruptCount" type="int32_t" />
+- <ApiParam name="m_responseConcept" type="CUtlString" />
+- <ApiParam name="m_responseCriteria" type="CUtlString" />
 - <ApiParam name="m_bSceneMissing" type="bool" />
 - <ApiParam name="m_bInterrupted" type="bool" />
 - <ApiParam name="m_bCompletedEarly" type="bool" />

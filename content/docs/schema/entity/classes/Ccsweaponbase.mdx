@@ -4,7 +4,7 @@ title: CCSWeaponBase
 
 # CCSWeaponBase
 
-**Inheritance**: [CBasePlayerWeapon](/docs/schema/entity/classes/Cbaseplayerweapon)
+**Inheritance**: CBasePlayerWeapon
 
 ## Fields
 
@@ -37,6 +37,10 @@ title: CCSWeaponBase
 - <ApiParam name="m_bIsHauledBack" type="bool" />
 - <ApiParam name="m_bSilencerOn" type="bool" />
 - <ApiParam name="m_flTimeSilencerSwitchComplete" type="float" />
+- <ApiParam name="m_bStealthy" type="bool" />
+- <ApiParam name="m_bInSilentReloadSection" type="bool" />
+- <ApiParam name="m_bSilentReloadStatCounted" type="bool" />
+- <ApiParam name="m_flStealthHoldStartTime" type="float" />
 - <ApiParam name="m_flWeaponActionPlaybackRate" type="float" />
 - <ApiParam name="m_iOriginalTeamNumber" type="int32_t" />
 - <ApiParam name="m_iMostRecentTeamNumber" type="int32_t" />
@@ -55,7 +59,7 @@ title: CCSWeaponBase
 - <ApiParam name="m_bWasOwnedByCT" type="bool" />
 - <ApiParam name="m_bWasOwnedByTerrorist" type="bool" />
 - <ApiParam name="m_numRemoveUnownedWeaponThink" type="int32_t" />
-- <ApiParam name="m_IronSightController" type="[CIronSightController](/docs/schema/entity/classes/Cironsightcontroller)" />
+- <ApiParam name="m_IronSightController" type="CIronSightController" />
 - <ApiParam name="m_iIronSightMode" type="int32_t" />
 - <ApiParam name="m_flLastLOSTraceFailureTime" type="float" />
 - <ApiParam name="m_flWatTickOffset" type="float" />

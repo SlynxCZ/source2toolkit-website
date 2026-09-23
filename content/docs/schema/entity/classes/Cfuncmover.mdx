@@ -4,7 +4,7 @@ title: CFuncMover
 
 # CFuncMover
 
-**Inheritance**: CBaseModelEntity
+**Inheritance**: [CBaseModelEntity](/docs/schema/entity/classes/Cbasemodelentity)
 
 ## Fields
 
@@ -48,6 +48,8 @@ title: CFuncMover
 - <ApiParam name="m_bStartAtClosestPoint" type="bool" />
 - <ApiParam name="m_bStartAtEnd" type="bool" />
 - <ApiParam name="m_bStartFollowingClosestMover" type="bool" />
+- <ApiParam name="m_flStartFollowingClosestMoverWhenWithinDistance" type="float" />
+- <ApiParam name="m_flStartFollowingClosestMoverWhenOutsideDistance" type="float" />
 - <ApiParam name="m_eOrientationUpdate" type="CFuncMover__OrientationUpdate_t" />
 - <ApiParam name="m_flTimeStartOrientationChange" type="float" />
 - <ApiParam name="m_flTimeToBlendToNewOrientation" type="float" />
@@ -57,11 +59,15 @@ title: CFuncMover
 - <ApiParam name="m_bAllowMovableNavMeshDockingOnEntireEntity" type="bool" />
 - <ApiParam name="m_iszOrientationMatchEntityName" type="CUtlSymbolLarge" />
 - <ApiParam name="m_hOrientationMatchEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_flTimeToTraverseToNextNode" type="float" />
-- <ApiParam name="m_vLerpToNewPosStartInPathEntitySpace" type="Vector" />
-- <ApiParam name="m_vLerpToNewPosEndInPathEntitySpace" type="Vector" />
+- <ApiParam name="m_vLerpToNewPosStartWS" type="Vector" />
+- <ApiParam name="m_flLerpToPositionTargetT" type="float" />
 - <ApiParam name="m_flLerpToPositionT" type="float" />
 - <ApiParam name="m_flLerpToPositionDeltaT" type="float" />
+- <ApiParam name="m_hTransitionSourcePath" type="CHandle&lt;CPathMover&gt;" />
+- <ApiParam name="m_flTransitionSourceT" type="float" />
+- <ApiParam name="m_flTransitionSourcePathLocation" type="float" />
+- <ApiParam name="m_iszTransitionSourcePathNodeStart" type="CUtlSymbolLarge" />
+- <ApiParam name="m_bStoppedDuringTransition" type="bool" />
 - <ApiParam name="m_OnLerpToPositionComplete" type="[CEntityIOOutput](/docs/schema/Entityio)" />
 - <ApiParam name="m_bIsPaused" type="bool" />
 - <ApiParam name="m_eTransitionedToPathNodeAction" type="CFuncMover__TransitionToPathNodeAction_t" />
@@ -99,12 +105,15 @@ title: CFuncMover
 - <ApiParam name="m_flFollowMoverSpeed" type="float" />
 - <ApiParam name="m_flFollowMoverVelocity" type="float" />
 - <ApiParam name="m_nTickMovementRan" type="int32_t" />
-- <ApiParam name="m_movementSummary" type="FuncMoverMovementSummary_t" />
+- <ApiParam name="m_movementSummary" type="[FuncMoverMovementSummary_t](/docs/schema/entity/classes/FuncMoverMovementSummary_t)" />
 - <ApiParam name="m_bStopFromBeginStopTarget" type="bool" />
 - <ApiParam name="m_bQueueStop" type="bool" />
 - <ApiParam name="m_bQueueStopMoving" type="bool" />
 - <ApiParam name="m_bQueueSetupPathMover" type="bool" />
 - <ApiParam name="m_ePathRebuildStrategy" type="CFuncMover__PathRebuildStrategy_t" />
+- <ApiParam name="m_eFindFollowMoverStrategy" type="CFuncMover__FindFollowMoverStrategy_t" />
+- <ApiParam name="m_bDisableDecelerationToStop" type="bool" />
+- <ApiParam name="m_vOffsetFromPath" type="Vector" />
 
 ## Methods
 
