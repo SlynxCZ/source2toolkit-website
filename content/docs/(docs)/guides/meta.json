@@ -6,6 +6,7 @@
                   "scheduler",
                   "sounds",
                   "transmit",
+                  "scripts",
                   "tracing",
                   "---Services---",
                   "http",

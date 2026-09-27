@@ -50,7 +50,7 @@ Called when plugin is loaded.
 | `api` | [`IToolkitAPI*`](/docs/core-api/IToolkitApi) | Toolkit API instance |
 | `error` | `char*` | Buffer for error message |
 | `maxlen` | `size_t` | Error buffer size |
-| `late` | `bool` | True if loaded after server start |
+| `late` | `bool` | False only when the toolkit's startup pass loads the plugin. True for every load after that: "toolkit load", "toolkit refresh" and the file watcher's hot reload. Players and entities may already exist. |
 
 **Returns** `bool` — True on success, false on failure
 
@@ -113,7 +113,7 @@ Allows plugins to react to lifecycle and map events.
 virtual void OnPluginLoad(PluginId id);
 ```
 
-Called when another toolkit plugin (.stx) is loaded. The id is a toolkit plugin id -- the one "toolkit list" shows.
+Called when a toolkit plugin (.stx) has loaded, after its Load() returned. The id is a toolkit plugin id -- the one "toolkit list" shows. Fires for your own plugin too (a listener added in Load() gets it right after Load() returns); compare against your own id to skip it.
 
 | Parameter | Type |
 |---|---|
@@ -125,7 +125,7 @@ Called when another toolkit plugin (.stx) is loaded. The id is a toolkit plugin 
 virtual void OnPluginUnload(PluginId id);
 ```
 
-Called when another toolkit plugin (.stx) is unloaded.
+Called when a toolkit plugin (.stx) is about to unload, before its Unload() runs. Fires for your own plugin too, like OnPluginLoad().
 
 | Parameter | Type |
 |---|---|

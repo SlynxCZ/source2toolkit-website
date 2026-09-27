@@ -1,0 +1,128 @@
+---
+title: Scripts
+description: Run cs_script (the game's server-side JavaScript) from a plugin — compiled assets, raw source, hot-reloaded files, inputs into a script and messages back out.
+---
+
+CS2 runs map and mode logic in JavaScript through `point_script` entities
+(`import { Instance } from "cs_script/point_script"`). `IToolkitScripts` lets a
+plugin run scripts of its own and talk to them in both directions.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitScripts.h"
+```
+
+## Running a script
+
+A script is known by a **name** you pick — it is also the targetname of its
+`point_script` entity. Running a script under a name already in use replaces
+the old one.
+
+| Call | Runs | Needs a signature |
+| --- | --- | --- |
+| `SCRIPTS_LOAD_ASSET(name, asset, persistent)` | a compiled `.vjs` asset, exactly as a map's `point_script` does | no |
+| `SCRIPTS_RUN_SOURCE(name, path, source, persistent)` | raw JavaScript source you hand over | yes |
+| `SCRIPTS_RUN_FILE(name, file, persistent)` | a `.js` file from the server's disk, relative to `game/csgo` or absolute | yes |
+
+Each returns the `point_script` entity's `CEntityHandle`, invalid on failure.
+Raw source goes through the game's script loader, found through the gamedata
+signature `CSScript::RunScript`; `g_pToolkitScripts->CanRunSource()` says
+whether it resolved. Compiled assets need nothing from the gamedata and keep
+working through game updates.
+
+```cpp title="plugin.cpp"
+static const char* s_source = R"js(
+import { Instance } from "cs_script/point_script";
+
+Instance.OnRoundStart(() => {
+    Instance.ServerCommand("toolkit_script myplugin " + encodeURIComponent("round started"));
+});
+
+Instance.OnScriptInput("ping", () => {
+    Instance.Msg("pong from cs_script");
+});
+)js";
+
+SCRIPTS_RUN_SOURCE("myplugin", "scripts/myplugin.js", s_source, true);
+```
+
+The path of `RunSource` only names the module in errors and stack traces.
+A script that does not compile is reported by the game in the server console
+("Exception during CompileModule …"); the entity exists regardless.
+
+## Hot reload
+
+`RunFile()` reads the file again on every run, so after an edit:
+
+```cpp
+g_pToolkitScripts->Reload("myplugin"); // throws the old entity away and runs the file again
+```
+
+`Reload()` works for every kind — source and assets simply run again as they
+were given. A handy dev loop is a console command that calls it.
+
+## Persistent scripts
+
+With `persistent = true` a script comes back by itself: when its entity is
+removed (round restart, a map's cleanup, `ent_remove`) it is spawned again on
+the next simulating frame, and after a map change on the new map's first one.
+A non-persistent script is done once its entity goes. `Remove(name)` ends
+either kind.
+
+## Native → script: inputs
+
+`SCRIPTS_FIRE_INPUT(name, input)` fires the game's `RunScriptInput` entity
+input, which calls the callback the script registered with
+`Instance.OnScriptInput(input, …)`:
+
+```cpp
+SCRIPTS_FIRE_INPUT("myplugin", "ping");
+```
+
+Only the input name reaches the script. Keep data on the script side, or send
+it the other way.
+
+## Script → native: messages
+
+A script sends a message with `Instance.ServerCommand`, through the hidden
+`toolkit_script` command:
+
+```js
+Instance.ServerCommand("toolkit_script <channel> " + encodeURIComponent(JSON.stringify(data)));
+```
+
+and every plugin that hooked `<channel>` gets everything after the channel
+name:
+
+```cpp title="plugin.cpp"
+HOOK_SCRIPT_MESSAGE("myplugin", [](const char* pszChannel, const char* pszPayload)
+{
+    // pszPayload is still URI-encoded, exactly as the script sent it.
+    META_CONPRINTF("[myplugin] script says: %s\n", pszPayload);
+});
+```
+
+Several plugins may hook one channel; each gets every message. Hooking the
+same channel again replaces your handler, `UNHOOK_SCRIPT_MESSAGE(channel)`
+removes it.
+
+<Callout type="warn">
+  The line goes through the server's command buffer: it arrives on a **later
+  tick**, a `;` or a newline in it would **split it into two commands**, and it
+  is cut at the buffer's line limit. Encode the payload (as above) and keep it
+  short. Only the server itself can run `toolkit_script` — a client typing it,
+  or `!toolkit_script` in chat, is ignored.
+</Callout>
+
+## Pitfalls
+
+- **The spawn warning.** A script run from source spawns its `point_script`
+  without a compiled asset, and the game prints `Failed to load cs_script ""`
+  while it spawns. It is harmless: the source goes into the same entity right
+  after.
+- **Lifetime.** Scripts and message hooks belong to your plugin and are
+  removed when it unloads — nothing to undo in `Unload()`.
+- **Main thread only.**
+
+## Reference
+
+- [`IToolkitScripts` API reference](/docs/core-api/IToolkitScripts)

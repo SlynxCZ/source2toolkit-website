@@ -21,6 +21,7 @@
     "IToolkitTransmit",
     "IToolkitTrace",
     "IToolkitScheduler",
+    "IToolkitScripts",
     "---Engine---",
     "IToolkitAddresses",
     "IToolkitHooks",

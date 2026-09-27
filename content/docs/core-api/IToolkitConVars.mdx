@@ -38,7 +38,7 @@ Retrieves access index of a ConVar by name.
 |---|---|---|
 | `name` | `const char*` | ConVar name |
 
-**Returns** `uint16` — Access index
+**Returns** `uint16` — Access index, or TOOLKIT_INVALID_CONVAR_INDEX if no ConVar has that name. 0 is a valid index, so compare against the sentinel rather than testing for zero.
 
 ### `GetConvarRef`
 
@@ -423,6 +423,8 @@ virtual uint16 CreateConVar(const char* name, EConVarType type, const char* help
 
 Creates a new ConVar.
 
+<Callout type="info">The engine has no way to unregister a ConVar, so one created here outlives the plugin that created it. When the plugin loads again, the same call returns the existing ConVar with its current value.</Callout>
+
 | Parameter | Type | Description |
 |---|---|---|
 | `name` | `const char*` | ConVar name |
@@ -431,11 +433,11 @@ Creates a new ConVar.
 | `flags` | `uint64` | FCVAR flags |
 | `hasMin` | `bool` | Whether min value is enforced |
 | `hasMax` | `bool` | Whether max value is enforced |
-| `defaultValue` | `void*` | Default value pointer |
-| `minValue` | `const void*` | Minimum value pointer |
-| `maxValue` | `const void*` | Maximum value pointer |
+| `defaultValue` | `void*` | Default value pointer (const char* for EConVarType_String) |
+| `minValue` | `const void*` | Minimum value pointer; only read when hasMin is true, may be nullptr otherwise |
+| `maxValue` | `const void*` | Maximum value pointer; only read when hasMax is true, may be nullptr otherwise |
 
-**Returns** `uint16` — Access index of created ConVar
+**Returns** `uint16` — Access index of the created ConVar. If a ConVar with that name already exists, its index is returned and the arguments are ignored. TOOLKIT_INVALID_CONVAR_INDEX on bad arguments or an unsupported type.
 
 ### `DeleteConVar`
 

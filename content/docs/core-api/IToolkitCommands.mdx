@@ -50,12 +50,12 @@ virtual void RegisterChatListener(PluginId owner, const char* pchName, ChatHandl
 
 Registers a chat command listener.
 
-<Callout type="info">Triggered when a player sends a matching chat message.</Callout>
+<Callout type="info">Only fires for a chat message that starts with one of the configured chat triggers (public or silent, "!" and "/" by default), e.g. "!kick" or "/kick". Plain "kick" typed into chat does not fire it. The trigger is stripped before matching, so args.Arg(0) is the bare name. A silent trigger hides the message; a public one lets it show.</Callout>
 
 | Parameter | Type | Description |
 |---|---|---|
 | `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the command |
-| `pchName` | `const char*` | Command name (e.g. "!kick", "!test") |
+| `pchName` | `const char*` | Command name without a trigger (e.g. "kick", "test") |
 | `handler` | [`ChatHandler`](/docs/core-api/IToolkitCommands#chathandler) | Callback executed when command is triggered |
 
 ### `UnregisterChatListener`
@@ -115,7 +115,7 @@ Registers a listener for an existing console command.
 | `handler` | [`CommandHandler`](/docs/core-api/IToolkitCommands#commandhandler) | Callback executed on command execution |
 | `post` | `bool` | false to run before the original, true to run after |
 
-**Returns** `void` — Action to control command execution: * Action::Ignore: do nothing * Action::Override: override return value but still call original (pre only) * Action::Supersede: block original execution (pre only)
+**Returns** `void` — Action to control command execution: * Action::Ignore: do nothing * Action::Override: the original still runs; commands return nothing, so this has no further effect. Later pre listeners and all post listeners still fire. * Action::Supersede: block original execution (pre only); the remaining pre listeners and all post listeners are skipped
 
 ### `UnregisterConListener`
 
