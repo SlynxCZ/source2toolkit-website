@@ -11,7 +11,7 @@ title: CAttributeList
 
 ## Methods
 
-### SetOrAddAttribute(pszAttributeName, flValue)
+### SetOrAddAttribute(pszAttributeName, flValue, eChain)
 
 Sets an attribute by name, adding it to the list when it is not there yet.
 
@@ -19,4 +19,15 @@ Sets an attribute by name, adding it to the list when it is not there yet.
 
 - <ApiParam name="pszAttributeName" type="const char*" />
 - <ApiParam name="flValue" type="float" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+
+### SetOrAddAttributeValueByName(pszAttributeName, flValue, eChain)
+
+CAttributeList::SetOrAddAttributeValueByName, the engine's name for SetOrAddAttribute.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszAttributeName" type="const char*" />
+- <ApiParam name="flValue" type="float" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 

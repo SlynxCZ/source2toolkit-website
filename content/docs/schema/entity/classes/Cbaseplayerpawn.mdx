@@ -36,7 +36,7 @@ title: CBasePlayerPawn
 
 ## Methods
 
-### CommitSuicide(bExplode, bForce)
+### CommitSuicide(bExplode, bForce, eChain)
 
 Force suicide.
 
@@ -44,14 +44,16 @@ Force suicide.
 
 - <ApiParam name="bExplode" type="bool" />
 - <ApiParam name="bForce" type="bool" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 
-### SnapViewAngles(angEyeAngles)
+### SnapViewAngles(angEyeAngles, eChain)
 
 Snaps the pawn's view angles. No-op where the engine function could not be resolved.
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="angEyeAngles" type="const QAngle&" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 
 ### CCSPlayerController* GetController()
 

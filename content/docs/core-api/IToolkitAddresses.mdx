@@ -16,7 +16,7 @@ Dispatches spawn on an entity.
 
 ### CBaseEntity_TakeDamageOld_t CBaseEntity_TakeDamageOld()
 
-Takes damage from entity..
+CBaseEntity::TakeDamageOld -- the game's own asserts name it so.
 
 ### CBaseModelEntity_SetModel_t CBaseModelEntity_SetModel()
 
@@ -30,7 +30,7 @@ Assigns pawn to player controller.
 
 Snaps a pawn's view angles, as the engine does on teleport.
 
-### CGameRules_TerminateRound_t CGameRules_TerminateRound()
+### CCSGameRules_TerminateRound_t CCSGameRules_TerminateRound()
 
 ### CPlayer_WeaponServices_Destroy_t CPlayer_WeaponServices_Destroy()
 
@@ -42,11 +42,11 @@ Retrieves legacy game event listener.
 
 ### CCSPlayerController_SwitchTeam_t CCSPlayerController_SwitchTeam()
 
-Switches player team.
+Switches player team. The team is read as a full int.
 
 ### CEntityInstance_AcceptInput_t CEntityInstance_AcceptInput()
 
-Accepts entity input.
+Accepts entity input. Interns the name and forwards to
 
 ### CEntityIOOutput_FireOutputInternal_t CEntityIOOutput_FireOutputInternal()
 
@@ -72,9 +72,11 @@ Constructs CTakeDamageInfo with valid members.
 
 ### CEntityIdentity_AcceptInput_t CEntityIdentity_AcceptInput()
 
+CEntityIdentity::AcceptInput -- the identity-side entry point.
+
 ### CCSPlayer_ItemServices_CanAcquire_t CCSPlayer_ItemServices_CanAcquire()
 
-### CCSPlayerPawn_CanMove_t CCSPlayerPawn_CanMove()
+### CCSPlayerPawnBase_CanMove_t CCSPlayerPawnBase_CanMove()
 
 ### CCSPlayerController_ProcessUserCmd_t CCSPlayerController_ProcessUserCmd()
 
@@ -120,15 +122,15 @@ Constructs CTakeDamageInfo with valid members.
 
 ### CCSPlayer_MovementServices_WaterMove_t CCSPlayer_MovementServices_WaterMove()
 
-### CCSPlayer_MovementServices_OnJumpLegacy_t CCSPlayer_MovementServices_OnJumpLegacy()
+### CCSPlayerLegacyJump_OnJump_t CCSPlayerLegacyJump_OnJump()
 
-The jump handlers take the jump object, not the movement services.
+Members of the jump components, not of the movement services: the
 
-### CCSPlayer_MovementServices_OnJumpModern_t CCSPlayer_MovementServices_OnJumpModern()
+### CCSPlayerModernJump_OnJump_t CCSPlayerModernJump_OnJump()
 
-### CCSPlayer_MovementServices_CheckJumpButtonLegacy_t CCSPlayer_MovementServices_CheckJumpButtonLegacy()
+### CCSPlayerLegacyJump_CheckJumpButton_t CCSPlayerLegacyJump_CheckJumpButton()
 
-### CCSPlayer_MovementServices_CheckJumpButtonModern_t CCSPlayer_MovementServices_CheckJumpButtonModern()
+### CCSPlayerModernJump_CheckJumpButton_t CCSPlayerModernJump_CheckJumpButton()
 
 ### CAttributeList_SetOrAddAttributeValueByName_t CAttributeList_SetOrAddAttributeValueByName()
 
@@ -143,4 +145,30 @@ C&lt;Type&gt;Projectile::EmitGrenade -- spawns a live grenade.
 ### CMolotovProjectile_EmitGrenade_t CMolotovProjectile_EmitGrenade()
 
 ### CSmokeGrenadeProjectile_EmitGrenade_t CSmokeGrenadeProjectile_EmitGrenade()
+
+### CCSPlayerPawn_PostThink_t CCSPlayerPawn_PostThink()
+
+### UTIL_Remove_t UTIL_Remove()
+
+### DispatchParticleEffect_t DispatchParticleEffect()
+
+DispatchParticleEffect
+
+### GetWeaponCSDataFromKey_t GetWeaponCSDataFromKey()
+
+GetWeaponCSDataFromKey -- looks a weapon's VData up by its key
+
+### CSource2Server_GetNavMeshData_t CSource2Server_GetNavMeshData()
+
+CSource2Server::GetNavMeshData -- ISource2Server vtable slot 32.
+
+### CLoggingSystem_LogDirect_t CLoggingSystem_LogDirect()
+
+### Cmd_ExecuteCommand_t Cmd_ExecuteCommand()
+
+Cmd_ExecuteCommand (engine2) -- runs one parsed command.
+
+### CCSPlayer_ItemServices_GiveNamedItem_t CCSPlayer_ItemServices_GiveNamedItem()
+
+CCSPlayer_ItemServices::GiveNamedItem -- the full implementation.
 

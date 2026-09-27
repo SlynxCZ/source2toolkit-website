@@ -199,15 +199,16 @@ title: CCSGameRules
 
 ## Methods
 
-### GoToIntermission(bAbortedMatch)
+### GoToIntermission(bAbortedMatch, eChain)
 
 Ends the match and moves everyone to the intermission screen.
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="bAbortedMatch" type="bool" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 
-### TerminateRound(flDelay, eRoundEndReason, nTeamId)
+### TerminateRound(flDelay, eRoundEndReason, nTeamId, eChain)
 
 Terminate round.
 
@@ -216,6 +217,7 @@ Terminate round.
 - <ApiParam name="flDelay" type="float" />
 - <ApiParam name="eRoundEndReason" type="int32_t" />
 - <ApiParam name="nTeamId" type="uint32" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 
 ### CBaseEntity* FindPickerEntity(pPlayer)
 

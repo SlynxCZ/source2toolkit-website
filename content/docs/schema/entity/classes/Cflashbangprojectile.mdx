@@ -14,7 +14,7 @@ title: CFlashbangProjectile
 
 ## Methods
 
-### CFlashbangProjectile* EmitGrenade(vecPosition, angAngle, vecVelocity, pOwner, nItemDefIndex)
+### CFlashbangProjectile* EmitGrenade(vecPosition, angAngle, vecVelocity, pOwner, nItemDefIndex, eChain)
 
 Spawns a live grenade of this type. Ported from SwiftlyS2.
 
@@ -25,6 +25,7 @@ Spawns a live grenade of this type. Ported from SwiftlyS2.
 - <ApiParam name="vecVelocity" type="const Vector&" />
 - <ApiParam name="pOwner" type="[CBaseEntity*](/docs/schema/entity/classes/Cbaseentity)" />
 - <ApiParam name="nItemDefIndex" type="uint32_t" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 
 ### CFlashbangProjectile* New(className)
 

@@ -128,7 +128,7 @@ Get entity by entity index.
 
 - <ApiParam name="index" type="CEntityIndex" />
 
-### AcceptInput(pszInput, pActivator, pCaller, pszValue)
+### AcceptInput(pszInput, pActivator, pCaller, pszValue, eChain)
 
 Accepts entity input.
 
@@ -138,8 +138,9 @@ Accepts entity input.
 - <ApiParam name="pActivator" type="CEntityInstance*" />
 - <ApiParam name="pCaller" type="CEntityInstance*" />
 - <ApiParam name="pszValue" type="const char*" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 
-### AddEntityIOEvent(pszInput, pActivator, pCaller, pszValue, flDelay)
+### AddEntityIOEvent(pszInput, pActivator, pCaller, pszValue, flDelay, eChain)
 
 Add delayed entity IO event.
 
@@ -150,6 +151,7 @@ Add delayed entity IO event.
 - <ApiParam name="pCaller" type="CEntityInstance*" />
 - <ApiParam name="pszValue" type="const char*" />
 - <ApiParam name="flDelay" type="float" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 
 ### CEntityIOListenerHandle* AddSingleEntityIOListener(pszOutput, callback, post)
 
@@ -221,15 +223,16 @@ Set base velocity.
 
 Get entity VData.
 
-### DispatchSpawn(pEntityKeyValues)
+### DispatchSpawn(pEntityKeyValues, eChain)
 
 Spawn entity.
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="pEntityKeyValues" type="CEntityKeyValues*" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 
-### Teleport(pPosition, pAngles, pVelocity)
+### Teleport(pPosition, pAngles, pVelocity, eChain)
 
 Teleport entity.
 
@@ -238,6 +241,7 @@ Teleport entity.
 - <ApiParam name="pPosition" type="const Vector*" />
 - <ApiParam name="pAngles" type="const QAngle*" />
 - <ApiParam name="pVelocity" type="const Vector*" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 
 ### SetMoveType(nMoveType)
 
@@ -274,4 +278,25 @@ Get entity handle. Templated the same way New() is: every generated entity class
 ### const char* GetName()
 
 Get entity name.
+
+### Remove(eChain)
+
+Removes the entity (UTIL_Remove).
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+
+### DispatchParticleEffect(pszParticleName, nAttachType, nAttachmentPoint, bResetAllParticlesOnEntity, pFilter, eChain)
+
+Dispatches a particle effect on this entity. A null filter sends it to everyone.
+
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="pszParticleName" type="const char*" />
+- <ApiParam name="nAttachType" type="ParticleAttachment_t" />
+- <ApiParam name="nAttachmentPoint" type="uint8" />
+- <ApiParam name="bResetAllParticlesOnEntity" type="bool" />
+- <ApiParam name="pFilter" type="IRecipientFilter*" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 

@@ -170,7 +170,7 @@ Print to center in HTML.
 - <ApiParam name="iDuration" type="int" />
 - <ApiParam name="bMenu" type="bool" />
 
-### TakeDamage(pAttacker, iDamage, bitsDamageType)
+### TakeDamage(pAttacker, iDamage, bitsDamageType, eChain)
 
 Take damage from player
 
@@ -179,26 +179,33 @@ Take damage from player
 - <ApiParam name="pAttacker" type="[CCSPlayerController*](/docs/schema/entity/classes/Ccsplayercontroller)" />
 - <ApiParam name="iDamage" type="int" />
 - <ApiParam name="bitsDamageType" type="DamageTypes_t" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 
-### Respawn()
+### Respawn(eChain)
 
 Respawn player.
 
-### SwitchTeam(nTeam)
+<ApiLabel>Parameters</ApiLabel>
+
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+
+### SwitchTeam(nTeam, eChain)
 
 Switch team without killing.
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="nTeam" type="int" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 
-### ChangeTeam(nTeam)
+### ChangeTeam(nTeam, eChain)
 
 Change team like jointeam.
 
 <ApiLabel>Parameters</ApiLabel>
 
 - <ApiParam name="nTeam" type="int" />
+- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
 
 ### CCSPlayerPawn* GetPlayerPawn()
 
