@@ -1,0 +1,80 @@
+---
+title: FAQ
+description: Licensing, platform support, how Source2Toolkit relates to Metamod:Source and CounterStrikeSharp, and what to do when something does not load.
+---
+
+## Licensing
+
+### Do I have to open-source my plugins?
+
+No. Source2Toolkit is licensed under the GPLv3, but it carries an explicit **MIT exception for derivative works**: plugins, and any software built from the Source2Toolkit SDK or its headers, may be licensed under the MIT License or under any other terms you choose — including closed-source and commercial. You do not have to publish or distribute their source code.
+
+The exception covers what you build **on** the toolkit, not the toolkit itself: Source2Toolkit and the SDK, and modified versions of them, stay under the GPLv3.
+
+### What else does the license say?
+
+- A **linking exception** lets the toolkit and its derivative works be linked with Counter-Strike 2, the Source 2 engine, Steam and other software running on Valve's software.
+- A **dual-licensing exception** lets derivative works be licensed under the GPL version 2 "or any later version", for compatibility with GPLv2 code.
+
+The authoritative text is `LICENSE_INFO.txt` in the [source2toolkit repository](https://github.com/SlynxCZ/source2toolkit) (the SDK carries the same file), with the full GPLv3 in `LICENSE`.
+
+## Platforms and compatibility
+
+### Does it run on Windows?
+
+Yes. Every release is built for Linux and Windows (`source2toolkit_<version>-linux.tar.gz` and `-windows.tar.gz`), and plugins build with MSVC on Windows. The differences:
+
+- A plugin must be built separately for each platform — a `.stx` is a native library.
+- Hot reload is Linux-only; on Windows, use `toolkit unload` and `toolkit load`.
+- Gamedata entries need a `windows` value; see [Gamedata](/docs/development/gamedata#windows-and-linux).
+
+### How does it relate to Metamod:Source?
+
+Source2Toolkit **is** a Metamod:Source plugin, so Metamod is required. Metamod loads the toolkit core; the core loads your `.stx` plugins. Hooks go through **KHook**, Metamod's own detour library: Metamod, the toolkit and every toolkit plugin share one instance, so hooks from all of them coexist on the same function.
+
+Your plugins are not Metamod plugins and do not appear in `meta list` — use `toolkit list`. They can still talk to Metamod plugins: `OnMetamodPluginLoad`, `GET_METAMOD_IFACE` and `OnMetamodQuery` exist for that. See [Plugin lifecycle](/docs/development/plugin-lifecycle#listener-callbacks).
+
+### How does it relate to CounterStrikeSharp?
+
+They are separate, independent projects. CounterStrikeSharp is a Metamod plugin that hosts plugins written in C# on .NET. Source2Toolkit plugins are native C++, compiled against the toolkit SDK, with direct access to engine memory, the schema system and KHook. Source2Toolkit does not need CounterStrikeSharp, and its API is its own — CounterStrikeSharp plugins do not run on it.
+
+### Can I load the toolkit with `meta load` on a running server?
+
+No. The core refuses a late load (`Late load is not supported`); it has to be loaded when the server starts. Plugins, on the other hand, can be loaded and unloaded at any time with `toolkit load` / `toolkit unload`.
+
+## Troubleshooting
+
+### A plugin refuses to load with "KHook mismatch"
+
+```
+Plugin myplugin refused to load: KHook mismatch: plugin built against 1111aaaa2222, toolkit core runs 3333bbbb4444 -- rebuild the plugin with the SDK's vendor/khook at the core's commit, or update the core
+```
+
+The toolkit core is built against the KHook inside Metamod:Source, and every plugin against the SDK's `vendor/khook`. KHook's headers and its engine are one library, so a plugin built against a different KHook than the one running could corrupt hooks — `TOOLKIT_SAVEVARS()` compares the two commits and refuses the load instead.
+
+- **Plugin developer:** update the SDK and run `python tools/deps.py update`, which moves `vendor/khook` to the commit Metamod:Source pins, then rebuild. See [SDK dependencies](/docs/development/sdk-dependencies).
+- **Server owner:** the plugin and the toolkit core are from different generations. Update the core to the latest release, or ask the plugin's author for a build that matches the core you run.
+
+If a plugin was built without git metadata for KHook, the check is skipped with a note — it does not fail.
+
+### A plugin refuses to load with "Plugin API version mismatch"
+
+The plugin was built against a different `TOOLKIT_PLAPI_VERSION` than the core speaks. Rebuild it against the current SDK, or update the core; `toolkit version` shows the API version the core expects.
+
+### A plugin does not show up at all
+
+The core prints the reason for every plugin it could not load at start, followed by a line such as `2 plugin(s) did not load, 5 running. See the errors above.` Common causes: the file is not a `.stx` in `addons/source2toolkit/plugins/`, it was built for the other platform, or it is missing a library it links against. If `PluginAutoLoadEnabled` is `false` in `core.json`, nothing loads until you run `toolkit refresh`.
+
+### Where are the logs?
+
+- **Toolkit messages** go to the server console, tagged `Source2Toolkit`, and to `Source2Toolkit.log` in the server process's working directory. That file is recreated on every start.
+- **Plugin messages** written with `TOOLKIT_LOG` go to the server console, prefixed with the plugin's name. Start the server with `-condebug` to keep the console in `console.log`.
+- **Crash dumps** and crash reports are written to `addons/source2toolkit/dumps/`.
+
+### The server crashed. How do I report it?
+
+The built-in crash handler writes a minidump, symbolizes plugin frames on the next start and names the suspected module. Follow the [crash handler guide](/docs/guides/crash-handler), then bring the report and the dump to the [Discord](https://discord.gg/CXeUtHbxzH) or open an issue on [GitHub](https://github.com/SlynxCZ/source2toolkit/issues). If the suspected module is someone else's plugin, report it to its author.
+
+### My new gamedata entries are not found
+
+Gamedata is read once, when the server starts, and the first definition of a name wins — `gamedata.json` is loaded before your file. Restart the server, and give your entries names the core does not already use. See [Gamedata](/docs/development/gamedata#how-files-are-merged).

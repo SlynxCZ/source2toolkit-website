@@ -1,0 +1,12 @@
+{
+    "title":  "Protobuf",
+    "description":  "Network and user messages",
+    "root":  true,
+    "icon":  "Radio",
+    "pages":  [
+                  "index",
+                  "sending",
+                  "hooking",
+                  "common-messages"
+              ]
+}

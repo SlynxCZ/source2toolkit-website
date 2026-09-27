@@ -1,0 +1,232 @@
+---
+title: Creating Entities
+description: Creating and spawning entities with New and DispatchSpawn, keyvalues, moving and modelling them, removing them, particles and live grenades.
+---
+
+Creating an entity is two steps: **create** it by classname, which gives you an
+object that exists but has not spawned, then **spawn** it. Between the two you
+set whatever the entity reads on spawn.
+
+## Create and spawn
+
+```cpp
+static CBaseEntity* CBaseEntity::CreateEntityByName(const char* pszClassName);
+
+template<typename T>
+static T* CBaseEntity::New(const char* pszClassName);
+
+void CBaseEntity::DispatchSpawn(CEntityKeyValues* pEntityKeyValues = nullptr,
+                                HookChain eChain = HookChain::Run);
+```
+
+`New<T>` is `CreateEntityByName` with the cast done for you, and every
+generated class has a non-template `New(classname)` returning its own type.
+The cast is not checked, so the classname has to be one that really creates a
+`T`. Both return `nullptr` when the entity could not be created.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/schema/entity/classes/CBaseModelEntity.h"
+
+CBaseModelEntity* pModel = CBaseEntity::New<CBaseModelEntity>("prop_dynamic_override");
+if (!pModel)
+    return;
+
+pModel->SetModel("models/props/de_dust/hr_dust/dust_crates/dust_crate_style_01_32x32x32.vmdl");
+pModel->DispatchSpawn();
+
+const Vector vecOrigin = pPawn->GetAbsOrigin();
+pModel->Teleport(&vecOrigin, nullptr, nullptr);
+```
+
+`CREATE_ENTITY(classname)` and `g_pToolkitEntities->CreateEntityByName()` are
+the same call through [IToolkitEntities](/docs/core-api/IToolkitEntities).
+
+Fields you set **before** `DispatchSpawn` are what the entity spawns with;
+some entities read their state only on spawn, others keep reading it. The FUNPLAY
+plugins set up a `point_worldtext` completely before spawning it:
+
+```cpp
+CPointWorldText* pText = CBaseEntity::New<CPointWorldText>("point_worldtext");
+if (!pText)
+    return;
+
+V_strncpy(pText->m_messageText, "Hello", 512);
+pText->m_messageText.NetworkStateChanged();
+pText->m_bEnabled = true;
+pText->m_flFontSize = 48.0f;
+pText->m_Color = Color(255, 255, 255, 255);
+pText->m_bFullbright = true;
+pText->m_flWorldUnitsPerPx = 0.01f;
+
+pText->DispatchSpawn();
+```
+
+## Keyvalues
+
+Anything a mapper would set in Hammer can be passed as keyvalues. Allocate a
+`CEntityKeyValues` with `new` and hand it to `DispatchSpawn`; do not delete it
+yourself — the SDK's own `CCSCustomHudLayout::Create` passes it the same way.
+
+```cpp
+#include "entitykeyvalues.h"
+
+auto* pKeyValues = new CEntityKeyValues();
+pKeyValues->SetString("targetname", "my_trigger");
+pKeyValues->SetString("model", "models/props/de_dust/hr_dust/dust_crates/dust_crate_style_01_32x32x32.vmdl");
+pKeyValues->SetInt("spawnflags", 1);
+pKeyValues->SetVector("origin", vecOrigin);
+
+pEntity->DispatchSpawn(pKeyValues);
+```
+
+`CEntityKeyValues` also has `SetBool`, `SetFloat`, `SetColor` and `SetQAngle`.
+
+## Moving and orienting
+
+```cpp
+void CBaseEntity::Teleport(const Vector* pPosition, const QAngle* pAngles, const Vector* pVelocity,
+                           HookChain eChain = HookChain::Run);
+```
+
+Pass `nullptr` for whatever should stay as it is. This is the right way to move
+anything, players included — it goes through the entity's own virtual.
+
+Reading position and motion:
+
+| Helper | Returns |
+|---|---|
+| `GetAbsOrigin()` | World position |
+| `GetAbsRotation()` / `GetAngRotation()` | World / local rotation |
+| `GetAbsVelocity()` | Velocity |
+| `CBaseModelEntity::GetEyePosition()` | Origin plus `m_vecViewOffset` |
+| `CCSPlayerPawn::GetEyeAngles()` | Where a player is actually looking |
+
+The setters (`SetAbsOrigin`, `SetAbsRotation`, `SetAngRotation`,
+`SetAbsVelocity`, `SetBaseVelocity`) write the scene node or velocity fields
+directly. For a real move prefer `Teleport`.
+
+Parenting and following go through inputs, the way maps do it:
+
+```cpp
+pText->AcceptInput("SetParent", pPawn, nullptr, "!activator");
+pModel->AcceptInput("FollowEntity", pPawn, pModel, "!activator");
+```
+
+## Models, bodygroups, collision
+
+```cpp
+void CBaseModelEntity::SetModel(const char* pszModel, HookChain eChain = HookChain::Run);
+void CBaseModelEntity::SetBodyGroup(const char* pszName, int nValue);
+CUtlSymbolLarge CBaseModelEntity::GetModelName();
+```
+
+A model that no map or stock content loads has to be precached before clients
+can show it; that happens in the `BuildGameSessionManifest` game system event
+(see [Game systems](/docs/guides/game-systems)). `SetBodyGroup` sends the
+`SetBodyGroup` input with `"name,value"`, as the engine has no direct setter.
+
+Collision:
+
+```cpp
+pEntity->SetCollisionGroup(COLLISION_GROUP_DEBRIS);   // also calls CollisionRulesChanged()
+uint8 nGroup = pEntity->GetCollisionGroup();
+pEntity->SetMoveType(MOVETYPE_NOCLIP);                // sets m_MoveType and m_nActualMoveType
+```
+
+## Removing
+
+```cpp
+void CBaseEntity::Remove(HookChain eChain = HookChain::Run);   // UTIL_Remove
+```
+
+Or with the `Kill` input — immediately, or delayed through the I/O queue:
+
+```cpp
+pEntity->AcceptInput("Kill");
+pEntity->AddEntityIOEvent("Kill", nullptr, nullptr, "", 5.0f);   // in five seconds
+```
+
+The delayed form is handy for anything temporary: create it, spawn it, and
+queue its own removal in the same place.
+
+## Particles
+
+For an entity-attached effect, `DispatchParticleEffect` sends it without
+creating an entity:
+
+```cpp
+void CBaseEntity::DispatchParticleEffect(const char* pszParticleName,
+                                         ParticleAttachment_t nAttachType = ParticleAttachment_t::PATTACH_ABSORIGIN_FOLLOW,
+                                         uint8 nAttachmentPoint = 0,
+                                         bool bResetAllParticlesOnEntity = false,
+                                         IRecipientFilter* pFilter = nullptr,
+                                         HookChain eChain = HookChain::Run);
+```
+
+A null filter sends it to everyone. To show it to one player, pass a
+`CSingleRecipientFilter` from `source2toolkit/schema/recipientfilter.h`:
+
+```cpp
+CSingleRecipientFilter filter(pController->GetPlayerSlot());
+pPawn->DispatchParticleEffect("particles/my_effect.vpcf",
+                              ParticleAttachment_t::PATTACH_ABSORIGIN_FOLLOW, 0, false, &filter);
+```
+
+For an effect with its own lifetime and position, create an
+`info_particle_system` (`CParticleSystem`) instead:
+
+```cpp title="plugin.cpp"
+auto* pParticle = CBaseEntity::New<CParticleSystem>("info_particle_system");
+if (!pParticle)
+    return;
+
+// CUtlSymbolLarge keeps the pointer it is given: pass a string that outlives
+// the entity, like this literal.
+pParticle->m_iszEffectName() = "particles/blood_impact/blood_pool.vpcf";
+pParticle->DispatchSpawn();
+pParticle->Teleport(&vecOrigin, nullptr, nullptr);
+pParticle->AcceptInput("Start");
+pParticle->AddEntityIOEvent("Kill", pParticle, nullptr, "", 1.0f);
+```
+
+## Grenades
+
+Each grenade projectile class has `EmitGrenade`, which spawns a live, thrown
+grenade the way the game does when a player throws one:
+
+```cpp
+static CHEGrenadeProjectile* CHEGrenadeProjectile::EmitGrenade(
+    const Vector& vecPosition, const QAngle& angAngle, const Vector& vecVelocity,
+    CBaseEntity* pOwner, uint32_t nItemDefIndex, HookChain eChain = HookChain::Run);
+```
+
+`CFlashbangProjectile`, `CDecoyProjectile` and `CMolotovProjectile` take the same
+arguments. `CSmokeGrenadeProjectile::EmitGrenade` has an extra `int nTeam`
+before the owner:
+
+```cpp
+static CSmokeGrenadeProjectile* CSmokeGrenadeProjectile::EmitGrenade(
+    const Vector& vecPosition, const QAngle& angAngle, const Vector& vecVelocity,
+    int nTeam, CBaseEntity* pOwner, uint32_t nItemDefIndex, HookChain eChain = HookChain::Run);
+```
+
+`pOwner` is who gets credit for the grenade (usually a player's pawn) and
+`nItemDefIndex` is the weapon's item definition index. The velocity is used as
+both the linear and the angular velocity, as in SwiftlyS2's implementation this
+is ported from.
+
+```cpp
+#include "source2toolkit/schema/entity/classes/CHEGrenadeProjectile.h"
+
+const Vector vecStart = pPawn->GetEyePosition();
+const Vector vecVelocity(0.0f, 0.0f, 300.0f);
+
+CHEGrenadeProjectile::EmitGrenade(vecStart, QAngle(0, 0, 0), vecVelocity, pPawn, 44);
+```
+
+## HookChain
+
+Every helper above that calls a game function takes a `HookChain` last. The
+default, `HookChain::Run`, goes through other plugins' hooks on that function
+as if the game made the call; `HookChain::Bypass` goes straight to the
+original. See [Players](/docs/entities/players#hookchain) for when to use which.

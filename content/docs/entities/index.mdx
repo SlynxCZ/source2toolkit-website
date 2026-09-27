@@ -1,0 +1,129 @@
+---
+title: Entities
+description: How CS2 models players and other entities, and how the SDK exposes them as typed schema classes you read, write and call helpers on.
+---
+
+Almost everything on a CS2 server is an entity: players, weapons, grenades,
+doors, triggers, the game rules, even a Panorama HUD layout. The SDK gives you
+every one of them as a C++ class generated from the game's own schema, so you
+work with `CCSPlayerPawn*` and `pPawn->m_iHealth` instead of raw offsets.
+
+This section covers finding entities, reading and writing their fields,
+creating new ones, the common player helpers, entity I/O and damage.
+
+<Cards>
+  <Card title="Finding entities" href="/docs/entities/finding-entities">Players by slot, userid or SteamID; entities by index, classname or name; handles.</Card>
+  <Card title="Schema fields" href="/docs/entities/schema-fields">Reading and writing fields, when a change is networked, and adding your own helpers.</Card>
+  <Card title="Creating entities" href="/docs/entities/creating-entities">New, DispatchSpawn, keyvalues, Teleport, SetModel, particles and grenades.</Card>
+  <Card title="Players" href="/docs/entities/players">Respawn, teams, damage, items and weapons, printing, kicking — and HookChain.</Card>
+  <Card title="Entity I/O" href="/docs/entities/entity-io">Inputs, queued events and output listeners.</Card>
+  <Card title="Damage" href="/docs/entities/damage">CTakeDamageInfo, hooking TakeDamageOld and dealing damage yourself.</Card>
+</Cards>
+
+## Controller and pawn
+
+A CS2 player is **two** entities:
+
+| Entity | Class | Classname | Lives |
+|---|---|---|---|
+| Controller | `CCSPlayerController` | `cs_player_controller` | From connect to disconnect. Holds the name, SteamID, team, score, money. |
+| Pawn | `CCSPlayerPawn` | `player` | The body in the world. Holds health, armor, position, weapons. Replaced or reused across deaths and respawns. |
+
+The controller is the one to keep track of a *player*; the pawn is the one to
+act on when something happens to their *body*. They point at each other:
+
+```cpp
+CCSPlayerPawn* pPawn = pController->GetPlayerPawn();          // m_hPlayerPawn
+CCSPlayerController* pOwner = pPawn->GetController();         // m_hController
+CCSPlayerController* pSame = CCSPlayerController::FromPawn(pPawn);
+```
+
+A dead or spectating player also has an observer pawn (`CCSObserverPawn`,
+`GetObserverPawn()`). `CBasePlayerController::GetPawn()` returns `m_hPawn`,
+whichever pawn the controller is currently driving, cast to `CCSPlayerPawn*` —
+when you mean "the player's body", use `GetPlayerPawn()`.
+
+Health lives on the pawn. The controller has `m_iPawnHealth` and
+`m_bPawnIsAlive`, which the game mirrors for the scoreboard; read them, but
+change health on the pawn.
+
+## Services
+
+A lot of behaviour is not on the pawn or controller itself but on **service**
+objects hanging off them as pointers:
+
+| Pointer | Class | For |
+|---|---|---|
+| `pPawn->m_pItemServices()` | `CPlayer_ItemServices` | `GiveNamedItem`, `RemoveWeapons` |
+| `pPawn->m_pWeaponServices()` | `CPlayer_WeaponServices` | `m_hMyWeapons`, `m_hActiveWeapon`, `DropWeapon`, `SelectItem` |
+| `pController->m_pInGameMoneyServices()` | `CCSPlayerController_InGameMoneyServices` | `m_iAccount` (money) |
+
+Any of these can be null on a pawn that does not have them, so check before use.
+Service fields are networked through the entity that owns them; writing one
+works exactly like writing a field on the entity (see
+[Schema fields](/docs/entities/schema-fields)).
+
+## Indices, slots and handles
+
+| Type | What it is | Get it |
+|---|---|---|
+| `CEntityIndex` | Position in the entity list (`.Get()` for the int). Reused after the entity is gone. | `pEntity->GetEntityIndex()`, `GetIndex()` for the int |
+| `CPlayerSlot` | Player slot, 0-based. A controller's entity index is always slot + 1. | `pController->GetPlayerSlot()`, `GetSlot()` for the int |
+| `CPlayerUserId` | The engine's userid, as game events carry it. | `pController->GetPlayerUserID()`, `GetUserID()` for the int |
+| `CHandle<T>` | Index **plus** a serial number. Resolves to null once the entity is removed, even if the index is reused. | `pEntity->GetHandle()` |
+
+The rule: a raw pointer is only good for the current call. Anything that
+crosses a frame — a timer, a `NEXT_FRAME` lambda, a map in your plugin — holds a
+`CHandle` and checks it when it comes back:
+
+```cpp title="plugin.cpp"
+CHandle<CCSPlayerController> hPlayer = pController->GetHandle();
+
+g_pToolkitScheduler->AddTimer(g_PluginID, 3.0f, [hPlayer]()
+{
+    CCSPlayerController* pPlayer = hPlayer.Get();
+    if (!pPlayer)
+        return; // disconnected in the meantime
+
+    pPlayer->PrintToChat("Three seconds later");
+});
+```
+
+Every generated entity class shadows `GetHandle()` with one returning a handle
+of its own type, so `pController->GetHandle()` is a
+`CHandle<CCSPlayerController>` without a template argument.
+
+## How the SDK exposes schema classes
+
+The classes under `source2toolkit/schema/entity/classes/` are generated from a
+dump of the game's schema by `tools/schemagen/generator.py`, one header per
+class, following the game's own inheritance
+(`CCSPlayerPawn` → `CCSPlayerPawnBase` → `CBasePlayerPawn` → … → `CBaseEntity`
+→ `CEntityInstance`). Each class carries:
+
+- **Fields** — one `SCHEMA_FIELD` per schema member. The offset is looked up by
+  name in the running game's schema the first time you touch it, so a CS2
+  update that moves a field does not break your binary.
+- **Helpers** — hand-written methods (`GiveNamedItem`, `Teleport`,
+  `PrintToChat`, …) that call into the game. They are declared by the
+  generator so they survive regeneration and implemented in the SDK's
+  `src/schema/entity/classes/*.cpp`.
+- **Static constructors** — `New(classname)`, `FromIndex(index)` and a typed
+  `GetHandle()` on every entity class.
+
+Include the header of the class you use:
+
+```cpp
+#include "source2toolkit/schema/entity/classes/CCSPlayerController.h"
+#include "source2toolkit/schema/entity/classes/CCSPlayerPawn.h"
+```
+
+<Callout type="warn">
+Do not use `dynamic_cast` on game types — the engine's RTTI does not work for
+it. Check the classname (`GetClassname()`, e.g. `"player"` or
+`"cs_player_controller"`) and `static_cast`.
+</Callout>
+
+The full list of classes, fields and helpers is in the
+[schema reference](/docs/schema/entity/classes/CBaseEntity); lookup and entity
+I/O functions are on [IToolkitEntities](/docs/core-api/IToolkitEntities).

@@ -1,0 +1,138 @@
+---
+title: Game Systems
+description: Register your own IGameSystem with the engine — for precaching in BuildGameSessionManifest and the rest of the game system events.
+---
+
+A game system is how the engine lets code run at fixed points of a session:
+`BuildGameSessionManifest` for precaching resources, `ServerGamePostSimulate`
+every frame, and the rest of the `IGameSystem` event set. Registering one means
+getting a factory into the engine's own linked list, whose head lives in a
+static the engine never exports.
+
+`IToolkitGameSystems` finds that list head once, by signature, and hands it
+over so your plugin can register into it.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitGameSystems.h"
+```
+
+## Why the head has to be handed over
+
+`CBaseGameSystemFactory::sm_pFirst` is a static member declared by the hl2sdk.
+Every binary that includes the header gets its **own** copy, and yours is null
+until you point it at the engine's list. The factory constructor links itself
+into whatever `*sm_pFirst` points at, so the assignment must happen before you
+construct any factory.
+
+## Registering a game system
+
+### 1. Declare it
+
+```cpp title="game_system.h"
+#include "igamesystemfactory.h"
+
+class MyGameSystemFactory;
+
+class MyGameSystem : public CBaseGameSystem
+{
+public:
+    DECLARE_GAME_SYSTEM();
+
+    GS_EVENT(BuildGameSessionManifest);
+
+    void SetGameSystemGlobalPtrs(void* pValue) override;
+    bool DoesGameSystemReallocate() override;
+
+    static MyGameSystemFactory* sm_Factory;
+};
+
+// Not IGameSystemFactory*: that is abstract and has no virtual destructor, so
+// deleting your factory through it is undefined. Hold a final type of your own.
+class MyGameSystemFactory final : public CGameSystemStaticFactory<MyGameSystem>
+{
+public:
+    using CGameSystemStaticFactory<MyGameSystem>::CGameSystemStaticFactory;
+};
+```
+
+### 2. Define it
+
+```cpp title="game_system.cpp"
+CBaseGameSystemFactory** CBaseGameSystemFactory::sm_pFirst = nullptr;
+
+MyGameSystem g_MyGameSystem;
+MyGameSystemFactory* MyGameSystem::sm_Factory = nullptr;
+
+void MyGameSystem::SetGameSystemGlobalPtrs(void* pValue)
+{
+    if (sm_Factory) sm_Factory->SetGlobalPtr(pValue);
+}
+
+bool MyGameSystem::DoesGameSystemReallocate()
+{
+    return sm_Factory && sm_Factory->ShouldAutoAdd();
+}
+
+GS_EVENT_MEMBER(MyGameSystem, BuildGameSessionManifest)
+{
+    IEntityResourceManifest* pManifest = msg->m_pResourceManifest;
+    // Add the resources your plugin needs precached to pManifest.
+}
+```
+
+### 3. Point `sm_pFirst` at the engine's list and register
+
+From FUNPLAY's `InitGameSystems()`, called from `Load()`:
+
+```cpp title="game_system.cpp"
+bool InitGameSystems()
+{
+    if (!g_pToolkitGameSystems || !g_pToolkitGameSystems->IsAvailable())
+        return false; // signature scan failed -- usually a game update
+
+    CBaseGameSystemFactory::sm_pFirst = g_pToolkitGameSystems->GetFactoryListHead();
+    if (!CBaseGameSystemFactory::sm_pFirst)
+        return false;
+
+    // The factory links itself into the list its constructor sees.
+    MyGameSystem::sm_Factory = new MyGameSystemFactory("MyPlugin_GameSystem", &g_MyGameSystem);
+    return true;
+}
+```
+
+`g_pToolkitGameSystems` is the same interface `g_ToolkitAPI->GameSystems()`
+returns.
+
+<Callout type="info">
+  `IEntityResourceManifest` is only forward-declared by the hl2sdk; adding
+  resources to it needs a declaration of its methods from your own project.
+</Callout>
+
+## The interface
+
+| Call | Returns |
+| --- | --- |
+| `IsAvailable()` | Whether the factory list head was found. `false` means registering cannot work — check before registering |
+| `GetFactoryListHead()` | The engine's `CBaseGameSystemFactory**`, or `nullptr` when unavailable |
+| `FindByName(name)` | An already-registered `IGameSystem*` by its registration name, or `nullptr` |
+
+## Pitfalls
+
+- **Registration only affects sessions started afterwards.** The engine walks
+  the list when it initialises all systems, so a system registered in the
+  middle of a map starts receiving events from the next one. A plugin loaded
+  late (after the server started) misses the current map's
+  `BuildGameSessionManifest`.
+- **Pick a unique registration name** — prefix it with your plugin's name.
+  `FindByName()` and the engine look systems up by that string.
+- **Nothing unlinks a factory.** Neither the hl2sdk nor the toolkit removes a
+  registered factory from the engine's list, and the toolkit does not track
+  game systems per plugin. The factory and your game system object live in
+  your library, so a plugin that registers one should not be unloaded or
+  hot-reloaded while the server keeps running.
+- **`static_cast` only.** Do not `dynamic_cast` what `FindByName()` returns;
+  engine RTTI is not usable.
+
+## Reference
+
+- [`IToolkitGameSystems` API reference](/docs/core-api/IToolkitGameSystems)

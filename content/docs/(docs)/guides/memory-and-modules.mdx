@@ -1,0 +1,156 @@
+---
+title: Memory and Modules
+description: Find functions and vtables in game binaries — pattern scanning, vtables by name, offset or base class, and address arithmetic.
+---
+
+When no toolkit interface or `ADDR_*` getter covers what you need, you go to
+the binaries yourself. `IToolkitModule` wraps a loaded library (`server`,
+`engine2`, `tier0` ...) for pattern scans, exports and vtables;
+`IToolkitMemory` is the address value type those calls return.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitModule.h" // pulls in IToolkitMemory.h
+```
+
+<Callout type="info">
+  Before scanning by hand, check whether the address already exists: the
+  toolkit resolves many engine functions as `ADDR_*()` getters
+  (IToolkitAddresses.h), and any gamedata entry can be resolved with
+  `GAMECONFIG_RESOLVE("Name")`. Both survive game updates through the gamedata
+  files instead of patterns compiled into your plugin.
+</Callout>
+
+## Getting a module
+
+| Way | Release with |
+| --- | --- |
+| `IToolkitModule::New("server")` | `delete` |
+| `IToolkitModule::New(ptr)` — any address inside the module (`uintptr_t`, `void*` or `IToolkitMemory`) | `delete` |
+| `LOAD_MODULE(name)` → `g_ToolkitAPI->LoadModule(name)` | `FREE_MODULE(mod)` |
+| `LOAD_MODULE_MEM(ptr)` → `g_ToolkitAPI->LoadModuleFromMemory(ptr)` | `FREE_MODULE(mod)` |
+
+Names are given without extension. `New(name)` is the same as
+`LoadModule(name)`; `delete` and `FreeModule()` are interchangeable.
+
+```cpp title="plugin.cpp"
+// From an interface pointer you already have: whatever module it lives in.
+IToolkitModule* server = IToolkitModule::New(static_cast<void*>(g_ToolkitAPI->GetSource2Server()));
+
+g_ToolkitAPI->ConPrintf("server module: %s\n", server->GetModulePath());
+```
+
+Keep module objects for as long as you use them (a global created in `Load()`
+and deleted in `Unload()` is typical) — they are cheap to keep and the strings
+they return (`GetModulePath()`, `GetModuleName()`) live as long as the object.
+
+## Pattern scanning
+
+```cpp
+IToolkitMemory FindPattern(const char* pattern, IToolkitMemory startAddress = IToolkitMemory()) const;
+IToolkitMemory FindPatternInSection(const char* pattern, const char* section, IToolkitMemory startAddress = IToolkitMemory()) const;
+```
+
+Patterns are IDA-style strings: space-separated hex bytes, `??` as a
+wildcard. `FindPattern` scans the executable section; `FindPatternInSection`
+takes a section name such as `".text"` or `".rdata"`. A miss returns a null
+`IToolkitMemory` — always check it.
+
+```cpp
+IToolkitMemory addr = server->FindPattern("48 89 5C 24 ?? 57 48 83 EC ?? 48 8B D9 E8");
+if (!addr)
+{
+    g_ToolkitAPI->ConPrintf("MyFunction not found -- game update?\n");
+    return false;
+}
+
+using MyFunction_t = void (*)(CBaseEntity*);
+auto pfn = addr.RCast<MyFunction_t>();
+```
+
+### Following references
+
+Patterns often land on an instruction that *references* what you want rather
+than on it. `IToolkitMemory` resolves the RIP-relative operand:
+
+```cpp
+// E8 xx xx xx xx -- a near call: follow it to the callee.
+IToolkitMemory callee = addr.FollowNearCall();          // opcode offset 1, instruction length 5
+
+// 48 8B 05 xx xx xx xx -- mov rax, [rip+disp32]: operand at +3, instruction length 7.
+IToolkitMemory global = addr.ResolveRelativeAddress(0x3, 0x7);
+```
+
+## Symbols and vtables
+
+| Call | Returns |
+| --- | --- |
+| `GetFunctionByName(name)` | An exported symbol |
+| `GetVirtualTableByName(name, decorated = false)` | A class's primary vtable |
+| `GetVirtualTableByBase(name, baseName, decorated = false)` | The vtable of a (non-virtual) base-class sub-object, found through RTTI |
+| `GetVirtualTableByOffset(name, offset, decorated = false)` | The vtable of the sub-object at a byte offset |
+
+Class names are undecorated unless you pass `decorated = true`. A class with
+several bases has one vtable per base not at offset 0;
+`GetVirtualTableByName` only gives the primary one. For an interface that is
+not the first base, prefer `GetVirtualTableByBase` — the offset moves whenever
+the class is laid out anew, the base name does not.
+
+```cpp
+IToolkitMemory vtable = server->GetVirtualTableByName("CCSPlayerPawn");
+// "CSomeClass" / "ISomeInterface": a class and one of its non-first bases.
+IToolkitMemory iface  = server->GetVirtualTableByBase("CSomeClass", "ISomeInterface");
+```
+
+The `KHOOK_VTABLE(module, name)` and `KHOOK_VTABLE_BASE(module, name, base)`
+hook targets resolve their tables through these same calls — see
+[Hooks](/docs/hooks).
+
+<Callout type="warn">
+  `GetVirtualTableByOffset` and `GetVirtualTableByBase` were appended to the
+  interface later. A plugin calling them needs a toolkit core that has them.
+</Callout>
+
+## Module inspection
+
+`GetSectionByName(name)` returns a `SectionInfo { base, size }` (check
+`IsValid()`), `GetModuleBase()` the load address, `GetModuleHandle()` the OS
+handle, `GetModulePath()` / `GetModuleName()` the file.
+
+## IToolkitMemory
+
+A thin value type over an address — plugins use it instead of DynLibUtils
+directly.
+
+| Member | Does |
+| --- | --- |
+| `operator bool`, `==`, `!=` | Null check and comparison |
+| `GetPtr()`, `GetAddr()` | As `void*` / `uintptr_t` |
+| `RCast<T>()`, `CCast<T>()`, `UCast<T>()` | Cast to a pointer or function type |
+| `GetValue<T>()` | Read a `T` at the address |
+| `Offset(n)`, `OffsetSelf(n)` | Add a byte offset |
+| `Deref(n = 1)`, `DerefSelf(n = 1)` | Follow pointers `n` times (stops at null) |
+| `FollowNearCall(opcodeOffset = 0x1, nextInstructionOffset = 0x5)` | Target of a relative call |
+| `ResolveRelativeAddress(registerOffset = 0x0, nextInstructionOffset = 0x4)` | Target of any RIP-relative operand |
+
+The `*Self` variants modify the object in place and return it.
+
+## Pitfalls
+
+- **Free what you create.** Every `New()` / `LOAD_MODULE()` result is a heap
+  object; release it with `delete` or `FREE_MODULE()`. The toolkit does not
+  track modules per plugin, so one you keep past `Unload()` leaks.
+- **Patterns break on game updates.** Keep them in gamedata, not in code, when
+  you can; always handle a null result instead of calling through it.
+- **Windows macro clashes.** `windows.h` defines `GetModuleHandle` and
+  `FreeModule` as macros; the SDK headers `#undef` them. Include the SDK
+  headers after `windows.h`, or the method names get rewritten.
+- **Platform differences.** Patterns, vtable layouts and decorated names differ
+  between Linux and Windows builds — guard platform-specific data with
+  `#ifdef _WIN32`.
+
+## Reference
+
+- [`IToolkitModule` API reference](/docs/core-api/IToolkitModule)
+- [`IToolkitMemory` API reference](/docs/core-api/IToolkitMemory)
+- [`IToolkitAddresses` API reference](/docs/core-api/IToolkitAddresses)
+- [Hooks](/docs/hooks)

@@ -1,0 +1,139 @@
+---
+title: Gamedata for Hooks
+description: Signatures and vtable offsets from a hooking point of view — writing them, Windows vs Linux differences, and verifying them.
+---
+
+A hook needs to know **where** the function is. For an engine interface the
+compiler knows (`&ISource2Server::GameFrame`), but most of the game is not
+exported: functions are found by a byte **signature**, and virtuals of game
+classes by a vtable **offset**. Both live in gamedata, one value per platform,
+so a game update means editing a JSON file instead of rebuilding plugins.
+
+This page covers gamedata as far as hooking needs it. The file format itself is
+documented in [Gamedata](/docs/development/gamedata).
+
+## Where gamedata comes from
+
+The toolkit reads **every** `.json` file in its gamedata folder
+(`addons/source2toolkit/gamedata/`, `TOOLKIT_GAMEDATA_DIR()` at runtime) into
+one table, `gamedata.json` first and the rest in name order. The first
+definition of a key wins, so a key in `gamedata.json` cannot be redefined by
+another file. Ship your plugin's entries as a file of their own with keys of
+their own (`myplugin.json`), and they resolve exactly like the toolkit's.
+
+Each entry is keyed by name and carries per-platform values; only the current
+platform's value is loaded.
+
+```json title="gamedata/myplugin.json"
+{
+  "CCSGameRules::TerminateRound": {
+    "signatures": {
+      "library": "server",
+      "windows": "48 8B C4 4C 89 48 ? 48 89 48 ? 55 41 54",
+      "linux": "55 48 89 E5 41 57 41 56 49 89 FE 41 55 41 54 53 48 81 EC ? ? ? ? 48 8D 05 ? ? ? ? F3 0F 11 85 ? ? ? ? 89 B5"
+    }
+  },
+  "CCSPlayerController::Respawn": {
+    "offsets": {
+      "windows": 274,
+      "linux": 276
+    }
+  }
+}
+```
+
+(Both entries are real, from the toolkit's own `gamedata.json`; they are shown
+here only as examples of the shape. Use your own key names.)
+
+## How hooks use it
+
+| you write | gamedata used | resolved through |
+|---|---|---|
+| `KHOOK_MEMBER(m_hX, "Name", ...)` / `KHOOK_FUNCTION` | `signatures` | `IToolkitGameConfig::ResolveSignature` |
+| `KHOOK_VIRTUAL(m_hX, "Name", KHOOK_VTABLE(...), ...)` | `offsets` | `IToolkitGameConfig::GetOffset` |
+| `GAMECONFIG_RESOLVE("Name")` | `signatures` | the same, for calling |
+| `GAMECONFIG_OFFSET("Name")` | `offsets` | the same, for `CALL_VIRTUAL` |
+
+`ResolveSignature` looks the entry's `library` up among the loaded modules
+(`server`, `engine2` — `engine` is accepted as an alias — `tier0`, `vscript`…),
+then finds the function by exported symbol when the value starts with `@`, or by
+pattern scan otherwise. It returns a null `IToolkitMemory` when the module, the
+symbol or the pattern is missing. `GetOffset` returns `-1` for a missing key.
+See [IToolkitGameConfig](/docs/core-api/IToolkitGameConfig).
+
+## Writing a signature
+
+A signature is the first bytes of the function, written as hex, with `?` for
+every byte that is not stable:
+
+```text
+48 89 5C 24 10 57 48 83 EC 30 48 8B DA 48 8B F9 48 85 C9
+55 48 89 E5 41 57 41 56 49 89 FE 41 55 41 54 53 48 81 EC ? ? ? ?
+```
+
+- **Start at the function's first byte.** The address the scan finds is where
+  the detour goes; a pattern that starts in the middle of a function places the
+  hook in the middle of it.
+- **Wildcard what the compiler or linker will move**: relative call and jump
+  targets, RIP-relative addresses (`48 8D 05 ? ? ? ?`), stack frame sizes and
+  field displacements that change when a class grows (`48 81 EC ? ? ? ?`).
+- **Keep it unique and short.** The scan returns the first match; a pattern
+  that also matches another function silently resolves to the wrong one. Add
+  bytes until exactly one function matches, then stop — every extra byte is one
+  more that can change in the next update.
+- **Exported functions** do not need a pattern: write the symbol with a leading
+  `@` (`"@SymbolName"`) and it is looked up by name in the module's exports.
+
+Tools such as IDA with a signature-maker plugin produce these, but always check
+the result is unique in the current binary.
+
+## Windows and Linux are different binaries
+
+Every entry has a value per platform because nothing carries over between them:
+
+- **Signatures** — MSVC and Clang/GCC generate different code for the same
+  source. Write and verify each platform's pattern against its own binary
+  (`server.dll` / `libserver.so`).
+- **Vtable indices** — the two ABIs lay vtables out differently (the Itanium
+  ABI used on Linux has two destructor entries where MSVC has one, and MSVC
+  merges overloads differently). The same virtual can sit a few slots apart:
+  `CCSPlayerController::Respawn` is 274 on Windows and 276 on Linux, while
+  `CBaseEntity::Teleport` is 165 and 164. Never derive one from the other.
+- **Argument order** — the prototype itself can differ, as it does for
+  `TerminateRound` and `GroundAccelerate`. The handler must follow; see
+  [Platform differences](/docs/hooks/handlers#platform-differences).
+- **Field offsets** — the layout of non-schema structs and of padding can
+  differ between the platforms, so a raw offset into an object read in a hook
+  needs a per-platform value too. Networked and schema fields do not: the SDK's
+  schema accessors look their offsets up at runtime from the schema system.
+
+## Finding a vtable index
+
+- From the declaration: when a header's class matches the game slot for slot,
+  `&Class::Method` in `KHOOK_VIRTUAL` gives the index with nothing written down.
+- From the binary: find the vtable (by its RTTI name — `IToolkitModule::GetVirtualTableByName`
+  does this at runtime) and count the entries up to the function. Remember the
+  table starts after the RTTI pointer: index 0 is the first function.
+- Put the number in gamedata under `offsets`, per platform, and name that key in
+  `KHOOK_VIRTUAL`.
+
+## Verifying
+
+- **Read the log.** A hook whose signature did not resolve logs
+  `KHook: 'Name' was not resolved; hook not installed`, one whose offset is
+  missing logs `KHook: offset 'Name' is missing from gamedata; hook not installed`,
+  and `KHOOK_INIT()` returns `false`.
+- **Check the hook fires** — a log line in the handler, once, on both
+  platforms.
+- **Check the arguments make sense** — print a pointer's class name or a
+  float argument. Garbage means the prototype or the platform order is wrong,
+  not the signature.
+- **After every game update**, recheck your own entries. The toolkit refuses
+  to start when one of its required signatures breaks, but your plugin's
+  entries are yours to watch.
+
+<Callout type="warn">
+  A signature that matches the wrong function does not fail — it hooks the wrong
+  function, with your handler reading its arguments as if they were the ones you
+  expected. Uniqueness is the one check you cannot skip.
+</Callout>

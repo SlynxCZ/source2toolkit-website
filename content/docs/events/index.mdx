@@ -1,0 +1,85 @@
+---
+title: Events
+description: The kinds of events a plugin can react to — game events, toolkit listener callbacks, engine hooks, entity outputs and net messages — and where each one is documented.
+---
+
+"Something happened, run my code" means different things on a CS2 server,
+and the toolkit has a different tool for each. This section covers the first
+two; the rest are linked below.
+
+## Game events
+
+The game announces what happens in a match through **game events** —
+`player_death`, `round_start`, `bomb_planted`, `player_connect_full`, some 270
+of them in all. Each is a named bag of typed fields (an `IGameEvent`) that the
+server fires and, usually, sends to every client too (that is how the killfeed
+and the round timer work).
+
+```cpp title="plugin.cpp"
+HOOK_GAME_EVENT("player_death", [](IGameEvent* event, bool post, bool& dontBroadcast) -> Action
+{
+    auto* victim = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
+    // ...
+    return Action::Ignore;
+}, true);
+```
+
+With [`IToolkitEvents`](/docs/core-api/IToolkitEvents) you hook an event before
+or after the engine handles it, read and change its fields, keep it from the
+clients, cancel it, and fire events of your own — to everybody or to one
+player. See [Game events](/docs/events/game-events), and the
+[event reference](/docs/events/event-reference) for the fields of the ones you
+will use most.
+
+## Toolkit listener callbacks
+
+The toolkit itself tells your plugin about the plugin system and the map
+lifecycle through `IToolkitListener`: other plugins loading and unloading,
+"all plugins are loaded", map start (`OnLevelInit`) and map end
+(`OnLevelShutdown`), plus interface queries. You implement the interface and
+register it once with `api->AddListener(this, this)`. See
+[Listeners](/docs/events/listeners).
+
+## Engine callbacks: clients and the frame
+
+Player connection and the server frame are **not** listener callbacks. They
+are engine interface functions you hook with KHook, the way the sample plugin
+does:
+
+| You want | Hook |
+| --- | --- |
+| A client connecting (can reject) | `ISource2GameClients::ClientConnect` |
+| Client fully in the game | `ISource2GameClients::ClientPutInServer`, `ClientActive` |
+| A client leaving | `ISource2GameClients::ClientDisconnect` |
+| Every server tick | `ISource2Server::GameFrame` |
+| A raw client command | `ISource2GameClients::ClientCommand` |
+
+```cpp title="plugin.h"
+KHOOK_VIRTUAL(m_hGameFrame, &ISource2Server::GameFrame, &g_pSource2Server, nullptr, &MyPlugin::Hook_GameFrame);
+KHOOK_VIRTUAL(m_hClientDisconnect, &ISource2GameClients::ClientDisconnect, &g_pSource2GameClients, nullptr, &MyPlugin::Hook_ClientDisconnect);
+```
+
+See [Hooking](/docs/hooks) for how these work. Many of these moments also have
+a game event — `player_connect_full` and `player_disconnect` are often all you
+need.
+
+## Entities and entity outputs
+
+Entities being created, spawned and deleted (`IEntityListener`, `ADD_ENTITY_LISTENER`)
+and map logic firing outputs such as `OnPressed` or `OnStartTouch`
+(`IEntityIOListener`, `ADD_ENTITY_IO_LISTENER`) belong to
+[`IToolkitEntities`](/docs/core-api/IToolkitEntities). See [Entities](/docs/entities).
+
+## Net messages, sounds, commands, ConVars
+
+- Protobuf messages between server and clients (user messages, net messages) —
+  [Protobuf](/docs/protobuf).
+- Sounds being emitted — [`IToolkitSounds`](/docs/core-api/IToolkitSounds).
+- Commands and chat — [ConVars & Commands](/docs/convars-commands).
+- ConVar changes — [`HOOK_CONVAR_CHANGE`](/docs/convars-commands/convars#watching-changes).
+
+<Cards>
+  <Card title="Game events" href="/docs/events/game-events">Hook, read, modify, block and fire IGameEvents.</Card>
+  <Card title="Listeners" href="/docs/events/listeners">Every IToolkitListener callback and when it fires.</Card>
+  <Card title="Event reference" href="/docs/events/event-reference">Common CS2 events and their fields.</Card>
+</Cards>

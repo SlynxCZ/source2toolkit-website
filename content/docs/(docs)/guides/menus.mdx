@@ -1,0 +1,186 @@
+---
+title: Menus
+description: Center-screen HTML menus with numbered options, paging, per-player instances and cleanup on unload.
+---
+
+`IToolkitMenus` shows a `CenterHtmlMenu` in the middle of a player's screen and
+turns their `!1`–`!9` presses into option callbacks. You build the menu, the
+toolkit keeps one active instance per player, draws it every frame and handles
+paging and the close button.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitMenus.h"
+```
+
+## Building and opening a menu
+
+A menu is a `CenterHtmlMenu` (an `IBaseMenu`) with a title and a list of
+`ChatMenuOption`s. `AddMenuOption()` takes the display text, the callback and
+whether the option starts disabled.
+
+```cpp title="plugin.cpp"
+static CenterHtmlMenu g_TeamMenu("Pick a team");
+
+void BuildTeamMenu()
+{
+    g_TeamMenu.ClearOptions();
+
+    g_TeamMenu.AddMenuOption("Terrorists", [](CCSPlayerController* player, ChatMenuOption& option)
+    {
+        player->PrintToChat("You picked T.");
+    });
+
+    g_TeamMenu.AddMenuOption("Counter-Terrorists", [](CCSPlayerController* player, ChatMenuOption& option)
+    {
+        player->PrintToChat("You picked CT.");
+    });
+
+    // Shown in the disabled colour, cannot be selected.
+    g_TeamMenu.AddMenuOption("Spectators (closed)", nullptr, true);
+}
+
+REGISTER_CON_COMMAND("team_menu", [](const CCommandContext& context, const CCommand& args, bool post)
+{
+    CCSPlayerController* player = CCSPlayerController::FromSlot(context.GetPlayerSlot());
+    if (!player)
+        return;
+
+    OPEN_CENTER_HTML_MENU(player, &g_TeamMenu);
+});
+```
+
+`OPEN_CENTER_HTML_MENU(player, menu)` expands to
+`g_pToolkitMenus->OpenCenterHtmlMenu(g_PluginID, player, menu)`. Opening a menu
+closes whatever the player had open before.
+
+### How players choose
+
+Options are numbered from `!1` on each page. A page holds five options (four
+once both the previous and next buttons are shown, one more without the exit
+button); `!7` goes to the previous page, `!8` to the next, and `!9` closes the menu when
+the exit button is on (`SetExitButton(true)`, the default for
+`CenterHtmlMenu`). The toolkit registers the `1`–`9` commands itself, so the
+keys work in chat (`!3`) and from the console (`3`, bindable to a key).
+
+### Appearance
+
+`CenterHtmlMenu` has public colour fields used when the HTML is drawn:
+`TitleColor`, `EnabledColor`, `DisabledColor`, `PrevPageColor`,
+`NextPageColor`, `CloseColor`.
+
+```cpp
+CenterHtmlMenu menu("Admin");
+menu.TitleColor = "red";
+menu.DisabledColor = "#555555";
+```
+
+## What happens after a selection
+
+`SetPostSelectAction()` decides what the menu does once an option's callback
+returned:
+
+| `PostSelectAction` | Effect |
+| --- | --- |
+| `Reset` (default) | Stays open, jumps back to the first page |
+| `Close` | Closes the menu |
+| `Nothing` | Stays open on the current page |
+
+If the callback opened another menu or closed this one, the post-select action
+is skipped — the instance is no longer the active one.
+
+### Options that change state
+
+`ChatMenuOption::Disabled` can be flipped at any time, and `DisabledEvaluator`
+(a `std::function<bool()>`) is evaluated every time the menu is drawn, so an
+option can grey itself out while the menu is on screen.
+
+```cpp
+ChatMenuOption& buy = menu.AddMenuOption("Buy AWP", OnBuyAwp);
+buy.DisabledEvaluator = [] { return !g_bBuyTimeOpen; };
+```
+
+### Global cooldown
+
+`AddMenuOptionWithCooldown(text, action, disabled = false, close = true, disabledEvaluator = nullptr)`
+wraps the callback in two global hooks you install once with
+`IBaseMenu::SetCooldownHandlers(canSelect, onSelect)`: `canSelect(player)` is
+asked before the action runs (return `false` to swallow the press), `onSelect`
+runs after it. With `close = true` the menu is closed after the action and the
+option's text is shown in its place. This is how FUNPLAY rate-limits every menu
+at once:
+
+```cpp title="plugin.cpp — Load()"
+IBaseMenu::SetCooldownHandlers(
+    [](CCSPlayerController* player) { return !IsOnMenuCooldown(player); },
+    [](CCSPlayerController* player) { StartMenuCooldown(player); });
+```
+
+The handlers are static members of `IBaseMenu` — global to your plugin's
+binary, not per menu.
+
+## The active menu
+
+| Call | Macro | What it does |
+| --- | --- | --- |
+| `GetActiveMenu(player)` | `GET_ACTIVE_MENU(player)` | The player's open `IMenuInstance*`, or `nullptr` |
+| `CloseActiveMenu(player)` | `CLOSE_ACTIVE_MENU(player)` | Closes it |
+| `OnKeyPress(player, key)` | `MENU_ON_KEY_PRESS(player, key)` | Feeds a key (1–9) to the open menu, as if the player had typed it |
+
+`IMenuInstance::Menu()` returns the `IMenu*` behind the instance, so you can
+tell whether the open menu is yours:
+
+```cpp
+IMenuInstance* active = GET_ACTIVE_MENU(player);
+if (active && active->Menu() == &g_TeamMenu)
+    CLOSE_ACTIVE_MENU(player);
+```
+
+Close menus whose options no longer make sense — FUNPLAY closes the menu of a
+player who died or disconnected:
+
+```cpp title="events.cpp"
+HOOK_GAME_EVENT("player_death", [](IGameEvent* event, bool post, bool& dontBroadcast) -> Action
+{
+    auto* victim = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
+    if (victim)
+        CLOSE_ACTIVE_MENU(victim);
+    return Action::Ignore;
+}, true);
+```
+
+## Ownership and lifetime
+
+- **You own the menu object.** The toolkit stores a raw `CenterHtmlMenu*` in
+  the player's instance and never deletes it. It has to stay alive for as long
+  as it is open for anyone: a static or member menu, or a per-player
+  `std::unique_ptr` you replace only after the new menu is open.
+- **Do not free or rebuild a menu from inside one of its own option
+  callbacks.** The callback being executed is a `std::function` stored in that
+  menu's option list. Opening a *different*, still-alive menu from a callback is
+  fine; freeing the current one or calling `ClearOptions()` on it is not. Defer
+  that with `NEXT_FRAME`, and carry a handle rather than the raw player pointer:
+
+```cpp
+menu.AddMenuOption("Refresh", [](CCSPlayerController* player, ChatMenuOption&)
+{
+    CHandle<CCSPlayerController> hPlayer = player->GetHandle();
+    NEXT_FRAME([hPlayer]()
+    {
+        if (CCSPlayerController* p = hPlayer.Get())
+            OpenFreshMenu(p); // rebuilds / replaces the old menu safely
+    });
+});
+```
+
+- **One instance per player slot.** Opening a menu for a player replaces
+  whatever was open, including another plugin's menu.
+- **Unload.** Every menu your plugin still has open is closed for you when it
+  unloads — the option handlers live in your library, and the next key press
+  would jump into unmapped code. Nothing to do in `Unload()`.
+- **Main thread only.** Open and close menus from game callbacks, commands,
+  timers or `NEXT_FRAME`, never from a worker thread.
+
+## Reference
+
+- [`IToolkitMenus` API reference](/docs/core-api/IToolkitMenus)
+- [Scheduler](/docs/guides/scheduler) — `NEXT_FRAME` for deferring menu work

@@ -20,6 +20,7 @@ import { CodeBlock } from '@/components/code-block';
 import { CodeShowcase } from '@/components/home/code-showcase';
 import { DownloadMenu } from '@/components/home/download-menu';
 import { docsRoute, gitConfig } from '@/lib/shared';
+import { docsSections } from '@/lib/sections';
 
 const repoUrl = `https://github.com/${gitConfig.user}/${gitConfig.repo}`;
 
@@ -299,18 +300,60 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ---------------------------------------------------- documentation */}
+      <section className="border-b border-fd-border">
+        <div className="mx-auto max-w-6xl border-fd-border px-6 py-20 md:border-x md:py-24">
+          <p className="s2-eyebrow text-ember">02 — Documentation</p>
+          <h2 className="mt-5 max-w-2xl text-3xl font-semibold sm:text-4xl">
+            Pick the part of the engine you are working on
+          </h2>
+          <p className="mt-4 max-w-2xl text-fd-muted-foreground">
+            Guides for every subsystem, a reference generated from the SDK
+            headers, and the full schema of the game — each with a sidebar of its
+            own.
+          </p>
+
+          <div className="mt-12 grid gap-px border border-fd-border bg-fd-border sm:grid-cols-2 lg:grid-cols-3">
+            {docsSections.map((section) => (
+              <Link
+                key={section.url}
+                href={section.url}
+                className="group relative flex items-start gap-4 bg-fd-background p-6 transition-colors hover:bg-fd-muted/50"
+              >
+                <span
+                  className="absolute inset-y-0 left-0 w-px origin-top scale-y-0 bg-ember transition-transform duration-300 group-hover:scale-y-100"
+                  aria-hidden
+                />
+                <span className="flex size-9 shrink-0 items-center justify-center border border-fd-border bg-fd-muted/60 text-ember">
+                  <section.icon className="size-4" />
+                </span>
+                <span className="min-w-0">
+                  <span className="flex items-center gap-2 font-semibold">
+                    {section.title}
+                    <ArrowRight className="size-3.5 -translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
+                  </span>
+                  <span className="mt-1.5 block text-sm leading-relaxed text-fd-muted-foreground">
+                    {section.description}
+                  </span>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* -------------------------------------------------------- showcase */}
       <section className="border-b border-fd-border bg-fd-muted/25">
         <div className="mx-auto max-w-6xl border-fd-border px-6 py-20 md:border-x md:py-24">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
-              <p className="s2-eyebrow text-ember">02 — In practice</p>
+              <p className="s2-eyebrow text-ember">03 — In practice</p>
               <h2 className="mt-5 max-w-2xl text-3xl font-semibold sm:text-4xl">
                 The same API you would have written yourself
               </h2>
             </div>
             <Link
-              href={docsRoute}
+              href={`${docsRoute}/core-api`}
               className="group flex items-center gap-2 text-sm font-medium text-fd-muted-foreground hover:text-fd-foreground"
             >
               Browse the full API
@@ -327,7 +370,7 @@ export default function HomePage() {
       {/* ------------------------------------------------------ quickstart */}
       <section className="border-b border-fd-border">
         <div className="mx-auto max-w-6xl border-fd-border px-6 py-20 md:border-x md:py-24">
-          <p className="s2-eyebrow text-ember">03 — Quickstart</p>
+          <p className="s2-eyebrow text-ember">04 — Quickstart</p>
           <h2 className="mt-5 max-w-2xl text-3xl font-semibold sm:text-4xl">
             Three steps to a loaded plugin
           </h2>

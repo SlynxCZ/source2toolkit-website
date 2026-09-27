@@ -1,0 +1,199 @@
+---
+title: Function Hooks
+description: KHOOK_MEMBER and KHOOK_FUNCTION — detouring functions by gamedata name, ADDR_* getter or address, and the hook lifecycle with KHOOK_INIT / KHOOK_DESTRUCT.
+---
+
+Anything a signature scan can find is hookable — no vtable, no interface. A
+function hook patches the first bytes of the function itself, so it catches
+**every** call: through a vtable, direct, from any library.
+
+```cpp
+KHOOK_MEMBER(member, target, pre, post)     // a function with a `this`
+KHOOK_FUNCTION(member, target, pre, post)   // a free function
+```
+
+- `KHOOK_MEMBER` — the handler's first parameter is the object (`this`), the
+  rest are the function's own arguments.
+- `KHOOK_FUNCTION` — the handler takes only the function's own arguments.
+
+## Where the address comes from
+
+The **target** is one of:
+
+| target | example | resolved by |
+|---|---|---|
+| a gamedata entry name | `"CCSPlayerPawn::PostThink"` | `IToolkitGameConfig::ResolveSignature` — the entry's `library`, then its symbol or pattern |
+| an `ADDR_*` getter | `ADDR_TAKE_DAMAGE_OLD()` | the toolkit, which scanned it at startup — nothing is scanned twice |
+| an address | an `IToolkitMemory`, `void*` or typed function pointer | you |
+| `nullptr` | | you, later, with `m_hX.Init(address)` |
+
+```cpp title="Hooks.h"
+class CHooks
+{
+public:
+    KHook::Return<int64_t> OnTakeDamageOld(CBaseEntity* pThis, CTakeDamageInfo* pInfo, CTakeDamageResult* pResult);
+    KHook::Return<void> OnPostThink(CCSPlayerPawn* pThis);
+
+    // What the toolkit already resolved.
+    KHOOK_MEMBER(m_hTakeDamageOld, ADDR_TAKE_DAMAGE_OLD(), &CHooks::OnTakeDamageOld, nullptr);
+    // A gamedata entry.
+    KHOOK_MEMBER(m_hPostThink, "CCSPlayerPawn::PostThink", &CHooks::OnPostThink, nullptr);
+};
+```
+
+Prefer an `ADDR_*` getter when one exists: it is already resolved, and its
+typedef in `IToolkitAddresses.h` documents the real prototype — including
+platform differences. The full list is on [Addresses](/docs/hooks/addresses).
+For a function the toolkit does not know, add an entry to your gamedata (see
+[Gamedata](/docs/hooks/gamedata)) and name it.
+
+### Deferred targets
+
+The target is **not** evaluated when your object is constructed. The macro
+wraps it in a capture-less lambda that runs at `KHOOK_INIT()` (or at
+`m_hX.Init()`). That is what lets `ADDR_TAKE_DAMAGE_OLD()` or
+`GAMECONFIG_RESOLVE("...")` sit right in the macro even though your hooks
+object is usually a global, constructed long before `Load()` when
+`g_pToolkitAddresses` is still null.
+
+Two consequences:
+
+- the target expression must not capture anything — it cannot name a local or
+  `this`; globals and function calls are fine;
+- the translation unit needs the toolkit globals in scope. A header that
+  declares hooks outside the plugin's main file uses `TOOLKIT_GLOBALVARS()` so
+  `g_pToolkitAddresses` is known:
+
+```cpp title="hooks/Hooks.h"
+#include "source2toolkit/IToolkitAddresses.h"
+
+// The ADDR_* targets below read g_pToolkitAddresses at KHOOK_INIT().
+TOOLKIT_GLOBALVARS();
+```
+
+A target that resolves to null at init — a missing gamedata entry, an optional
+`ADDR_*` that was not found — is logged and the hook is skipped.
+
+## Installing and removing everything
+
+`KHOOK_INIT()` in `Load()` resolves and installs every hook the plugin
+declared with the macros; `KHOOK_DESTRUCT()` in `Unload()` takes them all down:
+
+```cpp title="plugin.cpp"
+bool Plugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late)
+{
+    TOOLKIT_SAVEVARS();
+
+    g_pSource2Server = api->GetSource2Server();   // anything a hook reads has to be set first
+
+    if (!KHOOK_INIT())
+        TOOLKIT_LOG(this, "Some hooks were not installed, see above.\n");
+
+    return true;
+}
+
+bool Plugin::Unload(char* error, size_t maxlen)
+{
+    KHOOK_DESTRUCT();
+    return true;
+}
+```
+
+A hook whose target cannot be resolved — a gamedata entry that is missing, a
+vtable not found, an instance still null — is logged and skipped; the rest
+still go in, and `KHOOK_INIT()` returns `false` so you know. A hook declared
+with a `nullptr` target is left alone and counts as success.
+
+<Callout type="info">
+  Order matters: `KHOOK_INIT()` reads the instance pointers and calls the
+  toolkit, so it goes after `TOOLKIT_SAVEVARS()` and after you have set the
+  globals your virtual hooks name.
+</Callout>
+
+The list `KHOOK_INIT()` walks is per plugin binary: every hook wrapper
+registers itself as it is constructed, whatever file it is in, and
+`KHOOK_DESTRUCT()` takes them down last-first.
+
+## Hooks installed later
+
+`KHOOK_INIT()` installs the hooks that exist **when it runs**. A hook that is a
+member of an object you create after `Load()` is registered but not installed —
+install it yourself with `m_hX.Init()`, typically in that object's constructor
+(the members are built before the constructor body runs):
+
+```cpp
+class CChatFilter
+{
+public:
+    KHook::Return<void> Hook_ClientCommand(ISource2GameClients* pThis, CPlayerSlot slot, const CCommand& args);
+
+    CChatFilter()
+    {
+        m_hClientCommand.Init();   // KHOOK_INIT() ran long ago
+    }
+
+private:
+    KHOOK_VIRTUAL(m_hClientCommand, &ISource2GameClients::ClientCommand, &g_pSource2GameClients, &CChatFilter::Hook_ClientCommand, nullptr);
+};
+
+auto* pFilter = new CChatFilter();   // the hook goes in here
+...
+delete pFilter;                       // and comes out here
+```
+
+`Init()` resolves the target the macro was given exactly as `KHOOK_INIT()`
+would: it reads `&pInstance` now, looks the vtable up, resolves the gamedata
+entry or calls the `ADDR_*` getter. It returns `false` and logs when that
+fails, and it can simply be called again — a hook waiting for an instance that
+does not exist yet goes in with the first call that finds it. On a hook that
+is already installed it does nothing; `m_hX.IsInstalled()` tells you which is
+which.
+
+A hook declared with a `nullptr` target is placed the explicit way:
+
+```cpp
+m_hX.Init(address);        // KHOOK_MEMBER / KHOOK_FUNCTION: IToolkitMemory or typed function pointer
+m_hX.Init(pInstance);      // KHOOK_VIRTUAL, one object
+m_hX.InitGlobal(vtable);   // KHOOK_VIRTUAL, a whole vtable
+```
+
+## Removing hooks
+
+`KHOOK_DESTRUCT()` detaches every hook and deletes it — deleting is what takes
+the detour down. One hook can also go on its own: `m_hX.Destruct()`. That is
+final: the wrapper no longer owns a KHook object, so it cannot be installed
+again — to hook the same thing later, create a new owner.
+
+Destroying the owner does the same. Each wrapper's destructor calls
+`Destruct()` and takes itself off the plugin's hook list, so deleting an object
+removes its hooks, and a later `KHOOK_DESTRUCT()` never touches a hook that is
+already gone. `Destruct()` is safe to call twice: an object still alive at
+`Unload()` is covered by `KHOOK_DESTRUCT()`, and deleting it afterwards is
+harmless.
+
+<Callout type="warn">
+  Install and remove hooks on the game thread, and never destroy an owner from
+  inside one of its own handlers — removing a hook synchronously under its own
+  callback can deadlock or crash. Defer it to the next frame.
+</Callout>
+
+<Callout type="warn">
+  Take every hook down before your plugin unloads. A live hook pointing into an
+  unmapped library crashes the server on the next call.
+</Callout>
+
+## The wrapper's members
+
+What `KHOOK_MEMBER` / `KHOOK_FUNCTION` / `KHOOK_VIRTUAL` declare is a
+`CToolkitMemberHook`, `CToolkitFunctionHook` or `CToolkitVirtualHook`:
+
+| member | does |
+|---|---|
+| `Init()` | resolves the macro's target and installs; `false` on failure, retryable |
+| `Init(address)` / `Init(pInstance)` / `InitGlobal(...)` | installs on an explicit target |
+| `Destruct()` | detaches and deletes the KHook object; final |
+| `IsInstalled()` | whether it is installed |
+| `CallOriginal(...)` | runs the original past every hook |
+| `Get()` / `operator->` | the KHook object underneath (`KHook::Member`, `Function` or `Virtual`) |
+
+See the [IToolkitHooks reference](/docs/core-api/IToolkitHooks).

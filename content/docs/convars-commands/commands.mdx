@@ -1,0 +1,223 @@
+---
+title: Commands
+description: Registering console and chat commands, reading their arguments and caller, and taking them down again.
+---
+
+A plugin command is one call in `Load()`. The toolkit creates the console
+command, routes the chat aliases to it, and removes it again when your plugin
+unloads.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitCommands.h"
+
+bool MyPlugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late)
+{
+    TOOLKIT_SAVEVARS();
+
+    REGISTER_CON_COMMAND("hello", [](const CCommandContext& ctx, const CCommand& args, bool post)
+    {
+        TOOLKIT_CONPRINTF("hello from slot %d: %s\n", ctx.GetPlayerSlot().Get(), args.ArgS());
+    });
+
+    return true;
+}
+```
+
+`hello` now works from the server console, from a client's console, and from
+chat as `!hello` or `/hello`.
+
+## The API
+
+```cpp title="IToolkitCommands.h"
+using ChatHandler    = std::function<void(const CCommandContext&, const CCommand&, bool post)>;
+using CommandHandler = std::function<Action(const CCommandContext&, const CCommand&, bool post)>;
+
+virtual void RegisterChatListener(PluginId owner, const char* pchName, ChatHandler handler) = 0;
+virtual void UnregisterChatListener(PluginId owner, const char* pchName) = 0;
+
+virtual void RegisterConCommand(PluginId owner, const char* pchName, ChatHandler handler) = 0;
+virtual void UnregisterConCommand(PluginId owner, const char* pchName) = 0;
+
+virtual void RegisterConListener(PluginId owner, const char* pchName, CommandHandler handler, bool post) = 0;
+virtual void UnregisterConListener(PluginId owner, const char* pchName, bool post) = 0;
+```
+
+And the macros that fill in `owner` with your `g_PluginID`:
+
+| Macro | Calls |
+| --- | --- |
+| `REGISTER_CON_COMMAND(name, handler)` | `RegisterConCommand` |
+| `UNREGISTER_CON_COMMAND(name)` | `UnregisterConCommand` |
+| `REGISTER_CHAT_LISTENER(name, handler)` | `RegisterChatListener` |
+| `UNREGISTER_CHAT_LISTENER(name)` | `UnregisterChatListener` |
+| `REGISTER_CON_LISTENER(name, handler, post)` | `RegisterConListener` |
+| `UNREGISTER_CON_LISTENER(name, post)` | `UnregisterConListener` |
+
+Commands and chat listeners take a `ChatHandler`, which returns nothing. A
+handler that needs to block something is a *listener*, which returns an
+`Action` — see [Command listeners](/docs/convars-commands/command-listeners).
+Full reference: [`IToolkitCommands`](/docs/core-api/IToolkitCommands).
+
+## Console commands
+
+`REGISTER_CON_COMMAND(name, handler)` does two things:
+
+1. Creates a real engine `ConCommand` called `name`, so the console knows it
+   (autocomplete, `find`, no "Unknown command").
+2. Registers your handler for `name` and for the chat forms, so `!name` and
+   `/name` in chat reach the same code.
+
+If the name already exists in the engine — the game's own command or another
+plugin's — the toolkit cannot take it over. It logs a warning and registers
+only the handler, so your code still runs whenever that command is dispatched.
+To *replace* someone else's command, use a pre
+[listener](/docs/convars-commands/command-listeners) that returns
+`Action::Supersede` instead.
+
+<Callout type="warn">
+Register names in **lower case**. The dispatcher lower-cases the typed command
+before looking up handlers, so a handler registered as `"MyCmd"` is never
+found — while `!mycmd` and `!MyCmd` in chat both reach one registered as `"mycmd"`.
+</Callout>
+
+### Arguments
+
+`CCommand` is hl2sdk's tokenized command line:
+
+| Call | Returns |
+| --- | --- |
+| `args.ArgC()` | number of tokens, **including** the command itself |
+| `args.Arg(0)` | the command name |
+| `args.Arg(i)` | token `i` (1-based for real arguments) |
+| `args.ArgS()` | everything after the command name, as one string |
+| `args.GetCommandString()` | the whole line |
+
+From chat the trigger is already stripped: `!hello a b` gives
+`Arg(0) == "hello"`, `Arg(1) == "a"`, `ArgC() == 3`.
+
+```cpp title="plugin.cpp"
+REGISTER_CON_COMMAND("sample_echo", [](const CCommandContext& context, const CCommand& args, bool post)
+{
+    if (args.ArgC() < 2)
+    {
+        Reply(context, "Usage: sample_echo <text>");
+        return;
+    }
+
+    CCSPlayerController* pCaller = CallerOf(context);
+    Reply(context, "%s said: %s (%d arguments)",
+          pCaller ? pCaller->GetPlayerName() : "Console", args.ArgS(), args.ArgC() - 1);
+});
+```
+
+### The caller
+
+`CCommandContext::GetPlayerSlot()` tells you who ran the command. A player has
+a valid slot; the server console (and RCON) has none — the slot is `-1` and
+`IsValid()` is false. The sample plugin wraps this in two small helpers that
+are worth copying:
+
+```cpp title="plugin.cpp"
+// A controller for a player, nullptr for the server console.
+static CCSPlayerController* CallerOf(const CCommandContext& context)
+{
+    const CPlayerSlot slot = context.GetPlayerSlot();
+    return slot.IsValid() ? CCSPlayerController::FromSlot(slot) : nullptr;
+}
+
+// Answers where the command came from: the player's chat, or the server console.
+static void Reply(const CCommandContext& context, const char* pszFormat, ...)
+{
+    char szBuffer[512];
+
+    va_list args;
+    va_start(args, pszFormat);
+    vsnprintf(szBuffer, sizeof(szBuffer), pszFormat, args);
+    va_end(args);
+
+    if (CCSPlayerController* pCaller = CallerOf(context))
+        pCaller->PrintToChat(szBuffer);
+    else
+        TOOLKIT_CONPRINTF("%s\n", szBuffer);
+}
+```
+
+`PrintToChat` lives on
+[`CBasePlayerController`](/docs/schema/entity/classes/CBasePlayerController),
+next to `PrintToConsole` and `PrintToCenter` if you would rather answer in the
+player's console.
+
+### The `post` argument
+
+Command handlers are registered as *pre* handlers and are called once, with
+`post == false`. The parameter is there because the type is shared with
+listeners; for commands you can ignore it.
+
+## Permissions
+
+There is no permission system in the toolkit. The ConCommands it creates are
+client-executable, so **any player can run any plugin command** from their
+console or chat. Check the caller yourself before doing anything privileged:
+
+```cpp
+REGISTER_CON_COMMAND("myplugin_reload", [](const CCommandContext& ctx, const CCommand& args, bool post)
+{
+    // Server console and RCON only.
+    if (ctx.GetPlayerSlot().IsValid())
+        return;
+
+    // ...
+});
+```
+
+For player admins, keep your own list (SteamIDs from
+`CBasePlayerController::GetSteamID()`, a database, another plugin's
+interface) and look the caller up in it.
+
+## Chat-only commands
+
+`REGISTER_CHAT_LISTENER(name, handler)` registers the same handler without
+creating a console command. It fires when a player types `!name` or `/name`
+(or any other configured [chat trigger](/docs/convars-commands#console-commands-and-chat-commands))
+in chat:
+
+```cpp title="plugin.cpp"
+REGISTER_CHAT_LISTENER("noshake", [this](const CCommandContext& context, const CCommand& args, bool post)
+{
+    const CPlayerSlot slot = context.GetPlayerSlot();
+    if (!slot.IsValid())
+        return;
+
+    m_NoShakeMask ^= (uint64_t(1) << slot.Get());
+
+    const bool bOff = (m_NoShakeMask >> slot.Get()) & 1;
+    Reply(context, "Screen shakes are now %s for you.", bOff ? "off" : "on");
+});
+```
+
+A chat listener cannot hide the message: with the public trigger (`!`) it
+stays visible, with the silent trigger (`/`) the core hides it anyway. To hide
+`!name` messages too, register a pre [listener](/docs/convars-commands/command-listeners)
+on `name` and return `Action::Supersede` — *after* the command or chat
+listener, because a `Supersede` stops the handlers registered behind it.
+
+## Unregistering
+
+You rarely need to — everything is dropped when your plugin unloads. To turn a
+command off while the plugin keeps running:
+
+```cpp
+UNREGISTER_CON_COMMAND("hello");     // the handler and its chat forms
+UNREGISTER_CHAT_LISTENER("noshake");
+```
+
+`UNREGISTER_CON_COMMAND` removes your handlers. The engine `ConCommand` stays
+until the plugin unloads (it just does nothing in the meantime); registering
+the same name again reuses it. On unload the toolkit gives the name back to the
+engine, so a reloaded plugin — or another one — can register it again.
+
+## See also
+
+- [Command listeners](/docs/convars-commands/command-listeners) — hooking commands you do not own.
+- [`IToolkitCommands` reference](/docs/core-api/IToolkitCommands)
+- [`IToolkitTypes`](/docs/core-api/IToolkitTypes) — the `Action` enum.

@@ -1,0 +1,238 @@
+---
+title: Addresses
+description: IToolkitAddresses and the ADDR_* macros — calling and hooking the engine functions the toolkit resolves, TOOLKIT_ORIGINAL, and HookChain on schema helpers.
+---
+
+The toolkit scans a set of game functions once at startup and hands them out,
+typed, through `IToolkitAddresses`. Each one has a shorthand macro,
+`ADDR_*()`, that returns a function pointer ready to call — or to hook.
+
+```cpp
+#include "source2toolkit/IToolkitAddresses.h"
+
+if (auto pfnSwitchTeam = ADDR_SWITCH_TEAM())
+    pfnSwitchTeam(pController, 3);
+```
+
+The macros read `g_pToolkitAddresses`, which `TOOLKIT_SAVEVARS()` fills in
+`Load()` (and `TOOLKIT_GLOBALVARS()` declares in your other files). Module
+inspection, pattern scanning and pointer arithmetic are not here — they are on
+`IToolkitModule` and `IToolkitMemory`. Reference:
+[IToolkitAddresses](/docs/core-api/IToolkitAddresses).
+
+## Three ways to reach a game function
+
+| you want to… | use |
+|---|---|
+| do something the SDK already wraps (give an item, switch team, end the round) | the schema helper — `pItemServices->GiveNamedItem("weapon_ak47")` |
+| call a resolved function the helpers do not wrap, or with arguments they do not expose | `ADDR_*()` |
+| call it **past** every plugin's hooks | `TOOLKIT_ORIGINAL(ADDR_*())`, or the helper with `HookChain::Bypass` |
+| hook it | `KHOOK_MEMBER(m_hX, ADDR_*(), ...)` — see [Function hooks](/docs/hooks/function-hooks) |
+| reach a function the toolkit does not resolve | your own gamedata entry and `GAMECONFIG_RESOLVE(name)` — see [Gamedata](/docs/hooks/gamedata) |
+
+The sample plugin shows the first two side by side:
+
+```cpp title="plugin.cpp"
+// Way one: the toolkit resolved it and knows the type.
+if (auto pfnSwitchTeam = ADDR_SWITCH_TEAM())
+{
+    pfnSwitchTeam(pCaller, nNewTeam);
+    return;
+}
+
+// Way two: any gamedata entry, with the type spelled out by you.
+using SwitchTeam_t = void (FASTCALL *)(CCSPlayerController *, unsigned char);
+
+if (auto pfnSwitchTeam = GAMECONFIG_RESOLVE("CCSPlayerController::SwitchTeam").RCast<SwitchTeam_t>())
+    pfnSwitchTeam(pCaller, nNewTeam);
+
+// Way three: pCaller->SwitchTeam(nNewTeam) does exactly the above.
+```
+
+## Calling past the hooks
+
+An `ADDR_*` macro hands back the address the signature scan found. That is
+what you want to **hook**, but not always what you want to **call**: once any
+plugin inline-hooks the function, its first bytes are a jump into the detour,
+so calling it runs the whole Pre/Post chain.
+
+That is right when you stand in for the game — a plugin dealing damage as if a
+weapon fired wants the other plugins' rules to apply. It is wrong when you are
+asking for the function itself — an admin command, a forced round end — where
+another plugin's rules have no business vetoing what the server was told to
+do. For that, wrap the call in `TOOLKIT_ORIGINAL`:
+
+```cpp
+TOOLKIT_ORIGINAL(ADDR_TAKE_DAMAGE_OLD())(pPawn, &info, &result);
+```
+
+`TOOLKIT_ORIGINAL(fn)` casts `KHook::FindOriginal(fn)` back to `fn`'s type. It
+is signature-blind, so it works whatever prototype you hold and however the
+plugin that hooked the function declared its hook. Unhooked functions come back
+unchanged, so it is always safe to apply.
+
+<Callout type="warn">
+  Resolve it at the call; do not cache the result in a global. The address is
+  only the original from the moment a hook exists, and hooks are installed long
+  after these addresses are scanned.
+</Callout>
+
+## HookChain on schema helpers
+
+The schema helpers make the same choice through their last argument, a
+`HookChain` (`IToolkitTypes.h`):
+
+| value | the call goes |
+|---|---|
+| `HookChain::Run` | through the Pre/Post chain, as if the game made the call |
+| `HookChain::Bypass` | straight to the original, past every hook — inline detours and vtable hooks alike |
+
+The default of each helper is what it always did, so existing calls keep their
+behaviour. `CCSGameRules::TerminateRound` and `CCSPlayerController::TakeDamage`
+default to `Bypass` (the server was told to end the round or deal the damage);
+every other helper defaults to `Run`.
+
+```cpp
+pItemServices->GiveNamedItem("weapon_ak47");                        // hooks run
+pController->TakeDamage(pAttacker, 50, DMG_BULLET, HookChain::Run); // opt in to the hooks
+pGameRules->TerminateRound(5.0f, nReason);                          // bypasses by default
+```
+
+Helpers that take a `HookChain`:
+
+| class | helpers |
+|---|---|
+| `CBaseEntity` | `AcceptInput`, `AddEntityIOEvent`, `DispatchSpawn`, `Teleport`, `Remove`, `DispatchParticleEffect` |
+| `CBaseModelEntity` | `SetModel` |
+| `CBasePlayerController` | `SetPawn` |
+| `CBasePlayerPawn` | `CommitSuicide`, `SnapViewAngles` |
+| `CCSPlayerPawn` | `PostThink` |
+| `CCSPlayerController` | `TakeDamage` (Bypass), `Respawn`, `SwitchTeam`, `ChangeTeam` |
+| `CCSGameRules` | `TerminateRound` (Bypass), `GoToIntermission` |
+| `CPlayer_ItemServices` | `GiveNamedItem`, `DropActivePlayerWeapon`, `RemoveWeapons` |
+| `CPlayer_WeaponServices` | `DropWeapon`, `BumpWeapon`, `SelectItem`, `Destroy` |
+| `CAttributeList` | `SetOrAddAttribute`, `SetOrAddAttributeValueByName` |
+| grenade projectiles | `CHEGrenadeProjectile`, `CFlashbangProjectile`, `CSmokeGrenadeProjectile`, `CDecoyProjectile`, `CMolotovProjectile` — `EmitGrenade` |
+
+### When to pick which
+
+- **Standing in for the game** (a custom weapon dealing damage, a round reward
+  handing out an item): `Run`. Other plugins' damage rules, item restrictions
+  and so on should apply.
+- **Doing what the server was told** (admin command, forced round end, a
+  gamemode's own rule): `Bypass`.
+- **Inside a hook on the same function**: `Bypass`, always — `Run` would
+  re-enter your own handler. See [Recursion](/docs/hooks/handlers#recursion).
+
+For your own calls through a vtable index, `CALL_VIRTUAL_CHAIN(retType, index,
+eChain, this, args...)` (`utils/virtual.h`) does the same for virtual
+functions; `ResolveHookChain(fn, eChain)` does it for a function pointer.
+
+## The ADDR_* macros
+
+Every macro calls the `IToolkitAddresses` method of the same name and returns
+the typedef declared above it in `IToolkitAddresses.h` — read that typedef
+before you call or hook the function, it carries the checked prototype and the
+platform differences.
+
+**Required** functions must resolve for the toolkit to start, so they are never
+null while it runs. **Optional** ones are plugin-only hook targets resolved
+leniently: a pattern that stops matching after a game update leaves them
+**null** instead of blocking startup — check before you call or hook them (a
+hook on a null target is logged and skipped).
+
+### Entities and players (required)
+
+| macro | function | gamedata key |
+|---|---|---|
+| `ADDR_CREATE_ENTITY_BY_NAME()` | `CreateEntityByName` | `UTIL::CreateEntityByName` |
+| `ADDR_DISPATCH_SPAWN()` | `CBaseEntity::DispatchSpawn` | `CBaseEntity::DispatchSpawn` |
+| `ADDR_TAKE_DAMAGE_OLD()` | `CBaseEntity::TakeDamageOld` | `CBaseEntity::TakeDamageOld` |
+| `ADDR_TAKE_DAMAGE_INFO()` | `CTakeDamageInfo` constructor | `CTakeDamageInfo::Constructor` |
+| `ADDR_SET_MODEL()` | `CBaseModelEntity::SetModel` | `CBaseModelEntity::SetModel` |
+| `ADDR_SET_PAWN()` | `CBasePlayerController::SetPawn` | `CBasePlayerController::SetPawn` |
+| `ADDR_SNAP_VIEW_ANGLES()` | `CBasePlayerPawn::SnapViewAngles` | `CBasePlayerPawn::SnapViewAngles` |
+| `ADDR_SWITCH_TEAM()` | `CCSPlayerController::SwitchTeam` | `CCSPlayerController::SwitchTeam` |
+| `ADDR_WEAPON_SERVICES_DESTROY()` | `CPlayer_WeaponServices::Destroy` | `CCSPlayer_WeaponServices::Destroy` |
+| `ADDR_GIVE_NAMED_ITEM()` | `CCSPlayer_ItemServices::GiveNamedItem` (the full implementation) | `CCSPlayer_ItemServices::GiveNamedItem` |
+| `ADDR_POST_THINK()` | `CCSPlayerPawn::PostThink` | `CCSPlayerPawn::PostThink` |
+| `ADDR_CAN_MOVE()` | `CCSPlayerPawnBase::CanMove` | `CCSPlayerPawnBase::CanMove` |
+| `ADDR_UTIL_REMOVE()` | `UTIL_Remove` | `UTIL::Remove` |
+| `ADDR_SET_OR_ADD_ATTRIBUTE()` | `CAttributeList::SetOrAddAttributeValueByName` | `CAttributeList::SetOrAddAttributeValueByName` |
+| `ADDR_GET_WEAPON_CS_DATA_FROM_KEY()` | `GetWeaponCSDataFromKey` | `GetWeaponCSDataFromKey` |
+| `ADDR_DISPATCH_PARTICLE_EFFECT()` | `DispatchParticleEffect` | `DispatchParticleEffect` |
+| `ADDR_EMIT_HEGRENADE()` | `CHEGrenadeProjectile::EmitGrenade` | `CHEGrenadeProjectile::EmitGrenade` |
+| `ADDR_EMIT_FLASHBANG()` | `CFlashbangProjectile::EmitGrenade` | `CFlashbangProjectile::EmitGrenade` |
+| `ADDR_EMIT_SMOKE()` | `CSmokeGrenadeProjectile::EmitGrenade` | `CSmokeGrenadeProjectile::EmitGrenade` |
+| `ADDR_EMIT_DECOY()` | `CDecoyProjectile::EmitGrenade` | `CDecoyProjectile::EmitGrenade` |
+| `ADDR_EMIT_MOLOTOV()` | `CMolotovProjectile::EmitGrenade` | `CMolotovProjectile::EmitGrenade` |
+
+### Game rules, entity I/O and networking (required)
+
+| macro | function | gamedata key |
+|---|---|---|
+| `ADDR_TERMINATE_ROUND()` | `CCSGameRules::TerminateRound` — argument order differs per platform | `CCSGameRules::TerminateRound` |
+| `ADDR_ACCEPT_INPUT()` | `CEntityInstance::AcceptInput` | `CEntityInstance::AcceptInput` |
+| `ADDR_FIRE_OUTPUT_INTERNAL()` | `CEntityIOOutput::FireOutputInternal` | `CEntityIOOutput::FireOutputInternal` |
+| `ADDR_ADD_ENTITY_IO_EVENT()` | `CEntitySystem::AddEntityIOEvent` | `CEntitySystem::AddEntityIOEvent` |
+| `ADDR_FIND_ENTITY_BY_CLASSNAME()` | `CGameEntitySystem::FindEntityByClassName` | `CGameEntitySystem::FindEntityByClassName` |
+| `ADDR_FIND_ENTITY_BY_NAME()` | `CGameEntitySystem::FindEntityByName` | `CGameEntitySystem::FindEntityByName` |
+| `ADDR_LEGACY_GAME_EVENT_LISTENER()` | `LegacyGameEventListener` | `LegacyGameEventListener` |
+| `ADDR_FILTER_MESSAGE()` | `INetworkMessageProcessingPreFilter::FilterMessage` | `INetworkMessageProcessingPreFilter::FilterMessage` |
+
+### Optional — may be null
+
+| macro | function |
+|---|---|
+| `ADDR_IDENTITY_ACCEPT_INPUT()` | `CEntityIdentity::AcceptInput` |
+| `ADDR_CAN_ACQUIRE()` | `CCSPlayer_ItemServices::CanAcquire` |
+| `ADDR_PROCESS_USER_CMD()` | `CCSPlayerController::ProcessUserCmd` |
+| `ADDR_ON_SIMULATE_USER_COMMANDS()` | `CBasePlayerController::OnSimulateUserCommands` |
+| `ADDR_GET_NAV_MESH_DATA()` | `CSource2Server::GetNavMeshData` |
+| `ADDR_LOG_DIRECT()` | `CLoggingSystem::LogDirect` (tier0) |
+| `ADDR_CMD_EXECUTE_COMMAND()` | `Cmd_ExecuteCommand` (engine2) |
+
+Movement (`CCSPlayer_MovementServices::*`, all optional):
+
+| macro | function |
+|---|---|
+| `ADDR_AIR_ACCELERATE()` | `AirAccelerate` |
+| `ADDR_AIR_MOVE()` | `AirMove` |
+| `ADDR_CAN_UNDUCK()` | `CanUnduck` |
+| `ADDR_CATEGORIZE_POSITION()` | `CategorizePosition` |
+| `ADDR_CHECK_FALLING()` | `CheckFalling` |
+| `ADDR_CHECK_PARAMETERS()` | `CheckParameters` |
+| `ADDR_CHECK_VELOCITY()` | `CheckVelocity` |
+| `ADDR_CHECK_WATER()` | `CheckWater` |
+| `ADDR_DUCK()` | `Duck` |
+| `ADDR_FRICTION()` | `Friction` |
+| `ADDR_FULL_WALK_MOVE()` | `FullWalkMove` |
+| `ADDR_GROUND_ACCELERATE()` | `GroundAccelerate` — argument order differs per platform |
+| `ADDR_LADDER_MOVE()` | `LadderMove` |
+| `ADDR_MOVE_INIT()` | `MoveInit` |
+| `ADDR_PLAYER_MOVE()` | `PlayerMove` |
+| `ADDR_PROCESS_MOVEMENT()` | `ProcessMovement` |
+| `ADDR_SETUP_MOVE()` | `SetupMove` |
+| `ADDR_TRY_PLAYER_MOVE()` | `TryPlayerMove` |
+| `ADDR_WALK_MOVE()` | `WalkMove` |
+| `ADDR_WATER_MOVE()` | `WaterMove` |
+
+Jumping (members of the jump components, not of the movement services — all
+optional):
+
+| macro | function |
+|---|---|
+| `ADDR_ON_JUMP_LEGACY()` | `CCSPlayerLegacyJump::OnJump` |
+| `ADDR_ON_JUMP_MODERN()` | `CCSPlayerModernJump::OnJump` |
+| `ADDR_CHECK_JUMP_BUTTON_LEGACY()` | `CCSPlayerLegacyJump::CheckJumpButton` |
+| `ADDR_CHECK_JUMP_BUTTON_MODERN()` | `CCSPlayerModernJump::CheckJumpButton` |
+
+The gamedata key of each optional function is its function name as listed
+(`CCSPlayer_MovementServices::AirAccelerate`, `CCSPlayerLegacyJump::OnJump`, …).
+
+```cpp title="Hooks.h"
+// Optional target: if the signature broke, KHOOK_INIT() logs it and skips this hook.
+KHook::Return<void> OnCheckJumpButtonLegacy(CCSPlayerLegacyJump* pThis, CMoveData* pMove);
+
+KHOOK_MEMBER(m_hCheckJumpButtonLegacy, ADDR_CHECK_JUMP_BUTTON_LEGACY(), &CHooks::OnCheckJumpButtonLegacy, nullptr);
+```

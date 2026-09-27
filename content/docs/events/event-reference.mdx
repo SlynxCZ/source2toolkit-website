@@ -1,0 +1,264 @@
+---
+title: Event Reference
+description: The CS2 game events plugins use most, with their fields and types as the game defines them.
+---
+
+The fields below are taken from the event definitions CS2 ships in its VPKs —
+`resource/core.gameevents` (engine), `resource/game.gameevents` and
+`resource/mod.gameevents` (Counter-Strike). Where an event is defined in more
+than one file, the most specific definition is listed — `mod` over `game` over
+`core`. Names are case sensitive.
+
+For hooking, reading and firing, see [Game events](/docs/events/game-events).
+
+## Field types and getters
+
+| Type in the definition | Read with |
+| --- | --- |
+| `player_controller_and_pawn` | `GetPlayerController(key)`, `GetPlayerPawn(key)`, `GetPlayerSlot(key)` |
+| `player_controller` | `GetPlayerController(key)`, `GetPlayerSlot(key)` — the pawn through the controller |
+| `player_pawn` | `GetPlayerPawn(key)` |
+| `bool` | `GetBool(key)` |
+| `byte`, `short`, `long` | `GetInt(key)` |
+| `float` | `GetFloat(key)` |
+| `string` | `GetString(key)` |
+| `uint64` | `GetUint64(key)` |
+
+Player getters return a `CEntityInstance*`; `static_cast` it to
+`CCSPlayerController*` / `CCSPlayerPawn*` and check for `nullptr`.
+
+```cpp
+auto* pController = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
+CCSPlayerPawn* pPawn = pController ? pController->GetPlayerPawn() : nullptr;
+```
+
+## Players
+
+### `player_connect`
+
+A client connected (before it is in the game).
+
+| Field | Type | |
+| --- | --- | --- |
+| `name` | string | player name |
+| `userid` | player_controller | |
+| `networkid` | string | network (Steam) id |
+| `xuid` | uint64 | SteamID64 |
+| `bot` | bool | |
+
+### `player_connect_full`
+
+The client finished the connection sequence — the usual "player joined" hook.
+
+| Field | Type |
+| --- | --- |
+| `userid` | player_controller |
+
+### `player_disconnect`
+
+| Field | Type | |
+| --- | --- | --- |
+| `userid` | player_controller | |
+| `reason` | short | disconnect reason (`ENetworkDisconnectionReason` value) |
+| `name` | string | |
+| `networkid` | string | |
+| `xuid` | uint64 | SteamID64 |
+| `PlayerID` | short | |
+| `ever_fully_connected` | bool | whether the player ever reached `player_connect_full` |
+
+### `player_team`
+
+A player changed team.
+
+| Field | Type | |
+| --- | --- | --- |
+| `userid` | player_controller_and_pawn | |
+| `team` | byte | new team (`ETeam`: 1 spectator, 2 T, 3 CT) |
+| `oldteam` | byte | previous team |
+| `disconnect` | bool | the change is because the player disconnected |
+| `silent` | bool | |
+| `isbot` | bool | |
+
+### `player_spawn`
+
+| Field | Type |
+| --- | --- |
+| `userid` | player_controller_and_pawn |
+
+### `player_death`
+
+| Field | Type | |
+| --- | --- | --- |
+| `userid` | player_controller_and_pawn | victim |
+| `attacker` | player_controller_and_pawn | killer |
+| `assister` | player_controller_and_pawn | assisting player |
+| `assistedflash` | bool | the assist was a flash |
+| `weapon` | string | weapon name the killer used |
+| `weapon_itemid` | string | |
+| `weapon_fauxitemid` | string | |
+| `weapon_originalowner_xuid` | string | |
+| `headshot` | bool | |
+| `dominated` | short | |
+| `revenge` | short | |
+| `wipe` | short | squad wipe |
+| `penetrated` | short | objects penetrated by the shot |
+| `noreplay` | bool | |
+| `noscope` | bool | |
+| `thrusmoke` | bool | shot through smoke |
+| `attackerblind` | bool | attacker was flashed |
+| `distance` | float | distance to the victim, in metres |
+| `dmg_health` | short | |
+| `dmg_armor` | byte | |
+| `hitgroup` | byte | `EHitGroup` value |
+| `attackerinair` | bool | |
+
+### `player_hurt`
+
+| Field | Type | |
+| --- | --- | --- |
+| `userid` | player_controller_and_pawn | victim |
+| `attacker` | player_controller_and_pawn | |
+| `health` | byte | health left |
+| `armor` | byte | armour left |
+| `weapon` | string | |
+| `dmg_health` | short | damage to health |
+| `dmg_armor` | byte | damage to armour |
+| `hitgroup` | byte | `EHitGroup` value |
+
+`player_hurt` reports damage that was dealt. To change or prevent damage, hook
+the damage function instead (see [Hooking](/docs/hooks)).
+
+### `player_jump`
+
+| Field | Type |
+| --- | --- |
+| `userid` | player_controller |
+
+### `player_blind`
+
+| Field | Type | |
+| --- | --- | --- |
+| `userid` | player_controller | the flashed player |
+| `attacker` | player_controller | who threw the flash |
+| `entityid` | short | the flashbang |
+| `blind_duration` | float | |
+
+### `player_changename`
+
+| Field | Type |
+| --- | --- |
+| `userid` | player_controller |
+| `oldname` | string |
+| `newname` | string |
+
+### `player_radio`
+
+| Field | Type |
+| --- | --- |
+| `userid` | player_controller_and_pawn |
+| `slot` | short |
+
+## Rounds and match
+
+### `round_prestart` / `round_poststart`
+
+No fields. Sent before and after all other round restart actions.
+
+### `round_start`
+
+| Field | Type | |
+| --- | --- | --- |
+| `timelimit` | long | round time limit, seconds |
+| `fraglimit` | long | |
+| `objective` | string | |
+
+### `round_freeze_end`
+
+No fields. Freeze time is over, players can move.
+
+### `round_end`
+
+| Field | Type | |
+| --- | --- | --- |
+| `winner` | byte | winning team (`ETeam`) |
+| `reason` | byte | round end reason |
+| `message` | string | end-of-round message |
+| `legacy` | byte | |
+| `player_count` | short | players alive at the end of the round |
+| `nomusic` | byte | don't play round end music |
+
+### `round_mvp`
+
+| Field | Type |
+| --- | --- |
+| `userid` | player_controller |
+| `reason` | short |
+| `value` | long |
+| `musickitmvps` | long |
+| `nomusic` | byte |
+| `musickitid` | long |
+
+### `round_officially_ended`, `begin_new_match`, `round_announce_match_start`, `cs_win_panel_match`, `warmup_end`, `cs_pre_restart`
+
+No fields.
+
+## Bomb
+
+| Event | Fields |
+| --- | --- |
+| `bomb_beginplant` | `userid` (player_controller_and_pawn), `site` (short) |
+| `bomb_planted` | `userid` (player_controller_and_pawn), `site` (short), `c4` (short) |
+| `bomb_begindefuse` | `userid` (player_controller_and_pawn), `haskit` (bool) |
+| `bomb_defused` | `userid` (player_controller_and_pawn), `site` (short), `c4` (short) |
+| `bomb_exploded` | `userid` (player_controller_and_pawn, the planter), `site` (short), `c4` (short) |
+| `bomb_dropped` | `userid` (player_controller_and_pawn), `entindex` (long) |
+| `bomb_pickup` | `userid` (player_pawn) |
+| `player_given_c4` | `userid` (player_controller) |
+
+## Weapons and items
+
+| Event | Fields |
+| --- | --- |
+| `weapon_fire` | `userid` (player_controller_and_pawn), `weapon` (string), `silenced` (bool) |
+| `weapon_reload` | `userid` (player_controller_and_pawn) |
+| `weapon_zoom` | `userid` (player_controller_and_pawn) |
+| `bullet_impact` | `userid` (player_controller_and_pawn), `x`, `y`, `z` (float) |
+| `item_purchase` | `userid` (player_controller), `team` (short), `loadout` (short), `weapon` (string) |
+| `item_pickup` | `userid` (player_controller), `item` (string), `silent` (bool), `defindex` (long) |
+| `item_equip` | `userid` (player_controller), `item` (string), `defindex` (long), `canzoom`, `hassilencer`, `issilenced`, `hastracers` (bool), `weptype` (short), `ispainted` (bool) |
+
+`item_equip.weptype`: -1 unknown, 0 knife, 1 pistol, 2 SMG, 3 rifle, 4 shotgun,
+5 sniper rifle, 6 machine gun, 7 C4, 8 grenade.
+
+## Grenades
+
+| Event | Fields |
+| --- | --- |
+| `grenade_thrown` | `userid` (player_controller_and_pawn), `weapon` (string) |
+| `hegrenade_detonate` | `userid` (player_controller_and_pawn), `entityid` (short), `x`, `y`, `z` (float) |
+| `flashbang_detonate` | `userid` (player_controller_and_pawn), `entityid` (short), `x`, `y`, `z` (float) |
+| `smokegrenade_detonate` | `userid` (player_controller_and_pawn), `entityid` (short), `x`, `y`, `z` (float) |
+
+## Server
+
+| Event | Fields |
+| --- | --- |
+| `game_newmap` | `mapname` (string) — sent when a new map has finished loading |
+| `server_cvar` | `cvarname` (string), `cvarvalue` (string) |
+
+## Client-only helpers
+
+Some events exist to drive the client UI and are useful with
+`FireEventToClient`:
+
+| Event | Fields | Use |
+| --- | --- | --- |
+| `show_survival_respawn_status` | `loc_token` (string), `duration` (long), `userid` (player_controller_and_pawn) | HTML text in the centre of the screen — what `CCSPlayerController::PrintToCenterHtml` sends. |
+
+## Finding other events
+
+The full definitions are plain text inside the game's VPKs:
+`game/csgo/pak01_dir.vpk` → `resource/game.gameevents` and
+`resource/mod.gameevents`, `game/core/pak01_dir.vpk` →
+`resource/core.gameevents`. Any VPK tool can open them. To see what fires in
+practice, hook the candidates with a post hook that logs `event->GetName()`.

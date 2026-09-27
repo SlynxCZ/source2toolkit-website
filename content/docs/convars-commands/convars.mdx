@@ -1,0 +1,280 @@
+---
+title: ConVars
+description: Declaring your own console variables, reading and writing the game's, and reacting when any of them changes.
+---
+
+ConVars in CS2 are hl2sdk's `CConVar<T>` and `CConVarRef<T>` — the toolkit does
+not wrap them in a class of its own. What it adds is
+[`IToolkitConVars`](/docs/core-api/IToolkitConVars): an index-based interface for
+reading, writing and creating ConVars without templates, a process-wide change
+callback that takes lambdas, and a few by-name helpers.
+
+## Declaring your own
+
+Declare a `CConVar<T>` at file scope, then register the library's ConVars once
+in `Load()`:
+
+```cpp title="plugin.cpp"
+CConVar<bool>  myplugin_enabled("myplugin_enabled", FCVAR_NONE, "Turns the plugin on and off", true);
+CConVar<int>   myplugin_bonus("myplugin_bonus", FCVAR_NONE, "Money given at round start", 1337);
+CConVar<float> myplugin_scale("myplugin_scale", FCVAR_NONE, "Damage multiplier",
+                              1.0f, true, 0.0f, true, 10.0f); // min 0, max 10
+
+bool MyPlugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late)
+{
+    TOOLKIT_SAVEVARS();
+
+    g_pCVar = api->GetCVar();
+
+    ConVar_Register(FCVAR_RELEASE | FCVAR_CLIENT_CAN_EXECUTE | FCVAR_GAMEDLL);
+    return true;
+}
+```
+
+- `g_pCVar` has to be set before `ConVar_Register()` — that is where the
+  registration goes.
+- The flags passed to `ConVar_Register()` are added to every ConVar and
+  ConCommand declared in your library. The set above is what the sample plugin
+  and the core use.
+- Read and write your own ConVar with `Get()` and `Set()`:
+  `if (myplugin_enabled.Get()) …`, `myplugin_bonus.Set(500);`.
+
+### Constructors
+
+```cpp title="tier1/convar.h (hl2sdk)"
+CConVar(const char* name, uint64 flags, const char* help_string, const T& default_value,
+        FnTypedChangeCallback_t<T> cb = nullptr, ...);
+
+CConVar(const char* name, uint64 flags, const char* help_string, const T& default_value,
+        bool min, const T& minValue, bool max, const T& maxValue,
+        FnTypedChangeCallback_t<T> cb = nullptr, ...);
+```
+
+Typical `T`: `bool`, `int`, `float`, `double`, `CUtlString`, `Vector`,
+`QAngle`, `Color`.
+
+### Flags
+
+The `FCVAR_*` flags come from hl2sdk's `convar.h`. The ones you will use:
+
+| Flag | Meaning |
+| --- | --- |
+| `FCVAR_NONE` | Nothing special. |
+| `FCVAR_REPLICATED` | The server's value is sent to clients and enforced there (movement, prediction). See [Replication](/docs/convars-commands/replication). |
+| `FCVAR_NOTIFY` | Players are told in chat when it changes. |
+| `FCVAR_PROTECTED` | A password or similar: the value is not sent out. |
+| `FCVAR_CHEAT` | Only changeable with `sv_cheats 1`. |
+| `FCVAR_HIDDEN` | Not listed by `find` or autocomplete. |
+| `FCVAR_RELEASE` | Available in release builds — part of the usual `ConVar_Register` flags. |
+
+### Change callback on your own ConVar
+
+The last constructor argument is a typed callback, a plain function pointer
+(a lambda without captures converts to one):
+
+```cpp title="plugin.cpp"
+CConVar<int> myplugin_mode("myplugin_mode", FCVAR_NONE, "0 = off, 1 = on, 2 = debug", 1,
+    [](CConVar<int>* cvar, CSplitScreenSlot slot, const int* pNewValue, const int* pOldValue)
+    {
+        TOOLKIT_CONPRINTF("myplugin_mode: %d -> %d\n", *pOldValue, *pNewValue);
+    });
+```
+
+When you need captures, or want to hear about ConVars that are not yours, use
+[`HOOK_CONVAR_CHANGE`](#watching-changes) instead.
+
+### Unloading
+
+<Callout type="error">
+Every plugin that declares a `CConVar` must call `ConVar_Unregister()` in `Unload()`.
+</Callout>
+
+`ConVar_Register()` hands the engine pointers to the `CConVar` objects in your
+library. When the library is unloaded those pointers dangle, and the next thing
+that touches one — autocomplete, an `exec` — reads freed memory.
+`ConVar_Unregister()` only walks the list of the library that calls it, so the
+toolkit cannot do this for you:
+
+```cpp title="plugin.cpp"
+bool MyPlugin::Unload(char* error, size_t maxlen)
+{
+    KHOOK_DESTRUCT();
+    ConVar_Unregister();
+    return true;
+}
+```
+
+## Reading and writing the game's ConVars
+
+### `CConVarRef<T>` — typed, for a ConVar you keep using
+
+```cpp title="plugin.cpp"
+CConVarRef<int> mp_limitteams("mp_limitteams");
+
+if (mp_limitteams.IsValidRef() && mp_limitteams.IsConVarDataAvailable())
+{
+    int current = mp_limitteams.Get();
+    mp_limitteams.Set(5);
+}
+```
+
+Things the sample plugin spells out, all worth knowing:
+
+- A `CConVarRef<T>` to a name that is not registered yet **pre-registers** it
+  and reads default data until the real ConVar appears. Check
+  `IsConVarDataAvailable()`.
+- The type must be right. A ref of the wrong type can keep the real ConVar
+  from registering, or leave you with an invalid ref — check `IsValidRef()`
+  before reading or writing. An invalid ref reads and writes shared dummy data.
+- `Get()`/`Set()` are the fast typed path. `GetFloat()`, `GetBool()`,
+  `GetString()`, `SetFloat()`, … convert between types when possible.
+
+A ref to a file-scope `static CConVarRef<bool> sv_autobunnyhopping("sv_autobunnyhopping");`
+is a common pattern in FUNPLAY's plugins.
+
+### `ConVarRefAbstract` — untyped
+
+```cpp
+ConVarRefAbstract ref("mp_limitteams");
+
+if (ref.IsValidRef())
+{
+    ref.SetFloat(10.0f);                        // converting setters
+    float f = ref.GetFloat();
+    ref.SetAs<Vector>(Vector(1.0f, 2.0f, 3.0f)); // for non-primitive types
+
+    CConVarRef<int> typed(ref);                 // "promote" to a typed ref
+    if (typed.IsValidRef() && typed.IsConVarDataValid())
+        typed.Set(5);
+}
+```
+
+`ConVarRefAbstract` does not pre-register anything; it is a plain reference.
+
+### One-shot helpers by name
+
+`IToolkitConVars.h` has three inline helpers for "change this and move on".
+They look the ConVar up themselves and return `false` if it does not exist:
+
+```cpp
+UTIL_SetConVar("mp_freezetime", 5);
+UTIL_SetConVar<float>("mp_roundtime", 1.92f);
+UTIL_SetConVar<const char*>("hostname", "My Server");
+
+UTIL_RemoveConVarFlags("sv_jump_impulse", FCVAR_CHEAT); // settable without sv_cheats
+UTIL_AddConVarFlags("myplugin_bonus", FCVAR_NOTIFY);
+```
+
+For `UTIL_SetConVar` the *type* decides how the value is written, so spell it
+out (`UTIL_SetConVar<int>(…)`) when a literal would deduce to the wrong one — a
+string literal always needs `<const char*>`.
+These go through hl2sdk directly, so they also work before the toolkit's ConVar
+manager is up.
+
+### `IToolkitConVars` — by access index
+
+Every ConVar has a 16-bit access index. The interface is built around it, which
+suits code that does not know the type at compile time:
+
+```cpp
+uint16 idx = CVAR_IDX("mp_roundtime");        // GetConvarAccessIndexByName
+
+float roundTime = CVAR_GET_FLOAT(idx);
+CVAR_SET_FLOAT(idx, 2.5f);
+
+EConVarType type = g_pToolkitConVars->GetType(idx);
+uint64 flags     = g_pToolkitConVars->GetFlags(idx);
+const char* help = g_pToolkitConVars->GetHelpText(idx);
+```
+
+| Group | Methods |
+| --- | --- |
+| Lookup | `GetConvarAccessIndexByName`, `GetConvarRef`, `GetName`, `GetHelpText`, `GetType` |
+| Flags | `GetFlags`, `SetFlags` (replaces the whole set) |
+| Scalars | `GetString/Bool/Int/Float/Double`, `SetString/Bool/Int/Float/Double` |
+| Vectors | `GetVector2/3/4`, `GetQAngle`, `GetColor` and their `Set…` |
+| Raw | `GetValueAddress`, `GetValue`, `SetValue` |
+
+Macros: `CVAR_IDX`, `CVAR_REF`, `CVAR_GET_STR/BOOL/INT/FLOAT/DOUBLE`,
+`CVAR_SET_STR/BOOL/INT/FLOAT/DOUBLE`, `CVAR_CREATE`, `CVAR_DELETE`. Every
+getter and setter takes an optional last `CSplitScreenSlot` (default `-1`),
+which you can leave alone on a server.
+
+<Callout type="warn">
+`GetConvarAccessIndexByName` returns `0` when the name does not exist — and `0`
+is also a valid index. If the ConVar may be missing, verify the lookup, e.g.
+`V_strcmp(g_pToolkitConVars->GetName(idx), "mp_roundtime") == 0`, or use a
+`ConVarRef` and `IsValidRef()`.
+</Callout>
+
+`GetString` returns a pointer into a thread-local buffer: copy it before the
+next `GetString` call if you need to keep it.
+
+## Creating ConVars at runtime
+
+When the name is only known at runtime — read from a config, say — create the
+ConVar through the interface:
+
+```cpp title="IToolkitConVars.h"
+virtual uint16 CreateConVar(const char* name, EConVarType type, const char* help, uint64 flags,
+                            bool hasMin, bool hasMax,
+                            void* defaultValue, const void* minValue, const void* maxValue) = 0;
+virtual void DeleteConVar(uint16 accessIndex) = 0;
+```
+
+```cpp
+float def = 1.0f, min = 0.0f, max = 10.0f;
+uint16 idx = CVAR_CREATE("myplugin_dynamic", EConVarType_Float32, "Created at runtime",
+                         FCVAR_NONE, true, true, &def, &min, &max);
+
+// ...
+
+CVAR_DELETE(idx); // in Unload()
+```
+
+- `defaultValue`, `minValue` and `maxValue` point to a value of the matching
+  type (`int32` for `EConVarType_Int32`, `float` for `EConVarType_Float32`, …).
+  For `EConVarType_String` pass the string itself, `(void*)"text"`, not a
+  pointer to it.
+- Pass valid `minValue`/`maxValue` pointers even when `hasMin`/`hasMax` are
+  false — for numeric types they are read either way.
+- If a ConVar with that name exists already, nothing is created and its index
+  is returned.
+- The ConVar is created by the core, not by your library, and is **not**
+  removed when your plugin unloads. `DeleteConVar` in `Unload()` is on you.
+
+For ConVars known at compile time, a `CConVar<T>` is simpler and needs no cleanup
+beyond `ConVar_Unregister()`.
+
+## Watching changes
+
+`HOOK_CONVAR_CHANGE` registers a callback for **every** ConVar change on the
+server. The engine only takes one plain function pointer for this; the toolkit
+installs it once and fans out, so your handler can be a capturing lambda, and it
+is dropped automatically when the plugin unloads.
+
+```cpp title="plugin.cpp"
+HOOK_CONVAR_CHANGE([](ConVarRefAbstract* ref, CSplitScreenSlot slot, const char* pszNewValue, const char* pszOldValue)
+{
+    if (V_strcmp(ref->GetName(), "sv_autobunnyhopping") != 0)
+        return;
+
+    TOOLKIT_LOG(&g_Plugin, "%s changed from %s to %s\n", ref->GetName(), pszOldValue, pszNewValue);
+});
+```
+
+```cpp title="IToolkitConVars.h"
+using ConVarChangeHandler = std::function<void(ConVarRefAbstract* ref, CSplitScreenSlot slot,
+                                               const char* pszNewValue, const char* pszOldValue)>;
+
+virtual void HookConVarChange(PluginId owner, ConVarChangeHandler handler) = 0;
+virtual void UnhookConVarChange(PluginId owner) = 0;
+```
+
+Filter by name first — the callback fires for all ConVars, the game's included.
+`UNHOOK_CONVAR_CHANGE()` drops every change handler your plugin registered.
+
+## See also
+
+- [Replication](/docs/convars-commands/replication) — a different value per player.
+- [`IToolkitConVars` reference](/docs/core-api/IToolkitConVars)

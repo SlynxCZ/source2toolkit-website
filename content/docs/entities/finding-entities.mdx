@@ -1,0 +1,190 @@
+---
+title: Finding Entities
+description: Getting a player controller from a slot, userid, SteamID or pawn, and finding other entities by index, classname, name or crosshair.
+---
+
+Most plugin code starts from something that identifies an entity — a command
+caller's slot, a game event's userid, a SteamID from your database, an entity
+index — and needs the typed object. This page lists the ways in.
+
+## Players
+
+`CCSPlayerController` has static lookups for every way a player is identified:
+
+```cpp
+#include "source2toolkit/schema/entity/classes/CCSPlayerController.h"
+
+static CCSPlayerController* FromSlot(int iSlot);
+static CCSPlayerController* FromSlot(CPlayerSlot slot);
+static CCSPlayerController* FromUserId(int iUserId);
+static CCSPlayerController* FromUserId(CPlayerUserId userId);
+static CCSPlayerController* FromSteamId(uint64 uSteamId);
+static CCSPlayerController* FromSteamId(CSteamID steamId);
+static CCSPlayerController* FromPawn(CCSPlayerPawn* pPawn);
+```
+
+All of them return `nullptr` when nothing matches.
+
+- `FromSlot` reads the entity at index `slot + 1` — controllers always occupy
+  indices 1 to 64. The `CPlayerSlot` overload also returns null for an invalid
+  slot (`-1`, which is what the server console has).
+- `FromUserId` and `FromSteamId` walk the slots up to `maxClients`. Bots have
+  a SteamID of 0.
+- `FromPawn` follows the pawn's `m_hController` handle; the pawn must not be null.
+
+The command context gives you the caller's slot. The sample plugin's helper:
+
+```cpp title="plugin.cpp"
+// A controller for a player, nullptr for the server console.
+static CCSPlayerController* CallerOf(const CCommandContext& context)
+{
+    const CPlayerSlot slot = context.GetPlayerSlot();
+    return slot.IsValid() ? CCSPlayerController::FromSlot(slot) : nullptr;
+}
+```
+
+For getting the player out of a game event, see [Events](/docs/events).
+
+### Iterating players
+
+There is no player list to ask for — loop over the slots and skip the empty
+ones:
+
+```cpp
+for (int i = 0; i < GetGlobalVars()->maxClients; ++i)
+{
+    CCSPlayerController* pPlayer = CCSPlayerController::FromSlot(i);
+    if (!pPlayer || pPlayer->m_iConnected() != PlayerConnectedState::Connected)
+        continue;
+
+    if (pPlayer->IsBot())
+        continue;
+
+    // ...
+}
+```
+
+A controller exists from the moment a client starts connecting until it has
+fully left, so `m_iConnected` is worth checking when you are about to message
+or act on the player. For "alive players", also check `m_bPawnIsAlive()` and
+that `GetPlayerPawn()` is not null.
+
+### From controller to everything else
+
+| You want | Call |
+|---|---|
+| The body | `GetPlayerPawn()` → `CCSPlayerPawn*` |
+| The observer pawn | `GetObserverPawn()` → `CCSObserverPawn*` |
+| Slot | `GetSlot()` (`int`) / `GetPlayerSlot()` (`CPlayerSlot`) |
+| Userid | `GetUserID()` (`int`) / `GetPlayerUserID()` (`CPlayerUserId`) |
+| SteamID | `GetSteamID()` (`uint64`) / `GetPlayerSteamID()` (`CSteamID`) |
+| Name | `GetPlayerName()` |
+| IP address | `GetIpAddress()` → `CUtlString`, without the port |
+| Engine client | `GetServerSideClient()` → `CServerSideClient*` |
+
+## Any entity by index
+
+`CBaseEntity::FromIndex<T>` looks an entity up by index and casts it to the
+type you name; every generated class also has a non-template `FromIndex`
+returning its own type:
+
+```cpp
+CBaseEntity* pEntity = CBaseEntity::FromIndex<CBaseEntity>(nIndex);
+CCSPlayerPawn* pPawn = CCSPlayerPawn::FromIndex(nIndex);   // same, typed
+```
+
+Both take an `int` or a `CEntityIndex`. **No type check is done** — the cast
+is only right if the entity at that index really is that class. Check
+`GetClassname()` when you are not sure.
+
+## By classname, name or crosshair
+
+These live on [IToolkitEntities](/docs/core-api/IToolkitEntities), with macros
+that fill in the `g_pToolkitEntities` call:
+
+```cpp
+#include "source2toolkit/IToolkitEntities.h"
+
+FIND_ENTITY_BY_CLASSNAME(start, "func_breakable")  // FindEntityByClassname
+FIND_ENTITY_BY_NAME(start, "door_main")            // FindEntityByName (targetname)
+FIND_PICKER_ENTITY(pController)                    // FindPickerEntity: under the crosshair
+GET_GAME_RULES()                                   // the live CCSGameRules, or null
+```
+
+The `Find*` functions return one match at a time. Pass `nullptr` to start and
+the previous match to continue:
+
+```cpp title="plugin.cpp"
+int nBroken = 0;
+
+CBaseEntity* pEntity = nullptr;
+while ((pEntity = FIND_ENTITY_BY_CLASSNAME(pEntity, "func_breakable")) != nullptr)
+{
+    pEntity->AcceptInput("Break");
+    nBroken++;
+}
+```
+
+`FindEntityByName` has optional searching-entity, activator, caller and filter
+arguments, the same as the engine function it wraps.
+
+### All at once
+
+`UTIL_FindAllEntitiesByDesignerName<T>` (in `IToolkitEntities.h`) returns a
+`std::vector<T*>` of every live entity whose designer name matches exactly. It
+walks the entity system's active list directly:
+
+```cpp
+for (auto* pTeam : UTIL_FindAllEntitiesByDesignerName<CTeam>("cs_team_manager"))
+{
+    // ...
+}
+
+for (auto* pProp : UTIL_FindAllEntitiesByDesignerName<CDynamicProp>("prop_dynamic"))
+    pProp->AcceptInput("Kill");
+```
+
+Like `FromIndex`, the cast is unchecked — keep the name and the type consistent.
+
+## Watching entities come and go
+
+Instead of searching, you can be told. Implement `IEntityListener` (from the
+engine's `entity2/entitysystem.h`) and register it with `ADD_ENTITY_LISTENER`:
+
+```cpp title="plugin.h"
+class MyPlugin : public IToolkitPlugin, public IEntityListener
+{
+    void OnEntityCreated(CEntityInstance* pEntity) override;
+    void OnEntitySpawned(CEntityInstance* pEntity) override;
+    void OnEntityDeleted(CEntityInstance* pEntity) override;
+    void OnEntityParentChanged(CEntityInstance* pEntity, CEntityInstance* pNewParent) override;
+};
+```
+
+```cpp title="plugin.cpp"
+ADD_ENTITY_LISTENER(this);   // in Load()
+```
+
+`OnEntityCreated` is early — the keyvalues have not been applied and the entity
+has not spawned. `OnEntitySpawned` is usually the one you want. Some entities
+are filled in by the game right after they spawn, so a change made there can be
+overwritten; the sample plugin waits one frame, through a handle:
+
+```cpp title="plugin.cpp"
+void SamplePlugin::OnEntitySpawned(CEntityInstance* pEntity)
+{
+    if (V_strcmp(pEntity->GetClassname(), "smokegrenade_projectile") != 0)
+        return;
+
+    CHandle<CSmokeGrenadeProjectile> hSmoke = static_cast<CSmokeGrenadeProjectile*>(pEntity)->GetHandle();
+
+    NEXT_FRAME([hSmoke]()
+    {
+        if (CSmokeGrenadeProjectile* pSmoke = hSmoke.Get())
+            pSmoke->m_vSmokeColor = Vector(170.0f, 0.0f, 255.0f);
+    });
+}
+```
+
+The listener is removed for you when your plugin unloads;
+`REMOVE_ENTITY_LISTENER(this)` removes it earlier.

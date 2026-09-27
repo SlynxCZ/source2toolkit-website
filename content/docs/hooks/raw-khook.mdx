@@ -1,0 +1,191 @@
+---
+title: Raw KHook
+description: Using KHook::Virtual, Member and Function objects directly, with KHOOK_NEW, for hooks the KHOOK_* macros do not cover — and the C-style API underneath.
+---
+
+The `KHOOK_*` macros cover almost every hook a plugin needs. Underneath they are
+plain KHook objects, and you can hold those directly when the wrapper does not
+fit: a hook moved between instances at runtime, attached to several objects at
+once, configured from something the macros cannot express, or used outside a
+plugin class.
+
+## What the macros wrap
+
+The macros wrap `KHook::Virtual`, `KHook::Member` and `KHook::Function` in
+`CToolkitVirtualHook`, `CToolkitMemberHook` and `CToolkitFunctionHook`. Each
+wrapper owns its KHook object, registers itself in a per-plugin list that
+`KHOOK_INIT()` / `KHOOK_DESTRUCT()` walk, and remembers its target until the
+toolkit is ready to resolve it.
+
+You do not have to leave the wrapper to reach KHook: `m_hX.Get()` and
+`m_hX->` hand you the object underneath, so `m_hX->AddGlobal(...)` or
+`m_hX->Configure(...)` are one step away. Go fully raw only when you need to
+own the object's lifetime yourself.
+
+## KHOOK_NEW
+
+A raw KHook object carries the hooked function and the callbacks in its type.
+CTAD would derive that from the constructor arguments, but MSVC cannot, so
+`KHOOK_NEW` (`IToolkitTypes.h`) takes the type from the member it is stored in
+instead — for a constructor's initialiser list:
+
+```cpp title="plugin.h"
+class Plugin final : public IToolkitPlugin
+{
+public:
+    Plugin();
+
+    KHook::Return<void> Hook_GameFrame(ISource2Server* pThis, bool simulating, bool bFirstTick, bool bLastTick);
+
+private:
+    KHook::Virtual<ISource2Server, void, bool, bool, bool>* m_hGameFrame = nullptr;
+};
+```
+
+```cpp title="plugin.cpp"
+Plugin::Plugin() :
+    KHOOK_NEW(m_hGameFrame, &ISource2Server::GameFrame, this, nullptr, &Plugin::Hook_GameFrame)
+{
+}
+
+bool Plugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late)
+{
+    TOOLKIT_SAVEVARS();
+    m_hGameFrame->Add(api->GetSource2Server());   // attach
+    return true;
+}
+
+bool Plugin::Unload(char* error, size_t maxlen)
+{
+    m_hGameFrame->Remove(g_pSource2Server);       // detach
+    delete m_hGameFrame;                          // deleting takes the hook down
+    m_hGameFrame = nullptr;
+    return true;
+}
+```
+
+The address lookup, `Add` / `Configure` and `Remove` / `delete` are all yours.
+`KHOOK_INIT()` and `KHOOK_DESTRUCT()` do not see raw objects.
+
+This is how the toolkit core itself hooks — for example the overloaded
+`IGameEventSystem::PostEventAbstract`, disambiguated with a `static_cast`:
+
+```cpp
+KHOOK_NEW(m_hPostEventAbstract,
+    static_cast<void (IGameEventSystem::*)(CSplitScreenSlot, bool, int, const uint64*, INetworkMessageInternal*, const CNetMessage*, unsigned long, NetChannelBufType_t)>(&IGameEventSystem::PostEventAbstract),
+    this, &Virtuals::Hook_PostEventAbstract, nullptr)
+```
+
+## The three classes
+
+| class | where it goes | attach / detach |
+|---|---|---|
+| `KHook::Virtual<CLASS, RET, ARGS...>` | `Configure(&CLASS::Method)` or `Configure(index)` | `Add(pThis)` / `Remove(pThis)` for one object, `AddGlobal(pThis)` / `RemoveGlobal(pThis)` for every object sharing `pThis`'s vtable |
+| `KHook::Member<CLASS, RET, ARGS...>` | `Configure(address)` or `Configure(&CLASS::Method)` | configuring places the detour |
+| `KHook::Function<RET, ARGS...>` | `Configure(address)` or `Configure(&Function)` | configuring places the detour |
+
+The constructors take the function (or nothing, and you `Configure` later), an
+optional context object, and the Pre and Post callbacks. With a context the
+callbacks are members of the context's class — what the macros always use;
+without one they are free functions. Deleting the object removes the detour.
+
+Every class has `CallOriginal(...)` to run the original past its hooks.
+
+### A detour by gamedata name
+
+```cpp
+KHook::Member<CCSPlayerPawn, void>* m_hPostThink = nullptr;
+
+// constructor
+KHOOK_NEW(m_hPostThink, this, &Plugin::Hook_PostThink, nullptr)
+
+// Load(), after TOOLKIT_SAVEVARS()
+if (IToolkitMemory address = GAMECONFIG_RESOLVE("CCSPlayerPawn::PostThink"))
+    m_hPostThink->Configure(address.RCast<const void*>());
+
+// Unload()
+delete m_hPostThink;
+```
+
+### A whole vtable without an instance
+
+`AddGlobal` only reads the first pointer of what it is handed — the vtable
+pointer — so a local holding a vtable address stands in for an object. This is
+what `KHOOK_VTABLE` does for you:
+
+```cpp
+void* m_pVTable = nullptr;
+
+IToolkitModule* pServer = IToolkitModule::New("server");
+m_pVTable = pServer->GetVirtualTableByName("CCSPlayerController").GetPtr();
+FREE_MODULE(pServer);
+
+if (m_pVTable)
+    m_hRespawn->AddGlobal(reinterpret_cast<CCSPlayerController*>(&m_pVTable));
+
+// Unload(): RemoveGlobal with the same stand-in, then delete
+m_hRespawn->RemoveGlobal(reinterpret_cast<CCSPlayerController*>(&m_pVTable));
+```
+
+Keep `m_pVTable` alive (a member, not a local) — the same pointer is needed to
+remove the hook.
+
+## Finding originals
+
+Two free functions answer "what would run without the hooks":
+
+```cpp
+void* KHook::FindOriginal(void* function);                    // behind a detour
+void* KHook::FindOriginalVirtual(void** vtable, int index);   // behind a vtable hook
+```
+
+Both hand the input back unchanged when nothing is hooked. `TOOLKIT_ORIGINAL`
+and `HookChain::Bypass` are built on them — see
+[Addresses](/docs/hooks/addresses#calling-past-the-hooks).
+
+## The low-level API
+
+Everything above is built on a handful of C-style functions. You will very
+likely never call them, but knowing what they do explains how the classes
+behave.
+
+```cpp
+HookID_t KHook::SetupHook(void* function, void* context, void* removed_function, void* pre, void* post, void* make_return, void* make_call_original, unsigned int stack_size, bool async = false);
+
+HookID_t KHook::SetupVirtualHook(void** vtable, int index, void* context, void* removed_function, void* pre, void* post, void* make_return, void* make_call_original, unsigned int stack_size, bool async = false);
+
+void KHook::RemoveHook(HookID_t id, bool async = false, void (*hook_removal_fn)(HookID_t, void*) = nullptr, void* context = nullptr);
+```
+
+| parameter | meaning |
+|---|---|
+| `function` / `vtable` + `index` | what to detour: an address, or a vtable slot |
+| `context` | any pointer; inside the callbacks `KHook::GetContext<T>()` returns it |
+| `removed_function` | called when the hook has been removed — the place to clean up |
+| `pre`, `post` | the callbacks, with exactly the detoured function's signature |
+| `make_call_original` | may be called to run the original and store its return value |
+| `make_return` | called on the hook chosen to produce the final return value |
+| `stack_size` | the stack size in bytes for the detoured function — the classes compute it from the argument types |
+| `async` | add (or remove) the hook asynchronously; done synchronously from inside the hooked function it can deadlock |
+
+A callback at this level does not *return* its result — KHook restores the
+registers around every callback and ignores what it returns. It reports
+through `KHook::SaveReturnValue(action, ptr_to_return, return_size, init_op, deinit_op, original)`
+instead: the action, a pointer to the value to copy, its size, and two
+functions KHook may use to construct and destruct its own copy.
+`make_call_original` fetches the real function with
+`KHook::GetOriginalFunction()`, calls it and saves the result with
+`original = true`; `make_return` reads the chosen value with
+`KHook::GetCurrentValuePtr(true)` and must end with
+`KHook::DestroyReturnValue()`, which frees that copy and tells KHook the call
+is over.
+
+<Callout type="warn">
+  The raw API is full of footguns — a missed `DestroyReturnValue` leaks and
+  leaves KHook mid-call, a wrong `stack_size` corrupts the arguments. The
+  classes and macros exist so nobody has to write this by hand.
+</Callout>
+
+The KHook [README](https://github.com/Kenzzer/KHook/blob/master/README.md) and
+`vendor/khook/include/khook.hpp` in the SDK are the reference for everything on
+this page.

@@ -1,5 +1,6 @@
 ---
-title: SDK dependencies (deps.py)
+title: SDK Dependencies
+description: How tools/deps.py sets up hl2sdk-cs2 and the Protobufs, keeps KHook on the core's commit, and how the build finds them.
 ---
 
 The SDK compiles against two things it does not carry in git, and two it carries as submodules:
@@ -17,9 +18,8 @@ The SDK compiles against two things it does not carry in git, and two it carries
   KHook is the one dependency with no freedom in it. The toolkit core is compiled against the KHook inside Metamod:Source, every plugin against `vendor/khook`, and the core compares the two commits when a plugin loads: a mismatch means the plugin refuses to load. That is why `update` moves `vendor/khook` to exactly the commit `alliedmodders/metamod-source` master pins, and nowhere else.
 </Callout>
 
----
 
-# init — choose once
+## init — choose once
 
 ```bash
 cd source2toolkit-sdk
@@ -42,7 +42,7 @@ The answers go into `deps.json` next to the SDK. It is ignored by git, as are `d
 
 `init` ends by running `update`, so after it the dependencies are in place.
 
-## Without a terminal
+### Without a terminal
 
 Every question has a flag, which is what a CI script or a Dockerfile wants:
 
@@ -58,9 +58,8 @@ python tools/deps.py init --hl2sdk download --hl2sdk-repo https://github.com/you
   `CSGO_PROTO` may point at the `csgo/` folder or at the root of the Protobufs checkout; `init` finds `csgo/` itself.
 </Callout>
 
----
 
-# update — keep it current
+## update — keep it current
 
 ```bash
 python tools/deps.py update
@@ -77,9 +76,8 @@ Does, in this order:
 
 In `env` mode the environment variables have to be set when `update` runs, the same as when building; put them in your shell profile, or answer the path question by hand so it is stored.
 
----
 
-# status — what is checked out
+## status — what is checked out
 
 ```bash
 python tools/deps.py status
@@ -94,11 +92,10 @@ python tools/deps.py status
 
 `ok` means the probe file (`public/eiface.h`, `netmessages.proto`) is there. A `MISSING` here is what a CMake error about `HL2SDKCS2` or `CSGO_PROTO` looks like before CMake runs.
 
----
 
-# How the build picks it up
+## How the build picks it up
 
 - **CMake** includes `deps.cmake`, if it exists, before it looks at `HL2SDKCS2` and `CSGO_PROTO`. The file only carries downloaded dependencies and typed paths, so a downloaded choice wins over a stale environment variable. Without `deps.json` at all, the SDK reads the environment variables and then falls back to `vendor/hl2sdk-cs2` and `vendor/Protobufs/csgo` when they exist; a missing dependency is reported with the path it looked at.
 - **AMBuild** reads `deps.json` directly, with the same fallbacks.
 
-Nothing changes for a build that never ran `deps.py`: set the two variables and build, as on the [SDK & Building](/docs/building) page.
+Nothing changes for a build that never ran `deps.py`: set the two variables and build, as on the [SDK & Building](/docs/development/building) page.

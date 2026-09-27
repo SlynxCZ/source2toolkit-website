@@ -1,0 +1,20 @@
+{
+    "title":  "Guides",
+    "defaultOpen":  true,
+    "pages":  [
+                  "menus",
+                  "scheduler",
+                  "sounds",
+                  "transmit",
+                  "tracing",
+                  "---Services---",
+                  "http",
+                  "json",
+                  "mysql",
+                  "paths",
+                  "---Low level---",
+                  "game-systems",
+                  "memory-and-modules",
+                  "crash-handler"
+              ]
+}

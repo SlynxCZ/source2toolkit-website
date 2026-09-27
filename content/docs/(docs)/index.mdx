@@ -1,63 +1,75 @@
 ---
 title: Introduction
+description: Source2Toolkit is a native C++ plugin framework for Counter-Strike 2 servers, running on Metamod:Source.
 ---
 
-Source2Toolkit is a server-side development toolkit for **Counter-Strike 2**, built on top of **MetaMod:Source**.
+Source2Toolkit is a server-side development toolkit for **Counter-Strike 2**. It gives C++ plugins direct access to Source 2 internals — the schema system, entities, hooks, memory, network messages — together with the high-level pieces every server plugin needs: commands, ConVars, game events, menus, timers, HTTP, MySQL and more.
 
-It provides a powerful scripting and extension layer that enables developers to build plugins ranging from simple gameplay tweaks to advanced engine-level modifications.
+## Who it is for
 
----
+- **Plugin developers** who want native C++ with no scripting layer or managed runtime in between, and who are comfortable reading engine code when they need to.
+- **Server owners** who run plugins built on the toolkit: installing it is a Metamod plugin plus a folder of `.stx` files.
 
-# Why should you choose Source2Toolkit?
+## How it fits with Metamod:Source
 
-Source2Toolkit is designed with engine-level access and performance in mind.
-It combines low-level control with high-level utilities, allowing you to work directly with Source 2 internals while still keeping development efficient.
+Source2Toolkit is itself a **Metamod:Source plugin**. Metamod loads the toolkit core (`addons/source2toolkit/bin/...`), and the core then loads your plugins — `.stx` files from `addons/source2toolkit/plugins/` — and hands each of them the toolkit API.
 
-The toolkit focuses on:
+That split is deliberate:
 
-* Direct interaction with the game’s memory and schema system
-* Minimal overhead and near-native execution
-* Clean and modern API design for plugin development
-* Flexibility without artificial limitations
+- Your plugin talks to one API (`IToolkitAPI` and the `g_pToolkit*` interfaces) instead of fetching engine interfaces, scanning signatures and wiring listeners itself.
+- Everything a plugin registers — commands, event hooks, timers, net message hooks, menus — is owned by its plugin id and removed when the plugin unloads.
+- Hooks use **KHook**, the detour library inside Metamod:Source. Metamod, the toolkit and every toolkit plugin share one KHook instance, so hooks placed by different plugins on the same function chain correctly.
 
----
+The core also resolves engine functions from a shared gamedata folder, so most plugins never ship a signature of their own.
 
-A list of features:
+## Features
 
 ### Engine access
 
-* **Schema System**: Access Source 2 SDK classes, offsets and fields through schema.
-* **Entity System**: Work with entities using schema-based access and native structures.
-* **Hooks**: KHook — virtual, vtable and function detours on the one engine Metamod runs, with pattern scanning support.
-* **Memory**: Direct memory access and manipulation for advanced use cases.
-* **Addresses**: Resolved engine functions — spawn, take damage, set model, set pawn and more — ready to call.
-* **Game Systems**: Find and register `IGameSystem` implementations on the engine's factory list.
-* **GameConfig**: Signature and offset management system for cross-version compatibility.
-* **Dynamic Libraries**: Load and interact with external modules and engine interfaces.
+- **Schema system** — generated classes for the game's schema (`CBaseEntity`, `CCSPlayerController`, …) with typed field access and network state updates.
+- **Entities** — find, create and spawn entities, entity listeners and entity I/O.
+- **Hooks** — KHook virtual, vtable and function detours, declared in one line with `KHOOK_VIRTUAL` / `KHOOK_MEMBER` / `KHOOK_FUNCTION`.
+- **Addresses** — engine functions the core already resolved (spawn, take damage, set model, switch team, …), ready to call through `ADDR_*()`.
+- **GameConfig** — signatures, offsets and patches from JSON gamedata, per platform.
+- **Memory & modules** — pattern scans, symbol lookups and typed casts on any loaded library.
+- **Game systems** — register your own `IGameSystem` on the engine's factory list.
 
 ### Gameplay
 
-* **Commands**: Register and handle console or chat commands with full control over execution.
-* **ConVars**: Access, modify and replicate console variables across clients.
-* **Events**: Hook engine and game-level events with pre/post execution control.
-* **GameEvents**: Fully typed game event system for safe and predictable handling.
-* **Network Messages**: Allocate, send and hook Source 2 net messages by ID or by name.
-* **Menus**: Build chat menus with options, titles and per-player state.
-* **Custom HUD**: Hook click callbacks on custom HUD layout entities.
-* **Scheduler**: Timers and next-frame execution utilities.
-* **Tracing**: Built-in trace utilities for raycasts and collision queries.
-* **Sounds**: Sound events sent to exactly the players you pick, stopped or changed by guid, per-player volume channels, and a hook on every sound the game sends.
-* **Transmit**: Per-viewer entity visibility -- hide players and entities from some clients and not others, owner-following, and a CheckTransmit hook.
+- **Commands** — console and chat commands, plus listeners on commands you do not own.
+- **ConVars** — declare your own, read and write the game's, hear about changes.
+- **Game events** — pre/post hooks with field access, `dontBroadcast` and cancel, and firing your own.
+- **Network messages** — allocate, send and hook Source 2 net messages by id or by name.
+- **Menus** — chat menus with per-player state.
+- **Custom HUD** — Panorama layouts with click callbacks.
+- **Scheduler** — timers and next-frame tasks.
+- **Tracing** — ray and hull traces for line-of-sight and collision queries.
+- **Sounds** — sound events for exactly the players you pick, stop and change by guid, per-player volume channels and a hook on every sound the game sends.
+- **Transmit** — per-viewer entity visibility, owner-following and a CheckTransmit hook.
 
 ### Services
 
-* **HTTP**: Asynchronous requests through Steam's HTTP client, with availability and queue reporting.
-* **JSON**: Parse and build JSON values without pulling in a dependency of your own.
-* **MySQL**: Query the database and walk typed result sets by column name or index.
-* **Paths**: Resolved paths for the game, the toolkit root, configs, gamedata and plugins.
-* **[Crash Handler](/docs/crash-handler)**: Minidumps processed on the server, plugin frames symbolized to `function @ file:line`, a suspected culprit and a Discord report.
+- **HTTP** — asynchronous requests through Steam's HTTP client.
+- **JSON** — parse and build JSON without a dependency of your own.
+- **MySQL** — queries with typed result sets.
+- **Paths** — the game directory, the toolkit root, configs, gamedata, plugins and a shared data folder.
+- **[Crash handler](/docs/guides/crash-handler)** — minidumps processed on the server itself, plugin frames symbolized to `function @ file:line`, a suspected culprit and an optional Discord report.
 
----
+## Where to go next
 
-Source2Toolkit is an open-source project, designed to give developers full control over their server environment without unnecessary restrictions.
+<Cards>
+  <Card title="Installation" href="/docs/installation">Install Metamod:Source and the toolkit on a CS2 server.</Card>
+  <Card title="Your first plugin" href="/docs/development/first-plugin">A minimal plugin from class to built `.stx`.</Card>
+  <Card title="API reference" href="/docs/core-api/IToolkitApi">Every toolkit interface, generated from the SDK headers.</Card>
+  <Card title="Schema" href="/docs/schema/entity/classes/CBaseEntity">Generated schema classes, fields and helpers.</Card>
+  <Card title="ConVars & Commands" href="/docs/convars-commands">Declare ConVars, register console and chat commands.</Card>
+  <Card title="Entities" href="/docs/entities">Finding, creating and listening to entities.</Card>
+  <Card title="Protobuf" href="/docs/protobuf">Network messages and the game's protobufs.</Card>
+  <Card title="Events" href="/docs/events">Game events: hooking, reading, changing and firing.</Card>
+  <Card title="Panorama" href="/docs/panorama">Custom HUD layouts and their callbacks.</Card>
+  <Card title="Hooks" href="/docs/hooks">KHook detours on virtual and non-virtual functions.</Card>
+</Cards>
 
+## License
+
+Source2Toolkit and its SDK are licensed under the **GPLv3**, with an **MIT exception for derivative works**: plugins built against the SDK may use any license you choose, including closed-source and commercial terms. The toolkit and the SDK themselves, and modified versions of them, stay under the GPLv3. See the [FAQ](/docs/resources/faq) for details.

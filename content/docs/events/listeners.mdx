@@ -1,0 +1,162 @@
+---
+title: Listeners
+description: The IToolkitListener callbacks — plugin lifecycle, map start and end, interface queries — what each one reports and exactly when it fires.
+---
+
+`IToolkitListener` is how the toolkit tells your plugin about the plugin system
+and the map lifecycle. Every method has an empty default, so you override only
+what you need, and you register the listener once in `Load()`.
+
+```cpp title="plugin.h"
+#include "source2toolkit/IToolkitPlugin.h"
+
+class MyPlugin final : public IToolkitPlugin, public IToolkitListener
+{
+public:
+    bool Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late) override;
+    bool Unload(char* error, size_t maxlen) override;
+
+    // IToolkitListener
+    void OnAllToolkitPluginsLoaded() override;
+    void OnLevelInit(const char* mapName, const char* mapEntities, const char* oldLevel,
+                     const char* landmarkName, bool loadGame, bool background) override;
+    void OnLevelShutdown() override;
+
+    // GetAuthor(), GetName(), ... as usual
+};
+```
+
+```cpp title="plugin.cpp"
+bool MyPlugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late)
+{
+    TOOLKIT_SAVEVARS();
+
+    api->AddListener(this, this);
+    return true;
+}
+```
+
+## Registering
+
+```cpp title="IToolkitApi.h"
+virtual void AddListener(IToolkitPlugin* plugin, IToolkitListener* pListener) = 0;
+```
+
+- `plugin` — your plugin object; the listener is filed under it.
+- `pListener` — the object that implements the callbacks. Usually the plugin
+  class itself, hence `AddListener(this, this)`, but it can be any object that
+  lives as long as the plugin. A plugin can add several.
+
+Call it from `Load()`. There is no `RemoveListener`: the toolkit forgets a
+plugin's listeners when the plugin unloads (or when its `Load()` fails).
+
+## The callbacks
+
+### Plugin lifecycle
+
+| Callback | Fires |
+| --- | --- |
+| `OnPluginLoad(PluginId id)` | After a toolkit plugin (`.stx`) loaded successfully, on every plugin's listeners — **including the new plugin's own**, so you see your own `g_PluginID` once. |
+| `OnPluginUnload(PluginId id)` | When a toolkit plugin is about to unload — before its `Unload()` runs — on every plugin's listeners, including the one going away. |
+| `OnAllToolkitPluginsLoaded()` | After the toolkit loaded the plugins folder at startup, and again after `toolkit refresh` loaded at least one new plugin. |
+| `OnMetamodPluginLoad(PluginId id)` | A Metamod:Source plugin was loaded. |
+| `OnMetamodPluginUnload(PluginId id)` | A Metamod:Source plugin was unloaded. |
+| `OnAllMetamodPluginsLoaded()` | Metamod:Source finished loading all of its plugins. |
+
+The ids in `OnPluginLoad`/`OnPluginUnload` are **toolkit** plugin ids, the
+ones `toolkit list` shows. The ids in the two `OnMetamod…` callbacks are
+Metamod's own, from a different numbering — which is why they are separate
+callbacks.
+
+`OnAllToolkitPluginsLoaded` is the place for anything that depends on other
+plugins: fetching another plugin's interface with `GET_TOOLKIT_IFACE`, for
+example. Note what does **not** trigger it: loading one plugin by hand with
+`toolkit load`, or a hot reload. A plugin that may be loaded that way should
+also try its setup from `Load()` or from `OnPluginLoad`.
+
+```cpp title="plugin.cpp"
+void MyPlugin::OnAllToolkitPluginsLoaded()
+{
+    // IOtherPluginApi / OTHER_PLUGIN_API_NAME: the header the other plugin ships.
+    int ret = TOOLKIT_IFACE_FAILED;
+    GET_TOOLKIT_IFACE(m_pOtherApi, IOtherPluginApi, OTHER_PLUGIN_API_NAME, ret);
+
+    if (ret != TOOLKIT_IFACE_OK)
+        TOOLKIT_LOG(this, "Other plugin not found, running without it.\n");
+}
+```
+
+### Map lifecycle
+
+| Callback | Fires |
+| --- | --- |
+| `OnLevelInit(mapName, mapEntities, oldLevel, landmarkName, loadGame, background)` | A map is initialising — Metamod's `OnLevelInit`, passed through. `mapName` is the map being loaded. |
+| `OnLevelShutdown()` | The current map is shutting down. |
+
+Map start is the place to reset per-map state; map shutdown is
+the last moment to let go of entity pointers, handles to per-map objects, and
+timers that must not survive the map.
+
+```cpp title="plugin.cpp"
+void MyPlugin::OnLevelInit(const char* pMapName, const char* pMapEntities, const char* pOldLevel,
+                           const char* pLandmarkName, bool loadGame, bool background)
+{
+    TOOLKIT_LOG(this, "OnLevelInit(%s)\n", pMapName);
+}
+
+void MyPlugin::OnLevelShutdown()
+{
+    // Anything map-scoped goes here.
+}
+```
+
+<Callout type="info">
+A plugin loaded while a map is already running has missed that map's
+`OnLevelInit`. If you need the current map at load time, read it from the
+engine rather than waiting for the next map change.
+</Callout>
+
+### Interface queries
+
+These let your plugin **expose** interfaces to other plugins:
+
+| Callback | Called when |
+| --- | --- |
+| `void* OnToolkitQuery(const char* iface, int* ret)` | Another toolkit plugin asks for an interface (`g_ToolkitAPI->ToolkitFactory`, `GET_TOOLKIT_IFACE`). |
+| `void* OnMetamodQuery(const char* iface, int* ret)` | A Metamod:Source plugin asks for one through Metamod's factory. By default it answers exactly like `OnToolkitQuery`. |
+
+Return your interface and set `*ret` to `TOOLKIT_IFACE_OK` when `iface` is a
+name you serve; otherwise return `nullptr`. The default implementation sets
+`TOOLKIT_IFACE_FAILED`. Override `OnMetamodQuery` to answer Metamod plugins
+differently, or to return `nullptr` and keep an interface toolkit-only.
+
+```cpp title="plugin.cpp"
+// MY_PLUGIN_API_NAME and g_MyPluginApi: your own interface name and object.
+void* MyPlugin::OnToolkitQuery(const char* iface, int* ret)
+{
+    if (strcmp(iface, MY_PLUGIN_API_NAME) == 0)
+    {
+        if (ret) *ret = TOOLKIT_IFACE_OK;
+        return &g_MyPluginApi;
+    }
+
+    if (ret) *ret = TOOLKIT_IFACE_FAILED;
+    return nullptr;
+}
+```
+
+## What is not a listener callback
+
+`IToolkitListener` is deliberately small. For everything else:
+
+| Event | Where |
+| --- | --- |
+| Client connect, put in server, disconnect | KHook on `ISource2GameClients` (`ClientConnect`, `ClientPutInServer`, `ClientDisconnect`, …) — see [Hooking](/docs/hooks), or the `player_connect_full` / `player_disconnect` [game events](/docs/events/game-events) |
+| Every server frame | KHook on `ISource2Server::GameFrame` |
+| Entity created / spawned / deleted | `IEntityListener` via `ADD_ENTITY_LISTENER` — see [Entities](/docs/entities) |
+| Entity outputs | `IEntityIOListener` via `ADD_ENTITY_IO_LISTENER` — see [Entities](/docs/entities) |
+| Round start, deaths, bomb, … | [Game events](/docs/events/game-events) |
+
+The full interface is documented in the
+[`IToolkitPlugin` reference](/docs/core-api/IToolkitPlugin); `AddListener` in
+[`IToolkitApi`](/docs/core-api/IToolkitApi).

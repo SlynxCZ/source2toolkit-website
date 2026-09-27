@@ -1,0 +1,245 @@
+---
+title: Sending Messages
+description: Allocating a net message by id or name, filling its protobuf fields, and sending it to one player, a set of players or everyone.
+---
+
+Sending a message is four steps: allocate it, set its fields, send it, free it.
+The message stays yours throughout — sending does not consume it, so one
+message can go out as many times as you like before you free it.
+
+```cpp title="plugin.cpp"
+#include "usermessages.pb.h"   // UM_Shake
+
+REGISTER_CON_COMMAND("sample_shake", [](const CCommandContext& context, const CCommand& args, bool post)
+{
+    void* pMsg = NET_MSG_ALLOC_BY_ID(UM_Shake);
+    if (!pMsg)
+        return;
+
+    // CUserMessageShake, usermessages.proto
+    g_pToolkitNetworkMessages->SetUInt32(pMsg, "command", 0);   // SHAKE_START
+    g_pToolkitNetworkMessages->SetFloat(pMsg, "amplitude", args.ArgC() >= 2 ? strtof(args.Arg(1), nullptr) : 10.0f);
+    g_pToolkitNetworkMessages->SetFloat(pMsg, "frequency", 150.0f);
+    g_pToolkitNetworkMessages->SetFloat(pMsg, "duration", 2.0f);
+
+    const CPlayerSlot slot = context.GetPlayerSlot();
+    if (slot.IsValid())
+        NET_MSG_SEND(pMsg, UM_Shake, slot);            // the caller only
+    else
+        NET_MSG_SEND_PLAYERS(pMsg, UM_Shake, ~0ull);   // from the console: everybody
+
+    NET_MSG_FREE(pMsg);
+});
+```
+
+That is the sample plugin's `sample_shake` command, and it is the whole
+pattern.
+
+## Allocating
+
+| macro | method | |
+|---|---|---|
+| `NET_MSG_ALLOC_BY_ID(id)` | `AllocateNetMessageByID(int msgid)` | by the message id — preferred |
+| `NET_MSG_ALLOC_BY_NAME(name)` | `AllocateNetMessageByPartialName(const char* name)` | by protobuf class name, partial match |
+| `NET_MSG_FREE(msg)` | `DeallocateNetMessage(void* msg)` | frees what either returned |
+
+Both return `nullptr` when no message matches. The returned `void*` is an opaque
+handle — it is the `google::protobuf::Message` itself, and every field accessor
+takes it. Always free it with `NET_MSG_FREE`, never with `delete`: the engine
+object around the protobuf starts at a different address.
+
+Allocating by name is a partial match — see
+[Ids and names](/docs/protobuf#ids-and-names) — and you still need the id to
+send, so allocating by id is simpler whenever you have the enum.
+
+## Setting fields
+
+Fields are set by their `.proto` names through reflection. There is a getter
+and setter family per type:
+
+| type in the `.proto` | methods |
+|---|---|
+| `int32`, `sint32`, `sfixed32`, enums | `GetInt32` / `SetInt32` / `AddInt32` |
+| `int64`, `sint64`, `sfixed64` | `GetInt64` / `SetInt64` / `AddInt64` |
+| `uint32`, `fixed32` | `GetUInt32` / `SetUInt32` / `AddUInt32` |
+| `uint64`, `fixed64` | `GetUInt64` / `SetUInt64` / `AddUInt64` |
+| `bool` | `GetBool` / `SetBool` / `AddBool` |
+| `float` | `GetFloat` / `SetFloat` / `AddFloat` |
+| `double` | `GetDouble` / `SetDouble` / `AddDouble` |
+| `string` | `GetString` / `SetString` / `AddString` |
+| `bytes` | `GetBytes` / `SetBytes` / `AddBytes` |
+| `CMsgVector` | `GetVector` / `SetVector` / `AddVector` |
+| `CMsgVector2D` | `GetVector2D` / `SetVector2D` / `AddVector2D` |
+| `CMsgQAngle` | `GetQAngle` / `SetQAngle` / `AddQAngle` |
+| `CMsgRGBA` | `GetColor` / `SetColor` / `AddColor` |
+| any other nested message | `GetNestedMessage` / `AddNestedMessage` |
+
+Every family also has `GetRepeatedX(msg, field, index)` and
+`SetRepeatedX(msg, field, index, value)` for an existing element of a
+`repeated` field; `AddX` appends one.
+
+Pick the method by the field's **C++ type**. An enum field goes through
+`SetInt32`, which checks the value against the enum and ignores one it does not
+know. A `fixed32` colour (as in `CUserMessageFade`) is a `uint32`, not a
+`CMsgRGBA` — `SetColor` is only for fields declared as `CMsgRGBA`.
+
+A field name the message does not have is ignored (a getter returns 0 or an
+empty value), and so is a singular setter on a `repeated` field or the other
+way round. If a message arrives empty on the client, check the names and the
+`repeated` markers against the `.proto`.
+
+### Repeated fields
+
+```cpp
+// CUserMessageTextMsg: optional uint32 dest = 1; repeated string param = 2;
+void* pMsg = NET_MSG_ALLOC_BY_ID(UM_TextMsg);
+g_pToolkitNetworkMessages->SetUInt32(pMsg, "dest", 3);          // chat
+g_pToolkitNetworkMessages->AddString(pMsg, "param", "Hello!");  // param[0]
+
+int count = g_pToolkitNetworkMessages->GetRepeatedFieldSize(pMsg, "param");
+g_pToolkitNetworkMessages->ClearRepeatedField(pMsg, "param");
+```
+
+### Nested messages
+
+`GetNestedMessage` returns a handle to a singular sub-message (creating it if
+it was not set), `AddNestedMessage` appends one to a repeated message field and
+returns it, `GetRepeatedNestedMessage` returns an existing element. The
+returned handle takes the same accessors:
+
+```cpp
+// CUserMessageShakeDir: optional CUserMessageShake shake = 1; optional CMsgVector direction = 2;
+void* pMsg = NET_MSG_ALLOC_BY_ID(UM_ShakeDir);
+
+void* pShake = g_pToolkitNetworkMessages->GetNestedMessage(pMsg, "shake");
+g_pToolkitNetworkMessages->SetFloat(pShake, "amplitude", 8.0f);
+g_pToolkitNetworkMessages->SetFloat(pShake, "duration", 1.0f);
+
+g_pToolkitNetworkMessages->SetVector(pMsg, "direction", Vector(0.0f, 0.0f, 1.0f));
+```
+
+Nested handles belong to their parent — free only the top-level message.
+
+`HasField(msg, field)` tells whether a singular field is set, and `Clear(msg)`
+resets every field, which is handy to reuse one allocation for different
+contents.
+
+### Using the generated class
+
+The handle is the protobuf itself, so if you prefer the generated class over
+field names, cast it:
+
+```cpp
+#include "usermessages.pb.h"
+
+auto* pShake = static_cast<CUserMessageShake*>(static_cast<google::protobuf::Message*>(pMsg));
+pShake->set_amplitude(10.0f);
+```
+
+Cast through `google::protobuf::Message*` exactly like that. Casting the handle
+straight to an engine type (`CNetMessage*`) is wrong — the protobuf sits at an
+offset inside the engine object.
+
+## Sending
+
+| macro | method | recipients |
+|---|---|---|
+| `NET_MSG_SEND(msg, id, slot)` | `SendMessage(void* msg, int msgid, CPlayerSlot slot)` | one player slot |
+| `NET_MSG_SEND_PLAYERS(msg, id, mask)` | `SendMessageToPlayers(void* msg, int msgid, uint64_t playermask)` | a 64-bit mask, bit N = slot N |
+
+The `id` must be the message's own id — the engine serialises the message by
+the type it looks up from that id. Both go out reliably.
+
+### One player
+
+```cpp
+if (CCSPlayerController* pPlayer = CCSPlayerController::FromSlot(iSlot))
+    NET_MSG_SEND(pMsg, UM_Shake, CPlayerSlot(iSlot));
+```
+
+### Several players
+
+Build the mask from slots:
+
+```cpp
+uint64_t mask = 0;
+for (int i = 0; i < 64; ++i)
+{
+    CCSPlayerController* pPlayer = CCSPlayerController::FromSlot(i);
+    if (!pPlayer || pPlayer->m_iConnected() != PlayerConnectedState::Connected)
+        continue;
+
+    if (pPlayer->m_iTeamNum() == 3)   // counter-terrorists only
+        mask |= uint64_t(1) << i;
+}
+
+if (mask)
+    NET_MSG_SEND_PLAYERS(pMsg, UM_Fade, mask);
+```
+
+`~0ull` sends to every slot.
+
+### Recipient filters
+
+`source2toolkit/schema/recipientfilter.h` has `CRecipientFilter` and
+`CSingleRecipientFilter`, the engine's `IRecipientFilter` implementations. The
+toolkit's send functions do not need them — they build one from your slot or
+mask — but the SDK helpers that take an `IRecipientFilter*` (such as
+`CBaseEntity::DispatchParticleEffect`) and raw `PostEventAbstract` calls do:
+
+```cpp
+#include "source2toolkit/schema/recipientfilter.h"
+
+CRecipientFilter filter;                   // reliable by default
+filter.AddRecipient(CPlayerSlot(2));
+filter.AddRecipient(CPlayerSlot(5));
+
+CRecipientFilter everyone;
+everyone.SetFromBitmask(~0ull);
+
+CSingleRecipientFilter one(CPlayerSlot(2));
+```
+
+## Things to know
+
+- **Your hooks see your messages.** A message sent with `NET_MSG_SEND` goes
+  through `PostEventAbstract`, so every plugin's `HOOK_SERVER_MESSAGE` — yours
+  included — sees it and may change or block it. Do not send the same message
+  type from inside your own server hook without a guard, or it recurses.
+- **Send on the game thread.** Commands, timers, game event callbacks and hooks
+  on game functions are all fine.
+- **Free what you allocate**, also on the early-return paths. A message that is
+  sent once per tick and never freed is a leak per tick.
+
+## The raw way
+
+The toolkit wraps the engine's own interfaces, which you can also use directly
+— FUNPLAY's plugins do, with the generated classes. `IToolkitAPI` hands out
+`GetNetworkMessages()` (`INetworkMessages*`) and `GetGameEventSystem()`
+(`IGameEventSystem*`):
+
+```cpp
+#include "cstrike15_usermessages.pb.h"
+#include "source2toolkit/schema/recipientfilter.h"
+
+INetworkMessageInternal* pNetMsg = g_ToolkitAPI->GetNetworkMessages()->FindNetworkMessagePartial("CCSUsrMsg_Shake");
+if (!pNetMsg)
+    return;
+
+CNetMessage* pData = pNetMsg->AllocateMessage();
+auto* pShake = pData->ToPB<CCSUsrMsg_Shake>();   // never reinterpret_cast the CNetMessage*
+pShake->set_command(0);
+pShake->set_local_amplitude(10.0f);
+pShake->set_frequency(1.0f);
+pShake->set_duration(1.0f);
+
+CSingleRecipientFilter filter(CPlayerSlot(iSlot));
+g_ToolkitAPI->GetGameEventSystem()->PostEventAbstract(-1, false, &filter, pNetMsg, pData, 0);
+
+delete pData;
+```
+
+`ToPB<T>()` is the only correct way from the engine object to the protobuf:
+the protobuf is the engine object's second base, so a `reinterpret_cast`
+lands on the wrong address. The toolkit API does this for you, which is the
+main reason to prefer it.

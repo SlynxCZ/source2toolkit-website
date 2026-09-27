@@ -1,0 +1,172 @@
+---
+title: Gamedata
+description: The gamedata folder, its JSON format, how files are merged, and how a plugin ships and reads signatures and offsets of its own.
+---
+
+Engine functions that are not exported, and vtable indices that change between game updates, live in **gamedata**: JSON files that give each entry a name and, per platform, the byte pattern or index to find it. Plugin code refers to entries by name, so a game update means editing a JSON file instead of rebuilding.
+
+Most plugins never need their own gamedata. The core ships `gamedata.json` with everything it and the SDK helpers use, and the functions it resolves are ready to call through `ADDR_*()` ([IToolkitAddresses](/docs/core-api/IToolkitAddresses)). Reach for gamedata of your own when you hook or call something that is not there.
+
+## The gamedata folder
+
+```
+game/csgo/addons/source2toolkit/gamedata/
+├── gamedata.json        # the core's own entries (replaced by toolkit updates)
+└── myplugin.json        # yours
+```
+
+From code, the path is `TOOLKIT_GAMEDATA_DIR()` ([IToolkitPaths](/docs/core-api/IToolkitPaths)).
+
+## File format
+
+A gamedata file is a JSON object. Each key is an entry name — by convention `Class::Method` — and each value holds one or more of `signatures`, `offsets` and `patches`:
+
+```json title="gamedata/myplugin.json"
+{
+  "CCSPlayerController::SetClan": {
+    "signatures": {
+      "library": "server",
+      "windows": "48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC ? 49 8B E8 8B FA 48 8B F1 39 91 ? ? ? ? 74",
+      "linux": "55 48 89 E5 41 57 41 56 41 55 49 89 D5 41 54 53 48 89 FB 48 81 EC ? ? ? ? 39 B7 20 0B 00 00"
+    }
+  },
+  "CBaseEntity::Teleport": {
+    "offsets": {
+      "windows": 165,
+      "linux": 164
+    }
+  }
+}
+```
+
+### signatures
+
+| Field | Meaning |
+|---|---|
+| `library` | The module to search: `server`, `engine2`, `tier0`, … (`engine` is accepted as an alias for `engine2`). Shared by both platforms. |
+| `windows` / `linux` | A byte pattern — hex bytes separated by spaces, `?` for a wildcard byte — or a symbol name prefixed with `@`. |
+
+A value starting with `@` is a **symbol entry**: instead of scanning, the core looks the name after the `@` up in the module's exported symbols. That only works for functions the library actually exports, and the exported name usually differs between platforms, which is why it is per platform like a pattern.
+
+```json
+"MyExportedFunction": {
+  "signatures": {
+    "library": "server",
+    "linux": "@_ZN11SomeClass8SomeFuncEv"
+  }
+}
+```
+
+### offsets
+
+`windows` / `linux` are integers — usually vtable indices, sometimes field offsets. Virtual function indices commonly differ between the two platforms (in the core's file the Windows index is often one higher), so always fill in both.
+
+### patches
+
+`windows` / `linux` are strings, returned as they are by `GetPatch()`. The core does not apply patches itself; what the string means and how it is written to memory is up to the plugin that reads it.
+
+### Missing platforms
+
+The core reads only the key for the platform it runs on. An entry without that key simply does not exist on that platform: `GetSignature()` returns `nullptr`, `GetOffset()` returns `-1`, and `ResolveSignature()` logs an error and returns a null address. Check for that before you use the result.
+
+## How files are merged
+
+When the core loads (once, at server start) it:
+
+1. reads every `*.json` file in `gamedata/` — other extensions are ignored, and so are subfolders;
+2. loads `gamedata.json` first and the others in alphabetical order of file name;
+3. keeps the **first** definition of every name: a later file cannot replace an entry an earlier file already defined.
+
+Merging is per section, so a later file can add, say, `offsets` to a name that so far only had `signatures`, but it cannot change a signature that is already there.
+
+What this means for you:
+
+- **Use your own entry names.** Your file cannot override the core's entries. If you need a different pattern for something the core already defines, give it a new name.
+- **A file you add is read on the next server start**, not on `toolkit refresh` or a plugin reload.
+- **Keep the JSON valid.** A gamedata file that cannot be parsed stops the core from loading, and every plugin with it. A missing `gamedata/` folder, on the other hand, is only a warning.
+
+<Callout type="warn">
+  `gamedata.json` is replaced with every toolkit release. Do not edit it to add entries of your own — put them in a separate file. If a core entry is broken after a game update, report it (or fix it locally until the next release).
+</Callout>
+
+## Shipping gamedata with a plugin
+
+Put your file next to the plugin in your release, in the same layout as on the server:
+
+```
+addons/source2toolkit/
+├── plugins/myplugin.stx
+└── gamedata/myplugin.json
+```
+
+A file named after your plugin keeps it obvious which entries belong to whom. Tell server owners to restart after installing it — see above.
+
+## Reading entries in code
+
+`g_pToolkitGameConfig` ([IToolkitGameConfig](/docs/core-api/IToolkitGameConfig)) is filled by `TOOLKIT_SAVEVARS()`. Every method has a macro:
+
+| Method | Macro | Returns |
+|---|---|---|
+| `const char* GetLibrary(const char* pchName)` | `GAMECONFIG_LIBRARY(name)` | The entry's `library`, or `nullptr`. |
+| `const char* GetSignature(const char* pchName)` | `GAMECONFIG_SIGNATURE(name)` | The pattern (or `@symbol`) for this platform, or `nullptr`. |
+| `const char* GetSymbol(const char* pchName)` | `GAMECONFIG_SYMBOL(name)` | The symbol name without the `@`, or `nullptr`. |
+| `bool IsSymbol(const char* pchName)` | — | Whether the signature is an `@` symbol entry. |
+| `int GetOffset(const char* pchName)` | `GAMECONFIG_OFFSET(name)` | The offset for this platform, or `-1`. |
+| `const char* GetPatch(const char* pchName)` | `GAMECONFIG_PATCH(name)` | The patch string, or `nullptr`. |
+| `IToolkitMemory ResolveSignature(const char* pchName)` | `GAMECONFIG_RESOLVE(name)` | The address, found by symbol or by pattern in the entry's library. |
+
+### Calling a function by signature
+
+`ResolveSignature()` does the whole job: finds the library, then looks the entry up by symbol or scans for the pattern. The result is an `IToolkitMemory`; `RCast<T>()` turns it into a typed function pointer. Adapted from a real plugin:
+
+```cpp title="clantag.cpp"
+using SetClan_t = void (*)(CCSPlayerController*, uint32_t, const char*);
+
+void SetClanTag(CCSPlayerController* pPlayer, const char* pszTag)
+{
+    // Resolve once; the address does not change while the server runs.
+    static SetClan_t pSetClan = GAMECONFIG_RESOLVE("CCSPlayerController::SetClan").RCast<SetClan_t>();
+    if (!pSetClan)
+        return;  // entry missing or pattern not found -- the core logged which
+
+    // Call past any hook on it (see IToolkitAddresses).
+    TOOLKIT_ORIGINAL(pSetClan)(pPlayer, 0, pszTag);
+}
+```
+
+Resolving is a pattern scan, so do it once and keep the result — not on every call.
+
+### Calling a virtual function by offset
+
+```cpp
+#include "source2toolkit/utils/virtual.h"
+
+static int offset = GAMECONFIG_OFFSET("CCSPlayerController::ChangeTeam");
+if (offset != -1)
+    CALL_VIRTUAL(void, offset, pController, nTeam);
+```
+
+This is exactly how the SDK's own schema helpers call virtual functions (see `CCSPlayerController::ChangeTeam` in the SDK).
+
+### Hooking by entry name
+
+The hook macros accept entry names directly, so a hook on a gamedata function is one line:
+
+```cpp
+// A function found by signature -- resolved through ResolveSignature() at KHOOK_INIT().
+KHOOK_MEMBER(m_hSetClan, "CCSPlayerController::SetClan", &CHooks::OnSetClan, nullptr);
+
+// A virtual function by its gamedata offset, on the class's vtable.
+KHOOK_VIRTUAL(m_hRespawn, "CCSPlayerController::Respawn", KHOOK_VTABLE("server", "CCSPlayerController"), &CHooks::OnRespawn, nullptr);
+```
+
+See [Hooks](/docs/hooks) for the full hooking guide.
+
+## Windows and Linux
+
+- **Patterns** are different machine code on each platform — there is no way to derive one from the other. Find each in the corresponding binary (`server.dll` / `libserver.so`).
+- **Offsets** are separate numbers per platform; vtable layouts differ, typically by one slot.
+- **Symbols** only work for functions the library exports, and the exported name is platform-specific (a mangled GCC name on Linux). Check the export table (`nm -D`, `dumpbin /exports`) before relying on one; otherwise use a pattern.
+- **Library names** are platform-neutral: `server` means `server.dll` on Windows and `libserver.so` on Linux.
+
+If you only run one platform, you may fill in only its key — the entry is simply missing on the other. Fill in both before you publish a plugin.

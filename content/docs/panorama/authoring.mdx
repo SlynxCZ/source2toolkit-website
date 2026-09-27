@@ -1,0 +1,179 @@
+---
+title: Authoring Layouts
+description: Writing the layout and stylesheet a custom_hud_layout loads — the narrow XML subset it accepts, Panorama CSS versus web CSS, compiling, and the state of shipping layouts to players.
+---
+
+The plugin side is a few calls; most of the work is the layout. A
+`custom_hud_layout` loads a Panorama layout, but through a validator much
+stricter than Panorama itself, and Panorama CSS is not web CSS. Both fail
+**silently** — a layout that does not load simply is not there, a CSS rule it
+does not understand is dropped. This page collects what is known to work.
+
+<Callout type="info">
+The SDK does not ship layouts or tooling for them, and the toolkit
+repository's `panorama/layout/custom_game` and `panorama/styles/custom_game`
+folders are empty placeholders. What follows comes from hands-on testing of
+`custom_hud_layout` on CS2 builds from August–September 2026. Valve marks the
+feature experimental; re-check after game updates.
+</Callout>
+
+## File layout
+
+```text
+content/csgo_addons/<addon>/panorama/layout/custom_game/my_menu.xml    source layout
+content/csgo_addons/<addon>/panorama/styles/custom_game/my_menu.css    source stylesheet
+
+game/csgo_addons/<addon>/panorama/layout/custom_game/my_menu.vxml_c    compiled
+game/csgo_addons/<addon>/panorama/styles/custom_game/my_menu.vcss_c    compiled
+```
+
+The plugin refers to the layout by name — `CCSCustomHudLayout::Create("my_menu")`
+loads `panorama/layout/custom_game/my_menu.vxml_c`. The layout pulls in its
+stylesheet by the **compiled** path, with the `s2r://` scheme.
+
+## A minimal layout
+
+```xml title="my_menu.xml"
+<root>
+    <styles>
+        <include src="s2r://panorama/styles/custom_game/my_menu.vcss_c" />
+    </styles>
+    <Panel class="screen">
+        <Panel id="MenuRoot" class="menu">
+            <Label id="Title" class="title" text="{s:title}" />
+            <Button id="buy_ak47" class="row"><Label text="AK-47" /></Button>
+            <Button id="close" class="row"><Label text="Close" /></Button>
+        </Panel>
+    </Panel>
+</root>
+```
+
+```css title="my_menu.css"
+.screen {
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+}
+
+.menu {
+    visibility: collapse;          /* authored hidden: the entity shows it to everyone */
+    flow-children: down;
+    horizontal-align: center;
+    vertical-align: center;
+    background-color: #000000c0;
+    padding: 16px;
+}
+
+.menu.show {
+    visibility: visible;
+}
+
+.row:hover {
+    background-color: #ffffff20;   /* :hover works once input capture is on */
+}
+```
+
+Three rules this example follows on purpose:
+
+- **The outermost panel has no `id`.** The loader assigns the root; put an
+  anonymous full-screen panel first and your real root with its id inside it.
+- **The menu is authored hidden.** One entity draws its layout for every
+  player; per-player state only overlays it. A layout that is visible as written
+  appears on everyone's screen the moment the entity spawns. Show it per player
+  with `SetHasClass("MenuRoot", "show", true, pPlayer)`.
+- **`z-index` goes on the outermost panel, with a large value.** `z-index` only
+  orders siblings, so on an inner panel it does nothing; on the root wrapper it
+  puts the layout above the game HUD, crosshair included.
+
+## What the validator accepts
+
+The `custom_hud_layout` validator allows a small subset of Panorama:
+
+| | Allowed |
+|---|---|
+| Tags | `Panel`, `Label`, `Image`, `Button` |
+| Attributes | `id`, `class`, `hittest`, `text`, `src`, `texturewidth`, `textureheight` |
+| File sections | `<styles>` with `<include>` |
+
+Everything else is rejected, and that covers most of what Valve's own layouts
+use:
+
+- **No scripts.** `<scripts>`, `<script>` and `<snippets>` are rejected, so
+  there is **no JavaScript** in a custom HUD layout — all logic stays in your
+  plugin, which drives the layout through classes and dialog variables.
+- **No event attributes** — no `onactivate`, `onload`. A button's click reaches
+  the server through its `id`; see [Click callbacks](/docs/panorama/click-callbacks).
+- **No `style`, `html`, `selected`, `disabled`, `acceptsfocus`, `hittestchildren`,
+  `tooltip`**, and no `TextEntry` — a layout cannot take typed text; use chat.
+- **`Image` `src` is static.** The server cannot change it. For a picture that
+  changes, use a `Panel` whose `background-image` is set by a class.
+
+Copying a Valve layout is rarely a good start: most of them declare scripts or
+use attributes from the list above.
+
+When a layout is rejected the client console says why — one violation per
+load, so expect to iterate:
+
+| Console line before `did not pass CustomHud validation` | Meaning |
+|---|---|
+| `Failed to load layout '<path>'` | The file was never found. Nothing was parsed — check the path and that the `.vxml_c` exists on the client. |
+| `Layout contains disallowed attribute X for panel type 'Y'` | It loaded and was rejected. Fix the XML. |
+
+## Panorama CSS is not web CSS
+
+The habits that fail silently:
+
+| Web | Panorama |
+|---|---|
+| `display: flex` / `grid` | No `display`. Use `flow-children: down` / `right`. Panels never wrap. |
+| `display: none` | `visibility: collapse` |
+| `rgb()`, `rgba()`, `hsl()` | `#rrggbb` / `#rrggbbaa` only |
+| `calc()`, `var()`, `@media`, `::before`, `::after` | Do not exist |
+| `top` / `left` / `float` | `x`, `y`, `horizontal-align`, `vertical-align`, `position` |
+| `box-shadow: 0 4px 8px #000` | Colour first: `box-shadow: #000000 0px 4px 8px 0px` |
+| `background-size: contain` | `contains` |
+| `width: 100%` in an unsized parent | Resolves to nothing — the parent sizes to the child and the child to the parent |
+
+What does exist: `:hover` and `:active` (with input capture on),
+`:first-child`, `:last-child`, `:not()`, `:nth-child()`; `@keyframes`,
+`@import`, `@define`; transitions. `:selected`, `:disabled` and `:focus` are
+registered but unreachable, because the attributes that drive them are not
+allowed — use a class from the server instead.
+
+Useful ones:
+
+- **Bars and gauges with `clip`, not `width`.**
+  `clip: rect( 0%, 50%, 100%, 0% )` (top, right, bottom, left) does not affect
+  layout. A `width` transition restarts whenever a dialog variable in the same
+  subtree is written; `clip` does not. One class per step:
+  `.bar.w50 { clip: rect( 0%, 50%, 100%, 0% ); }`.
+- **`text-overflow: shrink`** lowers the font size until the text fits the box.
+- **Stock stylesheets** can be included (`csgostyles.vcss_c`) for the game's
+  fonts and colours. Watch for class-name clashes: stock sheets define both
+  `hidden` and `Hidden`.
+- **Restarting an animation** needs two class names used alternately; turning
+  one class off and on in the same tick sends nothing (see
+  [Layouts](/docs/panorama/layouts#how-the-state-reaches-the-client)).
+
+## Compiling
+
+Layouts and stylesheets are compiled like any other Source 2 resource, in the
+CS2 Workshop Tools for your addon, or with the resource compiler that ships with
+the game (`game\bin\win64\resourcecompiler.exe`), which the Workshop Tools
+use. Given the source file (`-i <path>`), it writes the `_c` file to the
+matching path under `game\csgo_addons\<addon>\`.
+
+`.xml` and `.css` changes hot-reload in a running client; `z-index` changes
+did not. Get the plugin side working first, then iterate on the stylesheet.
+
+## Shipping to clients
+
+<Callout type="warn">
+As of the last testing, the retail client **refuses layouts supplied by an
+addon** — the console shows
+`client disallowing panorama layout file creation`. A layout loads when the
+compiled files reach the client through a search path in its `gameinfo.gi`,
+which is a development setup, not a way to ship to players. Treat custom HUD
+layouts as something to build and test now, and check the current state
+before depending on them for a public server.
+</Callout>

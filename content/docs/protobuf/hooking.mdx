@@ -1,0 +1,195 @@
+---
+title: Hooking Messages
+description: Reading, changing, redirecting and blocking outgoing and incoming net messages with the toolkit's hooks, and the raw PostEventAbstract alternative.
+---
+
+The toolkit hooks the engine's message paths once and gives every plugin a
+callback on each. A callback sees the message **before** it goes out (or before
+the server processes it), may read and change its fields, and returns an
+`Action`: `Action::Ignore` lets it through, `Action::Supersede` drops it.
+
+| macro | callback | sees |
+|---|---|---|
+| `HOOK_SERVER_MESSAGE(handler)` | `Action(uint64_t* clients, int messageid, void* msg)` | every message the server posts to clients, with the recipient mask |
+| `HOOK_CLIENT_MESSAGE(handler)` | `Action(CPlayerSlot slot, int messageid, void* msg)` | every message a client sends to the server |
+| `HOOK_SERVER_INTERNAL_MESSAGE(handler)` | `Action(CPlayerSlot slot, int messageid, void* msg)` | messages as they are sent on one client's channel |
+
+Each has an `UNHOOK_*()` counterpart. The handlers are `std::function`s, so a
+lambda capturing `this` is fine.
+
+## Outgoing: HOOK_SERVER_MESSAGE
+
+Every message the server posts through `IGameEventSystem::PostEventAbstract` —
+user messages, sounds, temp entities, and the messages plugins send with
+`NET_MSG_SEND`, **yours included** — passes through this hook, once, with the
+recipients as a 64-bit mask (bit N = slot N).
+
+- **Change a field**: set it on `msg`. The clients get what is left when every
+  plugin's hook has run.
+- **Change the recipients**: edit `*clients`. Clear a bit and that player does
+  not get the message; the rest still do.
+- **Block it for everybody**: return `Action::Supersede`.
+
+This is the sample plugin, capping screen shakes and honouring a per-player
+`!noshake`:
+
+```cpp title="plugin.cpp"
+HOOK_SERVER_MESSAGE([this](uint64_t* clients, int messageid, void* msg) -> Action
+{
+    if (messageid != UM_Shake)
+        return Action::Ignore;
+
+    // Changing a field: no shake stronger than sample_shake_max.
+    const float flMax = sample_shake_max.Get();
+    if (g_pToolkitNetworkMessages->GetFloat(msg, "amplitude") > flMax)
+        g_pToolkitNetworkMessages->SetFloat(msg, "amplitude", flMax);
+
+    // Changing the recipients: not to those who typed !noshake.
+    *clients &= ~m_NoShakeMask;
+
+    return Action::Ignore;
+});
+```
+
+The `msg` handle takes the same accessors as a message you allocated
+([Setting fields](/docs/protobuf/sending#setting-fields)), or cast it to the
+generated class:
+
+```cpp
+auto* pShake = static_cast<CUserMessageShake*>(static_cast<google::protobuf::Message*>(msg));
+pShake->set_amplitude(flMax);
+```
+
+<Callout type="warn">
+  This hook runs for **every** message the server posts, many per tick. Check
+  `messageid` first and return `Action::Ignore` straight away for the ones you
+  do not handle. Do not keep `msg` after the callback returns — it belongs to
+  the engine.
+</Callout>
+
+Sounds the game starts (`GE_SosStartSoundEvent`) reach the sound hooks
+(`HOOK_SOUND`, [IToolkitSounds](/docs/core-api/IToolkitSounds)) first, decoded;
+what they leave of it is what this hook then sees, and a sound one of them
+blocked never gets here.
+
+## Incoming: HOOK_CLIENT_MESSAGE
+
+Every message a client sends reaches this hook before the server looks at it,
+with the sender's slot. `Action::Supersede` drops the message — the server never
+processes it. The sample plugin mutes players this way:
+
+```cpp title="plugin.cpp"
+// The packets of a muted player are dropped before the server looks at them,
+// so nobody hears them.
+HOOK_CLIENT_MESSAGE([this](CPlayerSlot slot, int messageid, void* msg) -> Action
+{
+    if (messageid == clc_VoiceData && ((m_VoiceMutedMask >> slot.Get()) & 1))
+        return Action::Supersede;
+
+    return Action::Ignore;
+});
+```
+
+`clc_VoiceData` comes from `netmessages.pb.h`. Fields of an incoming message
+can be read the same way (`GetString(msg, "command")` on a `net_StringCmd`,
+say) and changed before the server processes it — but treat everything a client
+sends as untrusted input.
+
+## Per client: HOOK_SERVER_INTERNAL_MESSAGE
+
+This one sits on `CServerSideClientBase::SendNetMessage`, the call that puts a
+message on one client's network channel. The callback gets that client's slot,
+so it is the place for per-recipient decisions on messages that do not come with
+a recipient mask. `Action::Supersede` drops the message for that client only.
+
+```cpp
+HOOK_SERVER_INTERNAL_MESSAGE([](CPlayerSlot slot, int messageid, void* msg) -> Action
+{
+    if (messageid == svc_Print && g_bQuietConsole[slot.Get()])
+        return Action::Supersede;
+
+    return Action::Ignore;
+});
+```
+
+## One hook per plugin, several plugins
+
+- **One handler per plugin per kind.** Hooking again replaces your previous
+  handler; pass `nullptr` or call `UNHOOK_SERVER_MESSAGE()` (and friends) to
+  remove it. Handle every message id you care about inside the one handler.
+- **Removed on unload.** The toolkit drops a plugin's hooks when it unloads, so
+  a forgotten unhook never leaves the engine calling into a closed library.
+- **Every plugin's handler runs.** The toolkit calls all of them in turn with
+  the same message — changes one plugin makes are visible to the next — and
+  keeps the strongest answer: one `Supersede` blocks the message whatever the
+  others returned.
+- **Pre only.** There is no post callback; the message has not been sent (or
+  processed) yet when your handler runs. Return `Action::Ignore` or
+  `Action::Supersede`; `Action::Override` has no defined meaning for these
+  hooks.
+
+Reference: [IToolkitNetworkMessages](/docs/core-api/IToolkitNetworkMessages).
+
+## The raw alternative: hooking PostEventAbstract
+
+The toolkit's hooks hand you a protobuf and a mask. When you need the engine's
+full call — the `INetworkMessageInternal*`, the buffer type, the client count —
+or want the typed message without the reflection layer, hook
+`IGameEventSystem::PostEventAbstract` yourself with
+[KHOOK_VIRTUAL](/docs/hooks/virtual-hooks). The AntiCheat plugin does this to
+read the server's own `te_firebullets` broadcast, which carries the weapon's
+exact spread for each shot:
+
+```cpp title="Listeners.h"
+class CListeners
+{
+public:
+    KHook::Return<void> OnPostEventAbstract(IGameEventSystem* pThis, CSplitScreenSlot slot, bool bLocalOnly, int nClientCount, const uint64* clients, INetworkMessageInternal* event, const CNetMessage* data, unsigned long size, NetChannelBufType_t bufType);
+
+private:
+    // PostEventAbstract is overloaded, so the member function pointer has
+    // to be disambiguated explicitly.
+    KHOOK_VIRTUAL(m_hPostEventAbstract, (static_cast<void (IGameEventSystem::*)(CSplitScreenSlot, bool, int, const uint64*, INetworkMessageInternal*, const CNetMessage*, unsigned long, NetChannelBufType_t)>(&IGameEventSystem::PostEventAbstract)), &globals::gameEventSystem, &CListeners::OnPostEventAbstract, nullptr);
+};
+```
+
+```cpp title="OnPostEventAbstract.cpp"
+#include "cs_gameevents.pb.h"
+
+KHook::Return<void> CListeners::OnPostEventAbstract(IGameEventSystem* pThis, CSplitScreenSlot slot, bool bLocalOnly, int nClientCount, const uint64* clients, INetworkMessageInternal* event, const CNetMessage* data, unsigned long size, NetChannelBufType_t bufType)
+{
+    if (!event || !data)
+        return { KHook::Action::Ignore };
+
+    // Fires for every message the engine posts: check the id before doing any work.
+    NetMessageInfo_t* info = event->GetNetMessageInfo();
+    if (!info || info->m_MessageId != GE_FireBulletsId)
+        return { KHook::Action::Ignore };
+
+    const CMsgTEFireBullets& bullets = *data->ToPB<CMsgTEFireBullets>();
+    // ... read bullets ...
+
+    return { KHook::Action::Ignore };
+}
+```
+
+`globals::gameEventSystem` is set from `api->GetGameEventSystem()` in `Load()`,
+before `KHOOK_INIT()`. `data->ToPB<T>()` is the way from the engine object to
+the protobuf — never `reinterpret_cast` it. Returning
+`{ KHook::Action::Supersede }` drops the message, like the toolkit hook does.
+
+For incoming messages the equivalent is a function hook on
+`ADDR_FILTER_MESSAGE()` (`INetworkMessageProcessingPreFilter::FilterMessage`),
+which is what the toolkit itself hooks. The object is the client's pre-filter
+sub-object; `INetworkMessageProcessingPreFilterCustom`
+(`source2toolkit/schema/serversideclient.h`) reads the slot out of it:
+
+```cpp
+KHook::Return<bool> Hook_FilterMessage(INetworkMessageProcessingPreFilterCustom* pThis, const CNetMessage* pData, INetChannel* pChannel);
+
+KHOOK_MEMBER(m_hFilterMessage, ADDR_FILTER_MESSAGE(), &Plugin::Hook_FilterMessage, nullptr);
+```
+
+Prefer the toolkit hooks unless you need what only the raw call has: they are
+already installed, cost nothing extra per plugin, and compose with every other
+plugin's hooks on the same messages.

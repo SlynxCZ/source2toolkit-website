@@ -1,0 +1,15 @@
+{
+    "title":  "Entities",
+    "description":  "Finding, creating and changing entities",
+    "root":  true,
+    "icon":  "Boxes",
+    "pages":  [
+                  "index",
+                  "finding-entities",
+                  "schema-fields",
+                  "creating-entities",
+                  "players",
+                  "entity-io",
+                  "damage"
+              ]
+}

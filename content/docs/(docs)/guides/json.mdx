@@ -1,0 +1,97 @@
+---
+title: JSON
+description: Parse and read JSON through the toolkit, without vendoring a JSON library or agreeing on its ABI.
+---
+
+`IToolkitJSON` parses JSON text inside the toolkit and hands you a read-only
+tree to walk. Nothing library-specific crosses the plugin boundary, so your
+plugin does not need its own JSON library for reading configs or HTTP
+responses — and if it has one, the two never have to match.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitJSON.h"
+```
+
+The interface is `g_pToolkitJSON`, filled in by `TOOLKIT_SAVEVARS()` like the
+others. The same value type, `IToolkitJSONValue`, is what
+[HTTP responses](/docs/guides/http) carry in `m_pJson`.
+
+## Parsing
+
+```cpp
+IToolkitJSONDocument* Parse(const char* pszText, int nLength = -1);
+```
+
+`Parse()` never returns `nullptr`. On a syntax error the document reports
+`IsValid() == false`, `GetError()` returns a short message, and its root reads as null — so
+walking a broken document is safe, you just get defaults. You own the
+document: call `Release()` when you are done.
+
+```cpp title="plugin.cpp"
+IToolkitJSONDocument* doc = g_pToolkitJSON->Parse(text.c_str());
+if (!doc->IsValid())
+    g_ToolkitAPI->ConPrintf("Bad config: %s\n", doc->GetError());
+
+const IToolkitJSONValue* root = doc->Root();
+
+m_Config.Prefix  = root->GetString("prefix", "[Server]"); // copied into std::string
+m_Config.MaxHp   = root->GetInt("max_hp", 100);
+m_Config.Enabled = root->GetBool("enabled", true);
+
+doc->Release();
+```
+
+## Reading values
+
+Every accessor is **total**: asking for the wrong type, a missing key or an
+out-of-range index returns the default you passed instead of throwing.
+
+| Kind | Calls |
+| --- | --- |
+| Type checks | `IsNull()`, `IsObject()`, `IsArray()`, `IsString()`, `IsNumber()`, `IsBool()` |
+| This node's value | `AsString(def = "")`, `AsInt(def = 0)`, `AsInt64(def = 0)`, `AsDouble(def = 0.0)`, `AsFloat(def = 0.0f)`, `AsBool(def = false)` |
+| A member's value | `GetString(key, def)`, `GetInt(key, def)`, `GetInt64(key, def)`, `GetDouble(key, def)`, `GetFloat(key, def)`, `GetBool(key, def)` |
+| Objects | `Has(key)`, `Get(key)` (null when absent), `Count()`, `KeyAt(i)` |
+| Arrays | `Count()`, `At(i)` (null when out of range) |
+| Serialising | `Dump(nIndent = -1)` — compact by default |
+
+### Arrays and objects
+
+```cpp
+// { "admins": [ { "steamid": 76561198000000000, "flags": "z" }, ... ] }
+const IToolkitJSONValue* admins = root->Get("admins");
+
+for (int i = 0; admins && i < admins->Count(); i++)
+{
+    const IToolkitJSONValue* admin = admins->At(i);
+    AddAdmin(admin->GetInt64("steamid"), admin->GetString("flags"));
+}
+
+// Walking an object's members
+const IToolkitJSONValue* colors = root->Get("colors");
+for (int i = 0; colors && i < colors->Count(); i++)
+{
+    const char* key = colors->KeyAt(i);
+    const char* value = colors->Get(key)->AsString();
+}
+```
+
+`GetInt64()` on a string such as `"76561198000000000"` returns the default —
+it does not convert. Store large IDs as numbers, or read them with
+`GetString()` and convert yourself.
+
+## Lifetime
+
+- **Every node and every string belongs to the document.** Pointers returned by
+  `Get()`, `At()`, `AsString()`, `GetString()`, `KeyAt()` and `Dump()` are
+  valid until `Release()`. Copy into `std::string` whatever you keep.
+- For `m_pJson` in an HTTP callback the toolkit owns the document and releases
+  it after the callback returns — do not call `Release()` on it.
+- Release every document you parse; a document is not tied to your plugin, so
+  one you forget is not freed on unload.
+
+## Reference
+
+- [`IToolkitJSON` API reference](/docs/core-api/IToolkitJSON)
+- [HTTP](/docs/guides/http)
+- [Paths](/docs/guides/paths) — where to find your plugin's config file

@@ -1,0 +1,13 @@
+{
+    "title":  "Documentation",
+    "description":  "Install, build and write plugins",
+    "root":  true,
+    "icon":  "BookOpen",
+    "pages":  [
+                  "index",
+                  "installation",
+                  "development",
+                  "guides",
+                  "resources"
+              ]
+}

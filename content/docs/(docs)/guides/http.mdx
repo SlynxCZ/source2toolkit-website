@@ -1,0 +1,124 @@
+---
+title: HTTP
+description: Asynchronous HTTP requests through Steam's HTTP client — no curl, queued until Steam is up, callbacks on the main thread.
+---
+
+`IToolkitHTTP` sends requests through the HTTP client Steam already gives the
+game server, so there is no library to link and nothing to pump. Responses
+arrive in a callback on the main thread, with the body already parsed as JSON
+when it is JSON.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitHTTP.h"
+```
+
+## A GET request
+
+```cpp title="plugin.cpp"
+HTTP_GET("https://api.example.com/status", [](const ToolkitHTTPResponse& r)
+{
+    if (!r.m_bSuccess || r.m_nStatusCode != 200)
+        return;
+
+    if (r.m_pJson)
+    {
+        const char* motd = r.m_pJson->GetString("motd", "");
+        int online = r.m_pJson->GetInt("online");
+        // copy anything you keep -- see below
+    }
+});
+```
+
+## The calls
+
+```cpp
+void Request(PluginId owner, EToolkitHTTPMethod method, const char* pszUrl, const char* pszBody,
+             ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr);
+
+void Get   (PluginId owner, const char* pszUrl, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr);
+void Post  (PluginId owner, const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr);
+void Put   (...same as Post...);
+void Patch (...same as Post...);
+void Delete(...same as Post...);
+```
+
+| Macro | Call |
+| --- | --- |
+| `HTTP_REQUEST(method, url, body, cb, ...)` | `Request(g_PluginID, ...)` |
+| `HTTP_GET(url, cb, ...)` | `Get(g_PluginID, ...)` |
+| `HTTP_POST(url, body, cb, ...)` | `Post(g_PluginID, ...)` |
+| `HTTP_PUT`, `HTTP_PATCH`, `HTTP_DELETE` | same shape as `HTTP_POST` |
+
+`EToolkitHTTPMethod` is `Get`, `Post`, `Put`, `Patch`, `Delete` or `Head`. The
+callback may be `nullptr` for fire-and-forget requests.
+
+## POST with headers
+
+```cpp title="plugin.cpp"
+std::vector<ToolkitHTTPHeader> headers = {
+    { "Authorization", "Bearer " + g_ApiToken },
+};
+
+std::string body = R"({"steamid":")" + std::to_string(steamid) + R"(","kills":12})";
+
+HTTP_POST("https://api.example.com/stats", body.c_str(), [steamid](const ToolkitHTTPResponse& r)
+{
+    if (!r.m_bSuccess)
+        return; // transport failure: no connection, DNS, timeout ...
+
+    if (r.m_nStatusCode < 200 || r.m_nStatusCode > 299)
+        g_ToolkitAPI->ConPrintf("Stats for %llu refused: HTTP %d\n", steamid, r.m_nStatusCode);
+}, &headers);
+```
+
+The body is sent with the content type `application/json`. The headers vector
+and body only have to live until the call returns.
+
+## The response
+
+| Field | Meaning |
+| --- | --- |
+| `m_bSuccess` | The request **completed**. A 404 that arrived is a success with `m_nStatusCode == 404` |
+| `m_nStatusCode` | HTTP status, 0 when the request never completed |
+| `m_sBody` | Raw body |
+| `m_pJson` | The body parsed as JSON, or `nullptr` when empty or not JSON |
+
+<Callout type="warn">
+  `m_pJson` is owned by the toolkit and valid only during the callback.
+  Strings from it (`AsString()`, `GetString()`) die with it too — copy them
+  into `std::string` before you store them. See [JSON](/docs/guides/json).
+</Callout>
+
+If your plugin already uses its own JSON library, parse `m_sBody` with it
+instead — FUNPLAY does exactly that with nlohmann::json, so its own JSON types
+never cross the plugin boundary.
+
+## Availability
+
+Steam hands the HTTP client over only once the Steam API has activated, after
+level startup. Requests made before that are **queued, not dropped**, and sent
+when it comes up — so a plugin can send requests from `Load()` without caring.
+
+- `IsAvailable()` — whether Steam's HTTP client is there yet. Only worth
+  checking to avoid building a body you cannot send yet.
+- `PendingCount()` — how many requests are waiting for it.
+
+## Pitfalls
+
+- **Callbacks run on the main thread**, so touching game state inside them is
+  fine — but the world may have changed while the request was in flight. Carry
+  a SteamID, slot or `CHandle` into the lambda and re-resolve the player,
+  never a raw `CCSPlayerController*`.
+- **Unload cancels.** A request still in flight or queued when your plugin
+  unloads is cancelled, callback and all — the callback lives in your library.
+- **Do not block waiting for a response.** There is no synchronous variant;
+  chain the next step from the callback.
+- **Transport vs. status.** Check both `m_bSuccess` and `m_nStatusCode`.
+- **The callback can run before the call returns.** When Steam refuses to even
+  create or send the request, the callback is invoked right away with an empty,
+  unsuccessful response. Do not rely on code after `HTTP_*()` running first.
+
+## Reference
+
+- [`IToolkitHTTP` API reference](/docs/core-api/IToolkitHTTP)
+- [JSON](/docs/guides/json) — walking `m_pJson`

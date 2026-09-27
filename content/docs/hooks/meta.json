@@ -1,0 +1,17 @@
+{
+    "title":  "Hooks",
+    "description":  "KHook detours, addresses and gamedata",
+    "root":  true,
+    "icon":  "GitBranch",
+    "pages":  [
+                  "index",
+                  "virtual-hooks",
+                  "function-hooks",
+                  "handlers",
+                  "---Engine functions---",
+                  "addresses",
+                  "gamedata",
+                  "---Advanced---",
+                  "raw-khook"
+              ]
+}

@@ -1,0 +1,13 @@
+{
+    "title": "ConVars & Commands",
+    "description": "Console variables, console and chat commands",
+    "root": true,
+    "icon": "Terminal",
+    "pages": [
+        "index",
+        "commands",
+        "command-listeners",
+        "convars",
+        "replication"
+    ]
+}

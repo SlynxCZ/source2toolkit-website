@@ -1,0 +1,81 @@
+---
+title: Panorama HUD
+description: Server-driven Panorama layouts with custom_hud_layout — what the server controls, what the client needs, and how a click gets back to your plugin.
+---
+
+CS2 has an entity, `custom_hud_layout`, that makes every client draw a
+Panorama layout on top of the game HUD. The SDK exposes it as
+`CCSCustomHudLayout`: you create one for a layout, show or change parts of it
+per player, and get a callback when a player clicks a button in it. Menus,
+shops, vote prompts, status bars and toasts can all be built this way.
+
+<Cards>
+  <Card title="Layouts" href="/docs/panorama/layouts">Create, per-player and global state, CSS classes, dialog variables, input capture.</Card>
+  <Card title="Click callbacks" href="/docs/panorama/click-callbacks">HookClick, button ids and IToolkitCustomHud.</Card>
+  <Card title="Authoring" href="/docs/panorama/authoring">Writing the layout and stylesheet, what the sandbox allows, compiling.</Card>
+</Cards>
+
+## What the server can and cannot do
+
+The layout itself lives **on the client**, as a compiled file. The server does
+not send panels, positions, colours or images. It can do exactly three things
+to a layout, all through networked fields of the entity:
+
+1. **Toggle a CSS class** on a panel, by the panel's `id`.
+2. **Set a dialog variable string** on a panel, which fills a
+   `text="{s:name}"` placeholder.
+3. **Enable input capture**, so the player gets a mouse cursor and can click.
+
+Everything else follows from those. A hidden row is a class. An accent colour
+is one of several classes the stylesheet defines. A progress bar is a ladder of
+classes. Plan the layout around that: anything the server should be able to
+change has to be baked into the stylesheet as a class.
+
+Each of the three can be set **globally** (every player sees it) or **per
+player** (overrides the global value for one player only). That is how one
+entity shows a different menu page to each player.
+
+## What the client needs
+
+The client resolves the layout from its own files:
+
+```text
+panorama/layout/custom_game/<name>.vxml_c     compiled layout
+panorama/styles/custom_game/<name>.vcss_c     compiled stylesheet it includes (conventional location)
+```
+
+`CCSCustomHudLayout::Create("my_panel")` points the entity at
+`panorama/layout/custom_game/my_panel.vxml_c`, so you pass only the name.
+If a client does not have that file, it draws nothing.
+
+Getting those files onto players' machines is the part of this feature that is
+**not** solved by the plugin; see [Authoring](/docs/panorama/authoring#shipping-to-clients)
+before you build something players are meant to see.
+
+## The flow
+
+```text
+plugin                                   client
+------                                   ------
+CCSCustomHudLayout::Create("menu")  -->  loads panorama/layout/custom_game/menu.vxml_c
+SetDialogVariableString(...)        -->  {s:title} shows the text
+SetHasClass("Root", "show", true)   -->  the panel becomes visible
+SetInputCaptureEnabled(true)        -->  mouse cursor, buttons clickable
+                                    <--  player clicks <Button id="buy_ak">
+HookClick callback("buy_ak")
+SetHasClass("Root", "show", false)  -->  hidden again
+```
+
+The click travels back as a user message (`CCSUsrMsg_CustomHudClicked`) that
+the core already listens for, and is routed to the plugin that registered a
+callback on that layout entity.
+
+## Headers
+
+```cpp
+#include "source2toolkit/schema/entity/classes/CCSCustomHudLayout.h"
+#include "source2toolkit/IToolkitCustomHud.h"   // only for the HOOK_CUSTOM_HUD_CLICK macros
+```
+
+References: [CCSCustomHudLayout](/docs/schema/entity/classes/CCSCustomHudLayout),
+[IToolkitCustomHud](/docs/core-api/IToolkitCustomHud).

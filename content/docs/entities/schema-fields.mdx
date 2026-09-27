@@ -1,0 +1,253 @@
+---
+title: Schema Fields
+description: Reading and writing entity fields, when a change reaches clients on its own and when you call NetworkStateChanged, embedded objects, pointers, arrays and vectors, and extending the classes.
+---
+
+Every member of a schema class is declared with `SCHEMA_FIELD` (or
+`SCHEMA_FIELD_POINTER`). The macro produces a small wrapper object with no
+storage of its own: it finds the field's offset in the running game's schema
+by name the first time it is used, and from then on reads and writes the
+entity's memory at that offset.
+
+```cpp title="CBaseEntity.h (generated)"
+class CBaseEntity : public CEntityInstance
+{
+public:
+    DECLARE_SCHEMA_CLASS(CBaseEntity);
+
+    SCHEMA_FIELD(int32_t, m_iHealth);
+    SCHEMA_FIELD(uint8_t, m_iTeamNum);
+    SCHEMA_FIELD(CHandle<CBaseEntity>, m_hOwnerEntity);
+    SCHEMA_FIELD(CCollisionProperty*, m_pCollision);
+    // ...
+};
+```
+
+## Read with a call, write with an assignment
+
+```cpp title="plugin.cpp"
+const int nOld = pPawn->m_iHealth();   // read: operator() returns a reference
+pPawn->m_iHealth = 150;                // write: goes through Set()
+pPawn->m_iHealth += 25;                // read-modify-write, also through Set()
+```
+
+Reading also works through the implicit conversion
+(`int n = pPawn->m_iHealth;`) and `Get()`. The call form is the clearest and
+the one used across the SDK.
+
+**Writing through the wrapper is what makes the change reach clients.** `=`,
+`Set()`, `++`, `--`, `+=`, `-=`, `*=`, `/=`, and for integers and enums `|=`,
+`&=`, `^=`, all call `Set()`, which marks the field as changed before writing
+it. The engine then includes it in the next snapshot.
+
+```cpp
+pPawn->m_fFlags |= FL_FROZEN;      // announced
+pPawn->m_fFlags() |= FL_FROZEN;    // NOT announced: writes through the raw reference
+```
+
+`field()` hands you a plain reference to the memory, and anything you do to
+that reference is invisible to the network layer. That is useful on purpose
+(several writes, then one `NetworkStateChanged()`), and a bug by accident.
+
+Only fields that are networked are marked; writing a server-only field through
+`=` just writes it.
+
+### What can be assigned
+
+`=` is available for pointers, trivially copyable types (numbers, enums, `bool`,
+handles, `Vector`, `QAngle`, `Color`, …). The assigned value is converted to the
+field's own type, so `m_nByteField = 1` writes one byte, not four.
+
+For everything else — `CUtlVector`, strings, embedded classes — you take the
+reference with `()` and change it in place (see below).
+
+## Calling NetworkStateChanged yourself
+
+Every field wrapper has `NetworkStateChanged()`. Call it after any write that
+did not go through `Set()`:
+
+```cpp
+auto& vecWeapons = pWeaponServices->m_hMyWeapons();   // CUtlVector<CHandle<CBasePlayerWeapon>>&
+// ... modify vecWeapons ...
+pWeaponServices->m_hMyWeapons.NetworkStateChanged();
+```
+
+The cases where you need it:
+
+- **Vectors and other non-assignable types**, modified through `()`.
+- **Fixed arrays and char buffers**, declared with `SCHEMA_FIELD_POINTER` —
+  it has no setter at all (below).
+- **Raw writes through `()`** that you batch on purpose.
+
+If you only have a class name and a field name at runtime,
+`schema::SetStateChanged(pEntity, "m_iHealth")` does the same, taking the
+class from the pointer's static type.
+
+### How the change is routed
+
+You do not have to pick; the wrapper does it from the class declaration:
+
+| Declared with | What it is | NetworkStateChanged goes to |
+|---|---|---|
+| `DECLARE_SCHEMA_CLASS` | An entity class | The entity's own `NetworkStateChanged` |
+| `DECLARE_SCHEMA_CLASS_INLINE` | An object embedded in an entity or hanging off one (`CCollisionProperty`, `CGameSceneNode`, `CEconItemView`, services, `CCSGameRules`) | Through the class's `__m_pChainEntity` chainer to the owning entity when the class has one (services, game rules); otherwise the `NetworkStateChanged` virtual of the NetworkVar wrapper the object is embedded in |
+
+For the embedded case the SDK finds that virtual's vtable slot at runtime from
+a gamedata signature, per vtable, so no indices are kept per class. If the
+signature is missing, a warning is printed once and embedded fields are not
+networked.
+
+## Embedded objects
+
+A field whose type is a class (not a pointer) is an object stored inside the
+entity. `()` gives you a reference to it, and its own fields work as usual:
+
+```cpp
+// CBaseModelEntity: SCHEMA_FIELD(CCollisionProperty, m_Collision)
+pModel->m_Collision().m_CollisionGroup = COLLISION_GROUP_DEBRIS;   // announced
+```
+
+The same chain works as deep as it goes:
+
+```cpp
+// CBasePlayerWeapon -> m_AttributeManager -> m_Item -> m_NetworkedDynamicAttributes
+CAttributeList& attrs = pWeapon->m_AttributeManager().m_Item().m_NetworkedDynamicAttributes();
+```
+
+## Pointers and handles
+
+A pointer field returns the pointer; `->` on the wrapper reaches straight
+through it:
+
+```cpp
+CPlayer_ItemServices* pItems = pPawn->m_pItemServices();
+if (pItems)
+    pItems->GiveNamedItem("weapon_ak47");
+
+Vector vecOrigin = pEntity->m_CBodyComponent->m_pSceneNode->m_vecAbsOrigin();
+```
+
+Pointer fields can be null — check them. Handle fields are `CHandle<T>` values;
+`.Get()` resolves them and returns null for a removed entity:
+
+```cpp
+if (CBaseEntity* pOwner = pEntity->m_hOwnerEntity().Get())
+    // ...
+```
+
+## Fixed arrays and char buffers
+
+Fields that are C arrays in the game are declared with `SCHEMA_FIELD_POINTER`,
+which returns a pointer to the first element instead of a reference. It has
+no setter, so announce the change yourself:
+
+```cpp
+// CPointWorldText: SCHEMA_FIELD_POINTER(char, m_messageText)
+V_strncpy(pText->m_messageText, "Hello", 512);
+pText->m_messageText.NetworkStateChanged();
+
+// CPlayer_WeaponServices: SCHEMA_FIELD_POINTER(uint16_t, m_iAmmo)
+pWeaponServices->m_iAmmo()[nAmmoType] = 90;
+pWeaponServices->m_iAmmo.NetworkStateChanged();
+```
+
+## Vectors
+
+`CUtlVector` fields are read and changed through the reference:
+
+```cpp
+for (const auto& hWeapon : pWeaponServices->m_hMyWeapons())
+{
+    if (CBasePlayerWeapon* pWeapon = hWeapon.Get())
+        // ...
+}
+```
+
+Some networked vectors are **not** laid out like a plain `CUtlVector`
+(`CUtlVectorEmbeddedNetworkVar`, for example), and indexing them directly reads
+the wrong memory. For those the schema system publishes an element accessor,
+available as `field.GetManipulator()` (null for every other field). The SDK's
+`CCSCustomHudLayout::GetLayoutState` is an example of using it; when a helper
+exists for such a field, use the helper.
+
+## Adding your own helpers
+
+The generated classes carry the game's fields and the SDK's helpers, not yours.
+You cannot add a method to a class you do not own, and editing the generated
+headers is lost on the next regeneration. The pattern that works is a derived
+class **with no data members and no virtual functions**, plus a cast:
+
+```cpp title="extends/CBaseEntityEx.h"
+#include "source2toolkit/schema/entity/classes/CBaseEntity.h"
+
+class CBaseEntityEx : public CBaseEntity
+{
+public:
+    bool IsPlayerPawn() { return V_strcmp(GetClassname(), "player") == 0; }
+    bool IsAlive()      { return m_lifeState() == LIFE_ALIVE; }
+
+    void AddFlags(uint32_t nMask) { m_fFlags |= nMask; }
+};
+
+// The whole trick depends on this: add a member or a virtual and the cast
+// below silently points at the wrong memory.
+static_assert(sizeof(CBaseEntityEx) == sizeof(CBaseEntity));
+
+inline CBaseEntityEx* Ex(CBaseEntity* pEntity)
+{
+    return static_cast<CBaseEntityEx*>(pEntity);
+}
+```
+
+```cpp
+if (Ex(pEntity)->IsPlayerPawn())
+    Ex(pEntity)->AddFlags(FL_FROZEN);
+```
+
+A schema class is only a view over engine memory, so a derived class that adds
+no storage has exactly the same layout, and the cast costs nothing. The
+FUNPLAY plugins use this for every class they extend, with one `Ex()` overload
+(or a trait-based template) per class. Before you add a helper, check the SDK
+does not already have it on the class or a base class —
+`CCSPlayerController` inherits a lot.
+
+## Declaring fields and classes yourself
+
+If the game has a field or class the SDK does not generate, declare it the same
+way the generator does. The class name is the key into the schema, so it must
+match the game's class name exactly:
+
+```cpp title="my_schema.h"
+#include "source2toolkit/schema/schema.h"
+#include "source2toolkit/schema/entity/classes/CBaseModelEntity.h"
+
+class CMyGameEntity : public CBaseModelEntity
+{
+public:
+    DECLARE_SCHEMA_CLASS(CMyGameEntity);   // entity class
+
+    SCHEMA_FIELD(float, m_flSomething);
+    SCHEMA_FIELD_POINTER(char, m_szBuffer);
+};
+
+class CMyEmbeddedThing
+{
+public:
+    DECLARE_SCHEMA_CLASS_INLINE(CMyEmbeddedThing);   // non-entity, embedded
+
+    SCHEMA_FIELD(int32_t, m_nValue);
+};
+```
+
+Use `DECLARE_SCHEMA_CLASS` for entities and `DECLARE_SCHEMA_CLASS_INLINE` for
+objects embedded in an entity — it decides how a change is networked (table
+above). Fields of base classes are found through the schema's inheritance, so
+you only declare the new ones.
+
+For a one-off lookup without a class, `schema::GetOffset<T>("m_field")`
+returns a `SchemaKey` (`offset`, `networked`), and
+`schema::GetServerOffset<T>("m_field")` returns just the offset, `-1` when it
+does not exist.
+
+See the [Schema API reference](/docs/core-api/Schema) for every function in
+`schema.h`.

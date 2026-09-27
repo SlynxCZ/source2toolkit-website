@@ -1,0 +1,201 @@
+---
+title: MySQL
+description: Asynchronous MySQL — one-off serverless queries with placeholders, or a persistent connection with queries and transactions.
+---
+
+`IToolkitMySQL` runs queries off the main thread and delivers the results in a
+callback on the main thread. There are two ways in:
+
+| | Serverless handle | Connection |
+| --- | --- | --- |
+| Created with | `CreateServerless(owner, info)` | `CreateConnection(owner, info)` + `Connect()` |
+| Connection | Opened and closed around every query | One, kept open |
+| Parameters | `?` / `??` placeholders, escaped on the worker | `printf`-style format + `Escape()` |
+| Errors | Always a callback, with `m_bSuccess` and `m_sError` | Always a callback, with `nullptr` (reason in the log) |
+| Good for | Occasional queries: load on connect, save on disconnect | Frequent queries, transactions |
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitMySQL.h"
+```
+
+Both take a `ToolkitMySQLConnectionInfo`:
+
+```cpp
+struct ToolkitMySQLConnectionInfo
+{
+    const char* host;
+    const char* user;
+    const char* pass;
+    const char* database;
+
+    int port = 3306;
+    int timeout = 60;
+};
+```
+
+## Serverless queries
+
+Create the handle once, typically in `Load()`. The info is copied, strings
+included, so it does not have to outlive the call.
+
+```cpp title="plugin.cpp"
+IToolkitMySQLServerless* g_pDb = nullptr;
+
+// Load()
+g_pDb = g_pToolkitMySQL->CreateServerless(g_PluginID, { "127.0.0.1", "user", "pass", "cs2" });
+```
+
+Then query wherever you need to. `?` becomes an escaped, quoted value; `??`
+a quoted identifier (a table or column name). A placeholder count that does
+not match the parameters fails the query instead of running it.
+
+```cpp title="players.cpp"
+void LoadPlayer(uint64_t steamid)
+{
+    g_pDb->Query("SELECT name, kills FROM players WHERE steamid = ?", { std::to_string(steamid) },
+        [steamid](const ToolkitMySQLServerlessResult& r)
+    {
+        if (!r.m_bSuccess)
+        {
+            g_ToolkitAPI->ConPrintf("LoadPlayer %llu: %s (%u)\n", steamid, r.m_sError.c_str(), r.m_nErrorCode);
+            return;
+        }
+
+        IToolkitMySQLResult* set = r.m_pQuery->GetResultSet();
+        while (set && set->MoreRows() && set->FetchRow())
+        {
+            std::string name = set->GetString(0); // copy -- the result dies with the callback
+            int kills = set->GetInt(1);
+        }
+    });
+}
+```
+
+`m_bSuccess` is about the query, not the rows — a `SELECT` that matched nothing
+is a success with an empty result set. On failure `m_pQuery` is `nullptr`,
+`m_sError` says why and `m_nErrorCode` holds MySQL's error number (0 when the
+query never reached the server).
+
+All serverless queries of all plugins share one worker thread. Each query pays
+a TCP handshake and a login, so do not use this for anything per tick or per
+shot — keep a connection open instead.
+
+## A persistent connection
+
+```cpp title="plugin.cpp"
+IToolkitMySQLConnection* g_pConn = nullptr;
+
+// Load()
+ToolkitMySQLConnectionInfo info{ "127.0.0.1", "user", "pass", "cs2" };
+g_pConn = MYSQL_CREATE_CONNECTION(info); // g_pToolkitMySQL->CreateConnection(g_PluginID, info)
+
+g_pConn->Connect([](bool connected)
+{
+    if (!connected)
+        return; // the reason is in the server log
+
+    g_bDbReady = true;
+});
+```
+
+`CreateConnection()` does not connect by itself. Queries sent before the
+`Connect()` callback reported `true` fail — their callback gets `nullptr` —
+so gate them on a flag like `g_bDbReady`.
+
+### Queries
+
+```cpp
+virtual void Query(char* query, ToolkitMySQLQueryCallbackFunc callback);
+virtual void Query(const char* query, ToolkitMySQLQueryCallbackFunc callback, ...);
+```
+
+The `const char*` overload is a `printf` format — the one you get with a string
+literal or `.c_str()`. Escape every string you insert, and write a literal `%`
+as `%%`:
+
+```cpp
+std::string name = g_pConn->Escape(player->GetPlayerName());
+
+g_pConn->Query("UPDATE players SET name = '%s', kills = kills + %d WHERE steamid = %llu",
+    [](IToolkitMySQLQuery* q)
+    {
+        if (!q)
+            return; // failed -- not connected, or rejected; the reason is in the server log
+
+        // q->GetAffectedRows(), q->GetInsertId(), q->GetResultSet()
+    },
+    name.c_str(), kills, steamid);
+```
+
+The callback always runs exactly once. `q` is `nullptr` when the query failed;
+otherwise it belongs to the toolkit and is freed when the callback returns.
+
+`Escape()` needs the live connection — call it only once connected.
+
+### Transactions
+
+```cpp
+ToolkitMySQLTransaction txn;
+txn.queries.push_back("UPDATE wallets SET credits = credits - 100 WHERE steamid = 1");
+txn.queries.push_back("UPDATE wallets SET credits = credits + 100 WHERE steamid = 2");
+
+g_pConn->ExecuteTransaction(txn,
+    [](std::vector<IToolkitMySQLQuery*> results)
+    {
+        // One per query, in order. Owned by the toolkit -- do not delete them.
+        unsigned int moved = results[0]->GetAffectedRows();
+    },
+    [](std::string error, int failedIndex)
+    {
+        // Already rolled back. failedIndex is -1 when no single query failed
+        // (not connected, or BEGIN / COMMIT failed).
+        g_ToolkitAPI->ConPrintf("Transaction failed at query %d: %s\n", failedIndex, error.c_str());
+    });
+```
+
+Exactly one of the two callbacks runs. The queries in a transaction are sent
+as written — escape their values yourself.
+
+## Reading a result set
+
+`IToolkitMySQLQuery::GetResultSet()` returns `nullptr` for statements without
+rows (`INSERT`, `UPDATE`). Otherwise step through the rows with `FetchRow()`
+and read the current row's columns by index:
+
+| Call | Returns |
+| --- | --- |
+| `GetRowCount()`, `GetFieldCount()` | Row and column counts |
+| `FieldNameToNum(name, &col)`, `FieldNumToName(col)` | Column lookup by name |
+| `MoreRows()`, `FetchRow()`, `CurrentRow()`, `Rewind()` | Row cursor |
+| `GetString(col, &len = nullptr)`, `GetInt(col)`, `GetInt64(col)`, `GetFloat(col)` | Column value of the current row |
+| `IsNull(col)`, `GetDataSize(col)`, `GetFieldType(col)` | Column metadata (`EToolkitMySQLType`) |
+
+`FetchMoreResults()` advances to the next result set of a multi-statement query.
+
+```cpp
+unsigned int colKills;
+if (set->FieldNameToNum("kills", &colKills))
+    while (set->FetchRow())
+        total += set->GetInt(colKills);
+```
+
+## Pitfalls
+
+- **Copy what you keep.** Query objects, result sets and every string they
+  return are freed once the callback returns — transaction results included.
+  Never `delete` them.
+- **Callbacks run on the main thread**, one completed operation per connection
+  per frame. Re-resolve players inside them by SteamID or slot; they may have
+  left while the query ran.
+- **Check for `nullptr`.** A failed query on an `IToolkitMySQLConnection`
+  still runs its callback, with `nullptr` instead of a query; the error text
+  only goes to the server log. If you need the message or MySQL's error
+  number, use a serverless handle.
+- **Unload.** Connections and serverless handles are destroyed for you when
+  your plugin unloads, together with every query still queued — their
+  callbacks never run. `Destroy()` does the same by hand; a query already on
+  the wire finishes and its result is thrown away.
+
+## Reference
+
+- [`IToolkitMySQL` API reference](/docs/core-api/IToolkitMySQL)

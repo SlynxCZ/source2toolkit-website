@@ -1,0 +1,201 @@
+---
+title: Damage
+description: CTakeDamageInfo and CTakeDamageResult, hooking CBaseEntity::TakeDamageOld to change or block damage, and dealing damage yourself.
+---
+
+All damage in CS2 — bullets, knives, grenades, falling, the world — goes
+through one function, `CBaseEntity::TakeDamageOld` (the game's own asserts call
+it that). It takes a `CTakeDamageInfo` describing the hit and a
+`CTakeDamageResult` it fills in. Hook it to change or block damage; call it to
+deal damage yourself.
+
+## CTakeDamageInfo
+
+```cpp
+#include "source2toolkit/schema/takedamageinfo.h"
+
+CTakeDamageInfo();
+CTakeDamageInfo(CBaseEntity* pInflictor, CBaseEntity* pAttacker, CBaseEntity* pAbility,
+                float flDamage, DamageTypes_t bitsDamageType);
+
+HitGroup_t GetHitGroup() const;
+```
+
+Both constructors call the game's own constructor, so every field you do not
+set has the game's default. The fields you will use:
+
+| Field | Type | Meaning |
+|---|---|---|
+| `m_flDamage` | `float` | Damage to apply. Change it in a Pre hook to scale the hit. |
+| `m_bitsDamageType` | `int32_t` | `DMG_*` bits: `DMG_BULLET`, `DMG_FALL`, `DMG_BLAST`, `DMG_BURN`, … |
+| `m_hAttacker` | `CHandle<CBaseEntity>` | Who is credited — for players, their **pawn**. |
+| `m_hInflictor` | `CHandle<CBaseEntity>` | What did it — the pawn for a bullet, the projectile for a grenade. |
+| `m_hAbility` | `CHandle<CBaseEntity>` | The weapon, when there is one. |
+| `m_vecDamagePosition`, `m_vecDamageForce`, `m_vecDamageDirection`, `m_vecReportedPosition` | `Vector` | Where and which way. |
+| `m_nDamageFlags` | `TakeDamageFlags_t` | `DFLAG_*` flags, e.g. `DFLAG_SUPPRESS_DAMAGE_MODIFICATION`, `DFLAG_PREVENT_DEATH`. |
+| `m_iHitGroupId` | `HitGroup_t` | Hit group field. |
+| `m_flOriginalDamage` | `float` | Damage before modification. |
+| `m_pTrace` | `CGameTrace*` | The trace that caused the hit, when there is one. |
+| `m_iDamageCustom`, `m_iAmmoType`, `m_bShouldBleed`, `m_bShouldSpark`, `m_AttackerInfo`, … | | See the [reference](/docs/schema/Takedamageinfo). |
+
+`GetHitGroup()` reads the hit group from the attached hit data through a
+gamedata offset; it returns `HITGROUP_INVALID` when that is unavailable and
+`HITGROUP_GENERIC` when the hit carries no group. Use it rather than
+`m_iHitGroupId` for "was this a headshot":
+
+```cpp
+if (pInfo->GetHitGroup() == HitGroup_t::HITGROUP_HEAD)
+    // ...
+```
+
+## CTakeDamageResult
+
+```cpp
+#include "source2toolkit/schema/takedamageresult.h"
+
+CTakeDamageResult(float damage);
+void CopyFrom(CTakeDamageInfo* pInfo);
+```
+
+What the game fills in while applying damage: `m_nHealthLost`,
+`m_nHealthBefore`, `m_flDamageDealt`, `m_flPreModifiedDamage`,
+`m_nTotalledHealthLost`, `m_flTotalledDamageDealt`, `m_bWasDamageSuppressed`
+and more. There is no default constructor — build it from a damage value, and
+call `CopyFrom(&info)` to point it at your info and copy the damage over when
+you call `TakeDamageOld` yourself.
+
+See the [reference](/docs/schema/Takedamageresult) for every field.
+
+## Hooking TakeDamageOld
+
+`ADDR_TAKE_DAMAGE_OLD()` returns the resolved function; hook it with
+`KHOOK_MEMBER`, which evaluates the address when `KHOOK_INIT()` runs:
+
+```cpp title="plugin.h"
+#include "source2toolkit/IToolkitAddresses.h"
+#include "source2toolkit/IToolkitHooks.h"
+#include "source2toolkit/schema/takedamageinfo.h"
+#include "source2toolkit/schema/takedamageresult.h"
+
+class MyPlugin : public IToolkitPlugin
+{
+public:
+    KHook::Return<int64_t> Hook_TakeDamageOld(CBaseEntity* pThis, CTakeDamageInfo* pInfo, CTakeDamageResult* pResult);
+
+    KHOOK_MEMBER(m_hTakeDamageOld, ADDR_TAKE_DAMAGE_OLD(), &MyPlugin::Hook_TakeDamageOld, nullptr);
+};
+```
+
+```cpp title="plugin.cpp"
+bool MyPlugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late)
+{
+    TOOLKIT_SAVEVARS();
+    KHOOK_INIT();
+    return true;
+}
+
+bool MyPlugin::Unload(char* error, size_t maxlen)
+{
+    KHOOK_DESTRUCT();
+    return true;
+}
+```
+
+The hooked entity arrives first — for player damage that is the victim's
+**pawn** (classname `player`), not the controller. The handler returns a
+`KHook::Return<int64_t>`:
+
+```cpp title="plugin.cpp"
+KHook::Return<int64_t> MyPlugin::Hook_TakeDamageOld(CBaseEntity* pThis, CTakeDamageInfo* pInfo, CTakeDamageResult* pResult)
+{
+    if (!pInfo)
+        return { KHook::Action::Ignore, 0 };
+
+    // No fall damage.
+    if (pInfo->m_bitsDamageType & DMG_FALL)
+        return { KHook::Action::Supersede, 0 };
+
+    // Halve everything else. This is a Pre hook: the original runs after
+    // it, with whatever pInfo holds by then.
+    pInfo->m_flDamage *= 0.5f;
+
+    return { KHook::Action::Ignore, 0 };
+}
+```
+
+- `Ignore` — the original runs (with your changes to `pInfo`).
+- `Supersede` — the original does not run: no damage at all.
+- To act on the result, run the original yourself and supersede so it does not
+  run twice:
+
+```cpp
+const int64_t ret = m_hTakeDamageOld.CallOriginal(pThis, pInfo, pResult);
+// pResult is filled in now
+return { KHook::Action::Supersede, ret };
+```
+
+Finding the players involved — the attacker handle points at a pawn:
+
+```cpp
+CCSPlayerController* pVictim = nullptr;
+if (!V_strcmp(pThis->GetClassname(), "player"))
+    pVictim = static_cast<CCSPlayerPawn*>(pThis)->GetController();
+
+CCSPlayerController* pAttacker = nullptr;
+if (CBaseEntity* pEnt = pInfo->m_hAttacker.Get(); pEnt && !V_strcmp(pEnt->GetClassname(), "player"))
+    pAttacker = static_cast<CCSPlayerPawn*>(pEnt)->GetController();
+```
+
+The hooks section covers handlers, `CallOriginal` and Post hooks in depth:
+[Hooking](/docs/hooks).
+
+## Dealing damage
+
+### Player to player
+
+The simplest route is the controller helper:
+
+```cpp
+void CCSPlayerController::TakeDamage(CCSPlayerController* pAttacker, int iDamage,
+                                     DamageTypes_t bitsDamageType,
+                                     HookChain eChain = HookChain::Bypass);
+```
+
+```cpp
+pVictim->TakeDamage(pAttacker, 25, DMG_GENERIC);
+```
+
+It builds the info with the attacker's pawn as inflictor and attacker, sets
+`DFLAG_SUPPRESS_DAMAGE_MODIFICATION` so armor and scaling leave the number
+alone, and calls `TakeDamageOld` on the victim's pawn. It needs both players
+connected with a pawn and the victim alive; otherwise it does nothing.
+
+By default it **bypasses** `TakeDamageOld` hooks — yours and other plugins' —
+because it is the server dealing damage, not the game. Pass `HookChain::Run`
+when it stands in for a weapon and other plugins' damage rules should apply.
+
+### Anything else
+
+For damage with no attacker player, a different inflictor, or fields the
+helper does not set, build the info yourself and call the function. The
+TroubleTerroristTown plugin's explosions do it like this:
+
+```cpp title="explosions.cpp"
+CTakeDamageInfo info(nullptr, pAttackerPawn, nullptr, flDamage, DMG_BLAST);
+info.m_vecReportedPosition = vecTargetOrigin;
+
+CTakeDamageResult result(flDamage);
+result.CopyFrom(&info);
+
+TOOLKIT_ORIGINAL(ADDR_TAKE_DAMAGE_OLD())(pVictimPawn, &info, &result);
+```
+
+`TOOLKIT_ORIGINAL` calls the function past every hook on it — the same as
+`HookChain::Bypass`. Call `ADDR_TAKE_DAMAGE_OLD()(…)` without it to run the
+hook chain. Resolve it at the call, not once into a global: the original
+behind a hook only exists once the hook does.
+
+<Callout type="warn">
+Damage a player through their **pawn**. Calling `TakeDamageOld` on the
+controller reaches an entity whose `m_iHealth` is 0.
+</Callout>

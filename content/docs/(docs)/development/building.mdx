@@ -1,28 +1,35 @@
 ---
 title: SDK & Building
+description: Get the Source2Toolkit SDK, set up its dependencies and build a plugin into a .stx with CMake.
 ---
 
-This guide explains how to use the **Source2Toolkit SDK** to build your own plugins.
+The **Source2Toolkit SDK** is what you compile plugins against. It contains:
 
-The SDK provides everything needed to compile plugins against Source2Toolkit, including:
-- KHook headers — Metamod:Source's own detour library, as the `vendor/khook` submodule, pinned to the commit Metamod was built with
-- Build configuration and CMake helpers
-- HL2SDK (CS2) and Protobuf — a checkout you already have, or one the SDK downloads for you
+- the toolkit's public headers (`public/source2toolkit/IToolkit*.h`) and the generated schema classes;
+- **KHook** headers — Metamod:Source's own detour library — as the `vendor/khook` submodule, pinned to the commit Metamod is built with;
+- the CMake (and AMBuild) build configuration, including the `add_s2toolkit_plugin` helper;
+- **hl2sdk-cs2** and the **Protobufs**, from a checkout you already have or one the SDK downloads for you.
 
----
+Requirements: CMake 3.18+, a C++20 compiler (GCC or Clang on Linux, MSVC on Windows), Python 3 and git.
 
-# Getting the SDK
+## Getting the SDK
 
-Clone the SDK repository with its submodules:
+Add it to your plugin as a git submodule, or clone it next to your projects:
+
+```bash
+git submodule add https://github.com/SlynxCZ/source2toolkit-sdk.git vendor/source2toolkit-sdk
+git submodule update --init --recursive
+```
 
 ```bash
 git clone --recursive https://github.com/SlynxCZ/source2toolkit-sdk.git
-cd source2toolkit-sdk
 ```
 
----
+<Callout type="warn">
+  Use git, not a zip download. The build reads the KHook commit from `vendor/khook` with `git rev-parse`; without git metadata the plugin is built with the commit `unknown` and the core cannot check that your plugin and the core use the same KHook.
+</Callout>
 
-# Dependencies
+## Dependencies
 
 The SDK compiles against two things it does not carry in git: **hl2sdk-cs2** (the `cs2` branch of AlliedModders' hl2sdk) and the **Protobufs** (the `csgo/` folder of SteamDatabase/Protobufs). `tools/deps.py` sets them up once and keeps them current afterwards:
 
@@ -30,13 +37,13 @@ The SDK compiles against two things it does not carry in git: **hl2sdk-cs2** (th
 python tools/deps.py init
 ```
 
-`init` asks, for each of the two, whether to use a checkout you already have — found through the `HL2SDKCS2` / `CSGO_PROTO` environment variable, or a path you type — or to download it into `vendor/`. The answer is saved in `deps.json` next to the SDK (ignored by git), and from then on one command brings everything up to date the same way every time:
+`init` asks, for each of the two, whether to use a checkout you already have — found through the `HL2SDKCS2` / `CSGO_PROTO` environment variable, or a path you type — or to download it into `vendor/`. The answer is saved in `deps.json` next to the SDK (ignored by git), and from then on one command brings everything up to date:
 
 ```bash
 python tools/deps.py update
 ```
 
-The full walkthrough, flags included, is on the [SDK dependencies](/docs/sdk-dependencies) page. In short: `update` pulls the two checkouts (a checkout with local changes is left alone), moves `vendor/khook` to the KHook commit that `alliedmodders/metamod-source` master pins — the toolkit core is built against that one, and a plugin built against any other KHook refuses to load — and moves `vendor/hl2sdk-manifests` to its latest. `python tools/deps.py status` shows what is configured and which commits are checked out.
+`update` pulls the two checkouts (a checkout with local changes is left alone), moves `vendor/khook` to the KHook commit that `alliedmodders/metamod-source` master pins — the toolkit core is built against that one, and a plugin built against any other KHook refuses to load — and moves `vendor/hl2sdk-manifests` to its latest. `python tools/deps.py status` shows what is configured and which commits are checked out. The full walkthrough, flags included, is on the [SDK dependencies](/docs/development/sdk-dependencies) page.
 
 The questions can be answered up front, which is what a CI script wants:
 
@@ -49,7 +56,7 @@ python tools/deps.py init --hl2sdk env --protobufs env
   A downloaded dependency wins over the environment variable: `deps.py` writes `deps.cmake`, which CMake includes before it looks at `HL2SDKCS2` and `CSGO_PROTO`. Without `deps.json` the SDK behaves as before — the environment variables, then `vendor/hl2sdk-cs2` and `vendor/Protobufs/csgo` if they exist.
 </Callout>
 
-## By hand
+### By hand
 
 If you would rather not use the script, set the two variables before running CMake:
 
@@ -59,10 +66,12 @@ If you would rather not use the script, set the two variables before running CMa
 | `CSGO_PROTO` | Path to the `csgo/` folder of a SteamDatabase/Protobufs checkout |
 
 ```bash
-# Linux / macOS
+# Linux
 export HL2SDKCS2=/path/to/hl2sdk-cs2
 export CSGO_PROTO=/path/to/Protobufs/csgo
+```
 
+```powershell
 # Windows (PowerShell)
 $env:HL2SDKCS2 = "C:\path\to\hl2sdk-cs2"
 $env:CSGO_PROTO = "C:\path\to\Protobufs\csgo"
@@ -70,11 +79,9 @@ $env:CSGO_PROTO = "C:\path\to\Protobufs\csgo"
 
 KHook needs nothing from you: it is the `vendor/khook` submodule. `MMSOURCE_DEV` is only read when building the toolkit core itself.
 
----
+## Project setup
 
-# Project Setup
-
-A typical plugin project using the SDK looks like this:
+A typical plugin project looks like this:
 
 ```
 my-plugin/
@@ -85,17 +92,18 @@ my-plugin/
     └── source2toolkit-sdk/
 ```
 
----
+## CMake configuration
 
-# CMake Configuration
+Add the SDK as a subdirectory and create the plugin with `add_s2toolkit_plugin`:
 
-To use the SDK, include it as a subdirectory and use the provided helper function.
-
-```cmake
+```cmake title="CMakeLists.txt"
 cmake_minimum_required(VERSION 3.18)
 project(my-plugin CXX)
 
 set(CMAKE_CXX_STANDARD 20)
+
+# Windows: the SDK is built with the static MSVC runtime, the plugin has to match.
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded")
 
 add_subdirectory(vendor/source2toolkit-sdk)
 
@@ -104,19 +112,31 @@ add_s2toolkit_plugin(my_plugin
 )
 ```
 
-<Callout type="tip">
-  The <code>add_s2toolkit_plugin</code> function automatically configures linking, include paths, and output format.
+`add_s2toolkit_plugin(name sources...)` creates a shared library, links it against the `source2toolkit-sdk` target (include paths, definitions, hl2sdk and protobuf libraries come with it) and names the output `<name>.stx` with no `lib` prefix. It is an ordinary CMake target afterwards, so `target_include_directories`, `target_link_libraries` and `set_target_properties` work as usual.
+
+To have the build drop the plugin straight into an `addons/` tree, set its output directory — this is what the official sample does:
+
+```cmake
+set_target_properties(my_plugin PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/addons/source2toolkit/plugins
+    # The .dll on Windows is a RUNTIME artifact.
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/addons/source2toolkit/plugins
+)
+```
+
+<Callout type="info">
+  The sample plugin (`samples/cs2_sample` in the core repository) finds the SDK through a `SOURCE2TOOLKIT_SDK` environment variable instead of a submodule, so one SDK checkout serves several plugins. Both approaches work; `add_subdirectory` just needs a binary directory as second argument when the SDK lives outside your source tree: `add_subdirectory(${SOURCE2TOOLKIT_SDK} ${CMAKE_BINARY_DIR}/source2toolkit-sdk)`.
 </Callout>
 
----
+## Example plugin
 
-# Example Plugin
+The smallest plugin that loads:
 
-Below is a minimal working plugin using the SDK:
-
-```cpp
+```cpp title="src/plugin.cpp"
 #include "source2toolkit/IToolkitPlugin.h"
-#include "source2toolkit/utils/log.h"
+#include "source2toolkit/IToolkitApi.h"
+
+TOOLKIT_GLOBALVARS();
 
 class Plugin final : public IToolkitPlugin
 {
@@ -124,18 +144,16 @@ public:
     bool Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late) override
     {
         TOOLKIT_SAVEVARS();
-        api->AddListener(this, this);
         TOOLKIT_LOG(this, "Hello World! Plugin loaded.\n");
         return true;
     }
 
-    bool Unload(char*, size_t) override
+    bool Unload(char* error, size_t maxlen) override
     {
         TOOLKIT_LOG(this, "Plugin unloaded.\n");
         return true;
     }
 
-private:
     const char* GetName() override { return "My Plugin"; }
     const char* GetVersion() override { return "1.0.0"; }
     const char* GetAuthor() override { return "You"; }
@@ -146,77 +164,41 @@ Plugin g_Plugin;
 TOOLKIT_EXPOSE(my_plugin, g_Plugin);
 ```
 
----
+[Your First Plugin](/docs/development/first-plugin) walks through a fuller version with a listener, a command and a game event, and explains every macro used here.
 
-# Building the Plugin
+## Building the plugin
 
 ```bash
-mkdir build && cd build
-cmake ..
-cmake --build . --config Release
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
 ```
 
-After building, you will get:
+The result is `my_plugin.stx` in the build directory (or in the output directory you set). Copy it to the server's
 
 ```
-my_plugin.stx
+game/csgo/addons/source2toolkit/plugins/
 ```
 
----
+and restart the server, or run `toolkit load my_plugin` in its console.
 
-# Output
+## What the SDK configures
 
-The compiled plugin uses the `.stx` extension and is ready to be placed into:
+- C++20, platform compiler flags and the definitions the hl2sdk expects.
+- The SDK's own helper code (schema helpers, hook wrappers) and the hl2sdk's `tier1` / `entity2` sources, compiled into a static library that becomes part of your plugin.
+- Include directories for the toolkit, hl2sdk, KHook and the generated protobufs.
+- Linking against `tier0`, `interfaces`, `mathlib`, `protobuf` and `steam_api` from the hl2sdk.
+- `TOOLKIT_KHOOK_COMMIT`, the KHook commit baked into your plugin for the load-time check.
+- The `.stx` output name.
 
-```
-/game/csgo/addons/source2toolkit/plugins/
-```
+## Platform notes
 
----
+### Linux
 
-# What the SDK Handles
+- The SDK target passes `_GLIBCXX_USE_CXX11_ABI=0` (the old `std::string` ABI) to everything that links it. Every static library you link into the plugin must be built with the same setting, or linking fails on `std::string` / `std::list` symbols.
+- Code is built with `-fPIC`, and protobuf's symbols are kept out of the plugin's exports (`--exclude-libs=libprotobuf.a`).
 
-The SDK automatically configures:
+### Windows
 
-- Platform-specific compiler flags
-- Linking against HL2SDK and engine libraries
-- Protobuf integration
-- ABI compatibility (Linux / Windows)
-- Include directories for Source 2 and KHook headers
-- Plugin output format (`.stx`)
-
----
-
-# Platform Notes
-
-## Linux
-
-- Uses static linking for standard libraries
-- Enforces `_GLIBCXX_USE_CXX11_ABI=0`
-
-## Windows
-
-- Requires **MSVC compiler**
-- MinGW is not supported
-
----
-
-# Summary
-
-Using the SDK is simple:
-
-```cmake
-add_subdirectory(source2toolkit-sdk)
-
-add_s2toolkit_plugin(my_plugin
-    src/plugin.cpp
-)
-```
-
-Run `python tools/deps.py init` once (or set `HL2SDKCS2` and `CSGO_PROTO` yourself), then build — that's it.
-
----
-
-<Callout type="success">
-  You are now ready to start developing plugins with full access to Source 2 internals.
-</Callout>
+- MSVC is required; configuring with MinGW stops with `MSVC restricted.`
+- The SDK library is built with the static MSVC runtime (`/MT`, `CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded"`). CMake applies that variable per directory, so set it in your own `CMakeLists.txt` before `add_s2toolkit_plugin`, as in the example above; otherwise the linker reports a `RuntimeLibrary` mismatch (LNK2038).
+- A Linux `.stx` and a Windows `.stx` are different binaries: build each on its own platform.

@@ -1,0 +1,191 @@
+---
+title: Transmit
+description: Decide per viewer which entities a player receives — hide players, personal entities, owner-following, and the raw CheckTransmit hook.
+---
+
+Every tick the server works out, per player, which entities to send them
+(CheckTransmit). `IToolkitTransmit` sits after that decision and takes entities
+back out of it. Use it for `!hide`, spectator-only markers, personal props
+only one player should see, or making an entity server-side only.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitTransmit.h"
+```
+
+## The model
+
+1. **Hook** an entity once with `HookEntity()`. Until then the setters refuse
+   it and the engine decides as usual.
+2. Set its **visibility per viewer** with `SetVisible()` /
+   `SetVisibleToAll()`, on one of eight **channels**.
+3. The entity is shown to a viewer only when **no channel hides it** — so two
+   independent features never un-hide each other's work.
+
+```cpp
+bool HookEntity(PluginId owner, CEntityInstance* entity, bool defaultVisible = true);
+bool SetVisible(CEntityInstance* entity, CPlayerSlot viewer, bool visible, int channel = 0);
+bool SetVisibleToAll(CEntityInstance* entity, bool visible, int channel = 0);
+bool IsVisible(CEntityInstance* entity, CPlayerSlot viewer);
+```
+
+Channels are `0` to `TRANSMIT_MAX_CHANNELS - 1` (8), or
+`TRANSMIT_CHANNEL_ALL` to act on all of them at once. Most plugins only ever
+need channel 0.
+
+## Hiding a player
+
+Hook the player's **controller**, never the pawn — pawns are refused. Hiding a
+controller from a viewer hides the pawn it drives, its observer pawn and its
+player pawn, while the controller itself keeps being sent so the scoreboard
+stays whole. From the sample plugin:
+
+```cpp title="plugin.cpp"
+REGISTER_CON_COMMAND("sample_hide", [](const CCommandContext& context, const CCommand& args, bool post)
+{
+    CCSPlayerController* pCaller = CCSPlayerController::FromSlot(context.GetPlayerSlot());
+    if (!pCaller || args.ArgC() < 2)
+        return;
+
+    const int iSlot = atoi(args.Arg(1));
+    CCSPlayerController* pTarget = (iSlot >= 0 && iSlot < 64) ? CCSPlayerController::FromSlot(iSlot) : nullptr;
+    if (!pTarget)
+        return;
+
+    // Hooking twice is refused, so ask first.
+    if (!g_pToolkitTransmit->IsEntityHooked(pTarget))
+        TRANSMIT_HOOK_ENTITY(pTarget);
+
+    const CPlayerSlot viewer = pCaller->GetPlayerSlot();
+    const bool bHidden = !g_pToolkitTransmit->IsVisible(pTarget, viewer);
+
+    TRANSMIT_SET_VISIBLE(pTarget, viewer, bHidden, 0); // toggle
+});
+```
+
+A player is never hidden from themselves, and player hiding is skipped on a
+full update (first snapshot, reconnect): the client has to have seen a player
+once to keep track of them afterwards.
+
+## Personal entities
+
+Pass `defaultVisible = false` to hook an entity hidden from everyone, then
+allow the one viewer who should see it:
+
+```cpp
+CBaseEntity* marker = /* a prop, a point_worldtext, ... */;
+
+TRANSMIT_HOOK_ENTITY(marker, false);                      // hidden from everyone
+TRANSMIT_SET_VISIBLE(marker, owner->GetPlayerSlot(), true); // except the owner
+```
+
+## Following an owner
+
+`SetOwner(entity, owner)` ties a hooked entity to another hooked entity:
+wherever the owner is hidden, so is the entity. Use it for things attached to a
+player — a trail, a beam, a hat — so hiding the player hides them too.
+
+```cpp
+TRANSMIT_HOOK_ENTITY(hat);
+g_pToolkitTransmit->SetOwner(hat, playerController); // the controller must be hooked as well
+```
+
+Pass `nullptr` to untie. Only one level is followed — the owner's own owner is
+not consulted — and `IsVisible()` does not look at the owner either; ask about
+the owner directly.
+
+## Hiding from everybody
+
+`SetBlockAll(entity, true)` takes a hooked entity away from every viewer,
+whatever the channels say — the one-line "server-side only" switch.
+
+```cpp
+TRANSMIT_HOOK_ENTITY(trigger);
+TRANSMIT_SET_BLOCK_ALL(trigger, true);
+```
+
+## The CheckTransmit hook
+
+For rules the model above does not cover, `HOOK_CHECK_TRANSMIT(handler)` gives
+you every viewer's transmit set once per tick, after the toolkit has applied
+its own hooked entities:
+
+```cpp
+using CheckTransmitHook = std::function<void(IToolkitTransmitInfo* const* infos, int infoCount,
+                                             const uint16_t* entityIndices, int entityCount)>;
+```
+
+`entityIndices` lists the entities the engine considered this tick; anything
+not in it is not being sent to anybody. Each `IToolkitTransmitInfo` is one
+viewer: `GetPlayerSlot()`, `IsFullUpdate()`, `IsTransmitting(index)`,
+`BlockTransmit()` and `AllowTransmit()` (by index or by entity), plus the raw
+bit sets. The sample hides each player's weapons from everyone else:
+
+```cpp title="plugin.cpp"
+HOOK_CHECK_TRANSMIT([](IToolkitTransmitInfo* const* infos, int infoCount, const uint16_t* entityIndices, int entityCount)
+{
+    struct Owned { int index; int ownerSlot; };
+    static std::vector<Owned> s_owned;
+    s_owned.clear();
+
+    // The expensive part once per tick...
+    for (int e = 0; e < entityCount; e++)
+    {
+        CBaseEntity* pEntity = CBaseEntity::FromIndex<CBaseEntity>(entityIndices[e]);
+        if (!pEntity || V_strncmp(pEntity->GetClassname(), "weapon_", 7) != 0)
+            continue;
+
+        auto* pOwner = static_cast<CCSPlayerPawn*>(pEntity->m_hOwnerEntity().Get());
+        auto* pController = pOwner ? static_cast<CCSPlayerController*>(pOwner->m_hController().Get()) : nullptr;
+        if (pController)
+            s_owned.push_back({ entityIndices[e], pController->GetPlayerSlot().Get() });
+    }
+
+    // ...and only the bit work per viewer.
+    for (int i = 0; i < infoCount; i++)
+    {
+        const int viewerSlot = infos[i]->GetPlayerSlot().Get();
+        for (const Owned& o : s_owned)
+            if (o.ownerSlot != viewerSlot)
+                infos[i]->BlockTransmit(o.index);
+    }
+});
+```
+
+<Callout type="error">
+  Always hide with `BlockTransmit()`. It clears the entity from the transmit
+  set **and** puts it on the "non-transmitted" list so the client keeps a
+  record of it. Clearing only the transmit bit makes the client forget the
+  entity, and sending it again later crashes the client with "missing client
+  entity".
+</Callout>
+
+One hook per plugin: hooking again replaces the handler, `UNHOOK_CHECK_TRANSMIT()`
+removes it. Handlers of different plugins run in the order they were added.
+The `IToolkitTransmitInfo` pointers are only valid during the callback.
+
+## Pitfalls
+
+- **Performance.** The hook runs every tick for every viewer. Do lookups once
+  at the top, keep the per-viewer loop to bit operations, and avoid allocating
+  (reuse a static vector as above).
+- **Lifetime.** An entity hook goes away with the entity, with your plugin, or
+  with `UnhookEntity()`. Hooks and the CheckTransmit handler are removed when
+  your plugin unloads — nothing to undo in `Unload()`.
+- **Disconnects.** When a player leaves, every hooked entity is reset to its
+  default for their slot (`ResetViewer()`), so the next player in that slot
+  does not inherit their settings.
+- **Hooking is refused** for pawns, for an entity that is already hooked (by
+  any plugin), and for one about to be deleted. `HookEntity()` returns `false`
+  then; check `IsEntityHooked()` first when several code paths may hook the
+  same entity.
+- **Hooks are shared.** There is one hook per entity for the whole server, not
+  one per plugin. If another plugin hooked the entity first, your
+  `SetVisible()` calls work on its hook — pick a channel of your own so you do
+  not clear each other's state — and the hook disappears when *that* plugin
+  unloads.
+- **Main thread only.**
+
+## Reference
+
+- [`IToolkitTransmit` API reference](/docs/core-api/IToolkitTransmit)
+- [`CCSPlayerController`](/docs/schema/entity/classes/CCSPlayerController)

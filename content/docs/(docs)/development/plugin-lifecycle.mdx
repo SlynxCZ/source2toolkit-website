@@ -1,0 +1,169 @@
+---
+title: Plugin Lifecycle
+description: When plugins are loaded and unloaded, what the listener callbacks tell you, what the toolkit cleans up for you, and how hot reload works.
+---
+
+This page describes what the core does with a plugin from the moment it finds the `.stx` file to the moment it closes it — so you know what is safe to do in `Load()`, what you must undo in `Unload()`, and which callbacks to rely on.
+
+## Loading at server start
+
+Source2Toolkit is a Metamod:Source plugin that must be loaded when the server starts (a late `meta load` is refused). While Metamod loads it, the core:
+
+1. fetches the engine interfaces, reads `configs/core.json` and installs the crash handler;
+2. loads every `.json` file in `gamedata/` and resolves its own addresses;
+3. registers its commands and hooks;
+4. loads every `.stx` in `plugins/` — unless `PluginAutoLoadEnabled` is `false`;
+5. calls `OnAllToolkitPluginsLoaded()` on every plugin's listeners;
+6. starts the hot reload watcher (Linux, when `PluginHotReloadEnabled` is on).
+
+Later, when Metamod has loaded all of its plugins, the core forwards that as `OnAllMetamodPluginsLoaded()`.
+
+This happens before the first map is loaded. In `Load()` at server start there is no map, no entity system content and no player — anything that needs those belongs in `OnLevelInit()` or a game event.
+
+### Load order
+
+Plugins are loaded in the order the filesystem lists the `plugins/` folder, which is not guaranteed to be alphabetical and can differ between machines. **Do not depend on another plugin in `Load()`.** Wait for `OnAllToolkitPluginsLoaded()` to look up interfaces other plugins expose:
+
+```cpp
+void MyPlugin::OnAllToolkitPluginsLoaded()
+{
+    int ret = TOOLKIT_IFACE_FAILED;
+    GET_TOOLKIT_IFACE(m_pOther, IOtherPlugin, "IOtherPlugin001", ret);
+
+    if (ret != TOOLKIT_IFACE_OK)
+        TOOLKIT_LOG(this, "IOtherPlugin is not available, feature X is off.\n");
+}
+```
+
+The other plugin answers that query in its own listener's `OnToolkitQuery()`.
+
+### What happens in a load
+
+For each `.stx` the core:
+
+1. opens the library and calls its `CreateInterface` export for `IToolkitPlugin` (which `TOOLKIT_EXPOSE` provides);
+2. compares `GetApiVersion()` with the core's `TOOLKIT_PLAPI_VERSION` — a mismatch is refused with `Plugin API version mismatch`;
+3. assigns the next plugin id and adds the plugin to its list;
+4. calls `Load(id, api, error, maxlen, late)`;
+5. on success, calls `OnPluginLoad(newId)` on every listener of every loaded plugin — including the new plugin's own, if it added one in `Load()`.
+
+If `Load()` returns `false`, the core removes everything the plugin registered under its id so far, closes the library and logs `Plugin <name> refused to load: <error>`.
+
+### The `late` flag
+
+`late` is `true` only when the core is loading the plugin as part of a [hot reload](#hot-reload). A plugin loaded with `toolkit load` or `toolkit refresh` on a running server receives `false`, even though a map may already be running. If your plugin needs to initialise per-player or per-map state, do not rely on `late` alone — check the actual state (for example, loop over player slots) instead.
+
+## Plugin ids
+
+Ids start at 1 and increase with every load; they are never reused while the server runs. A hot-reloaded or re-loaded plugin gets a **new** id. The id is what `toolkit list`, `toolkit info` and `toolkit unload` use, and what `OnPluginLoad` / `OnPluginUnload` report.
+
+Your own id is `g_PluginID` after `TOOLKIT_SAVEVARS()`. The registration macros (`REGISTER_CON_COMMAND`, `HOOK_GAME_EVENT`, `ADD_TIMER`, …) pass it for you; when you call an interface method directly, it is the `owner` argument.
+
+## Ownership: what the toolkit cleans up
+
+Everything registered through a toolkit interface is stored under the owning plugin's id. On unload (and on a failed load) the core removes, for that id:
+
+- console commands, command listeners and chat listeners;
+- game event hooks;
+- ConVar change callbacks;
+- network message hooks;
+- custom HUD callbacks;
+- sound hooks and sound state;
+- transmit rules;
+- timers and next-frame tasks;
+- pending HTTP requests;
+- MySQL connections;
+- entity listeners;
+- open menus;
+- the plugin's `IToolkitListener`s.
+
+Calling `UNREGISTER_CON_COMMAND`, `UNHOOK_GAME_EVENT`, `KILL_TIMER` and the like yourself is only needed to turn a feature off while the plugin stays loaded.
+
+### What you must undo yourself
+
+Some things live in your own library and the toolkit cannot reach them:
+
+- **KHook hooks.** Call `KHOOK_DESTRUCT()` in `Unload()`. A hook left installed after the library is closed jumps into unmapped memory on its next call.
+- **`CConVar`s you declared.** Call `ConVar_Unregister()` in `Unload()`. It only walks the list of the library that calls it, so the core cannot do it for you.
+- **Game systems** you registered on the engine's factory list.
+- Threads, sockets, files and any other resource you created yourself.
+
+```cpp title="plugin.cpp"
+bool MyPlugin::Unload(char* error, size_t maxlen)
+{
+    KHOOK_DESTRUCT();
+    ConVar_Unregister();
+    return true;
+}
+```
+
+## Unloading
+
+A plugin is unloaded by `toolkit unload <id>`, by a hot reload, or when the toolkit itself unloads (server shutdown). In each case, for that plugin:
+
+1. `OnPluginUnload(id)` is called on every listener of every plugin — including the plugin being unloaded;
+2. `Unload(error, maxlen)` is called;
+3. its listeners and everything it owns are removed (see above);
+4. the library is closed on the **next frame**, so that no stack frame still points into it (a `toolkit unload` is itself running inside a hook).
+
+The return value of `Unload()` and anything written to `error` are ignored — a plugin cannot refuse to be unloaded.
+
+At server shutdown every plugin goes through steps 1–3 in turn, and all libraries are closed together at the end, since there is no next frame.
+
+## Listener callbacks
+
+Implement `IToolkitListener` and register it with `api->AddListener(this, listener)` in `Load()`. All methods have empty defaults.
+
+| Callback | When |
+|---|---|
+| `OnPluginLoad(PluginId id)` | A toolkit plugin (`.stx`) finished loading. `id` is a toolkit plugin id. |
+| `OnPluginUnload(PluginId id)` | A toolkit plugin is about to be unloaded. |
+| `OnMetamodPluginLoad(PluginId id)` | A Metamod:Source plugin was loaded. `id` is Metamod's id, a different numbering. |
+| `OnMetamodPluginUnload(PluginId id)` | A Metamod:Source plugin was unloaded. |
+| `OnAllToolkitPluginsLoaded()` | After the start-up load of `plugins/`, and after a `toolkit refresh` that loaded at least one plugin. Called on **every** plugin's listeners each time. Not called for `toolkit load` or a hot reload. |
+| `OnAllMetamodPluginsLoaded()` | Metamod finished loading all its plugins. |
+| `OnLevelInit(mapName, mapEntities, oldLevel, landmarkName, loadGame, background)` | A map is starting. |
+| `OnLevelShutdown()` | A map is shutting down. |
+| `OnToolkitQuery(const char* iface, int* ret)` | Another toolkit plugin asked for an interface. Return a pointer and set `*ret = TOOLKIT_IFACE_OK` to answer. |
+| `OnMetamodQuery(const char* iface, int* ret)` | A Metamod plugin asked for an interface. Defaults to answering like `OnToolkitQuery()`; return `nullptr` to keep an interface for toolkit plugins only. |
+
+When `PluginAutoLoadEnabled` is `false`, nothing is loaded at start and `OnAllToolkitPluginsLoaded()` first fires when `toolkit refresh` loads the plugins.
+
+See the [IToolkitPlugin reference](/docs/core-api/IToolkitPlugin) for the full declarations.
+
+## Globals in other files
+
+`TOOLKIT_EXPOSE(name, var)` defines the toolkit globals once. Every other `.cpp` that uses `g_ToolkitAPI`, `g_PluginID`, a `g_pToolkit*` pointer or a macro built on them needs the `extern` declarations:
+
+```cpp title="src/features/greeter.cpp"
+#include "source2toolkit/IToolkitPlugin.h"
+#include "source2toolkit/IToolkitApi.h"
+
+TOOLKIT_GLOBALVARS();
+
+void Greeter::Setup()
+{
+    REGISTER_CON_COMMAND("greet", [](const CCommandContext& context, const CCommand& args, bool post)
+    {
+        TOOLKIT_CONPRINTF("Greetings.\n");
+    });
+}
+```
+
+The sample plugin puts `TOOLKIT_GLOBALVARS();` in its shared `plugin.h`, so every file that includes it has the declarations.
+
+## Hot reload
+
+On Linux, with `PluginHotReloadEnabled` set in `core.json`, the core watches `plugins/` for `.stx` files that are **written and closed** (inotify `IN_CLOSE_WRITE`). When that happens to a plugin that is currently loaded, on the next frame the core:
+
+1. unloads it exactly as `toolkit unload` does;
+2. on the following frame closes the old library and loads the file again, with `late = true` and a new plugin id.
+
+Things to know:
+
+- Only plugins that are already loaded are reloaded. A new `.stx` dropped into `plugins/` is not picked up automatically — run `toolkit refresh`.
+- Copying the file (`cp`, `scp`) triggers it. Moving or renaming a file into the folder (`mv`, `rsync`'s default temp-file-and-rename) does not, because that is not a close-after-write.
+- The setting is read at start; changing it needs a server restart.
+- There is no hot reload on Windows. Use `toolkit unload <id>` and `toolkit load <name>` instead.
+
+Because the plugin gets a fresh id and its old registrations are gone, a plugin that sets itself up completely in `Load()` needs nothing special to support hot reload. Use `late` to rebuild state the start-up path would have received from callbacks, such as the current map.

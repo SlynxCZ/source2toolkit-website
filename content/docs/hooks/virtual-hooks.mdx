@@ -1,0 +1,180 @@
+---
+title: Virtual Hooks
+description: KHOOK_VIRTUAL — hooking a vtable slot on one instance or on every object that shares a vtable.
+---
+
+A virtual hook replaces one slot of a vtable. It is the right tool for engine
+interfaces (`ISource2Server`, `ISource2GameClients`, `IGameEventSystem`…) and for
+virtual functions of game classes.
+
+```cpp
+KHOOK_VIRTUAL(member, function, target, pre, post)
+```
+
+- **member** — the name of the hook member in your class.
+- **function** — which slot: see [Which slot](#which-slot).
+- **target** — which object or vtable: see [What it attaches to](#what-it-attaches-to).
+- **pre**, **post** — `&Self::Handler` or `nullptr`.
+
+The handler's first parameter is the hooked class, the rest are the function's
+own arguments. Write the handlers first — the macro takes the hook's type from
+them. [Writing handlers](/docs/hooks/handlers) covers the body.
+
+## Which slot
+
+The **function** argument says where in the vtable the hook goes:
+
+- `&Class::Method` — the index is read out of the member function pointer,
+  nothing written down by hand. The class declaration has to match the game's
+  vtable **slot for slot**; headers carried over from older games often do not,
+  so check the index against the binary before you trust one.
+- an integer — a hardcoded index.
+- a gamedata offset name (`"CCSPlayerController::Respawn"`) — read from
+  gamedata at `KHOOK_INIT()`. Offsets differ between Windows and Linux, and
+  gamedata keeps one per platform — see [Gamedata](/docs/hooks/gamedata).
+
+When the method is overloaded, the member function pointer has to be
+disambiguated with a `static_cast` to the exact signature. `PostEventAbstract`
+is the usual example — this is how the AntiCheat plugin hooks it:
+
+```cpp title="Listeners.h"
+KHook::Return<void> OnPostEventAbstract(IGameEventSystem* pThis, CSplitScreenSlot slot, bool bLocalOnly, int nClientCount, const uint64* clients, INetworkMessageInternal* event, const CNetMessage* data, unsigned long size, NetChannelBufType_t bufType);
+
+// PostEventAbstract is overloaded, so the member function pointer has
+// to be disambiguated explicitly.
+KHOOK_VIRTUAL(m_hPostEventAbstract, (static_cast<void (IGameEventSystem::*)(CSplitScreenSlot, bool, int, const uint64*, INetworkMessageInternal*, const CNetMessage*, unsigned long, NetChannelBufType_t)>(&IGameEventSystem::PostEventAbstract)), &globals::gameEventSystem, &CListeners::OnPostEventAbstract, nullptr);
+```
+
+Note the extra parentheses around the `static_cast`: it contains commas, and
+without them the preprocessor splits it into several macro arguments.
+
+<Callout type="warn">
+  A gamedata offset that is missing reads as `-1`, and a hook configured at
+  `-1` lands one slot **before** the vtable — on the typeinfo pointer, which
+  corrupts every later by-name vtable lookup on that class. The wrapper refuses
+  a negative index and logs the key instead of installing the hook.
+</Callout>
+
+## What it attaches to
+
+The **target** says what the hook is attached to:
+
+| target | hooks | notes |
+|---|---|---|
+| `&pInstance` | that one object | a pointer to the instance pointer, read at `KHOOK_INIT()` |
+| `KHOOK_VTABLE(module, class)` | every object sharing the class's vtable | the vtable is found by RTTI name |
+| `KHOOK_VTABLE_BASE(module, class, base)` | every object, through the vtable of a base further in | see [Secondary vtables](#secondary-vtables) |
+| `nullptr` | nothing yet | you attach it yourself with `Init(pInstance)` or `InitGlobal(vtable)` |
+
+### One instance
+
+`&pInstance` is a pointer to the variable holding the instance
+(`&g_pSource2Server`). It is read at `KHOOK_INIT()`, not when the hook is
+constructed, so the global may still be null at that point — it only has to be
+set by the time `KHOOK_INIT()` runs. The variable may be of a type derived
+from the hooked class — an `ISource2Server*` for a method declared on its base
+`IServerGameDLL`, say.
+
+The hook fires for **that object only**: KHook patches the vtable the object
+points at and checks `this` on every call.
+
+```cpp title="plugin.h"
+KHook::Return<void> Hook_ClientCommand(ISource2GameClients* pThis, CPlayerSlot slot, const CCommand& args);
+
+KHOOK_VIRTUAL(m_hClientCommand, &ISource2GameClients::ClientCommand, &g_pSource2GameClients, &Plugin::Hook_ClientCommand, nullptr);
+```
+
+### A whole vtable
+
+`KHOOK_VTABLE(module, class)` looks a vtable up by its RTTI class name and hooks
+it for every object that uses it — every client, every player controller.
+`pThis` tells you which one was called.
+
+The module is either a name (`"server"`, `"engine2"`, `"tier0"`…), loaded
+through `IToolkitModule::New` at init, or a pointer to an `IToolkitModule*` your
+plugin fills in during `Load()` (`&modules::server`), read at init as well.
+
+```cpp title="plugin.h"
+KHook::Return<bool> Hook_SendNetMessage(CServerSideClientBase* pThis, const CNetMessage* pData, NetChannelBufType_t bufType);
+KHook::Return<void> Hook_Respawn(CCSPlayerController* pThis);
+
+// Every client: CServerSideClient's vtable in engine2.
+KHOOK_VIRTUAL(m_hSendNetMessage, &CServerSideClientBase::SendNetMessage, KHOOK_VTABLE("engine2", "CServerSideClient"), &Plugin::Hook_SendNetMessage, nullptr);
+
+// Every controller, with the slot from gamedata.
+KHOOK_VIRTUAL(m_hRespawn, "CCSPlayerController::Respawn", KHOOK_VTABLE("server", "CCSPlayerController"), &Plugin::Hook_Respawn, nullptr);
+```
+
+A real one from FUNPLAY's plugins, with the module held by the plugin:
+
+```cpp title="Listeners.h"
+KHook::Return<void> OnDropWeapon(CCSPlayer_WeaponServices* pThis, CBasePlayerWeapon* pWeapon, Vector* pVecTarget, Vector* pVelocity);
+
+KHOOK_VIRTUAL(m_hDropWeapon, "CCSPlayer_WeaponServices::DropWeapon", KHOOK_VTABLE(&modules::server, "CCSPlayer_WeaponServices"), nullptr, &CListeners::OnDropWeapon);
+```
+
+<Callout type="warn">
+  A vtable hook only sees calls that **go through the vtable**. Inside one
+  library the compiler often knows the exact class and calls the function
+  directly, and such a call never reaches your hook. Calls from another
+  library — the engine calling into `libserver`, say — always go through the
+  vtable. If a virtual hook stays silent, look at how the function is actually
+  called before blaming the index — or hook the implementation by signature
+  with [KHOOK_MEMBER](/docs/hooks/function-hooks).
+</Callout>
+
+## Secondary vtables
+
+A class with several bases has several vtables: the **primary** one, shared
+with the first base, and one more for every base further in. `KHOOK_VTABLE`
+finds the primary one. For an interface that is not the first base, name the
+base too — `KHOOK_VTABLE_BASE(module, class, base)` reads where the base sits
+out of the RTTI and hooks that table:
+
+```cpp title="Listeners.h"
+// IHLTVDirector is CCSHLTVDirector's third base.
+KHOOK_VIRTUAL(m_hHLTVRecordingStarted, &IHLTVDirector::OnRecordingStarted, KHOOK_VTABLE_BASE(&modules::server, "CCSHLTVDirector", "IHLTVDirector"), nullptr, &CListeners::OnHLTVRecordingStarted);
+```
+
+The same lookups are on `IToolkitModule` for your own use:
+`GetVirtualTableByBase(name, baseName)`, and
+`GetVirtualTableByOffset(name, offset)` when you know the byte offset instead.
+An offset moves whenever the class is laid out anew, so prefer the base. Only
+non-virtual bases can be looked up.
+
+Two other ways around it:
+
+- a **function hook** on the implementation, by signature — that is how the
+  toolkit hooks `FilterMessage`;
+- a **virtual hook on the instance**, when you can get the interface pointer
+  itself. That pointer already points at the secondary table, and `&pInstance`
+  hooks exactly the table the object uses.
+
+## Attaching by hand
+
+A hook declared with a `nullptr` target is not touched by `KHOOK_INIT()`. You
+attach it when you have the target:
+
+```cpp
+m_hX.Init(pInstance);          // one object
+m_hX.InitGlobal(vtable);       // an IToolkitMemory holding a vtable
+m_hX.InitGlobal(pModule, "CCSPlayerController");            // by RTTI name
+m_hX.InitGlobal("server", "CCSHLTVDirector", "IHLTVDirector"); // by name and base
+```
+
+Each returns `false` (and logs) when the target could not be resolved. The
+rest of the lifecycle — `Init()` for hooks created after `Load()`,
+`Destruct()`, `IsInstalled()` — is the same for every hook kind and is covered
+in [Function hooks](/docs/hooks/function-hooks#hooks-installed-later).
+
+## Calling the original
+
+The wrapper has `CallOriginal(pThis, args...)`, which runs the function past
+every hook on it, and forwards `->` to the `KHook::Virtual` underneath:
+
+```cpp
+m_hClientCommand.CallOriginal(pThis, slot, args);
+```
+
+See [Writing handlers](/docs/hooks/handlers#calling-the-original) for when and
+how to use it.

@@ -1,0 +1,92 @@
+---
+title: Paths
+description: Where the toolkit keeps configs, gamedata, plugins and shared data — ask instead of hard-coding paths.
+---
+
+`IToolkitPaths` tells a plugin where things are on disk. Ask it rather than
+spelling paths out against the game directory: when the layout moves, every
+plugin that asks keeps working without an edit.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitPaths.h"
+```
+
+## The layout
+
+Under the game directory (`.../game/csgo`):
+
+```
+addons/source2toolkit/
+  configs/              core.json, and one directory per plugin
+    <PluginName>/       this plugin's own configs
+  gamedata/             every .json here is read into the game config
+  plugins/              the .stx files themselves
+  shared/               data more than one plugin reads
+```
+
+| Call | Macro | Path |
+| --- | --- | --- |
+| `GameDirectory()` | `TOOLKIT_GAME_DIR()` | The game directory, e.g. `.../game/csgo` |
+| `RootDirectory()` | `TOOLKIT_ROOT_DIR()` | `addons/source2toolkit` |
+| `ConfigsDirectory()` | `TOOLKIT_CONFIGS_DIR()` | `addons/source2toolkit/configs` |
+| `GamedataDirectory()` | `TOOLKIT_GAMEDATA_DIR()` | `addons/source2toolkit/gamedata` |
+| `PluginsDirectory()` | `TOOLKIT_PLUGINS_DIR()` | `addons/source2toolkit/plugins` |
+| `SharedDirectory()` | `TOOLKIT_SHARED_DIR()` | `addons/source2toolkit/shared` |
+| `PluginConfigDirectory(PluginId owner)` | `PLUGIN_CONFIG_DIR()` | `configs/<PluginName>` for this plugin |
+
+All of them are absolute paths built on the game directory, without a trailing
+slash — append `"/file.json"` yourself.
+
+## Your plugin's config directory
+
+`PLUGIN_CONFIG_DIR()` is `PluginConfigDirectory(g_PluginID)`: the
+`configs/<PluginName>` directory, keyed on the name your plugin returns from
+`GetName()`.
+
+```cpp title="config.cpp"
+#include <fstream>
+#include <sstream>
+
+bool LoadConfig()
+{
+    const char* dir = PLUGIN_CONFIG_DIR();
+    if (!dir)
+        return false;
+
+    std::ifstream file(std::string(dir) + "/config.json");
+    if (!file)
+        return false;
+
+    std::stringstream text;
+    text << file.rdbuf();
+
+    IToolkitJSONDocument* doc = g_pToolkitJSON->Parse(text.str().c_str());
+    // ... read values, see the JSON guide ...
+    doc->Release();
+    return true;
+}
+```
+
+A small wrapper that turns `nullptr` into an empty string keeps call sites
+simple — FUNPLAY's plugins do this:
+
+```cpp
+inline std::string FromToolkit(const char* p) { return p ? std::string(p) : std::string(); }
+inline std::string ConfigDirectory() { return FromToolkit(PLUGIN_CONFIG_DIR()) + "/config"; }
+```
+
+## Pitfalls
+
+- **`PluginConfigDirectory()` can return `nullptr`** — for an unknown
+  `PluginId`, or when the plugin's `GetName()` is empty.
+- **The directory is not created for you.** It is where your plugin's files are
+  expected to have been installed; create it yourself if you write files there.
+- **Copy the string if you keep it** past the toolkit's lifetime. The returned
+  pointers are owned by the toolkit and stay valid while it is loaded.
+- **Ask after load.** The game directory is only known once the engine is up;
+  call these from `Load()` or later, not from static initialisers.
+
+## Reference
+
+- [`IToolkitPaths` API reference](/docs/core-api/IToolkitPaths)
+- [JSON](/docs/guides/json)

@@ -1,0 +1,137 @@
+---
+title: Replication
+description: Sending one player a ConVar value of their own with ReplicateConVar, keeping it there, and reading ConVars from the client.
+---
+
+Some ConVars matter on the client as much as on the server. `FCVAR_REPLICATED`
+ConVars — `sv_autobunnyhopping`, `sv_jump_impulse`, `mp_forcecamera`,
+`weapon_accuracy_nospread`, … — are sent by the server to every client, and the
+client uses them for prediction, movement and UI. Normally everyone gets the
+same value. `ReplicateConVar` sends a single player a value of their own.
+
+## `ReplicateConVar`
+
+A helper on [`CBasePlayerController`](/docs/schema/entity/classes/CBasePlayerController)
+(so on `CCSPlayerController` too):
+
+```cpp title="CBasePlayerController.h"
+void ReplicateConVar(const char* pszConVar, const char* pszValue);
+```
+
+It builds a `CNETMsg_SetConVar` with the one name/value pair and sends it
+straight down that player's net channel. The value is always a string, as the
+client would parse it from the console: `"1"`, `"true"`, `"301.9933"`.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/schema/entity/classes/CCSPlayerController.h"
+
+// Auto-bunnyhop for one player only.
+void SetBhop(CCSPlayerController* player, bool enabled)
+{
+    player->ReplicateConVar("sv_autobunnyhopping", enabled ? "true" : "false");
+}
+```
+
+Things to keep in mind:
+
+- **Only the client's copy changes.** The server's value is untouched, and
+  anything the server decides with it still uses the server's value. For
+  ConVars that are simulated on both sides — movement mostly — the server has
+  to agree, or the client mispredicts.
+- **The player must be connected.** Without a net channel the call does
+  nothing.
+- **It does not survive a reconnect.** A client that reconnects starts from the
+  server's values again.
+
+## Keeping the value per player
+
+If the ConVar is `FCVAR_REPLICATED`, the engine broadcasts the server's value to
+every client whenever it changes — which overwrites every per-player value you
+sent. FUNPLAY's plugins, which toggle bunnyhop, C4-anywhere and friends per
+player, handle this in three places:
+
+1. **Before sending**, drop `FCVAR_REPLICATED` from the ConVar so a later change
+   of the server value is not pushed over the per-player ones:
+
+   ```cpp
+   UTIL_RemoveConVarFlags("sv_autobunnyhopping", FCVAR_REPLICATED);
+   player->ReplicateConVar("sv_autobunnyhopping", state ? "true" : "false");
+   ```
+
+2. **When the server value changes**, send each player their value again
+   ([`HOOK_CONVAR_CHANGE`](/docs/convars-commands/convars#watching-changes)).
+
+3. **When a player (re)connects**, send it again — `player_connect_full` is the
+   usual place (see [Game events](/docs/events/game-events)).
+
+```cpp title="bhop.cpp"
+static CConVarRef<bool> sv_autobunnyhopping("sv_autobunnyhopping");
+
+static void UpdatePlayerBhop(CCSPlayerController* player, bool state)
+{
+    UTIL_RemoveConVarFlags("sv_autobunnyhopping", FCVAR_REPLICATED);
+
+    // With bhop on for everybody there is nothing to override.
+    if (!sv_autobunnyhopping.Get())
+        player->ReplicateConVar("sv_autobunnyhopping", state ? "true" : "false");
+}
+
+// in Load()
+HOOK_CONVAR_CHANGE([](ConVarRefAbstract* ref, CSplitScreenSlot slot, const char* pszNewValue, const char* pszOldValue)
+{
+    if (V_strcmp(ref->GetName(), "sv_autobunnyhopping") != 0)
+        return;
+
+    for (int i = 0; i < 64; i++)
+        if (auto* player = CCSPlayerController::FromSlot(i))
+            UpdatePlayerBhop(player, PlayerHasBhop(player)); // your own per-player state
+});
+
+HOOK_GAME_EVENT("player_connect_full", [](IGameEvent* event, bool post, bool& dontBroadcast) -> Action
+{
+    auto* player = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
+    if (player)
+        UpdatePlayerBhop(player, PlayerHasBhop(player));
+    return Action::Ignore;
+}, true);
+```
+
+`UTIL_RemoveConVarFlags` and `UTIL_AddConVarFlags` are the by-name helpers from
+`IToolkitConVars.h`; see [ConVars](/docs/convars-commands/convars#one-shot-helpers-by-name).
+
+## Common uses
+
+| ConVar | Per-player effect |
+| --- | --- |
+| `sv_autobunnyhopping` | Hold-to-jump bunnyhopping for chosen players. |
+| `mp_forcecamera` | What a dead player may spectate (FUNPLAY switches it per player on spawn, round start and round end). |
+| `sv_cheats` | Lets a single client use client-side cheat commands — FUNPLAY's Inspect plugin does this. The server stays `sv_cheats 0`. |
+| `sv_jump_impulse`, `sv_friction`, `weapon_accuracy_nospread`, `mp_plant_c4_anywhere` | Movement and weapon behaviour the client predicts; the server side has to match (see above). |
+
+## Reading ConVars from a client
+
+The toolkit has no wrapper for asking a client for one of its ConVars. There
+are two ways, both engine-level:
+
+- **User info.** `IVEngineServer2::GetClientConVarValue(CPlayerSlot, const char*)`
+  returns a value from the user info the client sends to the server — no round
+  trip, but only for what the client puts there.
+
+  ```cpp
+  IVEngineServer2* engine = g_ToolkitAPI->GetEngineServer();
+  const char* value = engine->GetClientConVarValue(player->GetPlayerSlot(), "name_of_userinfo_cvar");
+  ```
+
+- **A cvar query.** Send the client a `CSVCMsg_GetCvarValue` (fields `cookie`
+  and `cvar_name`) and read the answer, a `CCLCMsg_RespondCvarValue` with the
+  same cookie and a status (`EQueryCvarValueStatus`: value intact, not found,
+  not a ConVar, protected). The reply arrives asynchronously; FUNPLAY's
+  AntiCheat catches it with a KHook on
+  `CServerSideClientBase::ProcessRespondCvarValue`. Sending messages is covered
+  under [Protobuf](/docs/protobuf), hooking under [Hooking](/docs/hooks).
+
+## See also
+
+- [ConVars](/docs/convars-commands/convars)
+- [`CBasePlayerController`](/docs/schema/entity/classes/CBasePlayerController)
+- [`IToolkitConVars` reference](/docs/core-api/IToolkitConVars)

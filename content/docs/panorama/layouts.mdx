@@ -1,0 +1,182 @@
+---
+title: Layouts
+description: Creating a custom_hud_layout with CCSCustomHudLayout, global and per-player state, toggling CSS classes, setting dialog variables and capturing the mouse.
+---
+
+`CCSCustomHudLayout` is the schema class of the `custom_hud_layout` entity,
+with helpers that hide how its state is stored. This page goes through them.
+
+```cpp
+#include "source2toolkit/schema/entity/classes/CCSCustomHudLayout.h"
+```
+
+## Create
+
+```cpp
+static CCSCustomHudLayout* CCSCustomHudLayout::Create(const char* pszLayout,
+                                                      const char* pszTargetName = nullptr);
+```
+
+Creates **and spawns** a `custom_hud_layout` for
+`panorama/layout/custom_game/<pszLayout>.vxml_c`. Pass the name only — no
+directory, no extension. `pszTargetName` sets the entity's `targetname`, handy
+for finding it again with `FIND_ENTITY_BY_NAME`. Returns `nullptr` for an empty
+name or when the entity could not be created.
+
+```cpp title="plugin.cpp"
+CHandle<CCSCustomHudLayout> g_hMenu;
+
+void CreateMenu()
+{
+    CCSCustomHudLayout* pMenu = CCSCustomHudLayout::Create("my_menu", "my_menu_layout");
+    if (!pMenu)
+        return;
+
+    g_hMenu = pMenu->GetHandle();
+}
+```
+
+The entity is an ordinary entity: keep a `CHandle`, not a raw pointer, and
+check it before use — it is gone after a map change, and anything else that
+removes entities removes it too. `pMenu->Remove()` deletes it; its click
+callbacks go with it.
+
+One entity is one layout, drawn for **every** player. Per-player state (below)
+changes what each player sees on it, so you rarely need more than one entity
+per layout.
+
+## Global and per-player state
+
+The entity stores one global state and one state per player slot:
+
+```cpp
+CCSCustomHudLayoutState& GetLayoutState(CCSPlayerController* pController = nullptr);
+```
+
+Without a controller you get the global state, with one you get that player's.
+Every helper below takes the same optional `pController` last and passes it
+here, so:
+
+- **No controller** — the change applies to everyone.
+- **A controller** — the change applies to that player only, and overrides the
+  global value for them.
+
+The usual pattern: author the layout hidden, leave the global state alone, and
+show it per player.
+
+```cpp
+pMenu->SetHasClass("MenuRoot", "show", true, pPlayer);   // only pPlayer sees it
+```
+
+<Callout type="warn">
+The per-player states are stored in a networked vector with an unusual layout,
+reached through the schema's element accessor. If that accessor or the slot's
+element cannot be found, `GetLayoutState` **falls back to the global state** —
+so a per-player write would then show for everyone. It is a safety net against
+a crash, not something to rely on; if a "per-player" change shows up for all
+players, this is the place to look.
+</Callout>
+
+You rarely touch `CCSCustomHudLayoutState` directly; its fields are
+`m_playerSlot`, `m_bInputCaptureEnabled`, `m_vecHasClasses` and
+`m_vecDialogVariableStrings`.
+
+## CSS classes
+
+```cpp
+void SetHasClass(const char* pszPanelId, const char* pszClassName, bool bHasClass,
+                 CCSPlayerController* pController = nullptr);
+```
+
+Adds (`true`) or removes (`false`) a CSS class on the panel whose `id` is
+`pszPanelId`. This is the main tool: visibility, highlighting, colour variants,
+bar fill levels — all classes the stylesheet defines and the server switches.
+
+```cpp
+pMenu->SetHasClass("Row3", "selected", true, pPlayer);
+pMenu->SetHasClass("Toast", "accent-red", true);          // everyone
+```
+
+Setting `false` records "does not have the class" for that player; there is no
+helper to drop the per-player entry and fall back to the global value again.
+
+## Dialog variables
+
+```cpp
+void SetDialogVariableString(const char* pszPanelId, const char* pszVariableName, const char* pszValue,
+                             CCSPlayerController* pController = nullptr);
+```
+
+Sets a string dialog variable on a panel. In the layout, a label shows it with
+`{s:name}`:
+
+```xml
+<Label id="Title" text="{s:title}" />
+```
+
+```cpp
+pMenu->SetDialogVariableString("Title", "title", "Buy menu", pPlayer);
+pMenu->SetDialogVariableString("Title", "title", "Welcome");   // global default
+```
+
+The value is plain text — there is no markup channel.
+
+## Input capture
+
+```cpp
+void SetInputCaptureEnabled(bool bEnable, CCSPlayerController* pController = nullptr);
+bool IsInputCaptureEnabled(CCSPlayerController* pController = nullptr);
+```
+
+Without input capture the layout is display-only: the player keeps playing and
+cannot click it. With it, the player gets a cursor and can press the layout's
+buttons (and `:hover` / `:active` styles apply). Enable it per player while a
+menu is open, and **disable it when the menu closes** — otherwise the player is
+left with a cursor and cannot aim.
+
+```cpp title="plugin.cpp"
+void OpenMenu(CCSPlayerController* pPlayer)
+{
+    CCSCustomHudLayout* pMenu = g_hMenu.Get();
+    if (!pMenu)
+        return;
+
+    pMenu->SetDialogVariableString("Title", "title", "Choose a weapon", pPlayer);
+    pMenu->SetHasClass("MenuRoot", "show", true, pPlayer);
+    pMenu->SetInputCaptureEnabled(true, pPlayer);
+}
+
+void CloseMenu(CCSPlayerController* pPlayer)
+{
+    if (CCSCustomHudLayout* pMenu = g_hMenu.Get())
+    {
+        pMenu->SetHasClass("MenuRoot", "show", false, pPlayer);
+        pMenu->SetInputCaptureEnabled(false, pPlayer);
+    }
+}
+```
+
+## How the state reaches the client
+
+Panel ids, class names and dialog variable names are not stored in each
+player's state. They go into three string tables on the entity
+(`m_vecPanelIds`, `m_vecClassNames`, `m_vecDialogVariableNames`) the first time
+you use them, and the states store indices into those tables. The helpers do
+the interning and call `NetworkStateChanged()` on the vectors they change.
+
+That has consequences worth knowing. These are field observations from people
+who tested `custom_hud_layout` on live builds, not something the SDK
+enforces or checks:
+
+- **State travels as a netvar diff, not a message.** Turning a class off and
+  back on within the same tick is no change at all, so nothing is sent and a
+  CSS animation does not restart. Alternate between two class names instead.
+- **The string tables are capped (observed: 1024 entries each).** Names are
+  interned forever for the life of the entity; values are not. Do not generate
+  unbounded ids or class names at runtime.
+- **Per-player state belongs to the slot**, so a player who takes over a slot
+  can inherit the previous occupant's state — including input capture. Reset
+  the slot's state when a player disconnects.
+
+Valve marks the whole custom HUD API as experimental; expect it to change with
+game updates.

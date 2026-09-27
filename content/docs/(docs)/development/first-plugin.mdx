@@ -1,0 +1,243 @@
+---
+title: Your First Plugin
+description: A minimal Source2Toolkit plugin, from the plugin class to a built .stx on the server — with a command, a game event and logging.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+This page builds a complete, small plugin: it logs when it loads, answers a `hello` command, and prints a line whenever a player dies. Everything here is the same pattern the official sample plugin (`samples/cs2_sample` in the core repository) uses, just with less of it.
+
+Before you start, set up the SDK and its dependencies as described in [SDK & Building](/docs/development/building).
+
+## Project layout
+
+```
+hello/
+├── CMakeLists.txt
+├── src/
+│   └── plugin.cpp
+└── vendor/
+    └── source2toolkit-sdk/     # git submodule
+```
+
+```bash
+mkdir hello && cd hello && git init
+git submodule add https://github.com/SlynxCZ/source2toolkit-sdk.git vendor/source2toolkit-sdk
+git submodule update --init --recursive
+python vendor/source2toolkit-sdk/tools/deps.py init
+```
+
+<Callout type="warn">
+  Add the SDK with git, not from a downloaded zip. The build reads the KHook commit from `vendor/khook`'s git metadata; without it the plugin carries `unknown` and the KHook version check cannot protect you.
+</Callout>
+
+## The plugin
+
+```cpp title="src/plugin.cpp"
+#include "source2toolkit/IToolkitPlugin.h"
+#include "source2toolkit/IToolkitApi.h"
+#include "source2toolkit/schema/entity/classes/CCSPlayerController.h"
+
+#include "igameevents.h"
+
+// Declares g_ToolkitAPI, g_PluginID and the g_pToolkit* interface pointers.
+// The class below uses them, so they have to be declared before it;
+// TOOLKIT_EXPOSE at the bottom defines them.
+TOOLKIT_GLOBALVARS();
+
+class HelloPlugin final : public IToolkitPlugin, public IToolkitListener
+{
+public:
+    bool Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late) override
+    {
+        // First line of every Load(): stores the API and plugin id, checks the
+        // KHook version, fills the g_pToolkit* pointers.
+        TOOLKIT_SAVEVARS();
+
+        // Receive the IToolkitListener callbacks below.
+        api->AddListener(this, this);
+
+        // A console command. "!hello" and "/hello" in chat reach it too.
+        REGISTER_CON_COMMAND("hello", [](const CCommandContext& context, const CCommand& args, bool post)
+        {
+            const CPlayerSlot slot = context.GetPlayerSlot();
+
+            // No valid slot means the server console ran it.
+            if (!slot.IsValid())
+            {
+                TOOLKIT_CONPRINTF("Hello, console!\n");
+                return;
+            }
+
+            if (CCSPlayerController* pPlayer = CCSPlayerController::FromSlot(slot))
+                pPlayer->PrintToChat("Hello from my first plugin!");
+        });
+
+        // A game event, after the engine has handled it (post = true).
+        HOOK_GAME_EVENT("player_death", [this](IGameEvent* event, bool post, bool& dontBroadcast) -> Action
+        {
+            auto* pVictim = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
+            auto* pAttacker = static_cast<CCSPlayerController*>(event->GetPlayerController("attacker"));
+
+            TOOLKIT_LOG(this, "%s killed %s with %s\n",
+                        pAttacker ? pAttacker->GetPlayerName() : "world",
+                        pVictim ? pVictim->GetPlayerName() : "?",
+                        event->GetString("weapon"));
+
+            return Action::Ignore;
+        }, true);
+
+        TOOLKIT_LOG(this, "Loaded (id %d)%s.\n", id, late ? ", hot reload" : "");
+        return true;
+    }
+
+    bool Unload(char* error, size_t maxlen) override
+    {
+        // The command, the event hook and the listener belong to this plugin's
+        // id; the toolkit removes them on unload. Nothing else to undo here.
+        TOOLKIT_LOG(this, "Unloaded.\n");
+        return true;
+    }
+
+    // IToolkitListener
+    void OnAllToolkitPluginsLoaded() override
+    {
+        TOOLKIT_LOG(this, "All toolkit plugins are loaded.\n");
+    }
+
+    void OnLevelInit(const char* mapName, const char* mapEntities, const char* oldLevel,
+                     const char* landmarkName, bool loadGame, bool background) override
+    {
+        TOOLKIT_LOG(this, "Map %s is starting.\n", mapName);
+    }
+
+    // IToolkitPlugin metadata, shown by "toolkit list" and "toolkit info".
+    const char* GetAuthor() override { return "You"; }
+    const char* GetName() override { return "Hello"; }
+    const char* GetDescription() override { return "My first Source2Toolkit plugin"; }
+    const char* GetVersion() override { return "1.0.0"; }
+};
+
+HelloPlugin g_Plugin;
+TOOLKIT_EXPOSE(hello, g_Plugin);
+```
+
+### What each piece does
+
+**`IToolkitPlugin`** is the one interface every plugin implements. `Load()` and the four metadata getters are pure virtual; `Unload()` has a default that returns `true`.
+
+```cpp
+virtual bool Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late) = 0;
+virtual bool Unload(char* error, size_t maxlen);
+```
+
+Return `false` from `Load()` to refuse loading, with a reason written into `error` (at most `maxlen` bytes). The core logs `Plugin <name> refused to load: <reason>` and removes whatever the plugin registered before it gave up. `late` is `true` when the plugin is being [hot reloaded](/docs/development/plugin-lifecycle#hot-reload).
+
+**`TOOLKIT_EXPOSE(name, var)`** goes in exactly one `.cpp` file. It defines the toolkit globals (`g_ToolkitAPI`, `g_PluginID`, `g_pToolkitCommands`, …, and KHook's engine pointer) and exports `var` as the plugin interface the core looks for.
+
+**`TOOLKIT_SAVEVARS()`** must be the first statement of `Load()`, and `Load()`'s parameters must keep their declared names (`id`, `api`, `error`, `maxlen`), because the macro uses them. It:
+
+1. stores `api`, the plugin pointer and `id` in `g_ToolkitAPI`, `g_PluginAPI` and `g_PluginID`;
+2. fetches the core's KHook instance, so your hooks run on the same detour engine as Metamod and every other plugin;
+3. compares the KHook commit your plugin was built against with the one the core runs, and on a mismatch writes `KHook mismatch: plugin built against …, toolkit core runs …` into `error` and **returns `false` from `Load()`**;
+4. fills every `g_pToolkit*` interface pointer.
+
+If either side cannot report its KHook commit (an older core, or a plugin built without git), the check is skipped and a note is written into `error` instead; the load goes on.
+
+**`TOOLKIT_GLOBALVARS()`** declares the same globals as `extern`. Put it at the top of every other translation unit that uses them — see [Plugin lifecycle](/docs/development/plugin-lifecycle#globals-in-other-files).
+
+**`IToolkitListener`** gives you lifecycle callbacks; every method has an empty default, so override only what you need. It only receives them after `api->AddListener(this, listener)`. The full list is on the [Plugin lifecycle](/docs/development/plugin-lifecycle#listener-callbacks) page.
+
+## Logging
+
+| Macro | Output |
+|---|---|
+| `TOOLKIT_LOG(plugin, fmt, ...)` | `[<plugin name>] <message>` to the server console. Inside the class pass `this`; elsewhere pass `&g_Plugin`. |
+| `TOOLKIT_CONPRINTF(fmt, ...)` | A formatted line to the server console, no prefix. |
+| `TOOLKIT_CONPRINT(msg)` | An unformatted string to the server console. |
+
+None of them add a newline — end your format strings with `\n`. They go through Metamod's console output, so they show up wherever the server console goes (the terminal, `-condebug` logs, RCON output).
+
+## Commands and events
+
+`REGISTER_CON_COMMAND(name, handler)` registers a console command owned by your plugin. The handler signature is `void(const CCommandContext&, const CCommand&, bool post)`. The same handler runs for `!name` and `/name` in chat (the triggers are set in [core.json](/docs/installation#core-configuration)). See [ConVars & Commands](/docs/convars-commands) and the [IToolkitCommands reference](/docs/core-api/IToolkitCommands).
+
+`HOOK_GAME_EVENT(name, handler, post)` hooks a game event. The handler returns an `Action`: in a pre hook (`post = false`) you may change fields, set `dontBroadcast`, or return `Action::Supersede` to cancel the event; in a post hook you only react. See [Events](/docs/events) and the [IToolkitEvents reference](/docs/core-api/IToolkitEvents).
+
+## CMake
+
+```cmake title="CMakeLists.txt"
+cmake_minimum_required(VERSION 3.18)
+project(hello CXX)
+
+set(CMAKE_CXX_STANDARD 20)
+
+# Windows: match the SDK's static MSVC runtime.
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded")
+
+add_subdirectory(vendor/source2toolkit-sdk)
+
+add_s2toolkit_plugin(hello src/plugin.cpp)
+
+# Optional: put the .stx straight into an addons/ tree you can copy to a server.
+set_target_properties(hello PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/addons/source2toolkit/plugins
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/addons/source2toolkit/plugins   # Windows
+)
+```
+
+`add_s2toolkit_plugin` creates a shared library linked against the SDK and names it `<name>.stx` (no `lib` prefix) on both platforms. The core only loads files with the `.stx` extension.
+
+## Build and install
+
+<Steps>
+<Step>
+
+Build:
+
+```bash
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+```
+
+Build on Linux for a Linux server and with MSVC on Windows for a Windows server; a `.stx` is a native library for one platform.
+
+</Step>
+<Step>
+
+Copy `hello.stx` to `game/csgo/addons/source2toolkit/plugins/` on the server.
+
+</Step>
+<Step>
+
+Restart the server, or load it on the running server from the console:
+
+```
+toolkit load hello
+```
+
+</Step>
+<Step>
+
+Check it:
+
+```
+toolkit list
+hello
+```
+
+`toolkit list` shows `[<id>] Hello (1.0.0) by You`, and `hello` prints `Hello, console!`.
+
+</Step>
+</Steps>
+
+If the plugin does not show up, the server console says why — look for `refused to load` or `Failed to load`.
+
+## Next steps
+
+<Cards>
+  <Card title="Plugin lifecycle" href="/docs/development/plugin-lifecycle">Load order, unload, listener callbacks and hot reload.</Card>
+  <Card title="Hooks" href="/docs/hooks">Detour engine functions with KHook.</Card>
+  <Card title="Gamedata" href="/docs/development/gamedata">Signatures and offsets of your own.</Card>
+  <Card title="API reference" href="/docs/core-api/IToolkitApi">Everything `IToolkitAPI` and the `g_pToolkit*` interfaces offer.</Card>
+</Cards>

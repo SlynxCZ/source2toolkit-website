@@ -1,0 +1,258 @@
+---
+title: Players
+description: The everyday player helpers — respawning, teams, killing and damaging, items and weapons, attributes, messages, kicking — and the HookChain argument they take.
+---
+
+The generated player classes carry helpers for the things plugins do all the
+time. This page groups them by task. Every signature here is copied from the
+SDK headers; the [schema reference](/docs/schema/entity/classes/CCSPlayerController)
+has the complete list per class.
+
+## HookChain
+
+Most of these helpers call a game function that plugins also like to hook —
+`TakeDamage`, `GiveNamedItem`, `SwitchTeam`. So each one takes a last argument
+saying whether your call goes through those hooks:
+
+```cpp title="IToolkitTypes.h"
+enum class HookChain : uint8_t
+{
+    Run,     // through the Pre/Post chain, as if the game made the call
+    Bypass,  // straight to the original, past every hook
+};
+```
+
+- **`HookChain::Run`** — right when your plugin stands in for the game: a
+  custom weapon dealing damage, a round reward handing out an item. Other
+  plugins' rules (a no-friendly-fire plugin, a weapon restriction) should
+  apply, so they get to see and veto the call.
+- **`HookChain::Bypass`** — right when the server was *told* to do it: an admin
+  command, a forced round end. Also required when you call the very function
+  you are hooking from inside your own hook, where `Run` would recurse.
+
+`Bypass` skips both inline detours and vtable hooks. The default of each
+helper is what it did before the argument existed, so omitting it keeps the
+old behaviour:
+
+| Helper | Default |
+|---|---|
+| `CCSPlayerController::TakeDamage` | **Bypass** |
+| `CCSGameRules::TerminateRound` | **Bypass** |
+| `CCSPlayerController::Respawn`, `SwitchTeam`, `ChangeTeam` | Run |
+| `CBasePlayerController::SetPawn` | Run |
+| `CBasePlayerPawn::CommitSuicide`, `SnapViewAngles` | Run |
+| `CCSPlayerPawn::PostThink` | Run |
+| `CPlayer_ItemServices::GiveNamedItem`, `RemoveWeapons`, `DropActivePlayerWeapon` | Run |
+| `CPlayer_WeaponServices::DropWeapon`, `BumpWeapon`, `SelectItem`, `Destroy` | Run |
+| `CAttributeList::SetOrAddAttribute`, `SetOrAddAttributeValueByName` | Run |
+| `CBaseEntity::AcceptInput`, `AddEntityIOEvent`, `DispatchSpawn`, `Teleport`, `Remove`, `DispatchParticleEffect` | Run |
+| `CBaseModelEntity::SetModel`, `CCSGameRules::GoToIntermission`, `C*Projectile::EmitGrenade` | Run |
+
+```cpp
+pItems->GiveNamedItem("weapon_ak47");                                  // hooks run
+pVictim->TakeDamage(pAttacker, 50, DMG_BULLET, HookChain::Run);        // opt in
+```
+
+For calling an `ADDR_*` function directly past its hooks there is
+`TOOLKIT_ORIGINAL(fn)`; see [Hooking](/docs/hooks).
+
+## Pawn and life
+
+```cpp
+CCSPlayerPawn* CCSPlayerController::GetPlayerPawn();
+void CCSPlayerController::Respawn(HookChain eChain = HookChain::Run);
+void CBasePlayerPawn::CommitSuicide(bool bExplode, bool bForce, HookChain eChain = HookChain::Run);
+void CBasePlayerPawn::SnapViewAngles(const QAngle& angEyeAngles, HookChain eChain = HookChain::Run);
+```
+
+`Respawn` does nothing if the controller has no player pawn. It puts the
+player pawn back on the controller and runs the controller's respawn.
+
+`CommitSuicide(bExplode, bForce)` calls the pawn's own suicide virtual with
+the two flags as the game defines them; the sample plugin's slay command uses
+`CommitSuicide(false, true)`.
+
+`SnapViewAngles` sets where the player looks. It is a no-op on platforms where
+the engine function could not be resolved — currently it is only found on Linux.
+
+```cpp title="plugin.cpp"
+if (CCSPlayerPawn* pPawn = pController->GetPlayerPawn(); pPawn && pController->m_bPawnIsAlive())
+{
+    pPawn->m_iHealth = 200;
+    pPawn->m_ArmorValue = 100;
+}
+```
+
+## Teams
+
+```cpp
+void CCSPlayerController::SwitchTeam(int nTeam, HookChain eChain = HookChain::Run);
+void CCSPlayerController::ChangeTeam(int nTeam, HookChain eChain = HookChain::Run);
+```
+
+- **`SwitchTeam`** moves the player to the team without killing them.
+- **`ChangeTeam`** is the controller's `ChangeTeam` virtual — the `jointeam`
+  path, the same thing as a player picking a team in the menu, with what that
+  means for a living player.
+
+Team numbers are `CS_TEAM_NONE` (0), `CS_TEAM_SPECTATOR` (1), `CS_TEAM_T` (2)
+and `CS_TEAM_CT` (3), from the game's `shareddefs.h`.
+The current team is `m_iTeamNum()`.
+
+## Damage
+
+```cpp
+void CCSPlayerController::TakeDamage(CCSPlayerController* pAttacker, int iDamage,
+                                     DamageTypes_t bitsDamageType,
+                                     HookChain eChain = HookChain::Bypass);
+```
+
+Deals damage to this player's pawn as if `pAttacker`'s pawn did it. It does
+nothing unless both players are connected, the victim is alive and both have a
+pawn. The damage is flagged `DFLAG_SUPPRESS_DAMAGE_MODIFICATION`, so armor and
+the game's scaling do not change the number you asked for.
+
+It **bypasses** hooks by default, because damage a plugin was asked to deal
+is not the game dealing damage — a plugin policing hits in `TakeDamageOld`
+should not have to tell them apart. Pass `HookChain::Run` when you are standing
+in for a weapon. For damage without an attacker player, or with full control
+over the damage info, see [Damage](/docs/entities/damage).
+
+## Items and weapons
+
+The item and weapon services hang off the pawn:
+
+```cpp
+CPlayer_ItemServices*   pItems   = pPawn->m_pItemServices();
+CPlayer_WeaponServices* pWeapons = pPawn->m_pWeaponServices();
+```
+
+`CPlayer_ItemServices`:
+
+```cpp
+CBasePlayerWeapon* GiveNamedItem(const char* pszItem, HookChain eChain = HookChain::Run);
+void RemoveWeapons(bool bRemoveSuit, HookChain eChain = HookChain::Run);
+void DropActivePlayerWeapon(CBasePlayerWeapon* pActiveWeapon, HookChain eChain = HookChain::Run);
+```
+
+`GiveNamedItem` takes an item classname (`"weapon_ak47"`, `"item_assaultsuit"`)
+and returns the weapon, or null. `DropActivePlayerWeapon` ignores its argument
+and drops whatever is active — prefer `DropWeapon`.
+
+`CPlayer_WeaponServices`:
+
+```cpp
+bool CanUse(CBasePlayerWeapon* pWeapon);
+void DropWeapon(CBasePlayerWeapon* pWeapon, Vector* pVecTarget = nullptr, Vector* pVelocity = nullptr, HookChain eChain = HookChain::Run);
+int  BumpWeapon(CBasePlayerWeapon* pWeapon, HookChain eChain = HookChain::Run);
+void SelectItem(CBasePlayerWeapon* pWeapon, int unk1 = 0, HookChain eChain = HookChain::Run);
+void Destroy(CBasePlayerWeapon* pWeapon, HookChain eChain = HookChain::Run);
+```
+
+`Destroy` removes a weapon from the player and deletes it. The inventory is
+`m_hMyWeapons()` and the weapon in hand `m_hActiveWeapon()`, both handles:
+
+```cpp title="plugin.cpp"
+// Strip everything except the knife.
+for (const auto& hWeapon : pWeapons->m_hMyWeapons())
+{
+    CBasePlayerWeapon* pWeapon = hWeapon.Get();
+    if (!pWeapon)
+        continue;
+
+    if (V_strstr(pWeapon->GetWeaponClassname(), "knife"))
+        continue;
+
+    pWeapons->DropWeapon(pWeapon);
+    pWeapon->Remove();
+}
+```
+
+`CBasePlayerWeapon::GetWeaponVData()` returns the weapon's `CCSWeaponBaseVData`
+(damage, clip size, price …); `CCSWeaponBaseVData::FromKey("weapon_ak47")`
+looks the same data up without a weapon.
+
+Money is on the controller:
+
+```cpp
+if (auto* pMoney = pController->m_pInGameMoneyServices())
+    pMoney->m_iAccount = 16000;
+```
+
+## Attributes
+
+Econ attributes (skins, stickers, custom values) are set on a `CAttributeList`:
+
+```cpp
+void CAttributeList::SetOrAddAttribute(const char* pszAttributeName, float flValue, HookChain eChain = HookChain::Run);
+void CAttributeList::SetOrAddAttributeValueByName(const char* pszAttributeName, float flValue, HookChain eChain = HookChain::Run);
+```
+
+The two are the same call; the second has the engine's name. A weapon's
+lists are on its item:
+
+```cpp
+CAttributeList& attrs = pWeapon->m_AttributeManager().m_Item().m_NetworkedDynamicAttributes();
+attrs.SetOrAddAttribute("set item texture prefab", 44.0f);
+```
+
+## Messages
+
+```cpp
+void CBasePlayerController::PrintToChat(const char* pszMessage);
+void CBasePlayerController::PrintToCenter(const char* pszMessage);
+void CBasePlayerController::PrintToCenterAlert(const char* pszMessage);
+void CBasePlayerController::PrintToConsole(const char* pszMessage);   // adds the newline
+void CCSPlayerController::PrintToCenterHtml(const char* pszMessage, int iDuration = 5, bool bMenu = false);
+```
+
+The first four send a `TextMsg` user message to this player only. They take a
+finished string — format it first:
+
+```cpp
+char szBuffer[256];
+V_snprintf(szBuffer, sizeof(szBuffer), "You have %d HP", pPawn->m_iHealth());
+pController->PrintToChat(szBuffer);
+```
+
+`PrintToCenterHtml` shows HTML in the center panel for `iDuration` seconds.
+While the player has a [menu](/docs/guides/menus) open it does nothing unless
+`bMenu` is true, so it cannot overwrite the menu.
+
+## Commands, convars and events on the client
+
+```cpp
+void ExecuteClientCommand(const char* pszCommand);            // runs on the client
+void ExecuteClientCommandFromServer(const char* pszCommand);  // dispatches a server command as if the player ran it
+void ReplicateConVar(const char* pszConVar, const char* pszValue);
+void FireEventToClient(IGameEvent* pEvent);                   // to this player's legacy listener only
+```
+
+`ReplicateConVar` tells one client a replicated convar has a different value,
+without changing it on the server.
+
+## Kicking
+
+```cpp
+void CBasePlayerController::Disconnect(ENetworkDisconnectionReason eReason,
+                                       const char* pszInternalReason = nullptr);
+```
+
+```cpp
+pController->Disconnect(NETWORK_DISCONNECT_KICKED, "Kicked by admin");
+```
+
+The disconnect happens on the **next frame**; the reason string is copied, so a
+temporary is fine. The player's open menu is closed first, and nothing happens
+if the player is not fully connected.
+
+## Other controller helpers
+
+| Helper | Does |
+|---|---|
+| `IsBot()` | `FL_FAKECLIENT` is set |
+| `SetPawn(pPawn, eChain)` | Puts a pawn on the controller |
+| `GetServerSideClient()` | The engine's `CServerSideClient` for this slot, or null |
+| `GetObserverPawn()` | The observer pawn, or null |
+| `CCSPlayerPawnBase::CanMove()` | False while frozen, defusing, … |
+| `CCSPlayerPawnBase::GetOriginalController()` | The controller the pawn was created for |

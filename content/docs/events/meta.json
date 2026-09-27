@@ -1,0 +1,12 @@
+{
+    "title": "Events",
+    "description": "Game events and toolkit listeners",
+    "root": true,
+    "icon": "Activity",
+    "pages": [
+        "index",
+        "game-events",
+        "listeners",
+        "event-reference"
+    ]
+}

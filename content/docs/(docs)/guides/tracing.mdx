@@ -1,0 +1,163 @@
+---
+title: Tracing
+description: Line and hull traces against the world and entities — what a player is looking at, line of sight, and whether a box fits.
+---
+
+`IToolkitTrace` runs physics traces through the game's own trace function:
+rays along a view direction, rays between two points, hull (box) sweeps, and a
+low-level call for your own filter and ray shape. Results come back as a
+`TraceResult`.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitTrace.h"
+```
+
+## The calls
+
+```cpp
+TraceResult TraceShape(const Vector& vecStart, const QAngle& angAngles, CBaseEntity* pIgnoreEntity, TraceOptions* pTraceOptions);
+TraceResult TraceEndShape(const Vector& vecStart, const Vector& vecEnd, CBaseEntity* pIgnoreEntity, TraceOptions* pTraceOptions);
+TraceResult TraceHullShape(const Vector& vecStart, const Vector& vecEnd, const Vector& vecMins, const Vector& vecMaxs,
+                           CBaseEntity* pIgnoreEntity, TraceOptions* pTraceOptions);
+TraceResult TraceShapeEx(const Vector& vecStart, const Vector& vecEnd, CTraceFilter* pTraceFilter, Ray_t* pRay);
+```
+
+Each has a macro: `TRACE_SHAPE`, `TRACE_END_SHAPE`, `TRACE_HULL_SHAPE`,
+`TRACE_SHAPE_EX` (same arguments). `TraceShape` casts a line 8192 units along
+the angles.
+
+## What is the player looking at?
+
+```cpp title="plugin.cpp"
+CCSPlayerPawn* pawn = player->GetPlayerPawn();
+if (!pawn)
+    return;
+
+Vector eyes = pawn->GetEyePosition();
+QAngle angles = pawn->GetEyeAngles();
+
+TraceOptions opts{};
+opts.InteractsExclude = CONTENTS_PLAYER | CONTENTS_PLAYER_CLIP;
+
+TraceResult result = TRACE_SHAPE(eyes, angles, pawn, &opts);
+
+if (result.DidHit())
+{
+    Vector hit = result.EndPos();
+    auto* target = static_cast<CBaseEntity*>(result.HitEntity()); // may be nullptr (world)
+}
+```
+
+The ignored entity (`pawn` here) is filtered out together with its owner and
+everything sharing its collision hierarchy, so the player does not hit
+themselves or their own weapon.
+
+## Line of sight between two points
+
+```cpp
+bool CanSee(CCSPlayerController* player, CCSPlayerController* target)
+{
+    CCSPlayerPawn* from = player->GetPlayerPawn();
+    CCSPlayerPawn* to = target->GetPlayerPawn();
+    if (!from || !to)
+        return false;
+
+    TraceOptions opts{};
+    opts.InteractsExclude = CONTENTS_PLAYER_CLIP;
+
+    TraceResult result = TRACE_END_SHAPE(from->GetEyePosition(), to->GetEyePosition(), from, &opts);
+    return result.HitEntity() == to;
+}
+```
+
+## Hull traces
+
+A hull trace sweeps a box from start to end — use it to test whether a player
+fits somewhere before teleporting them.
+
+```cpp
+Vector mins = pawn->m_pCollision()->m_vecMins();
+Vector maxs = pawn->m_pCollision()->m_vecMaxs();
+
+TraceOptions opts{};
+opts.InteractsWith = MASK_PLAYERSOLID;
+
+TraceResult result = TRACE_HULL_SHAPE(dest, dest, mins, maxs, pawn, &opts);
+if (result.IsAllSolid())
+    return; // would be stuck
+```
+
+## TraceOptions
+
+```cpp
+struct TraceOptions
+{
+    uint64_t InteractsAs = CONTENTS_EMPTY;
+    uint64_t InteractsWith = MASK_SHOT;
+    uint64_t InteractsExclude = CONTENTS_EMPTY;
+};
+```
+
+The three masks are applied to the filter exactly as given.
+
+<Callout type="warn">
+  `nullptr` and `TraceOptions{}` are **not** the same. With `nullptr` the
+  filter interacts with `MASK_ALL`; a default-constructed `TraceOptions`
+  interacts with `MASK_SHOT`. Pass options explicitly when the mask matters.
+</Callout>
+
+## Custom filter and ray: TraceShapeEx
+
+`TraceShapeEx` takes your own `CTraceFilter` and `Ray_t`. `CTraceFilterEx` is
+the ordinary filter — ignore an entity, its owner and its hierarchy — and its
+public masks can be changed before the trace:
+
+```cpp
+CTraceFilterEx filter(pawn);
+filter.m_nInteractsWith = MASK_PLAYERSOLID;
+
+Ray_t ray(mins, maxs); // a hull ray; Ray_t() is a line
+
+TraceResult result = TRACE_SHAPE_EX(start, end, &filter, &ray);
+```
+
+## TraceResult
+
+| Accessor | Meaning |
+| --- | --- |
+| `DidHit()` | `Fraction() < 1.0f` |
+| `Fraction()` | How far the trace got, 1.0 = nothing hit |
+| `StartPos()`, `EndPos()` | Where it started and stopped |
+| `HitPoint()` | Exact hit point when `HasExactHit()`, otherwise equal to `EndPos()` |
+| `Normal()` | Surface normal at impact |
+| `HitEntity()` | The `CEntityInstance*` hit, or `nullptr` |
+| `IsAllSolid()` | The start point was inside something solid |
+| `HitboxBoneIndex()`, `Hitbox()` | Hitbox that was hit (with `CONTENTS_HITBOX`) |
+| `Contents()`, `Surface()` | Contents and surface properties of what was hit |
+
+`TraceResult` is move-only (copying is deleted). Keep it by value from the
+call, or copy out the fields you need.
+
+## Other queries
+
+| Call | Macro |
+| --- | --- |
+| `PointContents(const Vector* const vTestPos, uint64 nContentsMask)` | `POINT_CONTENTS(pos, mask)` |
+| `GetEntityWorldSpaceAABB(const CBaseEntity* const rEntity, Vector* pMinsOut, Vector* pMaxsOut)` | `ENTITY_WORLD_AABB(ent, mins, maxs)` |
+| `CheckAreaOverlappingEntity(const CCSNavArea* const rArea, const CBaseEntity* const rEntity, bool bExtrudeHullHeight)` | `CHECK_AREA_OVERLAPPING_ENTITY(area, ent, extrudeHull)` |
+
+## Pitfalls
+
+- **Main thread only.** Traces read the live physics world.
+- **Check `HitEntity()` for `nullptr`** — hitting the world is a hit without an
+  entity. Cast with `static_cast`, never `dynamic_cast` (engine RTTI is not
+  usable).
+- **A failed lookup returns an empty result.** If the toolkit cannot find the
+  engine's trace interface (for example after a game update), every trace
+  returns a default `TraceResult` — `DidHit()` false, `Fraction()` 1.0 — and an
+  error is logged.
+- `TraceShape` stops at 8192 units; use `TraceEndShape` for anything longer.
+
+## Reference
+
+- [`IToolkitTrace` API reference](/docs/core-api/IToolkitTrace)

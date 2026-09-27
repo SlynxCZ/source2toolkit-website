@@ -1,0 +1,132 @@
+---
+title: Click Callbacks
+description: Getting a callback when a player clicks a button in a custom HUD layout — HookClick, the panel id, and the IToolkitCustomHud registry behind it.
+---
+
+When a player with [input capture](/docs/panorama/layouts#input-capture)
+clicks a button in a layout, the client sends a `CCSUsrMsg_CustomHudClicked`
+user message carrying the layout entity and the clicked panel's `id`. The core
+catches it and calls the callbacks registered on that layout entity.
+
+## HookClick
+
+```cpp
+void CCSCustomHudLayout::HookClick(std::function<void(CCSPlayerController*, CCSCustomHudLayout*, const char*)> callback);
+void CCSCustomHudLayout::UnhookClicks();
+```
+
+The callback gets the player who clicked, the layout, and the `id` attribute of
+the clicked panel:
+
+```xml title="my_menu.xml"
+<root>
+    <styles>
+        <include src="s2r://panorama/styles/custom_game/my_menu.vcss_c" />
+    </styles>
+    <Panel class="screen">
+        <Panel id="MenuRoot" class="menu">
+            <Button id="buy_ak47" class="row"><Label text="AK-47" /></Button>
+            <Button id="buy_m4a1" class="row"><Label text="M4A1" /></Button>
+            <Button id="close" class="close"><Label text="X" /></Button>
+        </Panel>
+    </Panel>
+</root>
+```
+
+```cpp title="plugin.cpp"
+CHandle<CCSCustomHudLayout> g_hMenu;
+
+void CreateMenu()
+{
+    CCSCustomHudLayout* pMenu = CCSCustomHudLayout::Create("my_menu");
+    if (!pMenu)
+        return;
+
+    pMenu->HookClick([](CCSPlayerController* pPlayer, CCSCustomHudLayout* pLayout, const char* pszButtonId)
+    {
+        if (!V_strcmp(pszButtonId, "close"))
+        {
+            pLayout->SetHasClass("MenuRoot", "show", false, pPlayer);
+            pLayout->SetInputCaptureEnabled(false, pPlayer);
+            return;
+        }
+
+        CCSPlayerPawn* pPawn = pPlayer->GetPlayerPawn();
+        if (!pPawn || !pPlayer->m_bPawnIsAlive())
+            return;
+
+        CPlayer_ItemServices* pItems = pPawn->m_pItemServices();
+        if (!pItems)
+            return;
+
+        if (!V_strcmp(pszButtonId, "buy_ak47"))
+            pItems->GiveNamedItem("weapon_ak47");
+        else if (!V_strcmp(pszButtonId, "buy_m4a1"))
+            pItems->GiveNamedItem("weapon_m4a1");
+    });
+
+    g_hMenu = pMenu->GetHandle();
+}
+```
+
+Things to keep in mind:
+
+- **The id is the only thing that identifies a button.** It comes from the
+  client, so treat it as input: compare it against the ids you know, and check
+  that this player is allowed to do what the button does *right now* — do not
+  assume only players you showed the menu to can click it.
+- **Every player's clicks arrive at the same callback.** Per-player menus
+  (different pages for different players) are told apart by your own state
+  keyed by the player, not by the layout.
+- `UnhookClicks()` drops **every** callback on the layout, including ones other
+  code registered on it. Several `HookClick` calls on one layout all fire, in
+  the order they were added.
+- A callback may create another layout or unhook itself; the core collects the
+  matching callbacks before calling any of them.
+
+## Lifetime
+
+You rarely need to unhook:
+
+- A callback is dropped when **its layout entity is removed** — the entity is
+  stored as a handle, and dead entries are pruned the next time a click comes in.
+- All of a plugin's callbacks are dropped when **that plugin unloads**.
+- The whole registry is cleared on **level shutdown**, along with the entities.
+
+A removed layout's index being reused by a new entity cannot trigger an old
+callback: the match is made on the full handle, serial number included.
+
+## IToolkitCustomHud
+
+`HookClick` and `UnhookClicks` forward to
+[IToolkitCustomHud](/docs/core-api/IToolkitCustomHud), the registry of
+callbacks the core owns. You can call it directly; the macros fill in
+`g_pToolkitCustomHud` and your plugin id:
+
+```cpp
+#include "source2toolkit/IToolkitCustomHud.h"
+
+using CustomHudClickHandler = std::function<void(CCSPlayerController* player,
+                                                 CCSCustomHudLayout* pLayout,
+                                                 const char* pszButtonId)>;
+
+virtual void HookCustomHudClick(PluginId owner, CCSCustomHudLayout* pLayout, CustomHudClickHandler handler) = 0;
+virtual void UnhookCustomHudClick(CCSCustomHudLayout* pLayout) = 0;
+
+HOOK_CUSTOM_HUD_CLICK(pLayout, handler);   // g_pToolkitCustomHud->HookCustomHudClick(g_PluginID, pLayout, handler)
+UNHOOK_CUSTOM_HUD_CLICK(pLayout);          // g_pToolkitCustomHud->UnhookCustomHudClick(pLayout)
+```
+
+It exists as an interface because the click arrives on the core's own hook
+(`ClientSvcUserMessage`) and has to be routed back to whichever plugin created
+the layout. A null layout or an empty handler is ignored.
+
+## When clicks do not arrive
+
+A layout that renders but never calls back is almost always one of:
+
+1. **Input capture is off** for that player — no cursor, no clicks.
+2. **The clicked element has no `id`**, or the id in the layout differs from
+   the one your callback compares against.
+3. **The callback is on a different entity** — for example one created before a
+   map change, whose handle is now dead.

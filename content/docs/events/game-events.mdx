@@ -1,0 +1,238 @@
+---
+title: Game Events
+description: Hooking game events before and after the engine, reading and changing their fields, keeping them from clients, cancelling them, and firing your own.
+---
+
+Game events are how CS2 announces what happens in a match: `player_death`,
+`round_start`, `bomb_planted`. The toolkit hooks the engine's
+`IGameEventManager2::FireEvent` once and hands every event to the plugins that
+asked for it — before the engine processes it, after, or both.
+
+## Hooking an event
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitEvents.h"
+#include "source2toolkit/schema/entity/classes/CCSPlayerController.h"
+
+bool MyPlugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late)
+{
+    TOOLKIT_SAVEVARS();
+
+    HOOK_GAME_EVENT("player_death", [](IGameEvent* event, bool post, bool& dontBroadcast) -> Action
+    {
+        auto* pVictim   = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
+        auto* pAttacker = static_cast<CCSPlayerController*>(event->GetPlayerController("attacker"));
+
+        TOOLKIT_LOG(&g_Plugin, "%s killed %s with %s%s\n",
+                    pAttacker ? pAttacker->GetPlayerName() : "world",
+                    pVictim ? pVictim->GetPlayerName() : "?",
+                    event->GetString("weapon"),
+                    event->GetBool("headshot") ? " (headshot)" : "");
+
+        return Action::Ignore;
+    }, true);
+
+    return true;
+}
+```
+
+The API:
+
+```cpp title="IToolkitEvents.h"
+using GameEventHandler = std::function<Action(IGameEvent* event, bool post, bool& dontBroadcast)>;
+
+virtual void HookGameEvent(PluginId owner, const char* pchName, GameEventHandler handler, bool post) = 0;
+virtual void UnhookGameEvent(PluginId owner, const char* pchName, bool post) = 0;
+
+#define HOOK_GAME_EVENT(passname, passfunc, post)
+#define UNHOOK_GAME_EVENT(passname, post)
+```
+
+- `pchName` — the event name, exactly as the game defines it (case sensitive).
+  The [event reference](/docs/events/event-reference) lists the common ones.
+- `post` — `false` for a pre hook, `true` for a post hook. For both, hook twice.
+- Hook in `Load()`. If the game's event manager does not exist yet, the toolkit
+  keeps the hook and attaches it once it does.
+- Hooking an event also registers a server-side listener for it, so the game
+  creates the event even when nothing else on the server listens for it.
+
+Everything is dropped when your plugin unloads; `UNHOOK_GAME_EVENT(name, post)`
+removes this plugin's hooks for one event and side earlier. Full reference:
+[`IToolkitEvents`](/docs/core-api/IToolkitEvents).
+
+## Pre and post
+
+| | Pre (`post == false`) | Post (`post == true`) |
+| --- | --- | --- |
+| When | The event is filled in, nobody has seen it yet. | The engine has processed and sent it. |
+| The `event` | The real event. | A copy taken after the pre hooks ran. |
+| Change fields | Yes — the engine and clients see your values. | Pointless — it is a copy. |
+| `dontBroadcast` | Yes, see below. | No effect. |
+| `Action::Supersede` | Cancels the event. | Only skips the remaining post hooks. |
+
+Rule of thumb: **pre to change or stop, post to react.** A post hook sees the
+event after the game's own handling, so state the event caused — money, score,
+team — is already updated.
+
+Hooks for the same event run in the order they were registered, across all
+plugins.
+
+## Reading fields
+
+`IGameEvent` is hl2sdk's interface. Field names are plain strings:
+
+| Getter | For field type |
+| --- | --- |
+| `GetInt(key, default = 0)` | `short`, `long`, `byte` |
+| `GetBool(key, default = false)` | `bool` |
+| `GetFloat(key, default = 0.0f)` | `float` |
+| `GetString(key, default = "")` | `string` |
+| `GetUint64(key, default = 0)` | `uint64` (SteamIDs) |
+| `GetPlayerController(key)` | player fields — the controller as `CEntityInstance*` |
+| `GetPlayerPawn(key)` | player fields — the pawn as `CEntityInstance*` |
+| `GetPlayerSlot(key)` | player fields — the `CPlayerSlot` |
+| `GetEntity(key)`, `GetEntityIndex(key)`, `GetEHandle(key)` | entity fields |
+
+Player fields (`userid`, `attacker`, `assister`) are typed
+`player_controller`, `player_pawn` or `player_controller_and_pawn` in the
+game's event files. Cast the result with `static_cast`, never `dynamic_cast` —
+RTTI on the game's classes does not work:
+
+```cpp
+auto* pController = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
+if (!pController)
+    return Action::Ignore; // world, a disconnected player, ...
+
+CCSPlayerPawn* pPawn = pController->GetPlayerPawn();
+```
+
+`GetPlayerController` returns `nullptr` when the field names no player — an
+`attacker` that was the world, a player who already left — so always check. `event->GetName()` gives the event name, which helps when one handler
+serves several events.
+
+## Changing fields
+
+In a pre hook, set fields with the matching setter before the engine sees the
+event: `SetInt`, `SetBool`, `SetFloat`, `SetString`, `SetUint64`, `SetEntity`,
+`SetPlayer(key, CPlayerSlot)`.
+
+```cpp title="plugin.cpp"
+// Every kill shows as a headshot in the killfeed.
+HOOK_GAME_EVENT("player_death", [](IGameEvent* event, bool post, bool& dontBroadcast) -> Action
+{
+    event->SetBool("headshot", true);
+    return Action::Override;
+}, false);
+```
+
+Return `Action::Override` when you changed something. The dispatcher treats it
+like `Ignore` — the event goes on — but it documents intent, and it is what the
+rest of the toolkit's callbacks use.
+
+## Keeping an event from the clients
+
+Set `dontBroadcast = true` in a pre hook. The server still processes the event —
+the game's own handling, other plugins' post hooks — but no client receives it:
+
+```cpp title="plugin.cpp"
+// Bot deaths never show up in the killfeed.
+HOOK_GAME_EVENT("player_death", [](IGameEvent* event, bool post, bool& dontBroadcast) -> Action
+{
+    auto* pVictim = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
+
+    if (pVictim && pVictim->IsBot())
+    {
+        dontBroadcast = true;
+        return Action::Override;
+    }
+
+    return Action::Ignore;
+}, false);
+```
+
+FUNPLAY's JailBreak does the same with `player_team` and `player_radio` — the
+game still switches the team, the clients just never get the event:
+
+```cpp
+HOOK_GAME_EVENT("player_radio", [](IGameEvent* event, bool post, bool& dontBroadcast) -> Action
+{
+    dontBroadcast = true;
+    return Action::Ignore;
+}, false);
+```
+
+The flag works both ways: setting it to `false` on an event the game fired
+server-only sends it to the clients after all.
+
+## Cancelling an event
+
+Return `Action::Supersede` from a pre hook and the event is not fired at all:
+the remaining pre hooks are skipped, the engine never processes it, no client
+receives it and no post hook runs.
+
+```cpp
+HOOK_GAME_EVENT("player_jump", [](IGameEvent* event, bool post, bool& dontBroadcast) -> Action
+{
+    auto* pPlayer = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
+
+    // Nobody hears about bots jumping -- not the game, not the clients, not later hooks.
+    if (pPlayer && pPlayer->IsBot())
+        return Action::Supersede;
+
+    return Action::Ignore;
+}, false);
+```
+
+<Callout type="warn">
+Cancelling also hides the event from every other plugin that hooked it later.
+If all you want is to keep something off players' screens, `dontBroadcast` is
+the gentler tool.
+</Callout>
+
+## Firing your own event
+
+Create the event through the engine's event manager, fill it in, then send it
+one of two ways:
+
+- **`IGameEventManager2::FireEvent(event, bDontBroadcast)`** — to the server and
+  every client, through every plugin's hooks, exactly like a game-fired event.
+  `FireEvent` takes ownership and frees the event.
+- **`CBasePlayerController::FireEventToClient(event)`** — to one player only.
+  The server never processes it and no hooks run. The event is still yours:
+  free it afterwards.
+
+```cpp title="plugin.cpp"
+IGameEventManager2* pEventManager = g_ToolkitAPI->GetGameEventManager();
+
+// To everybody.
+if (IGameEvent* pEvent = pEventManager->CreateEvent("round_announce_match_start", true))
+    pEventManager->FireEvent(pEvent); // freed by FireEvent
+
+// To one player (pCaller, a CCSPlayerController*): HUD text through show_survival_respawn_status.
+if (IGameEvent* pEvent = pEventManager->CreateEvent("show_survival_respawn_status", true))
+{
+    pEvent->SetString("loc_token", "<font color='#00ff00'>Hello from a game event</font>");
+    pEvent->SetInt("duration", 5);
+    pEvent->SetPlayer("userid", pCaller->GetPlayerSlot());
+
+    pCaller->FireEventToClient(pEvent);
+    pEventManager->FreeEvent(pEvent);   // FireEventToClient does not free it
+}
+```
+
+- The second argument of `CreateEvent` is `bForce`: create the event even if
+  nothing on the server listens for it. Pass `true` for events you send to
+  clients.
+- `CreateEvent` returns `nullptr` for a name the game does not know.
+- The schema headers also declare a free function `GetGameEventManager()`,
+  returning the same manager.
+
+`FireEventToClient` is on
+[`CBasePlayerController`](/docs/schema/entity/classes/CBasePlayerController);
+`CCSPlayerController::PrintToCenterHtml` is built on exactly this event.
+
+## See also
+
+- [Event reference](/docs/events/event-reference) — fields of the common events.
+- [Listeners](/docs/events/listeners) — map start/end and plugin lifecycle.
+- [`IToolkitEvents` reference](/docs/core-api/IToolkitEvents)

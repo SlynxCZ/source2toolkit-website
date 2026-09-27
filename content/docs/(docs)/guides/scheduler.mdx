@@ -1,0 +1,149 @@
+---
+title: Scheduler
+description: Run code on the next frame, after a delay or on a repeat — on the main thread, and cleaned up with your plugin.
+---
+
+`IToolkitScheduler` is how a plugin defers work: once on the next game frame,
+once after a delay, or repeatedly. Every callback runs on the main thread, and
+everything you schedule belongs to your plugin and is dropped when it unloads.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitScheduler.h"
+```
+
+| Call | Macro |
+| --- | --- |
+| `NextFrame(PluginId owner, std::function<void()>&& task)` | `NEXT_FRAME(task)` |
+| `AddTimer(PluginId owner, float interval, TimerCallback callback, int flags = 0)` | `ADD_TIMER(interval, cb, ...)` |
+| `KillTimer(Timer* timer)` | `KILL_TIMER(timer)` |
+
+The macros fill in `g_PluginID` for you.
+
+## Next frame
+
+The classic use is an entity the game is still filling in when you hear about
+it. From the sample plugin — a change made in `OnEntitySpawned()` would be
+overwritten, one frame later it sticks:
+
+```cpp title="plugin.cpp"
+void SamplePlugin::OnEntitySpawned(CEntityInstance* pEntity)
+{
+    if (V_strcmp(pEntity->GetClassname(), "smokegrenade_projectile") != 0)
+        return;
+
+    // A raw pointer must not cross a frame -- the entity may be gone by then.
+    // A handle resolves to nullptr instead.
+    CHandle<CSmokeGrenadeProjectile> hSmoke = static_cast<CSmokeGrenadeProjectile*>(pEntity)->GetHandle();
+
+    NEXT_FRAME([hSmoke]()
+    {
+        if (CSmokeGrenadeProjectile* pSmoke = hSmoke.Get())
+            pSmoke->m_vSmokeColor = Vector(170.0f, 0.0f, 255.0f);
+    });
+}
+```
+
+`NextFrame()` is the one scheduler call that is safe from any thread (the queue
+is locked), which makes it the way to hand a result from your own worker thread
+back to the main thread.
+
+## Timers
+
+`AddTimer()` returns a `Timer*`. Without flags the timer fires once after
+`interval` seconds.
+
+```cpp
+// One-shot: stop a sound 0.3 s after it started.
+ADD_TIMER(0.3f, [guid]() { SOUND_STOP(guid); });
+```
+
+### Flags
+
+| Flag | Meaning |
+| --- | --- |
+| `TIMER_FLAG_REPEAT` | Fires every `interval` seconds until killed |
+| `TIMER_FLAG_NO_MAPCHANGE` | Killed automatically on map change |
+
+A repeating countdown, adapted from the sample plugin:
+
+```cpp title="plugin.cpp"
+Timer* m_pCountdownTimer = nullptr;
+int m_nCountdown = 0;
+
+void StartCountdown(int seconds)
+{
+    if (m_pCountdownTimer)
+    {
+        KILL_TIMER(m_pCountdownTimer);
+        m_pCountdownTimer = nullptr;
+    }
+
+    m_nCountdown = seconds;
+
+    m_pCountdownTimer = ADD_TIMER(1.0f, [this]()
+    {
+        // ... print m_nCountdown to everyone ...
+
+        // A timer may kill itself from inside its own callback.
+        if (m_nCountdown-- <= 0)
+        {
+            KILL_TIMER(m_pCountdownTimer);
+            m_pCountdownTimer = nullptr;
+        }
+    }, TIMER_FLAG_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
+}
+
+void SamplePlugin::OnLevelShutdown()
+{
+    // TIMER_FLAG_NO_MAPCHANGE: the scheduler has killed it, and the pointer with it.
+    m_pCountdownTimer = nullptr;
+}
+```
+
+Long-lived repeating timers are typically started once in `Load()`:
+
+```cpp title="plugin.cpp — Load()"
+ADD_TIMER(1.0f, Timers::HeartBeat, TIMER_FLAG_REPEAT);
+```
+
+### Debouncing
+
+Timers are cheap, so "save a few seconds after the last change" is just a
+timer plus a sequence number. FUNPLAY's volume menu does exactly this:
+
+```cpp
+const int seq = ++data->SaveSeq;
+ADD_TIMER(3.0f, [steamid, seq]()
+{
+    PlayerData* d = FindPlayer(steamid);
+    if (d && d->SaveSeq == seq) // only the last change saves
+        Save(steamid, d);
+});
+```
+
+## Pitfalls
+
+- **A `Timer*` dies with its timer.** A one-shot is deleted right after it
+  fires; a repeating one when it is killed — by you, by a map change with
+  `TIMER_FLAG_NO_MAPCHANGE`, or by your plugin unloading. Calling `KILL_TIMER`
+  on a pointer that is already gone is a use-after-free. Clear your copy when
+  the timer ends, and do not keep pointers to one-shot timers you might kill
+  after they fired.
+- **Resolution is about 0.1 s.** Timers are checked every 100 ms of game time,
+  so a 0.05 s interval fires about as often as a 0.1 s one. For per-frame work
+  use `NEXT_FRAME` (re-queued from itself) or a game frame hook instead.
+- **Capture handles, not raw entity pointers.** Anything that crosses a frame
+  must survive the entity being deleted — capture a `CHandle`, a slot or a
+  SteamID and re-resolve it inside the callback.
+- **Exceptions are swallowed.** A callback that throws is caught and ignored,
+  so the timer keeps going (or is dropped, for a one-shot) without a trace.
+- **Main thread.** `AddTimer()` and `KillTimer()` are not thread-safe; only
+  `NextFrame()` is.
+- **Unload.** Timers and pending next-frame tasks are owned by your `PluginId`
+  and are dropped before your library is closed — a `std::function` destroyed
+  afterwards would call into unmapped memory. `KILL_TIMER` in `Unload()` is not
+  needed; it is for turning a feature off while the plugin stays loaded.
+
+## Reference
+
+- [`IToolkitScheduler` API reference](/docs/core-api/IToolkitScheduler)

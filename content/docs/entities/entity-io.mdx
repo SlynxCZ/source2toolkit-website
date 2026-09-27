@@ -1,0 +1,172 @@
+---
+title: Entity I/O
+description: Sending inputs to entities, queueing delayed ones, and listening to — or blocking — outputs, for one entity or a whole class.
+---
+
+Entity I/O is how maps wire entities together: a button's `OnPressed`
+**output** fires a door's `Open` **input**. Plugins can take part on both ends —
+send inputs as if a map did, and listen to outputs as they fire, with the option
+to stop them.
+
+## Sending inputs
+
+```cpp
+void CBaseEntity::AcceptInput(const char* pszInput,
+                              CEntityInstance* pActivator = nullptr,
+                              CEntityInstance* pCaller = nullptr,
+                              const char* pszValue = "",
+                              HookChain eChain = HookChain::Run);
+```
+
+The input runs immediately. The arguments are what a map connection passes:
+the input name, the entity that started the chain (**activator**), the entity
+whose output is firing (**caller**), and the parameter as a string.
+
+```cpp
+pDoor->AcceptInput("Open");
+pBreakable->AcceptInput("Break");
+pEntity->AcceptInput("Kill");
+pModel->AcceptInput("FollowEntity", pPawn, pModel, "!activator");
+pText->AcceptInput("SetParent", pPawn, nullptr, "!activator");   // parent to the activator
+```
+
+`!activator` in the value is resolved against the activator you pass, as it is
+in a map — that is how parenting and following are done.
+
+### Delayed inputs
+
+```cpp
+void CBaseEntity::AddEntityIOEvent(const char* pszInput,
+                                   CEntityInstance* pActivator = nullptr,
+                                   CEntityInstance* pCaller = nullptr,
+                                   const char* pszValue = "",
+                                   float flDelay = 0.0f,
+                                   HookChain eChain = HookChain::Run);
+```
+
+Same arguments plus a delay in seconds. The event goes into the engine's I/O
+queue, like a connection with a delay set in Hammer. If the entity is removed
+first, the event is dropped with it — which makes this the easy way to give
+something a lifetime:
+
+```cpp
+pParticle->AddEntityIOEvent("Kill", nullptr, nullptr, "", 1.0f);
+```
+
+Both are also on [IToolkitEntities](/docs/core-api/IToolkitEntities), taking
+the target first:
+
+```cpp
+ACCEPT_INPUT(pTarget, "Open", pActivator, pCaller);        // value defaults to ""
+ADD_ENTITY_IO_EVENT(pTarget, "Kill", nullptr, nullptr, "", 5.0f);
+```
+
+The interface versions have no `HookChain` and always run the chain.
+
+## Listening to outputs
+
+The toolkit hooks the engine's output dispatch once and hands each firing to
+the listeners that match it. There are two ways to listen.
+
+### For a class of entities: IEntityIOListener
+
+Implement `IEntityIOListener` (from `source2toolkit/schema/entityio.h`) and
+register it for a classname and an output:
+
+```cpp title="plugin.h"
+class MyPlugin : public IToolkitPlugin, public IEntityIOListener
+{
+public:
+    Action OnEntityOutput(const char* pchOutputName, CEntityInstance* pActivator,
+                          CEntityInstance* pCaller, float flDelay, bool post) override;
+};
+```
+
+```cpp title="plugin.cpp"
+// In Load():
+ADD_ENTITY_IO_LISTENER(this, "func_button", "OnPressed");   // Pre
+ADD_ENTITY_IO_LISTENER(this, nullptr, "OnStartTouch", true); // Post, any class
+```
+
+```cpp
+virtual void AddEntityIOListener(PluginId owner, IEntityIOListener* pListener,
+                                 const char* pchClassName, const char* pchOutputName,
+                                 bool post = false) = 0;
+```
+
+`nullptr` for the classname or the output name means "any". The classname is
+matched against the **caller's** classname — the entity whose output fired.
+
+In the callback:
+
+```cpp title="plugin.cpp"
+Action MyPlugin::OnEntityOutput(const char* pchOutputName, CEntityInstance* pActivator,
+                                CEntityInstance* pCaller, float flDelay, bool post)
+{
+    if (post)
+        return Action::Ignore;
+
+    // Nobody opens this button while a round is being set up.
+    if (g_bSetupPhase && !V_strcmp(pchOutputName, "OnPressed"))
+        return Action::Supersede;
+
+    return Action::Ignore;
+}
+```
+
+| Return (Pre) | Effect |
+|---|---|
+| `Action::Ignore` | Nothing changed; the output fires. |
+| `Action::Override` | The output still fires. |
+| `Action::Supersede` | The output does **not** fire — the door stays shut, the button does nothing. Remaining Pre listeners and all Post listeners are skipped. |
+
+The Post return value is ignored. Listeners are removed for you when your
+plugin unloads; `REMOVE_ENTITY_IO_LISTENER(this, cls, out, post)` removes one
+earlier and must be given the same classname, output and `post` it was added
+with.
+
+### For one entity: AddSingleEntityIOListener
+
+When you care about one specific entity — a button you spawned, a trigger you
+created — attach a callback to it directly:
+
+```cpp
+CEntityIOListenerHandle* CBaseEntity::AddSingleEntityIOListener(
+    const char* pszOutput,
+    std::function<Action(const char*, CEntityInstance*, CEntityInstance*, float, bool)> callback,
+    bool post);
+```
+
+The callback has the same arguments and return value as `OnEntityOutput` and
+only fires when the caller is this entity:
+
+```cpp title="plugin.cpp"
+std::unique_ptr<CEntityIOListenerHandle> g_pButtonListener;
+
+void HookButton(CBaseEntity* pButton)
+{
+    g_pButtonListener.reset(pButton->AddSingleEntityIOListener("OnPressed",
+        [](const char* pszOutput, CEntityInstance* pActivator, CEntityInstance* pCaller, float flDelay, bool post)
+        {
+            // pActivator is usually the player's pawn.
+            return Action::Ignore;
+        },
+        false));
+}
+```
+
+The returned handle owns the listener: **deleting it unregisters it** (or call
+`Unhook()`). Keep it for as long as you want the callback, and drop it when the
+entity goes away — the listener stays registered until you do, it just never
+matches again.
+
+## Outputs on the entity
+
+Outputs are fields too. `CBaseEntity` has `m_OnUser1` … `m_OnUser4` and
+`m_OnKilled`, and each class has its own (`CEntityIOOutput`). The struct in
+`entityio.h` exposes the output's descriptor (`m_pDesc->m_pName`) and its
+linked list of connections (`m_pConnections`), each with target, input, value
+override, delay and remaining fire count — enough to inspect how a map wired
+an entity.
+
+See the [entity I/O reference](/docs/schema/Entityio) for the full structs.

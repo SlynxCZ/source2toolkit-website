@@ -1,0 +1,258 @@
+---
+title: Writing Handlers
+description: Handler signatures, KHook::Return, calling the original, changing arguments and return values, and avoiding recursion.
+---
+
+A handler is an ordinary member function of the class that declared the hook.
+It receives the hooked call's arguments and returns a `KHook::Return<T>` that
+tells KHook what to do with the original.
+
+## The signature
+
+The object that was actually called arrives as the first parameter; the rest
+are the function's own arguments, in the order the **machine code** takes
+them. A `KHOOK_FUNCTION` handler has no object, only the arguments.
+
+```cpp
+// void CCSPlayer_WeaponServices::DropWeapon(CBasePlayerWeapon*, Vector*, Vector*)
+KHook::Return<void> OnDropWeapon(CCSPlayer_WeaponServices* pThis, CBasePlayerWeapon* pWeapon, Vector* pVecTarget, Vector* pVelocity);
+```
+
+The macros derive the hook's type from this declaration, so the declaration
+**is** the prototype KHook uses to read the registers and the stack. Nothing
+checks it against the game. A wrong parameter list compiles fine and then reads
+garbage — or corrupts the call — at runtime.
+
+- **Match the real function**, not an older port or a Source 1 header. Where
+  the toolkit resolves the function, its typedef in `IToolkitAddresses.h` is
+  the checked prototype: `CCSPlayerPawn_PostThink_t` takes nothing but the
+  pawn, `CCSPlayer_MovementServices_TryPlayerMove_t` is declared `void`
+  because no caller reads what is left in `al`, and so on.
+- **Widths matter.** A `bool` where the game passes an `int`, or a `float`
+  where it passes a `double`, reads the wrong part of the register.
+- **Returning a struct or a non-trivial class by value** changes the calling
+  convention (a hidden return pointer). Stick to what the typedef says.
+
+### Platform differences
+
+The same function does not always take its arguments in the same order on
+Windows and Linux: the compilers are free to lay the parameters out
+differently, and they do. `CCSGameRules::TerminateRound` is the standing
+example — the delay and the reason swap places:
+
+```cpp title="IToolkitAddresses.h"
+#ifdef _WIN32
+using CCSGameRules_TerminateRound_t = void (FASTCALL*)(CCSGameRules* pThis, float flDelay,
+                                                       uint32 nReason, uint32* pnTeamId);
+#else
+using CCSGameRules_TerminateRound_t = void (FASTCALL*)(CCSGameRules* pThis, uint32 nReason,
+                                                       uint32* pnTeamId, float flDelay);
+#endif
+```
+
+The handler has to follow suit, with an `#ifdef` on the declaration **and** the
+definition. This is TroubleTerroristTown's round-end hook (the plugin spells
+the reason as its own 32-bit enum; any type of the same width works):
+
+```cpp title="Hooks.h"
+class CHooks
+{
+public:
+    // Same argument order as CCSGameRules_TerminateRound_t: the delay and
+    // the reason swap places between platforms, the team goes by pointer.
+#ifdef _WIN32
+    KHook::Return<void> OnTerminateRound(CCSGameRules* pThis, float flDelay, uint32 nReason, uint32* pnTeamId);
+#else
+    KHook::Return<void> OnTerminateRound(CCSGameRules* pThis, uint32 nReason, uint32* pnTeamId, float flDelay);
+#endif
+
+    KHOOK_MEMBER(m_hTerminateRound, ADDR_TERMINATE_ROUND(), &CHooks::OnTerminateRound, nullptr);
+};
+```
+
+```cpp title="OnTerminateRound.cpp"
+#ifdef _WIN32
+KHook::Return<void> CHooks::OnTerminateRound(CCSGameRules* pThis, float flDelay, uint32 nReason, uint32* pnTeamId)
+#else
+KHook::Return<void> CHooks::OnTerminateRound(CCSGameRules* pThis, uint32 nReason, uint32* pnTeamId, float flDelay)
+#endif
+{
+    if (g_bRoundEnding)
+        return { KHook::Action::Supersede };   // a round end is already in flight: swallow this one
+
+    return { KHook::Action::Ignore };
+}
+```
+
+The winning team goes in as a pointer, null when there is none. Other known
+cases are marked in `IToolkitAddresses.h` (`GroundAccelerate` swaps the wish
+direction and the frame time). When you write a signature of your own, check
+the prototype on **both** binaries — see [Gamedata](/docs/hooks/gamedata).
+
+## Returning an action
+
+A handler returns `KHook::Return<T>`: the action, plus the value when the
+hooked function returns one.
+
+```cpp
+return { KHook::Action::Ignore };             // void handlers
+return { KHook::Action::Ignore, true };       // the value is not used with Ignore
+return { KHook::Action::Override, false };    // the original runs, false is returned
+return { KHook::Action::Supersede, false };   // the original is skipped, false is returned
+```
+
+What KHook does with each is in
+[How a hooked call runs](/docs/hooks#how-a-hooked-call-runs). For example,
+turning a connection away before the game sees it:
+
+```cpp
+KHook::Return<bool> Plugin::Hook_ClientConnect(ISource2GameClients* pThis, CPlayerSlot slot, const char* pszName, uint64 xuid, const char* pszNetworkID, bool unk1, CBufferString* pRejectReason)
+{
+    if (IsBanned(xuid))
+        return { KHook::Action::Supersede, false };   // the game never sees this connection
+
+    return { KHook::Action::Ignore, true };
+}
+```
+
+## Changing what the original sees
+
+### Through pointers
+
+Arguments passed by pointer or reference can simply be changed in a **Pre**
+handler: the original runs afterwards and reads what you left there. This is
+the sample plugin's damage scaling:
+
+```cpp
+KHook::Return<int64_t> SamplePlugin::Hook_TakeDamageOld(CBaseEntity* pThis, CTakeDamageInfo* pInfo, CTakeDamageResult* pResult)
+{
+    // A Pre hook: the original runs after it, with whatever is in pInfo by then.
+    if (pInfo && sample_damage_scale.Get() != 1.0f)
+        pInfo->m_flDamage *= sample_damage_scale.Get();
+
+    return { KHook::Action::Ignore, 0 };
+}
+```
+
+### Changing the arguments
+
+Arguments passed by value cannot be changed that way. `KHook::Recall` carries
+the call on with **new arguments**: the hooks after yours, the original and
+every Post handler see them instead of the ones the caller passed. Your own
+handler is not called again — the call picks up right after it. The action you
+pass is your handler's action as usual, so `Ignore` lets the original run with
+the new arguments. `Recall` hands that return back, so it is the whole of the
+handler's `return`:
+
+```cpp
+// Hooked with KHOOK_MEMBER(m_hSetModel, ADDR_SET_MODEL(), &Plugin::Hook_SetModel, nullptr)
+KHook::Return<void> Plugin::Hook_SetModel(CBaseModelEntity* pThis, const char* pszModel)
+{
+    if (V_strcmp(pszModel, "models/weapons/old.vmdl"))
+        return { KHook::Action::Ignore };
+
+    const char* pszReplacement = "models/weapons/new.vmdl";
+    return KHook::Recall(ADDR_SET_MODEL(), KHook::Return<void>{ KHook::Action::Ignore }, pThis, pszReplacement);
+}
+```
+
+The first argument of `Recall` only supplies the function's **type** — KHook
+calls the chain it is already in, not that pointer. For a detour, pass the
+typed function pointer (an `ADDR_*` getter or your own typedef); for a virtual
+hook, the member function pointer (`&ISource2GameClients::ClientCommand`).
+Do not pass a pointer to an SDK schema helper such as
+`&CBaseModelEntity::SetModel` — its parameter list is the helper's (it has a
+`HookChain` argument), not the game function's.
+
+This is SourceHook's `RETURN_META_NEWPARAMS`. Only call it from inside a
+handler — KHook aborts on a recall made anywhere else.
+
+## Calling the original
+
+From a Pre handler, `CallOriginal` runs the real function with the arguments
+you give it, past every hook on it — then supersede, so KHook does not run it
+a second time. The member declared by the macro has `CallOriginal` itself and
+forwards `->` to the KHook object underneath:
+
+```cpp
+// Public plugin: auto-bunnyhop for a whitelisted player, for this one call.
+sv_autobunnyhopping.Set(true);
+m_hCheckJumpButtonLegacy->CallOriginal(pThis, mv);
+sv_autobunnyhopping.Set(false);
+
+return { KHook::Action::Supersede };
+```
+
+Use it to act on the original's result from inside the Pre handler, to run it
+with changed global state around it, or to run it more than once:
+
+```cpp
+const int64_t ret = m_hTakeDamageOld.CallOriginal(pThis, pInfo, pResult);
+// ... pResult is filled in now ...
+return { KHook::Action::Supersede, ret };
+```
+
+Outside a handler, `KHook::CallOriginal(function, args...)` does the same for
+any function — hooked by you or by someone else. For a member function pointer
+it finds the original behind a vtable hook or a detour; for a plain function
+pointer it finds the original behind a detour. For the toolkit's `ADDR_*`
+functions there is the shorter [`TOOLKIT_ORIGINAL`](/docs/hooks/addresses#calling-past-the-hooks).
+
+<Callout type="warn">
+  `Supersede` skips the original **for every remaining Pre handler too**. If
+  you called the original yourself and only want to stop KHook calling it a
+  second time, supersede is still the right answer — but hooks registered
+  after yours will not see it run.
+</Callout>
+
+## Reading the return value in Post
+
+In a Post handler the original has already run. These are only valid inside a
+Post handler:
+
+```cpp
+bool original  = KHook::GetOriginalReturn<bool>();    // what the original returned
+bool overriden = KHook::GetOverrideReturn<bool>();    // what a Pre handler overrode it with
+bool current   = KHook::GetCurrentReturn<bool>();     // what the call is going to return
+bool skipped   = KHook::WasOriginalFunctionSkipped(); // did a Pre handler supersede it
+```
+
+`GetOriginalReturn` is meaningless when the original was superseded — check
+`WasOriginalFunctionSkipped()` first.
+
+## Recursion
+
+A handler that calls the function it hooks — through the game, a schema helper
+or an `ADDR_*` pointer — runs straight back into its own hook. Unless the
+handler guards against it, that is endless recursion. Call the original instead:
+
+| from inside the hook of… | call it as |
+|---|---|
+| your own `m_hX` | `m_hX.CallOriginal(...)` |
+| an `ADDR_*` function | `TOOLKIT_ORIGINAL(ADDR_...())(...)` |
+| a function a schema helper wraps | the helper with `HookChain::Bypass` |
+
+```cpp
+// Inside a TerminateRound hook: end the round now, without re-entering the hook.
+pGameRules->TerminateRound(5.0f, static_cast<int32_t>(nReason), 0, HookChain::Bypass);
+```
+
+`CCSGameRules::TerminateRound` and `CCSPlayerController::TakeDamage` already
+default to `HookChain::Bypass`; every other helper defaults to
+`HookChain::Run`. See [Addresses](/docs/hooks/addresses#hookchain-on-schema-helpers).
+
+The opposite case is fine: calling **another** hooked function from a handler
+runs that function's hooks as usual.
+
+## Threads and context
+
+The handler's context is the object that declared the hook, so handlers are
+ordinary member functions with access to your state. KHook itself is
+thread-safe, but your handler runs on whatever thread called the hooked
+function — engine code does not always run on the game thread. Keep a handler
+that can be reached from elsewhere free of anything that is not thread-safe,
+or hand the work to the game thread.
+
+Keep hot handlers cheap. `PostThink`, the movement functions and
+`PostEventAbstract` run for every player every tick; return early on the cases
+you do not care about.

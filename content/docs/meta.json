@@ -1,0 +1,13 @@
+{
+    "pages":  [
+                  "(docs)",
+                  "core-api",
+                  "schema",
+                  "convars-commands",
+                  "entities",
+                  "protobuf",
+                  "events",
+                  "panorama",
+                  "hooks"
+              ]
+}

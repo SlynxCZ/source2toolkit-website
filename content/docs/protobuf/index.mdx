@@ -1,0 +1,112 @@
+---
+title: Net Messages
+description: What network and user messages are in Source 2, how they are identified by id and by name, and how the toolkit lets you send and hook them.
+---
+
+Everything a CS2 server and its clients say to each other is a **protobuf
+message**: the chat line, the screen shake, a sound starting, a voice packet,
+the player's movement input. Each one is a message type from Valve's `.proto`
+files plus a numeric **message id**. Source2Toolkit lets you build and send
+them, and sit on the wire in both directions to read, change or drop them.
+
+<Cards>
+  <Card title="Sending messages" href="/docs/protobuf/sending">Allocate a message, fill its fields, send it to one player or many.</Card>
+  <Card title="Hooking messages" href="/docs/protobuf/hooking">Read, change, redirect or block messages going out and coming in.</Card>
+  <Card title="Common messages" href="/docs/protobuf/common-messages">Fade, shake, text, hint, sounds — ids, proto names and fields.</Card>
+</Cards>
+
+## Kinds of messages
+
+| prefix | direction | id enum (`.proto` file) | message class | examples |
+|---|---|---|---|---|
+| `net_` | both ways, engine level | `NET_Messages` (`networkbasetypes.proto`) | `CNETMsg_*` | `net_Tick`, `net_StringCmd`, `net_SetConVar` |
+| `clc_` | client → server | `CLC_Messages` (`netmessages.proto`) | `CCLCMsg_*` | `clc_Move`, `clc_VoiceData`, `clc_RespondCvarValue` |
+| `svc_` | server → client | `SVC_Messages` (`netmessages.proto`) | `CSVCMsg_*` | `svc_Print`, `svc_VoiceData`, `svc_GetCvarValue` |
+| `UM_` | server → client, user messages | `EBaseUserMessages` (`usermessages.proto`) | `CUserMessage*` | `UM_Fade`, `UM_Shake`, `UM_TextMsg`, `UM_SayText2` |
+| `CS_UM_` | server → client, CS2 user messages | `ECstrike15UserMessages` (`cstrike15_usermessages.proto`) | `CCSUsrMsg_*` | `CS_UM_HintText`, `CS_UM_ServerRankRevealAll` |
+| `GE_` | server → client, game events | `EBaseGameEvents` (`gameevents.proto`), `ECsgoGameEvents` (`cs_gameevents.proto`) | `CMsg*` | `GE_SosStartSoundEvent`, `GE_FireBulletsId` |
+| `TE_` | server → client, temp entities | `ETEProtobufIds` (`te.proto`) | `CMsgTE*` | `TE_EffectDispatchId`, `TE_ExplosionId` |
+
+**User messages** are what most plugins want: short server-to-client
+messages that drive the HUD and effects — text in chat or the centre of the
+screen, screen fades and shakes, hint boxes. The `net_` / `clc_` / `svc_`
+messages are the engine's own protocol; you mostly hook those rather than send
+them.
+
+<Callout type="info">
+  The toolkit's **game events** API ([Events](/docs/events)) is a different
+  thing: `IGameEvent` events like `player_death`. The `GE_` protobuf messages
+  above are network messages the engine happens to call "game events"
+  (sounds, decals, bullets).
+</Callout>
+
+## Ids and names
+
+Every message type is registered with the engine's `INetworkMessages` under
+both an **id** and the **name** of its protobuf class. The toolkit takes
+either:
+
+- **By id** — the value from the `.proto` enum, e.g. `UM_Shake` = 120,
+  `CS_UM_HintText` = 323, `clc_VoiceData` = 22. The generated headers give
+  them to you as plain enums: include `usermessages.pb.h`,
+  `cstrike15_usermessages.pb.h`, `netmessages.pb.h`, … (generated into your
+  build by the SDK). The SDK also has them as `enum class` types under
+  `source2toolkit/schema/entity/enums/` (`EBaseUserMessages`,
+  `ECstrike15UserMessages`, `SVC_Messages`, `CLC_Messages`, …).
+- **By name** — the protobuf class name, e.g. `"CUserMessageShake"`,
+  `"CCSUsrMsg_HintText"`, `"CSVCMsg_GetCvarValue"`. The lookup is a **partial**
+  match: `"Shake"` also works, but it matches `CUserMessageShake`,
+  `CUserMessageShakeDir` and `CCSUsrMsg_Shake` alike, and you get whichever the
+  engine finds first. Use the full class name.
+
+The id is what everything else keys on: sending needs it, and hooks report it.
+Allocating by name is a convenience for when you do not have the enum at hand —
+you still pass the id when you send.
+
+<Callout type="warn">
+  CS2 carries two families side by side: `UM_Shake` (`CUserMessageShake`,
+  field `amplitude`) and `CS_UM_Shake` (`CCSUsrMsg_Shake`, field
+  `local_amplitude`), `UM_Fade` and `CS_UM_Fade`, and so on. Their fields
+  differ. Pick one, and fill the fields of **that** message — field names are
+  looked up on the message you allocated, and a name it does not have is
+  silently ignored.
+</Callout>
+
+## Fields
+
+A message's fields are exactly those in its `.proto` definition. The toolkit
+reads and writes them by name through protobuf reflection, so you do not need
+the generated class — only the field names and types from the `.proto`:
+
+```text title="usermessages.proto"
+message CUserMessageShake {
+	optional uint32 command = 1;
+	optional float amplitude = 2;
+	optional float frequency = 3;
+	optional float duration = 4;
+}
+```
+
+→ `SetUInt32(msg, "command", 0)`, `SetFloat(msg, "amplitude", 10.0f)`, …
+The `.proto` files for CS2 are published in the
+[SteamDatabase/Protobufs](https://github.com/SteamDatabase/Protobufs/tree/master/csgo)
+repository.
+
+## How messages travel
+
+The server sends every message through `IGameEventSystem::PostEventAbstract`,
+with a recipient set of player slots. Messages from clients arrive per client
+and pass through the engine's pre-filter
+(`INetworkMessageProcessingPreFilter::FilterMessage`) before the server handles
+them. The toolkit hooks both places once and hands every plugin a callback:
+
+| API | sees |
+|---|---|
+| `NET_MSG_SEND` / `NET_MSG_SEND_PLAYERS` | — sends through `PostEventAbstract` |
+| `HOOK_SERVER_MESSAGE` | everything posted through `PostEventAbstract`, with its recipients |
+| `HOOK_CLIENT_MESSAGE` | everything a client sends to the server |
+| `HOOK_SERVER_INTERNAL_MESSAGE` | messages as they go out on one client's channel |
+
+All of it is on `IToolkitNetworkMessages`, reached through
+`g_pToolkitNetworkMessages` once `TOOLKIT_SAVEVARS()` has run. Reference:
+[IToolkitNetworkMessages](/docs/core-api/IToolkitNetworkMessages).

@@ -1,0 +1,163 @@
+---
+title: Common Messages
+description: Useful CS2 user and net messages — their ids, protobuf class names and fields, checked against the game's .proto files.
+---
+
+A reference for the messages plugins use most. Every id and class name here is
+taken from the CS2 `.proto` files (`usermessages.proto`,
+`cstrike15_usermessages.proto`, `netmessages.proto`, `networkbasetypes.proto`,
+`cs_gameevents.proto`); the fields are listed with their `.proto` types so you
+can pick the right accessor ([Setting fields](/docs/protobuf/sending#setting-fields)).
+
+Valve changes these between updates. When a message does not do what this page
+says, compare with the current `.proto` in
+[SteamDatabase/Protobufs](https://github.com/SteamDatabase/Protobufs/tree/master/csgo).
+
+## Text
+
+Before sending text yourself, look at the helpers: `CBasePlayerController`
+has `PrintToChat`, `PrintToCenter`, `PrintToCenterAlert` and `PrintToConsole`,
+all built on `UM_TextMsg`, and `CCSPlayerController::PrintToCenterHtml` shows
+HTML in the centre of the screen.
+
+| id | value | class | fields |
+|---|---|---|---|
+| `UM_TextMsg` | 124 | `CUserMessageTextMsg` | `uint32 dest`, `repeated string param` |
+| `UM_SayText2` | 118 | `CUserMessageSayText2` | `int32 entityindex`, `bool chat`, `string messagename`, `string param1` … `param4`, `bool textallchat` |
+| `UM_SayText` | 117 | `CUserMessageSayText` | `int32 playerindex`, `string text`, `bool chat`, `bool textallchat` |
+| `CS_UM_HintText` | 323 | `CCSUsrMsg_HintText` | `string message` |
+| `CS_UM_KeyHintText` | 324 | `CCSUsrMsg_KeyHintText` | `repeated string messages` |
+| `CS_UM_RadioText` | 322 | `CCSUsrMsg_RadioText` | `int32 msg_dst`, `int32 client`, `string msg_name`, `repeated string params` |
+| `svc_Print` | 48 | `CSVCMsg_Print` | `string text` — prints to the client's console |
+
+`UM_TextMsg`'s `dest` is where the text appears. The values the SDK's print
+helpers use:
+
+| `dest` | where | helper |
+|---|---|---|
+| 1 | notify area | |
+| 2 | console | `PrintToConsole` |
+| 3 | chat | `PrintToChat` |
+| 4 | centre of the screen | `PrintToCenter` |
+| 6 | centre alert | `PrintToCenterAlert` |
+
+The text goes in `param` — the first element is the message (or a localisation
+token), the rest are its arguments.
+
+```cpp
+void* pMsg = NET_MSG_ALLOC_BY_ID(UM_TextMsg);
+g_pToolkitNetworkMessages->SetUInt32(pMsg, "dest", 3);
+g_pToolkitNetworkMessages->AddString(pMsg, "param", "Round starts in 10 seconds");
+NET_MSG_SEND_PLAYERS(pMsg, UM_TextMsg, ~0ull);
+NET_MSG_FREE(pMsg);
+```
+
+## Screen effects
+
+| id | value | class | fields |
+|---|---|---|---|
+| `UM_Shake` | 120 | `CUserMessageShake` | `uint32 command`, `float amplitude`, `float frequency`, `float duration` |
+| `UM_ShakeDir` | 121 | `CUserMessageShakeDir` | `CUserMessageShake shake` (nested), `CMsgVector direction` |
+| `UM_Fade` | 106 | `CUserMessageFade` | `uint32 duration`, `uint32 hold_time`, `uint32 flags`, `fixed32 color` |
+| `UM_ScreenTilt` | 125 | `CUserMessageScreenTilt` | `uint32 command`, `bool ease_in_out`, `CMsgVector angle`, `float duration`, `float time` |
+| `CS_UM_Shake` | 312 | `CCSUsrMsg_Shake` | `int32 command`, `float local_amplitude`, `float frequency`, `float duration` |
+| `CS_UM_Fade` | 313 | `CCSUsrMsg_Fade` | `int32 duration`, `int32 hold_time`, `int32 flags`, `CMsgRGBA clr` |
+
+Note the differences between the two families: `UM_Fade`'s colour is a packed
+`fixed32` (`SetUInt32`), `CS_UM_Fade`'s is a `CMsgRGBA` (`SetColor`);
+`UM_Shake` has `amplitude`, `CS_UM_Shake` has `local_amplitude`. For shakes,
+`command` 0 starts one — the sample plugin's `sample_shake` uses `UM_Shake`,
+FUNPLAY's slap uses `CS_UM_Shake`.
+
+```cpp
+// A red flash, CS_UM_Fade.
+void* pMsg = NET_MSG_ALLOC_BY_ID(CS_UM_Fade);
+g_pToolkitNetworkMessages->SetInt32(pMsg, "duration", 200);
+g_pToolkitNetworkMessages->SetInt32(pMsg, "hold_time", 100);
+g_pToolkitNetworkMessages->SetInt32(pMsg, "flags", 0x0001);
+g_pToolkitNetworkMessages->SetColor(pMsg, "clr", Color(255, 0, 0, 128));
+NET_MSG_SEND(pMsg, CS_UM_Fade, slot);
+NET_MSG_FREE(pMsg);
+```
+
+The `flags`, `duration` and `hold_time` of the fade messages follow the Source
+engine's screen-fade conventions; test the values on a client before relying
+on them.
+
+## Sounds
+
+| id | value | class | fields |
+|---|---|---|---|
+| `UM_SendAudio` | 130 | `CUserMessageSendAudio` | `string soundname`, `bool stop` |
+| `CS_UM_SendAudio` | 317 | `CCSUsrMsg_SendAudio` | `string radio_sound` |
+| `CS_UM_WeaponSound` | 369 | `CCSUsrMsg_WeaponSound` | `int32 entidx`, `float origin_x` / `origin_y` / `origin_z`, `string sound`, `float game_timestamp`, `fixed32 source_soundscapeid`, `bool stealth` |
+| `GE_SosStartSoundEvent` | 208 | `CMsgSosStartSoundEvent` | the game's own sound starts |
+
+For playing and filtering sounds, use `IToolkitSounds` — `SOUND_EMIT_FROM_ENTITY`
+and `HOOK_SOUND` handle `GE_SosStartSoundEvent` decoded, which is far easier
+than building or picking apart the message yourself. See
+[IToolkitSounds](/docs/core-api/IToolkitSounds).
+
+## HUD and player state (CS2)
+
+| id | value | class | fields |
+|---|---|---|---|
+| `CS_UM_ServerRankRevealAll` | 350 | `CCSUsrMsg_ServerRankRevealAll` | `int32 seconds_till_shutdown`, `reservation` — send it empty to reveal every player's rank on the scoreboard |
+| `CS_UM_EntityOutlineHighlight` | 371 | `CCSUsrMsg_EntityOutlineHighlight` | `int32 entidx`, `bool removehighlight` |
+| `CS_UM_UpdateScreenHealthBar` | 370 | `CCSUsrMsg_UpdateScreenHealthBar` | `int32 entidx`, `float healthratio_old`, `float healthratio_new`, `int32 style` |
+| `CS_UM_Damage` | 321 | `CCSUsrMsg_Damage` | `int32 amount`, `CMsgVector inflictor_world_pos`, `int32 victim_entindex` |
+| `CS_UM_AdjustMoney` | 327 | `CCSUsrMsg_AdjustMoney` | `int32 amount` |
+| `CS_UM_BarTime` | 355 | `CCSUsrMsg_BarTime` | `string time` |
+| `CS_UM_KillCam` | 330 | `CCSUsrMsg_KillCam` | `int32 obs_mode`, `int32 first_target`, `int32 second_target` |
+
+FUNPLAY's Core re-sends `CS_UM_ServerRankRevealAll` on `player_connect_full`,
+`round_start` and from a timer: the client-side reveal is time-limited and
+cleared on map change. Do not send it every tick — spamming it makes the
+client scoreboard glitch.
+
+## Engine messages
+
+| id | value | class | fields | use |
+|---|---|---|---|---|
+| `svc_GetCvarValue` | 58 | `CSVCMsg_GetCvarValue` | `int32 cookie`, `string cvar_name` | ask a client for a cvar's value |
+| `clc_RespondCvarValue` | 25 | `CCLCMsg_RespondCvarValue` | `int32 cookie`, `int32 status_code`, `string name`, `string value` | the client's answer — catch it with `HOOK_CLIENT_MESSAGE` |
+| `net_StringCmd` | 5 | `CNETMsg_StringCmd` | `string command`, `uint32 prediction_sync` | sent to a client, runs a command on it (only what the client allows from the server) |
+| `clc_VoiceData` | 22 | `CCLCMsg_VoiceData` | `CMsgVoiceAudio audio`, `fixed64 xuid`, `uint32 tick` | a client's voice — drop it to mute |
+| `svc_VoiceData` | 47 | `CSVCMsg_VoiceData` | `CMsgVoiceAudio audio`, `int32 client_deprecated`, `bool proximity`, `fixed64 xuid`, `int32 audible_mask`, `uint32 tick` | voice relayed to listeners |
+| `GE_FireBulletsId` | 452 | `CMsgTEFireBullets` | see `cs_gameevents.proto` | the server's bullet broadcast; AntiCheat reads it for exact spread |
+
+```cpp
+// Ask a client for a cvar; the answer arrives as clc_RespondCvarValue with the same cookie.
+void* pMsg = NET_MSG_ALLOC_BY_ID(svc_GetCvarValue);
+g_pToolkitNetworkMessages->SetInt32(pMsg, "cookie", ++g_iCookie);
+g_pToolkitNetworkMessages->SetString(pMsg, "cvar_name", "cl_interp_ratio");
+NET_MSG_SEND(pMsg, svc_GetCvarValue, slot);
+NET_MSG_FREE(pMsg);
+
+HOOK_CLIENT_MESSAGE([](CPlayerSlot slot, int messageid, void* msg) -> Action
+{
+    if (messageid == clc_RespondCvarValue)
+    {
+        int cookie = g_pToolkitNetworkMessages->GetInt32(msg, "cookie");
+        std::string value = g_pToolkitNetworkMessages->GetString(msg, "value");
+        // ... match the cookie to the request ...
+    }
+    return Action::Ignore;
+});
+```
+
+## Where the ids come from
+
+| enum | header to include | SDK `enum class` |
+|---|---|---|
+| `UM_*` | `usermessages.pb.h` | `EBaseUserMessages` |
+| `CS_UM_*` | `cstrike15_usermessages.pb.h` | `ECstrike15UserMessages` |
+| `svc_*`, `clc_*` | `netmessages.pb.h` | `SVC_Messages`, `CLC_Messages` |
+| `net_*` | `networkbasetypes.pb.h` | `NET_Messages` |
+| `GE_*` (base) | `gameevents.pb.h` | `EBaseGameEvents` |
+| `GE_*Id` (CS2) | `cs_gameevents.pb.h` | `ECsgoGameEvents` |
+| `TE_*Id` | `te.pb.h` | `ETEProtobufIds` |
+
+The `.pb.h` headers declare plain enums, usable directly as the `int` id; the
+SDK's `enum class` versions live in `source2toolkit/schema/entity/enums/` and
+need a `static_cast<int>`.

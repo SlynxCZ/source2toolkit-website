@@ -1,74 +1,171 @@
-﻿---
+---
 title: Installation
+description: Install Metamod:Source and Source2Toolkit on a Counter-Strike 2 server, and check that both are running.
 ---
 
-This guide will walk you through installing **Source2Toolkit** on your **Counter-Strike 2 server**.
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Source2Toolkit is a Metamod:Source plugin, so a server needs Metamod first and the toolkit on top of it. Both are folders you copy into `game/csgo/`. Linux and Windows servers are both supported.
 
 ## Prerequisites
 
-* Latest **Source2Toolkit release**
-* [MetaMod:Source 2.X](https://www.metamodsource.net/downloads.php?branch=dev) *(Required)*
+- A Counter-Strike 2 dedicated server you can restart and reach the console of.
+- [Metamod:Source 2.x](https://www.metamodsource.net/downloads.php?branch=dev) — a current dev build, matching your OS.
+- The latest [Source2Toolkit release](https://github.com/SlynxCZ/source2toolkit/releases) — `source2toolkit_<version>-linux.tar.gz` or `source2toolkit_<version>-windows.tar.gz`.
 
-<Callout type="note">
-  Source2Toolkit is loaded through <b>MetaMod:Source</b>.
-  Ensure your MetaMod build is compatible with your current CS2 server version.
+<Callout type="warn">
+  CS2 updates regularly break older Metamod builds. When the server stops loading Metamod after a game update, update Metamod before looking anywhere else.
 </Callout>
 
-## Installing Source2Toolkit
+## Install Metamod:Source
 
-1. Download the latest **Source2Toolkit release** for your operating system.
-2. Extract the archive. You will find the following directory:
+<Steps>
+<Step>
 
-* `/addons/source2toolkit` — the **Source2Toolkit plugin**
+Download the Metamod:Source build for your operating system and extract it.
 
-3. Copy the `/addons` directory to your server’s `/game/csgo/` folder.
+</Step>
+<Step>
 
-<Callout type="warning">
-  If this is your first time installing MetaMod, make sure it is properly installed before continuing.
+Copy its `addons/` folder into your server's `game/csgo/` folder, so that you end up with `game/csgo/addons/metamod/`.
+
+</Step>
+<Step>
+
+Open `game/csgo/gameinfo.gi`, find the line
+
+```
+Game_LowViolence	csgo_lv // Perfect World content override
+```
+
+and add this line **below** it:
+
+```
+Game	csgo/addons/metamod
+```
+
+</Step>
+<Step>
+
+Start the server and run `meta list` in its console. If the command is known, Metamod is loaded.
+
+</Step>
+</Steps>
+
+<Callout type="info">
+  Game updates overwrite `gameinfo.gi`. If Metamod disappears after an update, the `Game csgo/addons/metamod` line is the first thing to check.
 </Callout>
 
-## Installing MetaMod
+## Install Source2Toolkit
 
-1. Download the latest [MetaMod:Source build](https://www.metamodsource.net/downloads.php?branch=dev) for your operating system.
+<Steps>
+<Step>
 
-2. Extract the archive.
+Download the release archive for your operating system and extract it. It contains a single `addons/` folder.
 
-3. Copy the `/addons/metamod/` directory to your server’s `/game/csgo/` folder.
+</Step>
+<Step>
 
-4. Locate your `gameinfo.gi` file inside `/game/csgo/` and open it.
+Copy that `addons/` folder into `game/csgo/`, merging it with the one Metamod created.
 
-5. Find the line:
+</Step>
+<Step>
 
-```
-Game_LowViolence csgo_lv
-```
+Restart the server. The toolkit has to be loaded at server start: loading it later with `meta load` is refused (`Late load is not supported`).
 
-and add the following line **below** it:
+</Step>
+</Steps>
 
-```
-Game csgo/addons/metamod
-```
-
-6. Save the file and restart your server.
-
-7. Run the command `meta list` in your server console to verify MetaMod is loaded.
-
-## Verifying Source2Toolkit
-
-Once the server is running:
-
-1. Open the server console.
-2. Run:
+### What the release contains
 
 ```
-meta list
+game/csgo/addons/
+├── metamod/
+│   └── source2toolkit.vdf          # tells Metamod to load the toolkit
+└── source2toolkit/
+    ├── bin/
+    │   └── linuxsteamrt64/          # win64/ in the Windows archive
+    ├── configs/
+    │   └── core.example.json        # template for core.json
+    ├── gamedata/
+    │   └── gamedata.json            # the core's signatures and offsets
+    ├── plugins/                     # your .stx plugins go here
+    ├── shared/                      # data more than one plugin reads
+    └── dumps/                       # crash dumps land here
 ```
 
-3. Ensure **Source2Toolkit** appears in the plugin list.
+| Folder | What it is for |
+|---|---|
+| `bin/` | The toolkit core binary. |
+| `configs/` | `core.json`, and one `configs/<PluginName>/` folder per plugin for its own config files (`PLUGIN_CONFIG_DIR()`). |
+| `gamedata/` | Every `.json` file here is loaded at start. Plugins that need signatures of their own ship an extra file next to `gamedata.json` — see [Gamedata](/docs/development/gamedata). |
+| `plugins/` | Every `.stx` file here is loaded at start. |
+| `shared/` | Data files read by more than one plugin (`TOOLKIT_SHARED_DIR()`). |
+| `dumps/` | Minidumps and crash reports written by the [crash handler](/docs/guides/crash-handler). |
 
-<Callout type="tip">
-  If the plugin does not appear, verify that files are located in <code>/addons/source2toolkit</code> and that MetaMod is loading correctly.
-</Callout>
+Missing folders are created on start, so deleting an empty one does no harm.
 
-**You’re done!**
-Source2Toolkit is now installed and ready to use on your server.
+## Core configuration
+
+On its first start the core copies `configs/core.example.json` to `configs/core.json` and reads that from then on. Releases only ship the example, so updating the toolkit never overwrites your settings.
+
+```json title="configs/core.json"
+{
+  "PublicChatTrigger": [ "!" ],
+  "SilentChatTrigger": [ "/" ],
+  "PluginHotReloadEnabled": true,
+  "PluginAutoLoadEnabled": true,
+  "UnlockConCommands": true,
+  "UnlockConVars": true,
+  "CrashHandlerEnabled": true,
+  "CrashDiscordWebhook": ""
+}
+```
+
+| Key | Default | Meaning |
+|---|---|---|
+| `PublicChatTrigger` | `["!"]` | Chat prefixes that run a command. `!mycommand` runs the plugin command `mycommand` and the message still shows in chat. |
+| `SilentChatTrigger` | `["/"]` | Same, but the chat message is suppressed. |
+| `PluginHotReloadEnabled` | `true` | Linux only: reload a plugin when its `.stx` is rewritten. See [Plugin lifecycle](/docs/development/plugin-lifecycle#hot-reload). |
+| `PluginAutoLoadEnabled` | `true` | Load every `.stx` in `plugins/` at start. When `false`, nothing loads until you run `toolkit refresh` or `toolkit load`. |
+| `UnlockConCommands` | `true` | Remove `FCVAR_HIDDEN` and `FCVAR_DEVELOPMENTONLY` from every console command, so hidden commands can be used. |
+| `UnlockConVars` | `true` | The same for ConVars. |
+| `CrashHandlerEnabled` | `true` | Install the crash handler. |
+| `CrashDiscordWebhook` | `""` | Discord webhook URL for crash reports. Empty disables Discord reporting; dumps are still written. |
+
+The file is read once, when the core loads. Restart the server after changing it.
+
+## Installing plugins
+
+Copy a plugin's `.stx` file into `addons/source2toolkit/plugins/`. If it comes with configs, gamedata or shared data, those go into `configs/`, `gamedata/` and `shared/` as its instructions say.
+
+On a running server, `toolkit refresh` loads every `.stx` in `plugins/` that is not loaded yet; a new gamedata file, however, is only read when the server restarts.
+
+## Verifying the installation
+
+Run `meta list` in the server console. **Source2Toolkit** should be in the list of Metamod plugins.
+
+Then ask the toolkit itself. The console command is `toolkit` (with the aliases `st`, `s2t`, `s2toolkit`, `stoolkit`, `source2t` and `source2toolkit`):
+
+```
+toolkit version
+toolkit list
+```
+
+| Command | What it does |
+|---|---|
+| `toolkit list` | Lists loaded plugins as `[id] name (version) by author`. |
+| `toolkit info <id>` | Name, version, author, description and file path of one plugin. |
+| `toolkit load <name>` | Loads the first `.stx` in `plugins/` whose file name contains `<name>`. |
+| `toolkit unload <id>` | Unloads a plugin by the id `toolkit list` shows. |
+| `toolkit refresh` | Loads every `.stx` in `plugins/` that is not loaded yet. |
+| `toolkit version` | Toolkit version, plugin API version, build date and commit. |
+| `toolkit credits` | Who made it. |
+
+`load`, `unload` and `refresh` work only from the server console (or RCON). Players can run `list`, `info`, `version` and `credits` from their own console.
+
+## When something does not load
+
+- **Source2Toolkit is not in `meta list`** — Metamod is not loading it. Check that `addons/metamod/source2toolkit.vdf` exists and that the `bin/` folder for your OS is there.
+- **A plugin is missing from `toolkit list`** — the core prints why at start: `Plugin <name> refused to load: <reason>` or `Failed to load <path>: <reason>`, followed by a summary line with the number that failed. A `KHook mismatch` reason means the plugin was built against a different KHook than the core runs; see the [FAQ](/docs/resources/faq#a-plugin-refuses-to-load-with-khook-mismatch).
+- **The server crashes on start** — see the [crash handler guide](/docs/guides/crash-handler); the report on the next start names the module that crashed.

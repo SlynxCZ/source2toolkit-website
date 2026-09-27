@@ -1,0 +1,149 @@
+---
+title: Command Listeners
+description: Running code before or after commands the game, the engine or other plugins own — and blocking them.
+---
+
+A listener is a callback on a command that already exists: `jointeam`, `say`,
+`kill`, an engine command, another plugin's command. It runs *around* the
+command rather than replacing it, and a pre listener decides whether the
+command runs at all.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitCommands.h"
+
+// No spectators: refuse "jointeam 1".
+REGISTER_CON_LISTENER("jointeam", [](const CCommandContext& context, const CCommand& args, bool post) -> Action
+{
+    if (args.ArgC() >= 2 && atoi(args.Arg(1)) == 1)
+    {
+        Reply(context, "Spectating is disabled on this server.");
+        return Action::Supersede;
+    }
+
+    return Action::Ignore;
+}, false);
+```
+
+(`Reply` is the helper from the [Commands](/docs/convars-commands/commands#the-caller) page.)
+
+## The API
+
+```cpp title="IToolkitCommands.h"
+using CommandHandler = std::function<Action(const CCommandContext&, const CCommand&, bool post)>;
+
+virtual void RegisterConListener(PluginId owner, const char* pchName, CommandHandler handler, bool post) = 0;
+virtual void UnregisterConListener(PluginId owner, const char* pchName, bool post) = 0;
+
+#define REGISTER_CON_LISTENER(pchName, handler, post)
+#define UNREGISTER_CON_LISTENER(pchName, post)
+```
+
+- `pchName` — the command to listen to, in **lower case** (the dispatcher
+  lower-cases what was typed before it looks for listeners).
+- `post` — `false` to run before the command, `true` to run after it. Register
+  twice if you need both.
+- The handler gets the same `CCommandContext` and `CCommand` a command handler
+  gets — see [arguments and the caller](/docs/convars-commands/commands#arguments).
+
+A plugin can register several listeners on the same command. They are called in
+registration order. `UNREGISTER_CON_LISTENER(name, post)` drops all of this
+plugin's listeners on `name` for that side; unloading the plugin drops all of them.
+
+## Return values
+
+Listeners return an [`Action`](/docs/core-api/IToolkitTypes):
+
+| Return | Pre (`post == false`) | Post (`post == true`) |
+| --- | --- | --- |
+| `Action::Ignore` | Nothing changes; the next listener runs, then the command. | Nothing. |
+| `Action::Override` | The command still runs, but the remaining pre listeners are skipped — and for a console command the post listeners too. | Nothing. |
+| `Action::Supersede` | The command does **not** run. The remaining listeners — pre and post — are skipped. | The command already ran; only the remaining post listeners are skipped. |
+
+In practice: return `Ignore` when you only watch, `Supersede` when you block,
+and avoid `Override` — for a command there is no return value to override, and
+it silently cuts the other listeners off.
+
+<Callout type="warn">
+A `Supersede` from your listener also stops every listener registered after it,
+including other plugins' and the handler of a command registered with
+`REGISTER_CON_COMMAND` on the same name. Block only what you mean to block.
+</Callout>
+
+## Pre and post together
+
+```cpp title="plugin.cpp"
+REGISTER_CON_LISTENER("jointeam", [](const CCommandContext& context, const CCommand& args, bool post) -> Action
+{
+    // Pre: decide.
+    return Action::Ignore;
+}, false);
+
+REGISTER_CON_LISTENER("jointeam", [](const CCommandContext& context, const CCommand& args, bool post) -> Action
+{
+    // Post: the team change has been processed -- react to it.
+    TOOLKIT_LOG(&g_Plugin, "Slot %d ran \"%s\"\n", context.GetPlayerSlot().Get(), args.GetCommandString());
+    return Action::Ignore;
+}, true);
+```
+
+## Which commands can be listened to
+
+The core hooks the engine's command dispatch, so a listener sees:
+
+- every console command run from the **server console** or RCON;
+- console commands a **client** runs that go through the engine's command
+  system;
+- **`jointeam`**, which the game handles as a raw client command — the core
+  routes it to listeners separately;
+- **chat**: `say` and `say_team` (see below), and every chat command typed with
+  a [chat trigger](/docs/convars-commands#console-commands-and-chat-commands).
+
+A client command the game handles itself, outside the console system, does not
+reach listeners (apart from `jointeam`). For those, hook
+`ISource2GameClients::ClientCommand` with `KHOOK_VIRTUAL` — the sample plugin
+does exactly that; see [Hooking](/docs/hooks#virtual-hooks).
+
+## Filtering chat
+
+Plain chat messages arrive as `say` (all chat) and `say_team` (team chat). A
+pre listener on them is a chat filter; `Supersede` drops the message. This is
+how FUNPLAY's Public plugin stops empty and repeated messages:
+
+```cpp title="chat.cpp"
+static Action OnPlayerChat(const CCommandContext& ctx, const CCommand& args, bool post)
+{
+    CCSPlayerController* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot().Get());
+    if (!player)
+        return Action::Ignore;
+
+    // The message is everything after "say", possibly wrapped in quotes.
+    std::string message = args.ArgS();
+    if (!message.empty() && message.front() == '"') message.erase(message.begin());
+    if (!message.empty() && message.back() == '"')  message.pop_back();
+
+    if (message.empty())
+        return Action::Supersede;
+
+    return Action::Ignore;
+}
+
+// in Load()
+REGISTER_CON_LISTENER("say", OnPlayerChat, false);
+REGISTER_CON_LISTENER("say_team", OnPlayerChat, false);
+```
+
+A message that starts with a chat trigger (`!`, `/`, …) does **not** reach the
+`say` listeners — the core dispatches it as the command it names instead. With a
+pre listener on that command name you can see it (and, with `Supersede`, hide
+the chat line); a `say` filter only ever sees ordinary chat.
+
+## Listeners vs. commands
+
+| You want to… | Use |
+| --- | --- |
+| Add a new command | [`REGISTER_CON_COMMAND`](/docs/convars-commands/commands) |
+| Add a chat word without a console command | [`REGISTER_CHAT_LISTENER`](/docs/convars-commands/commands#chat-only-commands) |
+| Watch or block an existing command | `REGISTER_CON_LISTENER` |
+| Replace an existing command | `REGISTER_CON_LISTENER`, pre, do your thing, return `Action::Supersede` |
+
+Full reference: [`IToolkitCommands`](/docs/core-api/IToolkitCommands).

@@ -1,0 +1,187 @@
+---
+title: Sounds
+description: Play sound events for exactly the players you pick, stop or change them by guid, give players volume channels, and rewrite the game's own sounds.
+---
+
+`IToolkitSounds` builds and sends the sound event network message itself
+instead of going through an entity on the server. That gives you four things:
+
+- a sound goes to **exactly the recipients you pick** — nobody else receives it;
+- every emit returns a **guid** that stops the sound or changes it while it plays;
+- **volume channels**: each player can have their own volume for `"music"`,
+  `"effects"` or any name you choose, applied per recipient;
+- every sound the game sends passes through a **hook** where it can be blocked,
+  renamed, re-parametrised or re-addressed.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitSounds.h"
+```
+
+## One-call emits
+
+For the common case there is one call per audience. All of them return the
+`SoundGuid` of the new sound (0 when nobody received it).
+
+```cpp
+SoundGuid EmitSoundToPlayer(CPlayerSlot slot, const char* name, float volume = 1.0f, float pitch = 1.0f, const char* channel = nullptr);
+SoundGuid EmitSoundToPlayers(SoundRecipients recipients, const char* name, float volume = 1.0f, float pitch = 1.0f, const char* channel = nullptr);
+SoundGuid EmitSoundToAll(const char* name, float volume = 1.0f, float pitch = 1.0f, const char* channel = nullptr);
+SoundGuid EmitSoundFromEntity(CEntityInstance* entity, const char* name, float volume = 1.0f, float pitch = 1.0f,
+                              SoundRecipients recipients = ~SoundRecipients(0), const char* channel = nullptr);
+```
+
+The first three play "in the head" of each recipient — no position, no
+falloff. From the sample plugin:
+
+```cpp title="plugin.cpp"
+REGISTER_CON_COMMAND("sample_sound", [](const CCommandContext& context, const CCommand& args, bool post)
+{
+    const CPlayerSlot slot = context.GetPlayerSlot();
+    const char* pszSound = args.ArgC() >= 2 ? args.Arg(1) : "Weapon_AK47.Single";
+
+    if (slot.IsValid())
+        SOUND_EMIT_TO_PLAYER(slot, pszSound);
+    else
+        SOUND_EMIT_TO_ALL(pszSound);
+});
+```
+
+`SoundRecipients` is a `uint64_t` with one bit per player slot.
+`SoundRecipientOf(slot)` gives the mask of one slot; OR them together for a
+group.
+
+## Sound objects
+
+For anything more — a position, extra parameters, a hand-picked recipient
+list — create an `IToolkitSound`, configure it and call `Emit()`. Release it
+with `delete` (or `g_pToolkitSounds->DestroySound()`); an object can be emitted
+any number of times, each call a new sound with a new guid.
+
+```cpp title="plugin.cpp"
+IToolkitSound* pSound = IToolkitSound::New("Weapon_AK47.Single");
+
+pSound->SetVolume(0.5f);
+pSound->SetPitch(2.0f);
+
+// One of three sources:
+//   SetSourceEntityIndex(SOUND_SOURCE_LISTENER) -- at each recipient (default)
+//   SetPosition(vec)                            -- a fixed point in the world
+//   SetSourceEntity(pEntity)                    -- from an entity, following it
+pSound->SetPosition(pPawn->GetAbsOrigin() + Vector(0.0f, 0.0f, 128.0f));
+
+// Any other public parameter of the sound event, by name:
+//     pSound->SetFloat("public.my_param", 1.0f);
+
+pSound->AddAllRecipients();
+pSound->RemoveRecipient(CPlayerSlot(63));
+
+const SoundGuid guid = pSound->Emit();
+delete pSound;
+```
+
+Typed parameter setters exist for every known wire type: `SetBool`,
+`SetInt32`, `SetUInt32`, `SetUInt64`, `SetFloat`, `SetFloat3`, with matching
+getters that take a default. Names are the sound event's public fields
+(`"public.volume"`, `"public.pitch"`, `"public.position"`, or whatever a custom
+`.vsndevts` declares).
+
+Recipients: `AddRecipient(slot)`, `RemoveRecipient(slot)`, `HasRecipient(slot)`,
+`AddAllRecipients()` (everyone connected *at the time of the call*),
+`ClearRecipients()`, `SetRecipients(mask)`, `GetRecipients()`.
+
+## Stopping and changing a playing sound
+
+The guid is the handle to a sound that is already playing on the clients.
+
+```cpp
+ADD_TIMER(0.1f, [guid]() { g_pToolkitSounds->SetSoundVolume(guid, 0.1f); });
+ADD_TIMER(0.3f, [guid]() { SOUND_STOP(guid); });
+```
+
+| Call | Effect |
+| --- | --- |
+| `StopSound(guid)` | Stops it for everyone it was sent to |
+| `StopSoundForPlayers(guid, recipients)` | Stops it for some; it keeps playing for the rest |
+| `StopSoundByName(name, sourceEntityIndex = SOUND_SOURCE_LISTENER, recipients = ~SoundRecipients(0))` | Stops by name — also works for a sound the game started |
+| `SetSoundVolume(guid, volume)` | New volume; channel volumes still apply |
+| `UpdateSoundParams(guid, params, recipients = SOUND_RECIPIENTS_NONE)` | Sends the parameters set on `params` (an `IToolkitSound`) to the playing sound; 0 recipients means everyone it went to |
+
+## Volume channels
+
+A channel is just a name a sound is emitted under. Each player has a volume per
+channel (1.0 when never set), and every recipient gets the sound's volume
+multiplied by their own. A player at 0 is not sent the sound at all.
+
+```cpp
+// Emit on a channel
+g_pToolkitSounds->EmitSoundToAll("jb.duel", 1.0f, 1.0f, "music");
+
+// A player's preference, e.g. from a !volume menu
+g_pToolkitSounds->SetPlayerVolume(player->GetPlayerSlot(), "music", 0.4f);
+float v = g_pToolkitSounds->GetPlayerVolume(player->GetPlayerSlot(), "music");
+g_pToolkitSounds->ResetPlayerVolumes(player->GetPlayerSlot());
+```
+
+`SetPlayerVolume()` applies straight away to what the player is still hearing
+on that channel — it gets louder, quieter, or stops — so a volume menu gives
+instant feedback.
+
+<Callout type="info">
+  Channel volumes are forgotten when the player disconnects, and the toolkit
+  stores nothing on disk. Load the player's preferences from wherever your
+  plugin keeps them (a database, an HTTP backend) when they connect, and call
+  `SetPlayerVolume()` for every channel — including ones whose default is not
+  1.0.
+</Callout>
+
+## Hooking the game's sounds
+
+`HOOK_SOUND(handler)` installs a `SoundHook`
+(`std::function<Action(IToolkitSound* sound)>`) that sees every sound the game
+is about to send. Return `Action::Ignore` to leave it alone,
+`Action::Override` to send it with your changes, `Action::Supersede` to drop it.
+
+```cpp title="plugin.cpp"
+HOOK_SOUND([](IToolkitSound* sound) -> Action
+{
+    // Sounds travel as hashes. Hash the names you care about once and
+    // compare numbers.
+    static const uint32_t s_nKnifeHit = g_pToolkitSounds->HashSoundName("Weapon_Knife.Hit");
+
+    if (sound->GetNameHash() != s_nKnifeHit)
+        return Action::Ignore;
+
+    sound->SetPitch(1.5f);
+    return Action::Override;
+});
+```
+
+- A hooked sound arrives as a **hash**. `GetName()` only resolves names the
+  toolkit has seen — anything you emitted or passed to `HashSoundName()` — and
+  returns `""` otherwise. `LookupSoundName(hash)` returns `nullptr` for unknown
+  hashes.
+- **Do not call `Emit()` inside the hook** — the sound is already on its way;
+  change it and return `Action::Override`.
+- Sounds you send through this interface do not come back through the hook.
+- Client-predicted sounds (a player's own shots, knife swings, footsteps) are
+  played locally by that client and never reach the server; the copy the
+  *other* players get does pass through the hook.
+- One hook per plugin: hooking again replaces the handler. `UNHOOK_SOUND()`
+  removes it.
+
+## Pitfalls
+
+- **Main thread only.** Everything in this interface belongs on the main
+  thread.
+- **Keep the guid, not the object.** A guid is all you need to stop or change a
+  sound later; the `IToolkitSound` can be deleted right after `Emit()`. A timer
+  that stops a sound should capture the guid by value.
+- **Unload.** The sound hook and any `IToolkitSound` objects your plugin leaves
+  behind are removed when it unloads.
+- `AddAllRecipients()` is a snapshot. A player who connects later does not get
+  a sound that was already emitted.
+
+## Reference
+
+- [`IToolkitSounds` API reference](/docs/core-api/IToolkitSounds)
+- [Scheduler](/docs/guides/scheduler) — changing or stopping a sound after a delay

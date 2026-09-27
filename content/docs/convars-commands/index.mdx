@@ -1,0 +1,102 @@
+---
+title: ConVars & Commands
+description: Console and chat commands, listening in on other commands, and console variables — what the toolkit gives you and where each piece lives.
+---
+
+Everything a server admin or a player types goes through the engine's console
+system: `mp_roundtime 5` in the server console, `jointeam 2` from a client,
+`!rtv` in chat. The toolkit hooks that dispatch once, in the core, and hands
+plugins three things on top of it:
+
+- **Commands of your own** — a console command that also answers in chat.
+- **Listeners** — a callback on a command somebody else owns (the game, the
+  engine, another plugin), before or after it runs, with the power to block it.
+- **ConVars** — your own console variables, and typed access to the game's.
+
+The interfaces are [`IToolkitCommands`](/docs/core-api/IToolkitCommands) and
+[`IToolkitConVars`](/docs/core-api/IToolkitConVars). Both come filled in by
+`TOOLKIT_SAVEVARS()` as `g_pToolkitCommands` and `g_pToolkitConVars`, and both
+headers ship short macros (`REGISTER_CON_COMMAND`, `CVAR_GET_INT`, …) that pass
+your `g_PluginID` for you.
+
+## Console commands and chat commands
+
+A command registered with `REGISTER_CON_COMMAND("mycmd", …)` is reachable three ways:
+
+| Typed where | Example | Caller |
+| --- | --- | --- |
+| Server console / RCON | `mycmd 1 2` | no player (slot `-1`) |
+| A client's console | `mycmd 1 2` | that player's slot |
+| Chat | `!mycmd 1 2` or `/mycmd 1 2` | that player's slot |
+
+Chat works through **chat triggers**. When a chat message starts with a
+trigger, the core strips the prefix, splits the rest into arguments and
+dispatches it exactly like a console command. The triggers come from the core
+config, `addons/source2toolkit/configs/core.json`:
+
+```json title="core.json"
+{
+  "PublicChatTrigger": [ "!" ],
+  "SilentChatTrigger": [ "/" ]
+}
+```
+
+- A **public** trigger (`!` by default) runs the command and the message still
+  shows in chat for everyone.
+- A **silent** trigger (`/` by default) runs the command and swallows the
+  message — nobody sees it.
+
+Both are lists, so a server can add its own prefixes (`"."`, say). Your code
+never sees the prefix: `!mycmd a b` arrives as `Arg(0) == "mycmd"`, `Arg(1) == "a"`.
+
+If you only want the chat side — a word players type, with no console command
+behind it — use `REGISTER_CHAT_LISTENER` instead. See [Commands](/docs/convars-commands/commands).
+
+## Listening to commands you do not own
+
+`REGISTER_CON_LISTENER` puts a callback on an **existing** command: `jointeam`,
+`say`, an engine command, another plugin's command. A pre listener can return
+`Action::Supersede` and the command never runs — that is a complete "no
+spectators" plugin in ten lines. See [Command listeners](/docs/convars-commands/command-listeners).
+
+## ConVars
+
+A ConVar is a named, typed value in the console: `mp_freezetime`,
+`sv_cheats`, or one your plugin declares (`myplugin_enabled`). The toolkit side
+covers:
+
+- declaring your own with hl2sdk's `CConVar<T>` (the recommended way), or at
+  runtime through `IToolkitConVars::CreateConVar`;
+- reading and writing the game's ConVars — typed `CConVarRef<T>`, the
+  index-based `IToolkitConVars` getters/setters, or the one-shot
+  `UTIL_SetConVar` helper;
+- one change callback for every ConVar in the process (`HOOK_CONVAR_CHANGE`),
+  which takes capturing lambdas.
+
+See [ConVars](/docs/convars-commands/convars). Sending one player a different
+value than everybody else is its own topic:
+[Replication](/docs/convars-commands/replication).
+
+<Callout type="info">
+The core unlocks hidden and development-only commands and ConVars at startup
+(`UnlockConCommands` and `UnlockConVars` in `core.json`, both on by default), so
+everything the game ships is reachable from the console and from plugins.
+</Callout>
+
+## Ownership and unloading
+
+Every command, listener and change callback is registered under your
+`PluginId`. When the plugin unloads, the toolkit drops all of them. You only
+call the `UNREGISTER_*` / `UNHOOK_*` macros to switch something off while the
+plugin stays loaded.
+
+The one exception is a `CConVar` you declared yourself: it lives in your
+library, so your `Unload()` has to call `ConVar_Unregister()`. The
+[ConVars](/docs/convars-commands/convars#unloading) page explains why.
+
+<Cards>
+  <Card title="Commands" href="/docs/convars-commands/commands">Console and chat commands, arguments, the caller.</Card>
+  <Card title="Command listeners" href="/docs/convars-commands/command-listeners">Pre/post callbacks on existing commands, blocking them.</Card>
+  <Card title="ConVars" href="/docs/convars-commands/convars">Declaring, reading, writing and watching console variables.</Card>
+  <Card title="Replication" href="/docs/convars-commands/replication">Per-player ConVar values and reading client ConVars.</Card>
+</Cards>
