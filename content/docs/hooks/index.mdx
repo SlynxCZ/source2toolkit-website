@@ -130,16 +130,27 @@ public:
     KHook::Return<void> Hook_GameFrame(ISource2Server* pThis, bool simulating, bool bFirstTick, bool bLastTick);
     KHook::Return<int> Hook_LoadEventsFromFile(IGameEventManager2* pThis, const char* pszFile, bool bSearchAll);
     KHook::Return<void> Hook_PostThink(CCSPlayerPawn* pThis);
+    KHook::Return<int64_t> Hook_TakeDamageOld(CBaseEntity* pThis, CTakeDamageInfo* pInfo, CTakeDamageResult* pResult);
+    KHook::Return<void> Hook_SetModel(CBaseModelEntity* pThis, const char* pszModel);
 
 private:
     KHOOK_VIRTUAL(m_hGameFrame, &ISource2Server::GameFrame, &g_pSource2Server, nullptr, &Plugin::Hook_GameFrame);   // Post only
     KHOOK_VIRTUAL(m_hLoadEventsFromFile, &IGameEventManager2::LoadEventsFromFile, KHOOK_VTABLE("server", "CGameEventManager"), &Plugin::Hook_LoadEventsFromFile, nullptr); // Pre only
-    KHOOK_MEMBER(m_hPostThink, "CCSPlayerPawn::PostThink", &Plugin::Hook_PostThink, nullptr);
+    KHOOK_MEMBER(m_hPostThink, "CCSPlayerPawn::PostThink", &Plugin::Hook_PostThink, nullptr);         // gamedata entry name
+    KHOOK_MEMBER(m_hTakeDamageOld, ADDR_TAKE_DAMAGE_OLD(), &Plugin::Hook_TakeDamageOld, nullptr);     // address the toolkit already resolved
+    KHOOK_MEMBER(m_hSetModel, ADDR_SET_MODEL(), &Plugin::Hook_SetModel, nullptr);
 };
 ```
 
 The last two arguments are always the Pre and the Post callback; `nullptr`
-leaves a side empty. `KHOOK_INIT()` in `Load()` installs every hook declared
+leaves a side empty.
+
+A function the toolkit resolves itself has an `ADDR_*()` getter in
+`IToolkitAddresses.h`; pass it instead of a gamedata name and your plugin needs
+no gamedata entry, no signature of its own, and follows the toolkit's gamedata
+through game updates. The getter is read when `KHOOK_INIT()` runs, after
+`TOOLKIT_SAVEVARS()` has filled `g_pToolkitAddresses`. The full list is on
+[Addresses](/docs/hooks/addresses). `KHOOK_INIT()` in `Load()` installs every hook declared
 this way and `KHOOK_DESTRUCT()` in `Unload()` takes them all down — see
 [Function hooks](/docs/hooks/function-hooks#installing-and-removing-everything).
 
