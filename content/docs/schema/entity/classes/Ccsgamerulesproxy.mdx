@@ -1,34 +1,17 @@
 ---
-title: CCSGameRulesProxy
+title: "CCSGameRulesProxy"
+description: "Schema class CCSGameRulesProxy, derived from CGameRulesProxy."
 ---
 
-# CCSGameRulesProxy
 
-**Inheritance**: CGameRulesProxy
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSGameRulesProxy.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSGameRulesProxy.h)
+
+**Inherits** [`CGameRulesProxy`](/docs/schema/entity/classes/CGameRulesProxy)
 
 ## Fields
 
-- <ApiParam name="m_pGameRules" type="CCSGameRules*" />
+| Field | Type |
+|---|---|
+| `m_pGameRules` | [`CCSGameRules*`](/docs/schema/entity/classes/CCSGameRules) |
 
-## Methods
-
-### CCSGameRulesProxy* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CCSGameRulesProxy* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CCSGameRulesProxy* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CCSGameRulesProxy&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,37 +1,20 @@
 ---
-title: CPropDoorRotatingBreakable
+title: "CPropDoorRotatingBreakable"
+description: "Schema class CPropDoorRotatingBreakable, derived from CPropDoorRotating."
 ---
 
-# CPropDoorRotatingBreakable
 
-**Inheritance**: [CPropDoorRotating](/docs/schema/entity/classes/Cpropdoorrotating)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPropDoorRotatingBreakable.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPropDoorRotatingBreakable.h)
+
+**Inherits** [`CPropDoorRotating`](/docs/schema/entity/classes/CPropDoorRotating)
 
 ## Fields
 
-- <ApiParam name="m_bBreakable" type="bool" />
-- <ApiParam name="m_isAbleToCloseAreaPortals" type="bool" />
-- <ApiParam name="m_currentDamageState" type="int32_t" />
-- <ApiParam name="m_damageStates" type="CUtlVector&lt;CUtlSymbolLarge&gt;" />
+| Field | Type |
+|---|---|
+| `m_bBreakable` | `bool` |
+| `m_isAbleToCloseAreaPortals` | `bool` |
+| `m_currentDamageState` | `int32_t` |
+| `m_damageStates` | `CUtlVector<CUtlSymbolLarge>` |
 
-## Methods
-
-### CPropDoorRotatingBreakable* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPropDoorRotatingBreakable* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPropDoorRotatingBreakable* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPropDoorRotatingBreakable&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

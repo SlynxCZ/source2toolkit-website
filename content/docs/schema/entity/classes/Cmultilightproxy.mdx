@@ -1,41 +1,24 @@
 ---
-title: CMultiLightProxy
+title: "CMultiLightProxy"
+description: "Schema class CMultiLightProxy, derived from CLogicalEntity."
 ---
 
-# CMultiLightProxy
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMultiLightProxy.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMultiLightProxy.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszLightNameFilter" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszLightClassFilter" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flLightRadiusFilter" type="float" />
-- <ApiParam name="m_flBrightnessDelta" type="float" />
-- <ApiParam name="m_bPerformScreenFade" type="bool" />
-- <ApiParam name="m_flTargetBrightnessMultiplier" type="float" />
-- <ApiParam name="m_flCurrentBrightnessMultiplier" type="float" />
-- <ApiParam name="m_vecLights" type="CUtlVector&lt;CHandle&lt;CLightEntity&gt;&gt;" />
+| Field | Type |
+|---|---|
+| `m_iszLightNameFilter` | `CUtlSymbolLarge` |
+| `m_iszLightClassFilter` | `CUtlSymbolLarge` |
+| `m_flLightRadiusFilter` | `float` |
+| `m_flBrightnessDelta` | `float` |
+| `m_bPerformScreenFade` | `bool` |
+| `m_flTargetBrightnessMultiplier` | `float` |
+| `m_flCurrentBrightnessMultiplier` | `float` |
+| `m_vecLights` | [`CUtlVector<CHandle<CLightEntity>>`](/docs/schema/entity/classes/CLightEntity) |
 
-## Methods
-
-### CMultiLightProxy* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMultiLightProxy* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMultiLightProxy* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMultiLightProxy&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

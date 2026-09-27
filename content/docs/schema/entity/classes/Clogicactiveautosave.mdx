@@ -1,37 +1,20 @@
 ---
-title: CLogicActiveAutosave
+title: "CLogicActiveAutosave"
+description: "Schema class CLogicActiveAutosave, derived from CLogicAutosave."
 ---
 
-# CLogicActiveAutosave
 
-**Inheritance**: CLogicAutosave
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicActiveAutosave.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicActiveAutosave.h)
+
+**Inherits** [`CLogicAutosave`](/docs/schema/entity/classes/CLogicAutosave)
 
 ## Fields
 
-- <ApiParam name="m_TriggerHitPoints" type="int32_t" />
-- <ApiParam name="m_flTimeToTrigger" type="float" />
-- <ApiParam name="m_flStartTime" type="float" />
-- <ApiParam name="m_flDangerousTime" type="float" />
+| Field | Type |
+|---|---|
+| `m_TriggerHitPoints` | `int32_t` |
+| `m_flTimeToTrigger` | `float` |
+| `m_flStartTime` | `float` |
+| `m_flDangerousTime` | `float` |
 
-## Methods
-
-### CLogicActiveAutosave* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicActiveAutosave* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicActiveAutosave* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicActiveAutosave&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,59 +1,42 @@
 ---
-title: CPointClientUIWorldPanel
+title: "CPointClientUIWorldPanel"
+description: "Schema class CPointClientUIWorldPanel, derived from CBaseClientUIEntity."
 ---
 
-# CPointClientUIWorldPanel
 
-**Inheritance**: CBaseClientUIEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointClientUIWorldPanel.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointClientUIWorldPanel.h)
+
+**Inherits** [`CBaseClientUIEntity`](/docs/schema/entity/classes/CBaseClientUIEntity)
 
 ## Fields
 
-- <ApiParam name="m_bIgnoreInput" type="bool" />
-- <ApiParam name="m_bLit" type="bool" />
-- <ApiParam name="m_bFollowPlayerAcrossTeleport" type="bool" />
-- <ApiParam name="m_flWidth" type="float" />
-- <ApiParam name="m_flHeight" type="float" />
-- <ApiParam name="m_flDPI" type="float" />
-- <ApiParam name="m_flWindowUIScale" type="float" />
-- <ApiParam name="m_flInteractDistance" type="float" />
-- <ApiParam name="m_flDepthOffset" type="float" />
-- <ApiParam name="m_unOwnerContext" type="uint32_t" />
-- <ApiParam name="m_unHorizontalAlign" type="uint32_t" />
-- <ApiParam name="m_unVerticalAlign" type="uint32_t" />
-- <ApiParam name="m_unOrientation" type="uint32_t" />
-- <ApiParam name="m_bAllowInteractionFromAllSceneWorlds" type="bool" />
-- <ApiParam name="m_vecCSSClasses" type="CUtlVector&lt;CUtlSymbolLarge&gt;" />
-- <ApiParam name="m_bOpaque" type="bool" />
-- <ApiParam name="m_bNoDepth" type="bool" />
-- <ApiParam name="m_bVisibleWhenParentNoDraw" type="bool" />
-- <ApiParam name="m_bRenderBackface" type="bool" />
-- <ApiParam name="m_bUseOffScreenIndicator" type="bool" />
-- <ApiParam name="m_bExcludeFromSaveGames" type="bool" />
-- <ApiParam name="m_bGrabbable" type="bool" />
-- <ApiParam name="m_bOnlyRenderToTexture" type="bool" />
-- <ApiParam name="m_bDisableMipGen" type="bool" />
-- <ApiParam name="m_nExplicitImageLayout" type="int32_t" />
-- <ApiParam name="m_bIgnoreParentOrientation" type="bool" />
+| Field | Type |
+|---|---|
+| `m_bIgnoreInput` | `bool` |
+| `m_bLit` | `bool` |
+| `m_bFollowPlayerAcrossTeleport` | `bool` |
+| `m_flWidth` | `float` |
+| `m_flHeight` | `float` |
+| `m_flDPI` | `float` |
+| `m_flWindowUIScale` | `float` |
+| `m_flInteractDistance` | `float` |
+| `m_flDepthOffset` | `float` |
+| `m_unOwnerContext` | `uint32_t` |
+| `m_unHorizontalAlign` | `uint32_t` |
+| `m_unVerticalAlign` | `uint32_t` |
+| `m_unOrientation` | `uint32_t` |
+| `m_bAllowInteractionFromAllSceneWorlds` | `bool` |
+| `m_vecCSSClasses` | `CUtlVector<CUtlSymbolLarge>` |
+| `m_bOpaque` | `bool` |
+| `m_bNoDepth` | `bool` |
+| `m_bVisibleWhenParentNoDraw` | `bool` |
+| `m_bRenderBackface` | `bool` |
+| `m_bUseOffScreenIndicator` | `bool` |
+| `m_bExcludeFromSaveGames` | `bool` |
+| `m_bGrabbable` | `bool` |
+| `m_bOnlyRenderToTexture` | `bool` |
+| `m_bDisableMipGen` | `bool` |
+| `m_nExplicitImageLayout` | `int32_t` |
+| `m_bIgnoreParentOrientation` | `bool` |
 
-## Methods
-
-### CPointClientUIWorldPanel* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointClientUIWorldPanel* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointClientUIWorldPanel* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointClientUIWorldPanel&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

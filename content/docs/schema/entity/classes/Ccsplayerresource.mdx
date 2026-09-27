@@ -1,43 +1,26 @@
 ---
-title: CCSPlayerResource
+title: "CCSPlayerResource"
+description: "Schema class CCSPlayerResource, derived from CBaseEntity."
 ---
 
-# CCSPlayerResource
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSPlayerResource.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSPlayerResource.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_bHostageAlive" type="bool" />
-- <ApiParam name="m_isHostageFollowingSomeone" type="bool" />
-- <ApiParam name="m_iHostageEntityIDs" type="CEntityIndex" />
-- <ApiParam name="m_bombsiteCenterA" type="Vector" />
-- <ApiParam name="m_bombsiteCenterB" type="Vector" />
-- <ApiParam name="m_hostageRescueX" type="int32_t" />
-- <ApiParam name="m_hostageRescueY" type="int32_t" />
-- <ApiParam name="m_hostageRescueZ" type="int32_t" />
-- <ApiParam name="m_bEndMatchNextMapAllVoted" type="bool" />
-- <ApiParam name="m_foundGoalPositions" type="bool" />
+| Field | Type |
+|---|---|
+| `m_bHostageAlive` | `bool` |
+| `m_isHostageFollowingSomeone` | `bool` |
+| `m_iHostageEntityIDs` | `CEntityIndex` |
+| `m_bombsiteCenterA` | `Vector` |
+| `m_bombsiteCenterB` | `Vector` |
+| `m_hostageRescueX` | `int32_t` |
+| `m_hostageRescueY` | `int32_t` |
+| `m_hostageRescueZ` | `int32_t` |
+| `m_bEndMatchNextMapAllVoted` | `bool` |
+| `m_foundGoalPositions` | `bool` |
 
-## Methods
-
-### CCSPlayerResource* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CCSPlayerResource* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CCSPlayerResource* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CCSPlayerResource&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

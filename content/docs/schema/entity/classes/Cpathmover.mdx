@@ -1,39 +1,22 @@
 ---
-title: CPathMover
+title: "CPathMover"
+description: "Schema class CPathMover, derived from CPathWithDynamicNodes."
 ---
 
-# CPathMover
 
-**Inheritance**: CPathWithDynamicNodes
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPathMover.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPathMover.h)
+
+**Inherits** [`CPathWithDynamicNodes`](/docs/schema/entity/classes/CPathWithDynamicNodes)
 
 ## Fields
 
-- <ApiParam name="m_vecMovers" type="CUtlVector&lt;CHandle&lt;CFuncMover&gt;&gt;" />
-- <ApiParam name="m_vecSpawners" type="CUtlVector&lt;CHandle&lt;CPathMoverEntitySpawner&gt;&gt;" />
-- <ApiParam name="m_iszMoverSpawnerName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hMoverRouter" type="CHandle&lt;CFuncMoverRouter&gt;" />
-- <ApiParam name="m_iszMoverRouterName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flSampleSpacing" type="float" />
+| Field | Type |
+|---|---|
+| `m_vecMovers` | [`CUtlVector<CHandle<CFuncMover>>`](/docs/schema/entity/classes/CFuncMover) |
+| `m_vecSpawners` | [`CUtlVector<CHandle<CPathMoverEntitySpawner>>`](/docs/schema/entity/classes/CPathMoverEntitySpawner) |
+| `m_iszMoverSpawnerName` | `CUtlSymbolLarge` |
+| `m_hMoverRouter` | [`CHandle<CFuncMoverRouter>`](/docs/schema/entity/classes/CFuncMoverRouter) |
+| `m_iszMoverRouterName` | `CUtlSymbolLarge` |
+| `m_flSampleSpacing` | `float` |
 
-## Methods
-
-### CPathMover* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPathMover* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPathMover* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPathMover&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

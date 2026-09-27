@@ -1,11 +1,16 @@
 ---
-title: CMovementStatsProperty
+title: "CMovementStatsProperty"
+description: "Schema class CMovementStatsProperty."
 ---
 
-# CMovementStatsProperty
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMovementStatsProperty.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMovementStatsProperty.h)
 
 ## Fields
 
-- <ApiParam name="m_nUseCounter" type="int32_t" />
-- <ApiParam name="m_emaMovementDirection" type="CVectorExponentialMovingAverage" />
+| Field | Type |
+|---|---|
+| `m_nUseCounter` | `int32_t` |
+| `m_emaMovementDirection` | [`CVectorExponentialMovingAverage`](/docs/schema/entity/classes/CVectorExponentialMovingAverage) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

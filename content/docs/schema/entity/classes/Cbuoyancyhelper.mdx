@@ -1,20 +1,25 @@
 ---
-title: CBuoyancyHelper
+title: "CBuoyancyHelper"
+description: "Schema class CBuoyancyHelper."
 ---
 
-# CBuoyancyHelper
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBuoyancyHelper.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBuoyancyHelper.h)
 
 ## Fields
 
-- <ApiParam name="m_pController" type="IPhysicsMotionController*" />
-- <ApiParam name="m_nFluidType" type="CUtlStringToken" />
-- <ApiParam name="m_flFluidDensity" type="float" />
-- <ApiParam name="m_flNeutrallyBuoyantGravity" type="float" />
-- <ApiParam name="m_flNeutrallyBuoyantLinearDamping" type="float" />
-- <ApiParam name="m_flNeutrallyBuoyantAngularDamping" type="float" />
-- <ApiParam name="m_bNeutrallyBuoyant" type="bool" />
-- <ApiParam name="m_vecFractionOfWheelSubmergedForWheelFriction" type="CUtlVector&lt;float&gt;" />
-- <ApiParam name="m_vecWheelFrictionScales" type="CUtlVector&lt;float&gt;" />
-- <ApiParam name="m_vecFractionOfWheelSubmergedForWheelDrag" type="CUtlVector&lt;float&gt;" />
-- <ApiParam name="m_vecWheelDrag" type="CUtlVector&lt;float&gt;" />
+| Field | Type |
+|---|---|
+| `m_pController` | [`IPhysicsMotionController*`](/docs/schema/entity/classes/IPhysicsMotionController) |
+| `m_nFluidType` | `CUtlStringToken` |
+| `m_flFluidDensity` | `float` |
+| `m_flNeutrallyBuoyantGravity` | `float` |
+| `m_flNeutrallyBuoyantLinearDamping` | `float` |
+| `m_flNeutrallyBuoyantAngularDamping` | `float` |
+| `m_bNeutrallyBuoyant` | `bool` |
+| `m_vecFractionOfWheelSubmergedForWheelFriction` | `CUtlVector<float>` |
+| `m_vecWheelFrictionScales` | `CUtlVector<float>` |
+| `m_vecFractionOfWheelSubmergedForWheelDrag` | `CUtlVector<float>` |
+| `m_vecWheelDrag` | `CUtlVector<float>` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

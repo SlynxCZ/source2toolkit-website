@@ -1,34 +1,17 @@
 ---
-title: CSoundAreaEntitySphere
+title: "CSoundAreaEntitySphere"
+description: "Schema class CSoundAreaEntitySphere, derived from CSoundAreaEntityBase."
 ---
 
-# CSoundAreaEntitySphere
 
-**Inheritance**: [CSoundAreaEntityBase](/docs/schema/entity/classes/Csoundareaentitybase)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundAreaEntitySphere.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundAreaEntitySphere.h)
+
+**Inherits** [`CSoundAreaEntityBase`](/docs/schema/entity/classes/CSoundAreaEntityBase)
 
 ## Fields
 
-- <ApiParam name="m_flRadius" type="float" />
+| Field | Type |
+|---|---|
+| `m_flRadius` | `float` |
 
-## Methods
-
-### CSoundAreaEntitySphere* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundAreaEntitySphere* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundAreaEntitySphere* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundAreaEntitySphere&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,36 +1,19 @@
 ---
-title: CFogController
+title: "CFogController"
+description: "Schema class CFogController, derived from CBaseEntity."
 ---
 
-# CFogController
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFogController.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFogController.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_fog" type="fogparams_t" />
-- <ApiParam name="m_bUseAngles" type="bool" />
-- <ApiParam name="m_iChangedVariables" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_fog` | [`fogparams_t`](/docs/schema/entity/classes/fogparams_t) |
+| `m_bUseAngles` | `bool` |
+| `m_iChangedVariables` | `int32_t` |
 
-## Methods
-
-### CFogController* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFogController* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFogController* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFogController&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

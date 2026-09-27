@@ -1,22 +1,27 @@
 ---
-title: Shard_model_desc_t
+title: "shard_model_desc_t"
+description: "Schema class shard_model_desc_t."
 ---
 
-# shard_model_desc_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/shard_model_desc_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/shard_model_desc_t.h)
 
 ## Fields
 
-- <ApiParam name="m_nModelID" type="int32_t" />
-- <ApiParam name="m_hMaterialBase" type="CStrongHandle&lt;InfoForResourceTypeIMaterial2&gt;" />
-- <ApiParam name="m_hMaterialDamageOverlay" type="CStrongHandle&lt;InfoForResourceTypeIMaterial2&gt;" />
-- <ApiParam name="m_solid" type="ShardSolid_t" />
-- <ApiParam name="m_vecPanelSize" type="Vector2D" />
-- <ApiParam name="m_vecStressPositionA" type="Vector2D" />
-- <ApiParam name="m_vecStressPositionB" type="Vector2D" />
-- <ApiParam name="m_vecPanelVertices" type="CUtlVector&lt;Vector2D&gt;" />
-- <ApiParam name="m_vInitialPanelVertices" type="CUtlVector&lt;Vector4D&gt;" />
-- <ApiParam name="m_flGlassHalfThickness" type="float" />
-- <ApiParam name="m_bHasParent" type="bool" />
-- <ApiParam name="m_bParentFrozen" type="bool" />
-- <ApiParam name="m_SurfacePropStringToken" type="CUtlStringToken" />
+| Field | Type |
+|---|---|
+| `m_nModelID` | `int32_t` |
+| `m_hMaterialBase` | [`CStrongHandle<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandle) |
+| `m_hMaterialDamageOverlay` | [`CStrongHandle<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandle) |
+| `m_solid` | [`ShardSolid_t`](/docs/schema/entity/enums/ShardSolid_t) |
+| `m_vecPanelSize` | `Vector2D` |
+| `m_vecStressPositionA` | `Vector2D` |
+| `m_vecStressPositionB` | `Vector2D` |
+| `m_vecPanelVertices` | `CUtlVector<Vector2D>` |
+| `m_vInitialPanelVertices` | `CUtlVector<Vector4D>` |
+| `m_flGlassHalfThickness` | `float` |
+| `m_bHasParent` | `bool` |
+| `m_bParentFrozen` | `bool` |
+| `m_SurfacePropStringToken` | `CUtlStringToken` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,45 +1,28 @@
 ---
-title: CInfoOffscreenPanoramaTexture
+title: "CInfoOffscreenPanoramaTexture"
+description: "Schema class CInfoOffscreenPanoramaTexture, derived from CPointEntity."
 ---
 
-# CInfoOffscreenPanoramaTexture
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CInfoOffscreenPanoramaTexture.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CInfoOffscreenPanoramaTexture.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_bEnableMipGen" type="bool" />
-- <ApiParam name="m_nResolutionX" type="int32_t" />
-- <ApiParam name="m_nResolutionY" type="int32_t" />
-- <ApiParam name="m_szPanelType" type="CUtlSymbolLarge" />
-- <ApiParam name="m_szLayoutFileName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_RenderAttrName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_TargetEntities" type="CUtlVector&lt;CHandle&lt;CBaseModelEntity&gt;&gt;" />
-- <ApiParam name="m_nTargetChangeCount" type="int32_t" />
-- <ApiParam name="m_vecCSSClasses" type="CUtlVector&lt;CUtlSymbolLarge&gt;" />
-- <ApiParam name="m_szTargetsName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_AdditionalTargetEntities" type="CUtlVector&lt;CHandle&lt;CBaseModelEntity&gt;&gt;" />
+| Field | Type |
+|---|---|
+| `m_bDisabled` | `bool` |
+| `m_bEnableMipGen` | `bool` |
+| `m_nResolutionX` | `int32_t` |
+| `m_nResolutionY` | `int32_t` |
+| `m_szPanelType` | `CUtlSymbolLarge` |
+| `m_szLayoutFileName` | `CUtlSymbolLarge` |
+| `m_RenderAttrName` | `CUtlSymbolLarge` |
+| `m_TargetEntities` | [`CUtlVector<CHandle<CBaseModelEntity>>`](/docs/schema/entity/classes/CBaseModelEntity) |
+| `m_nTargetChangeCount` | `int32_t` |
+| `m_vecCSSClasses` | `CUtlVector<CUtlSymbolLarge>` |
+| `m_szTargetsName` | `CUtlSymbolLarge` |
+| `m_AdditionalTargetEntities` | [`CUtlVector<CHandle<CBaseModelEntity>>`](/docs/schema/entity/classes/CBaseModelEntity) |
 
-## Methods
-
-### CInfoOffscreenPanoramaTexture* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CInfoOffscreenPanoramaTexture* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CInfoOffscreenPanoramaTexture* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CInfoOffscreenPanoramaTexture&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

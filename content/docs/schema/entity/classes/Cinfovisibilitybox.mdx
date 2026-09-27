@@ -1,36 +1,19 @@
 ---
-title: CInfoVisibilityBox
+title: "CInfoVisibilityBox"
+description: "Schema class CInfoVisibilityBox, derived from CBaseEntity."
 ---
 
-# CInfoVisibilityBox
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CInfoVisibilityBox.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CInfoVisibilityBox.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_nMode" type="int32_t" />
-- <ApiParam name="m_vBoxSize" type="Vector" />
-- <ApiParam name="m_bEnabled" type="bool" />
+| Field | Type |
+|---|---|
+| `m_nMode` | `int32_t` |
+| `m_vBoxSize` | `Vector` |
+| `m_bEnabled` | `bool` |
 
-## Methods
-
-### CInfoVisibilityBox* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CInfoVisibilityBox* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CInfoVisibilityBox* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CInfoVisibilityBox&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

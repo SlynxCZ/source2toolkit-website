@@ -1,37 +1,20 @@
 ---
-title: CLogicNPCCounterAABB
+title: "CLogicNPCCounterAABB"
+description: "Schema class CLogicNPCCounterAABB, derived from CLogicNPCCounter."
 ---
 
-# CLogicNPCCounterAABB
 
-**Inheritance**: [CLogicNPCCounter](/docs/schema/entity/classes/Clogicnpccounter)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicNPCCounterAABB.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicNPCCounterAABB.h)
+
+**Inherits** [`CLogicNPCCounter`](/docs/schema/entity/classes/CLogicNPCCounter)
 
 ## Fields
 
-- <ApiParam name="m_vDistanceOuterMins" type="Vector" />
-- <ApiParam name="m_vDistanceOuterMaxs" type="Vector" />
-- <ApiParam name="m_vOuterMins" type="Vector" />
-- <ApiParam name="m_vOuterMaxs" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_vDistanceOuterMins` | `Vector` |
+| `m_vDistanceOuterMaxs` | `Vector` |
+| `m_vOuterMins` | `Vector` |
+| `m_vOuterMaxs` | `Vector` |
 
-## Methods
-
-### CLogicNPCCounterAABB* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicNPCCounterAABB* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicNPCCounterAABB* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicNPCCounterAABB&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,60 +1,49 @@
 ---
-title: CSmokeGrenadeProjectile
+title: "CSmokeGrenadeProjectile"
+description: "Schema class CSmokeGrenadeProjectile, derived from CBaseCSGrenadeProjectile."
 ---
 
-# CSmokeGrenadeProjectile
 
-**Inheritance**: [CBaseCSGrenadeProjectile](/docs/schema/entity/classes/Cbasecsgrenadeprojectile)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSmokeGrenadeProjectile.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSmokeGrenadeProjectile.h)
+
+**Inherits** [`CBaseCSGrenadeProjectile`](/docs/schema/entity/classes/CBaseCSGrenadeProjectile)
 
 ## Fields
 
-- <ApiParam name="m_nSmokeEffectTickBegin" type="int32_t" />
-- <ApiParam name="m_bDidSmokeEffect" type="bool" />
-- <ApiParam name="m_nRandomSeed" type="int32_t" />
-- <ApiParam name="m_vSmokeColor" type="Vector" />
-- <ApiParam name="m_vSmokeDetonationPos" type="Vector" />
-- <ApiParam name="m_VoxelFrameData" type="CUtlVector&lt;uint8_t&gt;" />
-- <ApiParam name="m_nVoxelFrameDataSize" type="int32_t" />
-- <ApiParam name="m_nVoxelUpdate" type="int32_t" />
-- <ApiParam name="m_nSmokeLightProbeRegen" type="uint8_t" />
-- <ApiParam name="m_flLastBounce" type="float" />
-- <ApiParam name="m_fllastSimulationTime" type="float" />
-- <ApiParam name="m_bExplodeFromInferno" type="bool" />
-- <ApiParam name="m_bDidGroundScorch" type="bool" />
+| Field | Type |
+|---|---|
+| `m_nSmokeEffectTickBegin` | `int32_t` |
+| `m_bDidSmokeEffect` | `bool` |
+| `m_nRandomSeed` | `int32_t` |
+| `m_vSmokeColor` | `Vector` |
+| `m_vSmokeDetonationPos` | `Vector` |
+| `m_VoxelFrameData` | `CUtlVector<uint8_t>` |
+| `m_nVoxelFrameDataSize` | `int32_t` |
+| `m_nVoxelUpdate` | `int32_t` |
+| `m_nSmokeLightProbeRegen` | `uint8_t` |
+| `m_flLastBounce` | `float` |
+| `m_fllastSimulationTime` | `float` |
+| `m_bExplodeFromInferno` | `bool` |
+| `m_bDidGroundScorch` | `bool` |
+
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).
 
 ## Methods
 
-### CSmokeGrenadeProjectile* EmitGrenade(vecPosition, angAngle, vecVelocity, nTeam, pOwner, nItemDefIndex, eChain)
+### `EmitGrenade`
+
+```cpp
+static CSmokeGrenadeProjectile* EmitGrenade(const Vector& vecPosition, const QAngle& angAngle, const Vector& vecVelocity, int nTeam, CBaseEntity* pOwner, uint32_t nItemDefIndex, HookChain eChain = HookChain::Run);
+```
 
 Spawns a live grenade of this type. Ported from SwiftlyS2.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="vecPosition" type="const Vector&" />
-- <ApiParam name="angAngle" type="const QAngle&" />
-- <ApiParam name="vecVelocity" type="const Vector&" />
-- <ApiParam name="nTeam" type="int" />
-- <ApiParam name="pOwner" type="[CBaseEntity*](/docs/schema/entity/classes/Cbaseentity)" />
-- <ApiParam name="nItemDefIndex" type="uint32_t" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
-
-### CSmokeGrenadeProjectile* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSmokeGrenadeProjectile* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSmokeGrenadeProjectile* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSmokeGrenadeProjectile&gt; GetHandle()
-
+| Parameter | Type | Default |
+|---|---|---|
+| `vecPosition` | `const Vector&` |  |
+| `angAngle` | `const QAngle&` |  |
+| `vecVelocity` | `const Vector&` |  |
+| `nTeam` | `int` |  |
+| `pOwner` | [`CBaseEntity*`](/docs/schema/entity/classes/CBaseEntity) |  |
+| `nItemDefIndex` | `uint32_t` |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |

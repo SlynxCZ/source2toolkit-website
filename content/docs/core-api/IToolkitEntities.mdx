@@ -1,47 +1,218 @@
 ---
-title: IToolkitEntities
+title: "IToolkitEntities"
+description: "Interface for entity lookup and Source2 Entity I/O system."
 ---
 
-# IToolkitEntities
+
+Provides:
+- Entity searching (classname, name, picker)
+- Entity creation
+- Input triggering
+- Output listening
+
+<Callout type="info">Entity I/O is the system used by maps to connect entities together.</Callout>
+
+Interface for interacting with entities and Entity I/O system.
+
+**Interface id** `IToolkitEntities002` (`TOOLKIT_ENTITIES_INTERFACE`) · **Global** `g_pToolkitEntities` · **Header** [`source2toolkit/IToolkitEntities.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitEntities.h)
 
 ## Methods
 
-### CCSGameRules* GetGameRules()
+### `GetGameRules`
+
+```cpp
+virtual CCSGameRules* GetGameRules() = 0;
+```
 
 The active CCSGameRules, or null before the entity exists.
 
-### CBaseEntity* CreateEntityByName(pszClassName)
+The toolkit captures this from cs_gamerules as the entity is created, so it is live for the whole map and a plugin does not have to scan for the proxy itself.
+
+### `FindPickerEntity`
+
+```cpp
+virtual CBaseEntity* FindPickerEntity(CBasePlayerController* pPlayer, CCSGameRules* pGameRules = nullptr) = 0;
+```
+
+Finds entity under player's crosshair.
+
+| Parameter | Type | Default |
+|---|---|---|
+| `pPlayer` | [`CBasePlayerController*`](/docs/schema/entity/classes/CBasePlayerController) |  |
+| `pGameRules` | [`CCSGameRules*`](/docs/schema/entity/classes/CCSGameRules) | `nullptr` |
+
+### `FindEntityByClassname`
+
+```cpp
+virtual CBaseEntity* FindEntityByClassname(CEntityInstance* pStart, const char* name) = 0;
+```
+
+Finds entity by classname.
+
+| Parameter | Type |
+|---|---|
+| `pStart` | `CEntityInstance*` |
+| `name` | `const char*` |
+
+### `FindEntityByName`
+
+```cpp
+virtual CBaseEntity* FindEntityByName(CEntityInstance* pStartEntity, const char* szName, CEntityInstance* pSearchingEntity = nullptr, CEntityInstance* pActivator = nullptr, CEntityInstance* pCaller = nullptr, IEntityFindFilter* pFilter = nullptr) = 0;
+```
+
+Finds entity by name.
+
+| Parameter | Type | Default |
+|---|---|---|
+| `pStartEntity` | `CEntityInstance*` |  |
+| `szName` | `const char*` |  |
+| `pSearchingEntity` | `CEntityInstance*` | `nullptr` |
+| `pActivator` | `CEntityInstance*` | `nullptr` |
+| `pCaller` | `CEntityInstance*` | `nullptr` |
+| `pFilter` | `IEntityFindFilter*` | `nullptr` |
+
+### `CreateEntityByName`
+
+```cpp
+virtual CBaseEntity* CreateEntityByName(const char* pszClassName) = 0;
+```
 
 Creates entity by classname.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pszClassName` | `const char*` |
 
-- <ApiParam name="pszClassName" type="const char*" />
+### `AddEntityListener`
 
-### AddEntityListener(owner, pListener)
+```cpp
+virtual void AddEntityListener(PluginId owner, IEntityListener* pListener) = 0;
+```
 
 Adds listener for entity spawn, creation, deletion and parent change.
 
-<ApiLabel>Parameters</ApiLabel>
+<Callout type="info">Removed for you if the owning plugin unloads. The listener is an object inside that plugin's library and the engine holds it directly, so one left behind is a call into unmapped memory.</Callout>
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin the listener belongs to
-- <ApiParam name="pListener" type="IEntityListener*" /> — Listener object
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin the listener belongs to |
+| `pListener` | `IEntityListener*` | Listener object |
 
-### RemoveEntityListener(pListener)
+### `RemoveEntityListener`
+
+```cpp
+virtual void RemoveEntityListener(IEntityListener* pListener) = 0;
+```
 
 Removes listener for entity spawn, creation, deletion and parent change.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pListener` | `IEntityListener*` |
 
-- <ApiParam name="pListener" type="IEntityListener*" />
+### `AcceptInput`
+
+```cpp
+virtual void AcceptInput(CEntityInstance* pTarget, const char* pszInput, CEntityInstance* pActivator, CEntityInstance* pCaller, const char* pszValue = "") = 0;
+```
+
+Sends input to entity.
+
+<Callout type="info">Equivalent to Source engine AcceptInput()</Callout>
+
+| Parameter | Type | Default |
+|---|---|---|
+| `pTarget` | `CEntityInstance*` |  |
+| `pszInput` | `const char*` |  |
+| `pActivator` | `CEntityInstance*` |  |
+| `pCaller` | `CEntityInstance*` |  |
+| `pszValue` | `const char*` | `""` |
+
+### `AddEntityIOEvent`
+
+```cpp
+virtual void AddEntityIOEvent(CEntityInstance* pTarget, const char* pszInput, CEntityInstance* pActivator = nullptr, CEntityInstance* pCaller = nullptr, const char* pszValue = "", float flDelay = 0.0f) = 0;
+```
+
+Queues an entity I/O event.
+
+| Parameter | Type | Default |
+|---|---|---|
+| `pTarget` | `CEntityInstance*` |  |
+| `pszInput` | `const char*` |  |
+| `pActivator` | `CEntityInstance*` | `nullptr` |
+| `pCaller` | `CEntityInstance*` | `nullptr` |
+| `pszValue` | `const char*` | `""` |
+| `flDelay` | `float` | `0.0f` |
+
+### `AddEntityIOListener`
+
+```cpp
+virtual void AddEntityIOListener(PluginId owner, IEntityIOListener* pListener, const char* pchClassName, const char* pchOutputName, bool post = false) = 0;
+```
+
+Adds listener for entity outputs.
+
+<Callout type="info">Removed for you if the owning plugin unloads, for the same reason as AddEntityListener().</Callout>
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  | Plugin the listener belongs to |
+| `pListener` | [`IEntityIOListener*`](/docs/schema/Entityio#ientityiolistener) |  |  |
+| `pchClassName` | `const char*` |  |  |
+| `pchOutputName` | `const char*` |  |  |
+| `post` | `bool` | `false` |  |
+
+### `RemoveEntityIOListener`
+
+```cpp
+virtual void RemoveEntityIOListener(IEntityIOListener* pListener, const char* pchClassName, const char* pchOutputName, bool post = false) = 0;
+```
+
+Removes entity output listener.
+
+| Parameter | Type | Default |
+|---|---|---|
+| `pListener` | [`IEntityIOListener*`](/docs/schema/Entityio#ientityiolistener) |  |
+| `pchClassName` | `const char*` |  |
+| `pchOutputName` | `const char*` |  |
+| `post` | `bool` | `false` |
 
 ## Functions
 
-### UTIL_FindAllEntitiesByDesignerName(pszDesignerName)
+### `UTIL_FindAllEntitiesByDesignerName`
+
+```cpp
+template <typename T = CBaseEntity> inline std::vector<T*> UTIL_FindAllEntitiesByDesignerName(const char* pszDesignerName);
+```
 
 Every entity whose designer name matches, cast to T.
 
-<ApiLabel>Parameters</ApiLabel>
+Walks the entity system's active list directly rather than going through the engine's finder, so it sees exactly the entities that are live right now and matches on m_designerName -- the name the map gave the entity, which is not always the classname the engine reports.
 
-- <ApiParam name="pszDesignerName" type="const char*" /> — Designer name to match, exactly.
+```cpp
+for (auto* pProp : UTIL_FindAllEntitiesByDesignerName<CDynamicProp>("prop_dynamic"))
+    pProp->AcceptInput("Kill");
+```
 
+| Parameter | Type | Description |
+|---|---|---|
+| `pszDesignerName` | `const char*` | Designer name to match, exactly. |
+
+**Returns** `std::vector<T*>` — Matches in list order; empty if the entity system is not up yet.
+
+## Macros
+
+| Macro | Expands to |
+|---|---|
+| `GET_GAME_RULES()` | `g_pToolkitEntities->GetGameRules()` |
+| `FIND_PICKER_ENTITY(player, ...)` | `g_pToolkitEntities->FindPickerEntity(player, ##__VA_ARGS__)` |
+| `FIND_ENTITY_BY_CLASSNAME(start, name)` | `g_pToolkitEntities->FindEntityByClassname(start, name)` |
+| `FIND_ENTITY_BY_NAME(start, name, ...)` | `g_pToolkitEntities->FindEntityByName(start, name, ##__VA_ARGS__)` |
+| `CREATE_ENTITY(classname)` | `g_pToolkitEntities->CreateEntityByName(classname)` |
+| `ADD_ENTITY_LISTENER(l)` | `g_pToolkitEntities->AddEntityListener(g_PluginID, l)` |
+| `REMOVE_ENTITY_LISTENER(l)` | `g_pToolkitEntities->RemoveEntityListener(l)` |
+| `ACCEPT_INPUT(target, input, ...)` | `g_pToolkitEntities->AcceptInput(target, input, ##__VA_ARGS__)` |
+| `ADD_ENTITY_IO_EVENT(target, input, ...)` | `g_pToolkitEntities->AddEntityIOEvent(target, input, ##__VA_ARGS__)` |
+| `ADD_ENTITY_IO_LISTENER(l, cls, out, ...)` | `g_pToolkitEntities->AddEntityIOListener(g_PluginID, l, cls, out, ##__VA_ARGS__)` |
+| `REMOVE_ENTITY_IO_LISTENER(l, cls, out, ...)` | `g_pToolkitEntities->RemoveEntityIOListener(l, cls, out, ##__VA_ARGS__)` |

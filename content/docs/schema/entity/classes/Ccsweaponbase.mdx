@@ -1,91 +1,74 @@
 ---
-title: CCSWeaponBase
+title: "CCSWeaponBase"
+description: "Schema class CCSWeaponBase, derived from CBasePlayerWeapon."
 ---
 
-# CCSWeaponBase
 
-**Inheritance**: [CBasePlayerWeapon](/docs/schema/entity/classes/Cbaseplayerweapon)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSWeaponBase.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSWeaponBase.h)
+
+**Inherits** [`CBasePlayerWeapon`](/docs/schema/entity/classes/CBasePlayerWeapon)
 
 ## Fields
 
-- <ApiParam name="m_bRemoveable" type="bool" />
-- <ApiParam name="m_bPlayerAmmoStockOnPickup" type="bool" />
-- <ApiParam name="m_bRequireUseToTouch" type="bool" />
-- <ApiParam name="m_iWeaponGameplayAnimState" type="WeaponGameplayAnimState" />
-- <ApiParam name="m_flWeaponGameplayAnimStateTimestamp" type="float" />
-- <ApiParam name="m_flInspectCancelCompleteTime" type="float" />
-- <ApiParam name="m_bInspectPending" type="bool" />
-- <ApiParam name="m_bInspectShouldLoop" type="bool" />
-- <ApiParam name="m_nLastEmptySoundCmdNum" type="int32_t" />
-- <ApiParam name="m_bFireOnEmpty" type="bool" />
-- <ApiParam name="m_OnPlayerPickup" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_weaponMode" type="CSWeaponMode" />
-- <ApiParam name="m_flTurningInaccuracyDelta" type="float" />
-- <ApiParam name="m_vecTurningInaccuracyEyeDirLast" type="Vector" />
-- <ApiParam name="m_flTurningInaccuracy" type="float" />
-- <ApiParam name="m_fAccuracyPenalty" type="float" />
-- <ApiParam name="m_flLastAccuracyUpdateTime" type="float" />
-- <ApiParam name="m_fAccuracySmoothedForZoom" type="float" />
-- <ApiParam name="m_iRecoilIndex" type="int32_t" />
-- <ApiParam name="m_flRecoilIndex" type="float" />
-- <ApiParam name="m_bBurstMode" type="bool" />
-- <ApiParam name="m_nPostponeFireReadyTicks" type="int32_t" />
-- <ApiParam name="m_flPostponeFireReadyFrac" type="float" />
-- <ApiParam name="m_bInReload" type="bool" />
-- <ApiParam name="m_nDeployTick" type="int32_t" />
-- <ApiParam name="m_flDroppedAtTime" type="float" />
-- <ApiParam name="m_bIsHauledBack" type="bool" />
-- <ApiParam name="m_bSilencerOn" type="bool" />
-- <ApiParam name="m_flTimeSilencerSwitchComplete" type="float" />
-- <ApiParam name="m_bStealthy" type="bool" />
-- <ApiParam name="m_bInSilentReloadSection" type="bool" />
-- <ApiParam name="m_bSilentReloadStatCounted" type="bool" />
-- <ApiParam name="m_bSilentReloadStatPending" type="bool" />
-- <ApiParam name="m_flStealthHoldStartTime" type="float" />
-- <ApiParam name="m_bReloadHeldSinceStart" type="bool" />
-- <ApiParam name="m_flWeaponActionPlaybackRate" type="float" />
-- <ApiParam name="m_iOriginalTeamNumber" type="int32_t" />
-- <ApiParam name="m_iMostRecentTeamNumber" type="int32_t" />
-- <ApiParam name="m_bDroppedNearBuyZone" type="bool" />
-- <ApiParam name="m_flNextAttackRenderTimeOffset" type="float" />
-- <ApiParam name="m_bCanBePickedUp" type="bool" />
-- <ApiParam name="m_bUseCanOverrideNextOwnerTouchTime" type="bool" />
-- <ApiParam name="m_nextOwnerTouchTime" type="float" />
-- <ApiParam name="m_nextPrevOwnerTouchTime" type="float" />
-- <ApiParam name="m_nextPrevOwnerUseTime" type="float" />
-- <ApiParam name="m_hPrevOwner" type="CHandle&lt;CCSPlayerPawn&gt;" />
-- <ApiParam name="m_nDropTick" type="int32_t" />
-- <ApiParam name="m_bWasActiveWeaponWhenDropped" type="bool" />
-- <ApiParam name="m_donated" type="bool" />
-- <ApiParam name="m_fLastShotTime" type="float" />
-- <ApiParam name="m_bWasOwnedByCT" type="bool" />
-- <ApiParam name="m_bWasOwnedByTerrorist" type="bool" />
-- <ApiParam name="m_numRemoveUnownedWeaponThink" type="int32_t" />
-- <ApiParam name="m_IronSightController" type="[CIronSightController](/docs/schema/entity/classes/Cironsightcontroller)" />
-- <ApiParam name="m_iIronSightMode" type="int32_t" />
-- <ApiParam name="m_flLastLOSTraceFailureTime" type="float" />
-- <ApiParam name="m_flWatTickOffset" type="float" />
-- <ApiParam name="m_flLastShakeTime" type="float" />
+| Field | Type |
+|---|---|
+| `m_bRemoveable` | `bool` |
+| `m_bPlayerAmmoStockOnPickup` | `bool` |
+| `m_bRequireUseToTouch` | `bool` |
+| `m_iWeaponGameplayAnimState` | [`WeaponGameplayAnimState`](/docs/schema/entity/enums/WeaponGameplayAnimState) |
+| `m_flWeaponGameplayAnimStateTimestamp` | `float` |
+| `m_flInspectCancelCompleteTime` | `float` |
+| `m_bInspectPending` | `bool` |
+| `m_bInspectShouldLoop` | `bool` |
+| `m_nLastEmptySoundCmdNum` | `int32_t` |
+| `m_bFireOnEmpty` | `bool` |
+| `m_OnPlayerPickup` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_weaponMode` | [`CSWeaponMode`](/docs/schema/entity/enums/CSWeaponMode) |
+| `m_flTurningInaccuracyDelta` | `float` |
+| `m_vecTurningInaccuracyEyeDirLast` | `Vector` |
+| `m_flTurningInaccuracy` | `float` |
+| `m_fAccuracyPenalty` | `float` |
+| `m_flLastAccuracyUpdateTime` | `float` |
+| `m_fAccuracySmoothedForZoom` | `float` |
+| `m_iRecoilIndex` | `int32_t` |
+| `m_flRecoilIndex` | `float` |
+| `m_bBurstMode` | `bool` |
+| `m_nPostponeFireReadyTicks` | `int32_t` |
+| `m_flPostponeFireReadyFrac` | `float` |
+| `m_bInReload` | `bool` |
+| `m_nDeployTick` | `int32_t` |
+| `m_flDroppedAtTime` | `float` |
+| `m_bIsHauledBack` | `bool` |
+| `m_bSilencerOn` | `bool` |
+| `m_flTimeSilencerSwitchComplete` | `float` |
+| `m_bStealthy` | `bool` |
+| `m_bInSilentReloadSection` | `bool` |
+| `m_bSilentReloadStatCounted` | `bool` |
+| `m_bSilentReloadStatPending` | `bool` |
+| `m_flStealthHoldStartTime` | `float` |
+| `m_bReloadHeldSinceStart` | `bool` |
+| `m_flWeaponActionPlaybackRate` | `float` |
+| `m_iOriginalTeamNumber` | `int32_t` |
+| `m_iMostRecentTeamNumber` | `int32_t` |
+| `m_bDroppedNearBuyZone` | `bool` |
+| `m_flNextAttackRenderTimeOffset` | `float` |
+| `m_bCanBePickedUp` | `bool` |
+| `m_bUseCanOverrideNextOwnerTouchTime` | `bool` |
+| `m_nextOwnerTouchTime` | `float` |
+| `m_nextPrevOwnerTouchTime` | `float` |
+| `m_nextPrevOwnerUseTime` | `float` |
+| `m_hPrevOwner` | [`CHandle<CCSPlayerPawn>`](/docs/schema/entity/classes/CCSPlayerPawn) |
+| `m_nDropTick` | `int32_t` |
+| `m_bWasActiveWeaponWhenDropped` | `bool` |
+| `m_donated` | `bool` |
+| `m_fLastShotTime` | `float` |
+| `m_bWasOwnedByCT` | `bool` |
+| `m_bWasOwnedByTerrorist` | `bool` |
+| `m_numRemoveUnownedWeaponThink` | `int32_t` |
+| `m_IronSightController` | [`CIronSightController`](/docs/schema/entity/classes/CIronSightController) |
+| `m_iIronSightMode` | `int32_t` |
+| `m_flLastLOSTraceFailureTime` | `float` |
+| `m_flWatTickOffset` | `float` |
+| `m_flLastShakeTime` | `float` |
 
-## Methods
-
-### CCSWeaponBase* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CCSWeaponBase* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CCSWeaponBase* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CCSWeaponBase&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

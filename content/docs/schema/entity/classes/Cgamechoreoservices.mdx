@@ -1,16 +1,21 @@
 ---
-title: CGameChoreoServices
+title: "CGameChoreoServices"
+description: "Schema class CGameChoreoServices, derived from IChoreoServices."
 ---
 
-# CGameChoreoServices
 
-**Inheritance**: IChoreoServices
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CGameChoreoServices.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CGameChoreoServices.h)
+
+**Inherits** [`IChoreoServices`](/docs/schema/entity/classes/IChoreoServices)
 
 ## Fields
 
-- <ApiParam name="m_hOwner" type="CHandle&lt;CBaseModelEntity&gt;" />
-- <ApiParam name="m_hScriptedSequence" type="CHandle&lt;CScriptedSequence&gt;" />
-- <ApiParam name="m_scriptState" type="IChoreoServices__ScriptState_t" />
-- <ApiParam name="m_choreoState" type="IChoreoServices__ChoreoState_t" />
-- <ApiParam name="m_flTimeStartedState" type="float" />
+| Field | Type |
+|---|---|
+| `m_hOwner` | [`CHandle<CBaseModelEntity>`](/docs/schema/entity/classes/CBaseModelEntity) |
+| `m_hScriptedSequence` | [`CHandle<CScriptedSequence>`](/docs/schema/entity/classes/CScriptedSequence) |
+| `m_scriptState` | [`IChoreoServices__ScriptState_t`](/docs/schema/entity/enums/IChoreoServices__ScriptState_t) |
+| `m_choreoState` | [`IChoreoServices__ChoreoState_t`](/docs/schema/entity/enums/IChoreoServices__ChoreoState_t) |
+| `m_flTimeStartedState` | `float` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

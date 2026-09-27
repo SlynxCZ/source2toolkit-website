@@ -1,47 +1,30 @@
 ---
-title: CCSTeam
+title: "CCSTeam"
+description: "Schema class CCSTeam, derived from CTeam."
 ---
 
-# CCSTeam
 
-**Inheritance**: CTeam
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSTeam.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSTeam.h)
+
+**Inherits** [`CTeam`](/docs/schema/entity/classes/CTeam)
 
 ## Fields
 
-- <ApiParam name="m_nLastRecievedShorthandedRoundBonus" type="int32_t" />
-- <ApiParam name="m_nShorthandedRoundBonusStartRound" type="int32_t" />
-- <ApiParam name="m_bSurrendered" type="bool" />
-- <ApiParam name="m_szTeamMatchStat" type="char" />
-- <ApiParam name="m_numMapVictories" type="int32_t" />
-- <ApiParam name="m_scoreFirstHalf" type="int32_t" />
-- <ApiParam name="m_scoreSecondHalf" type="int32_t" />
-- <ApiParam name="m_scoreOvertime" type="int32_t" />
-- <ApiParam name="m_szClanTeamname" type="char" />
-- <ApiParam name="m_iClanID" type="uint32_t" />
-- <ApiParam name="m_szTeamFlagImage" type="char" />
-- <ApiParam name="m_szTeamLogoImage" type="char" />
-- <ApiParam name="m_flNextResourceTime" type="float" />
-- <ApiParam name="m_iLastUpdateSentAt" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_nLastRecievedShorthandedRoundBonus` | `int32_t` |
+| `m_nShorthandedRoundBonusStartRound` | `int32_t` |
+| `m_bSurrendered` | `bool` |
+| `m_szTeamMatchStat` | `char` |
+| `m_numMapVictories` | `int32_t` |
+| `m_scoreFirstHalf` | `int32_t` |
+| `m_scoreSecondHalf` | `int32_t` |
+| `m_scoreOvertime` | `int32_t` |
+| `m_szClanTeamname` | `char` |
+| `m_iClanID` | `uint32_t` |
+| `m_szTeamFlagImage` | `char` |
+| `m_szTeamLogoImage` | `char` |
+| `m_flNextResourceTime` | `float` |
+| `m_iLastUpdateSentAt` | `int32_t` |
 
-## Methods
-
-### CCSTeam* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CCSTeam* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CCSTeam* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CCSTeam&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

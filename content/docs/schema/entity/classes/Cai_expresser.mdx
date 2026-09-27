@@ -1,22 +1,27 @@
 ---
-title: CAI_Expresser
+title: "CAI_Expresser"
+description: "Schema class CAI_Expresser."
 ---
 
-# CAI_Expresser
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CAI_Expresser.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CAI_Expresser.h)
 
 ## Fields
 
-- <ApiParam name="m_conceptCooldowns" type="CUtlDict" />
-- <ApiParam name="m_ruleCooldowns" type="CUtlDict" />
-- <ApiParam name="m_flStopTalkTime" type="float" />
-- <ApiParam name="m_flStopTalkTimeWithoutDelay" type="float" />
-- <ApiParam name="m_flQueuedSpeechTime" type="float" />
-- <ApiParam name="m_flBlockedTalkTime" type="float" />
-- <ApiParam name="m_voicePitch" type="int32_t" />
-- <ApiParam name="m_flLastTimeAcceptedSpeak" type="float" />
-- <ApiParam name="m_bAllowSpeakingInterrupts" type="bool" />
-- <ApiParam name="m_bConsiderSceneInvolvementAsSpeech" type="bool" />
-- <ApiParam name="m_bSceneEntityDisabled" type="bool" />
-- <ApiParam name="m_nLastSpokenPriority" type="int32_t" />
-- <ApiParam name="m_pOuter" type="CBaseModelEntity*" />
+| Field | Type |
+|---|---|
+| `m_conceptCooldowns` | `CUtlDict` |
+| `m_ruleCooldowns` | `CUtlDict` |
+| `m_flStopTalkTime` | `float` |
+| `m_flStopTalkTimeWithoutDelay` | `float` |
+| `m_flQueuedSpeechTime` | `float` |
+| `m_flBlockedTalkTime` | `float` |
+| `m_voicePitch` | `int32_t` |
+| `m_flLastTimeAcceptedSpeak` | `float` |
+| `m_bAllowSpeakingInterrupts` | `bool` |
+| `m_bConsiderSceneInvolvementAsSpeech` | `bool` |
+| `m_bSceneEntityDisabled` | `bool` |
+| `m_nLastSpokenPriority` | `int32_t` |
+| `m_pOuter` | [`CBaseModelEntity*`](/docs/schema/entity/classes/CBaseModelEntity) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

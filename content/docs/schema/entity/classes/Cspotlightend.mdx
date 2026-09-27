@@ -1,37 +1,20 @@
 ---
-title: CSpotlightEnd
+title: "CSpotlightEnd"
+description: "Schema class CSpotlightEnd, derived from CBaseModelEntity."
 ---
 
-# CSpotlightEnd
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSpotlightEnd.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSpotlightEnd.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_flLightScale" type="float" />
-- <ApiParam name="m_Radius" type="float" />
-- <ApiParam name="m_vSpotlightDir" type="Vector" />
-- <ApiParam name="m_vSpotlightOrg" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_flLightScale` | `float` |
+| `m_Radius` | `float` |
+| `m_vSpotlightDir` | `Vector` |
+| `m_vSpotlightOrg` | `Vector` |
 
-## Methods
-
-### CSpotlightEnd* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSpotlightEnd* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSpotlightEnd* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSpotlightEnd&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

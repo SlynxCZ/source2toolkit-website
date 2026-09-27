@@ -1,16 +1,21 @@
 ---
-title: CCSPlayer_ActionTrackingServices
+title: "CCSPlayer_ActionTrackingServices"
+description: "Schema class CCSPlayer_ActionTrackingServices, derived from CPlayerPawnComponent."
 ---
 
-# CCSPlayer_ActionTrackingServices
 
-**Inheritance**: [CPlayerPawnComponent](/docs/schema/entity/classes/Cplayerpawncomponent)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSPlayer_ActionTrackingServices.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSPlayer_ActionTrackingServices.h)
+
+**Inherits** [`CPlayerPawnComponent`](/docs/schema/entity/classes/CPlayerPawnComponent)
 
 ## Fields
 
-- <ApiParam name="m_hLastWeaponBeforeC4AutoSwitch" type="CHandle&lt;CBasePlayerWeapon&gt;" />
-- <ApiParam name="m_bIsRescuing" type="bool" />
-- <ApiParam name="m_weaponPurchasesThisMatch" type="[WeaponPurchaseTracker_t](/docs/schema/entity/classes/WeaponPurchaseTracker_t)" />
-- <ApiParam name="m_weaponPurchasesThisRound" type="[WeaponPurchaseTracker_t](/docs/schema/entity/classes/WeaponPurchaseTracker_t)" />
-- <ApiParam name="m_weaponCarryOverIntoThisRound" type="[WeaponPurchaseTracker_t](/docs/schema/entity/classes/WeaponPurchaseTracker_t)" />
+| Field | Type |
+|---|---|
+| `m_hLastWeaponBeforeC4AutoSwitch` | [`CHandle<CBasePlayerWeapon>`](/docs/schema/entity/classes/CBasePlayerWeapon) |
+| `m_bIsRescuing` | `bool` |
+| `m_weaponPurchasesThisMatch` | [`WeaponPurchaseTracker_t`](/docs/schema/entity/classes/WeaponPurchaseTracker_t) |
+| `m_weaponPurchasesThisRound` | [`WeaponPurchaseTracker_t`](/docs/schema/entity/classes/WeaponPurchaseTracker_t) |
+| `m_weaponCarryOverIntoThisRound` | [`WeaponPurchaseTracker_t`](/docs/schema/entity/classes/WeaponPurchaseTracker_t) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

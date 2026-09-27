@@ -1,0 +1,112 @@
+---
+title: "Net message types"
+description: "Network message wrappers for Source2 networking system."
+---
+
+
+This file defines strongly-typed wrappers around protobuf-based network messages used by the engine.
+
+Messages are grouped into categories:
+- net_* -&gt; core networking
+- clc_* -&gt; client -&gt; server
+- svc_* -&gt; server -&gt; client
+
+<Callout type="info">All classes inherit from CNetMessagePB.</Callout>
+
+<Callout type="info">Template parameters define message ID, protobuf type, group and flags.</Callout>
+
+**Header** [`source2toolkit/schema/netmessages.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/netmessages.h)
+
+## `CNetMessagePBTyped`
+
+**Inherits** `CNetMessagePB< PROTO_TYPE >`
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `kMsgId` | `int32_t` |
+| `kSignonGroup` | [`SignonGroup_t`](/docs/schema/Netmessages#signongroup_t) |
+| `kBufType` | `NetChannelBufType_t` |
+| `kIsForServer` | `bool` |
+
+### `GetGroupName`
+
+```cpp
+static constexpr const char* GetGroupName();
+```
+
+### `MyType_t`
+
+```cpp
+using MyType_t = CNetMessagePBTyped< ID, PROTO_TYPE, SIGNON, BUF_TYPE, IS_FOR_SERVER >;
+```
+
+### `PBType_t`
+
+```cpp
+using PBType_t = PROTO_TYPE;
+```
+
+## `CSVCMsg_PacketEntities_t`
+
+**Inherits** [`CNetMessagePBTyped< svc_PacketEntities, CSVCMsg_PacketEntities, SG_INVALID >`](/docs/schema/Netmessages#cnetmessagepbtyped)
+
+### `AsProto`
+
+```cpp
+void* AsProto() const override;
+```
+
+### `AsProto2`
+
+```cpp
+void* AsProto2() const override;
+```
+
+### `GetNetMessage`
+
+```cpp
+INetworkMessageInternal* GetNetMessage() const override;
+```
+
+### `CopyConstruct`
+
+```cpp
+CNetMessage* CopyConstruct(const CNetMessage* other) const override;
+```
+
+| Parameter | Type |
+|---|---|
+| `other` | `const CNetMessage*` |
+
+## Enums
+
+### `SignonGroup_t`
+
+```cpp
+enum SignonGroup_t : int32_t
+```
+
+| Name | Value |
+|---|---|
+| `SG_INVALID` | `-1` |
+| `SG_GENERIC` | `0` |
+| `SG_LOCALPLAYER` | `1` |
+| `SG_OTHERPLAYER` | `2` |
+| `SG_ENTITIES` | `3` |
+| `SG_SOUNDS` | `4` |
+| `SG_EVENTS` | `5` |
+| `SG_VOICE` | `6` |
+| `SG_STRINGTABLE` | `7` |
+| `SG_MOVE` | `8` |
+| `SG_STRINGCMD` | `9` |
+| `SG_SIGNON` | `10` |
+| `SG_SYSTEM` | `11` |
+| `SG_USERMSG` | `13` |
+| `SG_CLIENTMSG` | `14` |
+| `SG_SPAWNGROUPS` | `15` |
+| `SG_ENGINE` | `16` |
+| `SG_HLTVREPLAY` | `17` |
+| `SG_DECALS` | `18` |
+| `SG_TOTAL` | `19` |

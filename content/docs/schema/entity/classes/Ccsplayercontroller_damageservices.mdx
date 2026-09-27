@@ -1,13 +1,18 @@
 ---
-title: CCSPlayerController_DamageServices
+title: "CCSPlayerController_DamageServices"
+description: "Schema class CCSPlayerController_DamageServices, derived from CPlayerControllerComponent."
 ---
 
-# CCSPlayerController_DamageServices
 
-**Inheritance**: CPlayerControllerComponent
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSPlayerController_DamageServices.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSPlayerController_DamageServices.h)
+
+**Inherits** [`CPlayerControllerComponent`](/docs/schema/entity/classes/CPlayerControllerComponent)
 
 ## Fields
 
-- <ApiParam name="m_nSendUpdate" type="int32_t" />
-- <ApiParam name="m_DamageList" type="CUtlVector&lt;CDamageRecord&gt;" />
+| Field | Type |
+|---|---|
+| `m_nSendUpdate` | `int32_t` |
+| `m_DamageList` | [`CUtlVector<CDamageRecord>`](/docs/schema/entity/classes/CDamageRecord) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

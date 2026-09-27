@@ -1,58 +1,41 @@
 ---
-title: CTriggerFan
+title: "CTriggerFan"
+description: "Schema class CTriggerFan, derived from CBaseTrigger."
 ---
 
-# CTriggerFan
 
-**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTriggerFan.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTriggerFan.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_vFanOriginOffset" type="Vector" />
-- <ApiParam name="m_vDirection" type="Vector" />
-- <ApiParam name="m_bPushTowardsInfoTarget" type="bool" />
-- <ApiParam name="m_bPushAwayFromInfoTarget" type="bool" />
-- <ApiParam name="m_qNoiseDelta" type="Quaternion" />
-- <ApiParam name="m_hInfoFan" type="CHandle&lt;CInfoFan&gt;" />
-- <ApiParam name="m_flForce" type="float" />
-- <ApiParam name="m_bFalloff" type="bool" />
-- <ApiParam name="m_RampTimer" type="CountdownTimer" />
-- <ApiParam name="m_vFanOriginWS" type="Vector" />
-- <ApiParam name="m_vFanOriginLS" type="Vector" />
-- <ApiParam name="m_vFanEndLS" type="Vector" />
-- <ApiParam name="m_vNoiseDirectionTarget" type="Vector" />
-- <ApiParam name="m_iszInfoFan" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flRopeForceScale" type="float" />
-- <ApiParam name="m_flParticleForceScale" type="float" />
-- <ApiParam name="m_flPlayerForce" type="float" />
-- <ApiParam name="m_bPlayerWindblock" type="bool" />
-- <ApiParam name="m_flNPCForce" type="float" />
-- <ApiParam name="m_flRampTime" type="float" />
-- <ApiParam name="m_fNoiseDegrees" type="float" />
-- <ApiParam name="m_fNoiseSpeed" type="float" />
-- <ApiParam name="m_bPushPlayer" type="bool" />
-- <ApiParam name="m_bRampDown" type="bool" />
-- <ApiParam name="m_nManagerFanIdx" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_vFanOriginOffset` | `Vector` |
+| `m_vDirection` | `Vector` |
+| `m_bPushTowardsInfoTarget` | `bool` |
+| `m_bPushAwayFromInfoTarget` | `bool` |
+| `m_qNoiseDelta` | `Quaternion` |
+| `m_hInfoFan` | [`CHandle<CInfoFan>`](/docs/schema/entity/classes/CInfoFan) |
+| `m_flForce` | `float` |
+| `m_bFalloff` | `bool` |
+| `m_RampTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_vFanOriginWS` | `Vector` |
+| `m_vFanOriginLS` | `Vector` |
+| `m_vFanEndLS` | `Vector` |
+| `m_vNoiseDirectionTarget` | `Vector` |
+| `m_iszInfoFan` | `CUtlSymbolLarge` |
+| `m_flRopeForceScale` | `float` |
+| `m_flParticleForceScale` | `float` |
+| `m_flPlayerForce` | `float` |
+| `m_bPlayerWindblock` | `bool` |
+| `m_flNPCForce` | `float` |
+| `m_flRampTime` | `float` |
+| `m_fNoiseDegrees` | `float` |
+| `m_fNoiseSpeed` | `float` |
+| `m_bPushPlayer` | `bool` |
+| `m_bRampDown` | `bool` |
+| `m_nManagerFanIdx` | `int32_t` |
 
-## Methods
-
-### CTriggerFan* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTriggerFan* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTriggerFan* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTriggerFan&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

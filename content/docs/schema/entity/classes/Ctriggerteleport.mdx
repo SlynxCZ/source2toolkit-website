@@ -1,37 +1,20 @@
 ---
-title: CTriggerTeleport
+title: "CTriggerTeleport"
+description: "Schema class CTriggerTeleport, derived from CBaseTrigger."
 ---
 
-# CTriggerTeleport
 
-**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTriggerTeleport.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTriggerTeleport.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_iLandmark" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bUseLandmarkAngles" type="bool" />
-- <ApiParam name="m_bMirrorPlayer" type="bool" />
-- <ApiParam name="m_bCheckDestIfClearForPlayer" type="bool" />
+| Field | Type |
+|---|---|
+| `m_iLandmark` | `CUtlSymbolLarge` |
+| `m_bUseLandmarkAngles` | `bool` |
+| `m_bMirrorPlayer` | `bool` |
+| `m_bCheckDestIfClearForPlayer` | `bool` |
 
-## Methods
-
-### CTriggerTeleport* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTriggerTeleport* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTriggerTeleport* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTriggerTeleport&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

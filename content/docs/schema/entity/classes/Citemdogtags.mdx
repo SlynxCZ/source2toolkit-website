@@ -1,35 +1,18 @@
 ---
-title: CItemDogtags
+title: "CItemDogtags"
+description: "Schema class CItemDogtags, derived from CItem."
 ---
 
-# CItemDogtags
 
-**Inheritance**: [CItem](/docs/schema/entity/classes/Citem)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CItemDogtags.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CItemDogtags.h)
+
+**Inherits** [`CItem`](/docs/schema/entity/classes/CItem)
 
 ## Fields
 
-- <ApiParam name="m_OwningPlayer" type="CHandle&lt;CCSPlayerPawn&gt;" />
-- <ApiParam name="m_KillingPlayer" type="CHandle&lt;CCSPlayerPawn&gt;" />
+| Field | Type |
+|---|---|
+| `m_OwningPlayer` | [`CHandle<CCSPlayerPawn>`](/docs/schema/entity/classes/CCSPlayerPawn) |
+| `m_KillingPlayer` | [`CHandle<CCSPlayerPawn>`](/docs/schema/entity/classes/CCSPlayerPawn) |
 
-## Methods
-
-### CItemDogtags* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CItemDogtags* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CItemDogtags* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CItemDogtags&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

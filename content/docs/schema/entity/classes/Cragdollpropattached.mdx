@@ -1,39 +1,22 @@
 ---
-title: CRagdollPropAttached
+title: "CRagdollPropAttached"
+description: "Schema class CRagdollPropAttached, derived from CRagdollProp."
 ---
 
-# CRagdollPropAttached
 
-**Inheritance**: CRagdollProp
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CRagdollPropAttached.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CRagdollPropAttached.h)
+
+**Inherits** [`CRagdollProp`](/docs/schema/entity/classes/CRagdollProp)
 
 ## Fields
 
-- <ApiParam name="m_boneIndexAttached" type="uint32_t" />
-- <ApiParam name="m_ragdollAttachedObjectIndex" type="uint32_t" />
-- <ApiParam name="m_attachmentPointBoneSpace" type="Vector" />
-- <ApiParam name="m_attachmentPointRagdollSpace" type="Vector" />
-- <ApiParam name="m_bShouldDetach" type="bool" />
-- <ApiParam name="m_bShouldDeleteAttachedActivationRecord" type="bool" />
+| Field | Type |
+|---|---|
+| `m_boneIndexAttached` | `uint32_t` |
+| `m_ragdollAttachedObjectIndex` | `uint32_t` |
+| `m_attachmentPointBoneSpace` | `Vector` |
+| `m_attachmentPointRagdollSpace` | `Vector` |
+| `m_bShouldDetach` | `bool` |
+| `m_bShouldDeleteAttachedActivationRecord` | `bool` |
 
-## Methods
-
-### CRagdollPropAttached* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CRagdollPropAttached* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CRagdollPropAttached* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CRagdollPropAttached&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

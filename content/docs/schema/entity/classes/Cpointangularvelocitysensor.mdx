@@ -1,48 +1,31 @@
 ---
-title: CPointAngularVelocitySensor
+title: "CPointAngularVelocitySensor"
+description: "Schema class CPointAngularVelocitySensor, derived from CPointEntity."
 ---
 
-# CPointAngularVelocitySensor
 
-**Inheritance**: CPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointAngularVelocitySensor.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointAngularVelocitySensor.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_hTargetEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_flThreshold" type="float" />
-- <ApiParam name="m_nLastCompareResult" type="int32_t" />
-- <ApiParam name="m_nLastFireResult" type="int32_t" />
-- <ApiParam name="m_flFireTime" type="float" />
-- <ApiParam name="m_flFireInterval" type="float" />
-- <ApiParam name="m_flLastAngVelocity" type="float" />
-- <ApiParam name="m_lastOrientation" type="QAngle" />
-- <ApiParam name="m_vecAxis" type="Vector" />
-- <ApiParam name="m_bUseHelper" type="bool" />
-- <ApiParam name="m_OnLessThan" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnLessThanOrEqualTo" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnGreaterThan" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnGreaterThanOrEqualTo" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnEqualTo" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_hTargetEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_flThreshold` | `float` |
+| `m_nLastCompareResult` | `int32_t` |
+| `m_nLastFireResult` | `int32_t` |
+| `m_flFireTime` | `float` |
+| `m_flFireInterval` | `float` |
+| `m_flLastAngVelocity` | `float` |
+| `m_lastOrientation` | `QAngle` |
+| `m_vecAxis` | `Vector` |
+| `m_bUseHelper` | `bool` |
+| `m_OnLessThan` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnLessThanOrEqualTo` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnGreaterThan` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnGreaterThanOrEqualTo` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnEqualTo` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CPointAngularVelocitySensor* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointAngularVelocitySensor* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointAngularVelocitySensor* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointAngularVelocitySensor&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

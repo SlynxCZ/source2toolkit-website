@@ -1,37 +1,20 @@
 ---
-title: CMarkupVolumeWithRef
+title: "CMarkupVolumeWithRef"
+description: "Schema class CMarkupVolumeWithRef, derived from CMarkupVolumeTagged."
 ---
 
-# CMarkupVolumeWithRef
 
-**Inheritance**: [CMarkupVolumeTagged](/docs/schema/entity/classes/Cmarkupvolumetagged)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMarkupVolumeWithRef.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMarkupVolumeWithRef.h)
+
+**Inherits** [`CMarkupVolumeTagged`](/docs/schema/entity/classes/CMarkupVolumeTagged)
 
 ## Fields
 
-- <ApiParam name="m_bUseRef" type="bool" />
-- <ApiParam name="m_vRefPosEntitySpace" type="Vector" />
-- <ApiParam name="m_vRefPosWorldSpace" type="Vector" />
-- <ApiParam name="m_flRefDot" type="float" />
+| Field | Type |
+|---|---|
+| `m_bUseRef` | `bool` |
+| `m_vRefPosEntitySpace` | `Vector` |
+| `m_vRefPosWorldSpace` | `Vector` |
+| `m_flRefDot` | `float` |
 
-## Methods
-
-### CMarkupVolumeWithRef* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMarkupVolumeWithRef* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMarkupVolumeWithRef* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMarkupVolumeWithRef&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

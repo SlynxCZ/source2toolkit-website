@@ -1,38 +1,21 @@
 ---
-title: CPlayerPing
+title: "CPlayerPing"
+description: "Schema class CPlayerPing, derived from CBaseEntity."
 ---
 
-# CPlayerPing
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPlayerPing.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPlayerPing.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_hPlayer" type="CHandle&lt;CCSPlayerPawn&gt;" />
-- <ApiParam name="m_hPingedEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_iType" type="int32_t" />
-- <ApiParam name="m_bUrgent" type="bool" />
-- <ApiParam name="m_szPlaceName" type="char" />
+| Field | Type |
+|---|---|
+| `m_hPlayer` | [`CHandle<CCSPlayerPawn>`](/docs/schema/entity/classes/CCSPlayerPawn) |
+| `m_hPingedEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_iType` | `int32_t` |
+| `m_bUrgent` | `bool` |
+| `m_szPlaceName` | `char` |
 
-## Methods
-
-### CPlayerPing* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPlayerPing* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPlayerPing* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPlayerPing&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

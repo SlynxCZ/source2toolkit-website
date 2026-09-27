@@ -1,18 +1,17 @@
 ---
-title: GCConnectionStatus
+title: "GCConnectionStatus"
+description: "Schema enum GCConnectionStatus (5 values)."
 ---
 
-# GCConnectionStatus
 
-## Enums
+```cpp
+enum class GCConnectionStatus : uint32_t
+```
 
-### GCConnectionStatus
-
-#### Values
-
-- `GCConnectionStatus_HAVE_SESSION` = 0
-- `GCConnectionStatus_GC_GOING_DOWN` = 1
-- `GCConnectionStatus_NO_SESSION` = 2
-- `GCConnectionStatus_NO_SESSION_IN_LOGON_QUEUE` = 3
-- `GCConnectionStatus_NO_STEAM` = 4
-
+| Name | Value |
+|---|---|
+| `GCConnectionStatus_HAVE_SESSION` | `0` |
+| `GCConnectionStatus_GC_GOING_DOWN` | `1` |
+| `GCConnectionStatus_NO_SESSION` | `2` |
+| `GCConnectionStatus_NO_SESSION_IN_LOGON_QUEUE` | `3` |
+| `GCConnectionStatus_NO_STEAM` | `4` |

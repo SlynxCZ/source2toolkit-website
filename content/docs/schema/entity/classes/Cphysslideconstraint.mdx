@@ -1,43 +1,26 @@
 ---
-title: CPhysSlideConstraint
+title: "CPhysSlideConstraint"
+description: "Schema class CPhysSlideConstraint, derived from CPhysConstraint."
 ---
 
-# CPhysSlideConstraint
 
-**Inheritance**: [CPhysConstraint](/docs/schema/entity/classes/Cphysconstraint)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysSlideConstraint.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysSlideConstraint.h)
+
+**Inherits** [`CPhysConstraint`](/docs/schema/entity/classes/CPhysConstraint)
 
 ## Fields
 
-- <ApiParam name="m_axisEnd" type="Vector" />
-- <ApiParam name="m_slideFriction" type="float" />
-- <ApiParam name="m_systemLoadScale" type="float" />
-- <ApiParam name="m_initialOffset" type="float" />
-- <ApiParam name="m_bEnableLinearConstraint" type="bool" />
-- <ApiParam name="m_bEnableAngularConstraint" type="bool" />
-- <ApiParam name="m_flMotorFrequency" type="float" />
-- <ApiParam name="m_flMotorDampingRatio" type="float" />
-- <ApiParam name="m_bUseEntityPivot" type="bool" />
-- <ApiParam name="m_soundInfo" type="[ConstraintSoundInfo](/docs/schema/entity/classes/Constraintsoundinfo)" />
+| Field | Type |
+|---|---|
+| `m_axisEnd` | `Vector` |
+| `m_slideFriction` | `float` |
+| `m_systemLoadScale` | `float` |
+| `m_initialOffset` | `float` |
+| `m_bEnableLinearConstraint` | `bool` |
+| `m_bEnableAngularConstraint` | `bool` |
+| `m_flMotorFrequency` | `float` |
+| `m_flMotorDampingRatio` | `float` |
+| `m_bUseEntityPivot` | `bool` |
+| `m_soundInfo` | [`ConstraintSoundInfo`](/docs/schema/entity/classes/ConstraintSoundInfo) |
 
-## Methods
-
-### CPhysSlideConstraint* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysSlideConstraint* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysSlideConstraint* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysSlideConstraint&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

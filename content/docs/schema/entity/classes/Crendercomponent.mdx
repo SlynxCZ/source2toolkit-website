@@ -1,16 +1,21 @@
 ---
-title: CRenderComponent
+title: "CRenderComponent"
+description: "Schema class CRenderComponent, derived from CEntityComponent."
 ---
 
-# CRenderComponent
 
-**Inheritance**: CEntityComponent
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CRenderComponent.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CRenderComponent.h)
+
+**Inherits** `CEntityComponent`
 
 ## Fields
 
-- <ApiParam name="__m_pChainEntity" type="CEntityInstance*" />
-- <ApiParam name="m_bIsRenderingWithViewModels" type="bool" />
-- <ApiParam name="m_nSplitscreenFlags" type="uint32_t" />
-- <ApiParam name="m_bEnableRendering" type="bool" />
-- <ApiParam name="m_bInterpolationReadyToDraw" type="bool" />
+| Field | Type |
+|---|---|
+| `__m_pChainEntity` | `CEntityInstance*` |
+| `m_bIsRenderingWithViewModels` | `bool` |
+| `m_nSplitscreenFlags` | `uint32_t` |
+| `m_bEnableRendering` | `bool` |
+| `m_bInterpolationReadyToDraw` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

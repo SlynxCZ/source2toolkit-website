@@ -1,11 +1,16 @@
 ---
-title: IntervalTimer
+title: "IntervalTimer"
+description: "Schema class IntervalTimer."
 ---
 
-# IntervalTimer
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/IntervalTimer.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/IntervalTimer.h)
 
 ## Fields
 
-- <ApiParam name="m_timestamp" type="float" />
-- <ApiParam name="m_nWorldGroupId" type="WorldGroupId_t" />
+| Field | Type |
+|---|---|
+| `m_timestamp` | `float` |
+| `m_nWorldGroupId` | `WorldGroupId_t` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,38 +1,21 @@
 ---
-title: CSoundOpvarSetAutoRoomEntity
+title: "CSoundOpvarSetAutoRoomEntity"
+description: "Schema class CSoundOpvarSetAutoRoomEntity, derived from CSoundOpvarSetPointEntity."
 ---
 
-# CSoundOpvarSetAutoRoomEntity
 
-**Inheritance**: [CSoundOpvarSetPointEntity](/docs/schema/entity/classes/Csoundopvarsetpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundOpvarSetAutoRoomEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundOpvarSetAutoRoomEntity.h)
+
+**Inherits** [`CSoundOpvarSetPointEntity`](/docs/schema/entity/classes/CSoundOpvarSetPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_traceResults" type="CUtlVector&lt;SoundOpvarTraceResult_t&gt;" />
-- <ApiParam name="m_doorwayPairs" type="CUtlVector&lt;AutoRoomDoorwayPairs_t&gt;" />
-- <ApiParam name="m_flSize" type="float" />
-- <ApiParam name="m_flHeightTolerance" type="float" />
-- <ApiParam name="m_flSizeSqr" type="float" />
+| Field | Type |
+|---|---|
+| `m_traceResults` | [`CUtlVector<SoundOpvarTraceResult_t>`](/docs/schema/entity/classes/SoundOpvarTraceResult_t) |
+| `m_doorwayPairs` | [`CUtlVector<AutoRoomDoorwayPairs_t>`](/docs/schema/entity/classes/AutoRoomDoorwayPairs_t) |
+| `m_flSize` | `float` |
+| `m_flHeightTolerance` | `float` |
+| `m_flSizeSqr` | `float` |
 
-## Methods
-
-### CSoundOpvarSetAutoRoomEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundOpvarSetAutoRoomEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundOpvarSetAutoRoomEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundOpvarSetAutoRoomEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,34 +1,17 @@
 ---
-title: CFilterName
+title: "CFilterName"
+description: "Schema class CFilterName, derived from CBaseFilter."
 ---
 
-# CFilterName
 
-**Inheritance**: [CBaseFilter](/docs/schema/entity/classes/Cbasefilter)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFilterName.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFilterName.h)
+
+**Inherits** [`CBaseFilter`](/docs/schema/entity/classes/CBaseFilter)
 
 ## Fields
 
-- <ApiParam name="m_iFilterName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_iFilterName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CFilterName* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFilterName* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFilterName* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFilterName&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

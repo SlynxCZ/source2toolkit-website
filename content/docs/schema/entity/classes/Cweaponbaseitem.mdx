@@ -1,35 +1,18 @@
 ---
-title: CWeaponBaseItem
+title: "CWeaponBaseItem"
+description: "Schema class CWeaponBaseItem, derived from CCSWeaponBase."
 ---
 
-# CWeaponBaseItem
 
-**Inheritance**: CCSWeaponBase
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CWeaponBaseItem.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CWeaponBaseItem.h)
+
+**Inherits** [`CCSWeaponBase`](/docs/schema/entity/classes/CCSWeaponBase)
 
 ## Fields
 
-- <ApiParam name="m_bSequenceInProgress" type="bool" />
-- <ApiParam name="m_bRedraw" type="bool" />
+| Field | Type |
+|---|---|
+| `m_bSequenceInProgress` | `bool` |
+| `m_bRedraw` | `bool` |
 
-## Methods
-
-### CWeaponBaseItem* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CWeaponBaseItem* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CWeaponBaseItem* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CWeaponBaseItem&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

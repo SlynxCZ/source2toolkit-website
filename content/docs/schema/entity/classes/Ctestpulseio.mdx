@@ -1,37 +1,20 @@
 ---
-title: CTestPulseIO
+title: "CTestPulseIO"
+description: "Schema class CTestPulseIO, derived from CLogicalEntity."
 ---
 
-# CTestPulseIO
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTestPulseIO.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTestPulseIO.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_OnVariantVoid" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bAllowEmptyInputs" type="bool" />
-- <ApiParam name="m_TestComponent" type="[CTestPulseIOComponent_Derived](/docs/schema/entity/classes/Ctestpulseiocomponent_derived)" />
-- <ApiParam name="m_OnInternalTestVoid" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_OnVariantVoid` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bAllowEmptyInputs` | `bool` |
+| `m_TestComponent` | [`CTestPulseIOComponent_Derived`](/docs/schema/entity/classes/CTestPulseIOComponent_Derived) |
+| `m_OnInternalTestVoid` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CTestPulseIO* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTestPulseIO* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTestPulseIO* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTestPulseIO&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

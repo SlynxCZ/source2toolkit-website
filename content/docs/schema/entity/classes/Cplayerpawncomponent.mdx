@@ -1,17 +1,26 @@
 ---
-title: CPlayerPawnComponent
+title: "CPlayerPawnComponent"
+description: "Schema class CPlayerPawnComponent."
 ---
 
-# CPlayerPawnComponent
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPlayerPawnComponent.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPlayerPawnComponent.h)
 
 ## Fields
 
-- <ApiParam name="__m_pChainEntity" type="CEntityInstance*" />
-- <ApiParam name="m_pComponentGraphController" type="CAnimGraphControllerPtr" />
+| Field | Type |
+|---|---|
+| `__m_pChainEntity` | `CEntityInstance*` |
+| `m_pComponentGraphController` | [`CAnimGraphControllerPtr`](/docs/schema/entity/classes/CAnimGraphControllerPtr) |
+
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).
 
 ## Methods
 
-### CCSPlayerPawn* GetPlayerPawn()
+### `GetPlayerPawn`
+
+```cpp
+CCSPlayerPawn* GetPlayerPawn();
+```
 
 Get player pawn.
-

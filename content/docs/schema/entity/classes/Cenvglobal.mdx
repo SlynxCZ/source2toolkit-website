@@ -1,37 +1,20 @@
 ---
-title: CEnvGlobal
+title: "CEnvGlobal"
+description: "Schema class CEnvGlobal, derived from CLogicalEntity."
 ---
 
-# CEnvGlobal
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvGlobal.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvGlobal.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_globalstate" type="CUtlSymbolLarge" />
-- <ApiParam name="m_triggermode" type="int32_t" />
-- <ApiParam name="m_initialstate" type="int32_t" />
-- <ApiParam name="m_counter" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_globalstate` | `CUtlSymbolLarge` |
+| `m_triggermode` | `int32_t` |
+| `m_initialstate` | `int32_t` |
+| `m_counter` | `int32_t` |
 
-## Methods
-
-### CEnvGlobal* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvGlobal* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvGlobal* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvGlobal&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

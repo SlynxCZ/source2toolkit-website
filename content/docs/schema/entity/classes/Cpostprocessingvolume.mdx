@@ -1,45 +1,28 @@
 ---
-title: CPostProcessingVolume
+title: "CPostProcessingVolume"
+description: "Schema class CPostProcessingVolume, derived from CBaseTrigger."
 ---
 
-# CPostProcessingVolume
 
-**Inheritance**: CBaseTrigger
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPostProcessingVolume.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPostProcessingVolume.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_hPostSettings" type="CStrongHandle&lt;InfoForResourceTypeCPostProcessingResource&gt;" />
-- <ApiParam name="m_flFadeDuration" type="float" />
-- <ApiParam name="m_flMinLogExposure" type="float" />
-- <ApiParam name="m_flMaxLogExposure" type="float" />
-- <ApiParam name="m_flMinExposure" type="float" />
-- <ApiParam name="m_flMaxExposure" type="float" />
-- <ApiParam name="m_flExposureCompensation" type="float" />
-- <ApiParam name="m_flExposureFadeSpeedUp" type="float" />
-- <ApiParam name="m_flExposureFadeSpeedDown" type="float" />
-- <ApiParam name="m_flTonemapEVSmoothingRange" type="float" />
-- <ApiParam name="m_bMaster" type="bool" />
-- <ApiParam name="m_bExposureControl" type="bool" />
+| Field | Type |
+|---|---|
+| `m_hPostSettings` | [`CStrongHandle<InfoForResourceTypeCPostProcessingResource>`](/docs/core-api/Schema#cstronghandle) |
+| `m_flFadeDuration` | `float` |
+| `m_flMinLogExposure` | `float` |
+| `m_flMaxLogExposure` | `float` |
+| `m_flMinExposure` | `float` |
+| `m_flMaxExposure` | `float` |
+| `m_flExposureCompensation` | `float` |
+| `m_flExposureFadeSpeedUp` | `float` |
+| `m_flExposureFadeSpeedDown` | `float` |
+| `m_flTonemapEVSmoothingRange` | `float` |
+| `m_bMaster` | `bool` |
+| `m_bExposureControl` | `bool` |
 
-## Methods
-
-### CPostProcessingVolume* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPostProcessingVolume* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPostProcessingVolume* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPostProcessingVolume&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,37 +1,20 @@
 ---
-title: CGunTarget
+title: "CGunTarget"
+description: "Schema class CGunTarget, derived from CBaseToggle."
 ---
 
-# CGunTarget
 
-**Inheritance**: [CBaseToggle](/docs/schema/entity/classes/Cbasetoggle)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CGunTarget.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CGunTarget.h)
+
+**Inherits** [`CBaseToggle`](/docs/schema/entity/classes/CBaseToggle)
 
 ## Fields
 
-- <ApiParam name="m_flSpeed" type="float" />
-- <ApiParam name="m_on" type="bool" />
-- <ApiParam name="m_hTargetEnt" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_OnDeath" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_flSpeed` | `float` |
+| `m_on` | `bool` |
+| `m_hTargetEnt` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_OnDeath` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CGunTarget* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CGunTarget* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CGunTarget* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CGunTarget&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

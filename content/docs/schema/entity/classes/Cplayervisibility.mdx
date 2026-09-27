@@ -1,39 +1,22 @@
 ---
-title: CPlayerVisibility
+title: "CPlayerVisibility"
+description: "Schema class CPlayerVisibility, derived from CBaseEntity."
 ---
 
-# CPlayerVisibility
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPlayerVisibility.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPlayerVisibility.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_flVisibilityStrength" type="float" />
-- <ApiParam name="m_flFogDistanceMultiplier" type="float" />
-- <ApiParam name="m_flFogMaxDensityMultiplier" type="float" />
-- <ApiParam name="m_flFadeTime" type="float" />
-- <ApiParam name="m_bStartDisabled" type="bool" />
-- <ApiParam name="m_bIsEnabled" type="bool" />
+| Field | Type |
+|---|---|
+| `m_flVisibilityStrength` | `float` |
+| `m_flFogDistanceMultiplier` | `float` |
+| `m_flFogMaxDensityMultiplier` | `float` |
+| `m_flFadeTime` | `float` |
+| `m_bStartDisabled` | `bool` |
+| `m_bIsEnabled` | `bool` |
 
-## Methods
-
-### CPlayerVisibility* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPlayerVisibility* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPlayerVisibility* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPlayerVisibility&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

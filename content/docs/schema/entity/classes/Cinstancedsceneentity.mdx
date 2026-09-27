@@ -1,39 +1,22 @@
 ---
-title: CInstancedSceneEntity
+title: "CInstancedSceneEntity"
+description: "Schema class CInstancedSceneEntity, derived from CSceneEntity."
 ---
 
-# CInstancedSceneEntity
 
-**Inheritance**: CSceneEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CInstancedSceneEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CInstancedSceneEntity.h)
+
+**Inherits** [`CSceneEntity`](/docs/schema/entity/classes/CSceneEntity)
 
 ## Fields
 
-- <ApiParam name="m_hOwner" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_bHadOwner" type="bool" />
-- <ApiParam name="m_flPostSpeakDelay" type="float" />
-- <ApiParam name="m_flPreDelay" type="float" />
-- <ApiParam name="m_bIsBackground" type="bool" />
-- <ApiParam name="m_hTarget" type="CHandle&lt;CBaseEntity&gt;" />
+| Field | Type |
+|---|---|
+| `m_hOwner` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_bHadOwner` | `bool` |
+| `m_flPostSpeakDelay` | `float` |
+| `m_flPreDelay` | `float` |
+| `m_bIsBackground` | `bool` |
+| `m_hTarget` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
 
-## Methods
-
-### CInstancedSceneEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CInstancedSceneEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CInstancedSceneEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CInstancedSceneEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

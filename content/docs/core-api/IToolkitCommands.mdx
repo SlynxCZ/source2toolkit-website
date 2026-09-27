@@ -1,67 +1,143 @@
 ---
-title: IToolkitCommands
+title: "IToolkitCommands"
+description: "Command and chat handling interface for Source2Toolkit."
 ---
 
-# IToolkitCommands
+
+Provides functionality for:
+- Registering console commands
+- Listening to console command execution
+- Handling in-game chat messages
+
+<Callout type="info">This system allows plugins to hook into player input via chat or console.</Callout>
+
+Interface for registering and handling commands.
+
+Supports:
+- Chat-based commands (player messages)
+- Console commands (server or client)
+- Command listeners with pre/post execution hooks
+
+<Callout type="info">All commands are owned by a plugin via PluginId.</Callout>
+
+**Interface id** `IToolkitCommands001` (`TOOLKIT_COMMANDS_INTERFACE`) · **Global** `g_pToolkitCommands` · **Header** [`source2toolkit/IToolkitCommands.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitCommands.h)
+
+## Types
+
+### `ChatHandler`
+
+```cpp
+using ChatHandler = std::function<void(const CCommandContext&, const CCommand&, bool post)>;
+```
+
+Callback for chat messages.
+
+### `CommandHandler`
+
+```cpp
+using CommandHandler = std::function<Action(const CCommandContext&, const CCommand&, bool post)>;
+```
+
+Callback for console commands.
 
 ## Methods
 
-### RegisterChatListener(owner, pchName, handler)
+### `RegisterChatListener`
+
+```cpp
+virtual void RegisterChatListener(PluginId owner, const char* pchName, ChatHandler handler) = 0;
+```
 
 Registers a chat command listener.
 
-<ApiLabel>Parameters</ApiLabel>
+<Callout type="info">Triggered when a player sends a matching chat message.</Callout>
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the command
-- <ApiParam name="pchName" type="const char*" /> — Command name (e.g. "!kick", "!test")
-- <ApiParam name="handler" type="ChatHandler" /> — Callback executed when command is triggered
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the command |
+| `pchName` | `const char*` | Command name (e.g. "!kick", "!test") |
+| `handler` | [`ChatHandler`](/docs/core-api/IToolkitCommands#chathandler) | Callback executed when command is triggered |
 
-### UnregisterChatListener(owner, pchName)
+### `UnregisterChatListener`
+
+```cpp
+virtual void UnregisterChatListener(PluginId owner, const char* pchName) = 0;
+```
 
 Drops one of this plugin's chat listeners.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `pchName` | `const char*` |
 
-- <ApiParam name="owner" type="PluginId" />
-- <ApiParam name="pchName" type="const char*" />
+### `RegisterConCommand`
 
-### RegisterConCommand(owner, pchName, handler)
+```cpp
+virtual void RegisterConCommand(PluginId owner, const char* pchName, ChatHandler handler) = 0;
+```
 
 Registers a console command.
 
-<ApiLabel>Parameters</ApiLabel>
+<Callout type="info">This creates a new console command accessible via server/client console.</Callout>
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the command
-- <ApiParam name="pchName" type="const char*" /> — Command name (e.g. "sv_test")
-- <ApiParam name="handler" type="ChatHandler" /> — Callback executed when command is used
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the command |
+| `pchName` | `const char*` | Command name (e.g. "sv_test") |
+| `handler` | [`ChatHandler`](/docs/core-api/IToolkitCommands#chathandler) | Callback executed when command is used |
 
-### UnregisterConCommand(owner, pchName)
+### `UnregisterConCommand`
+
+```cpp
+virtual void UnregisterConCommand(PluginId owner, const char* pchName) = 0;
+```
 
 Removes a console command this plugin created.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `pchName` | `const char*` |
 
-- <ApiParam name="owner" type="PluginId" />
-- <ApiParam name="pchName" type="const char*" />
+### `RegisterConListener`
 
-### RegisterConListener(owner, pchName, handler, post)
+```cpp
+virtual void RegisterConListener(PluginId owner, const char* pchName, CommandHandler handler, bool post) = 0;
+```
 
 Registers a listener for an existing console command.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the listener |
+| `pchName` | `const char*` | Existing command name to listen for |
+| `handler` | [`CommandHandler`](/docs/core-api/IToolkitCommands#commandhandler) | Callback executed on command execution |
+| `post` | `bool` | false to run before the original, true to run after |
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the listener
-- <ApiParam name="pchName" type="const char*" /> — Existing command name to listen for
-- <ApiParam name="handler" type="CommandHandler" /> — Callback executed on command execution
-- <ApiParam name="post" type="bool" /> — false to run before the original, true to run after
+**Returns** `void` — Action to control command execution: * Action::Ignore: do nothing * Action::Override: override return value but still call original (pre only) * Action::Supersede: block original execution (pre only)
 
-### UnregisterConListener(owner, pchName, post)
+### `UnregisterConListener`
+
+```cpp
+virtual void UnregisterConListener(PluginId owner, const char* pchName, bool post) = 0;
+```
 
 Drops one of this plugin's console listeners.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `pchName` | `const char*` |
+| `post` | `bool` |
 
-- <ApiParam name="owner" type="PluginId" />
-- <ApiParam name="pchName" type="const char*" />
-- <ApiParam name="post" type="bool" />
+## Macros
 
+| Macro | Expands to |
+|---|---|
+| `REGISTER_CHAT_LISTENER(pchName, handler)` | `g_pToolkitCommands->RegisterChatListener(g_PluginID, pchName, handler)` |
+| `UNREGISTER_CHAT_LISTENER(pchName)` | `g_pToolkitCommands->UnregisterChatListener(g_PluginID, pchName)` |
+| `REGISTER_CON_COMMAND(pchName, handler)` | `g_pToolkitCommands->RegisterConCommand(g_PluginID, pchName, handler)` |
+| `UNREGISTER_CON_COMMAND(pchName)` | `g_pToolkitCommands->UnregisterConCommand(g_PluginID, pchName)` |
+| `REGISTER_CON_LISTENER(pchName, handler, post)` | `g_pToolkitCommands->RegisterConListener(g_PluginID, pchName, handler, post)` |
+| `UNREGISTER_CON_LISTENER(pchName, post)` | `g_pToolkitCommands->UnregisterConListener(g_PluginID, pchName, post)` |

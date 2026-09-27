@@ -1,45 +1,28 @@
 ---
-title: CPhysWheelConstraint
+title: "CPhysWheelConstraint"
+description: "Schema class CPhysWheelConstraint, derived from CPhysConstraint."
 ---
 
-# CPhysWheelConstraint
 
-**Inheritance**: CPhysConstraint
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysWheelConstraint.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysWheelConstraint.h)
+
+**Inherits** [`CPhysConstraint`](/docs/schema/entity/classes/CPhysConstraint)
 
 ## Fields
 
-- <ApiParam name="m_flSuspensionFrequency" type="float" />
-- <ApiParam name="m_flSuspensionDampingRatio" type="float" />
-- <ApiParam name="m_flSuspensionHeightOffset" type="float" />
-- <ApiParam name="m_bEnableSuspensionLimit" type="bool" />
-- <ApiParam name="m_flMinSuspensionOffset" type="float" />
-- <ApiParam name="m_flMaxSuspensionOffset" type="float" />
-- <ApiParam name="m_bEnableSteeringLimit" type="bool" />
-- <ApiParam name="m_flMinSteeringAngle" type="float" />
-- <ApiParam name="m_flMaxSteeringAngle" type="float" />
-- <ApiParam name="m_flSteeringAxisFriction" type="float" />
-- <ApiParam name="m_flSpinAxisFriction" type="float" />
-- <ApiParam name="m_hSteeringMimicsEntity" type="CHandle&lt;CBaseEntity&gt;" />
+| Field | Type |
+|---|---|
+| `m_flSuspensionFrequency` | `float` |
+| `m_flSuspensionDampingRatio` | `float` |
+| `m_flSuspensionHeightOffset` | `float` |
+| `m_bEnableSuspensionLimit` | `bool` |
+| `m_flMinSuspensionOffset` | `float` |
+| `m_flMaxSuspensionOffset` | `float` |
+| `m_bEnableSteeringLimit` | `bool` |
+| `m_flMinSteeringAngle` | `float` |
+| `m_flMaxSteeringAngle` | `float` |
+| `m_flSteeringAxisFriction` | `float` |
+| `m_flSpinAxisFriction` | `float` |
+| `m_hSteeringMimicsEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
 
-## Methods
-
-### CPhysWheelConstraint* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysWheelConstraint* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysWheelConstraint* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysWheelConstraint&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

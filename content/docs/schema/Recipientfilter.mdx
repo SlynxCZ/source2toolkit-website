@@ -1,36 +1,77 @@
 ---
-title: Recipientfilter
+title: "Recipient filters"
+description: "Engine structures the SDK declares by hand: CRecipientFilter, CSingleRecipientFilter."
 ---
 
-# recipientfilter
 
-## CRecipientFilter
+**Header** [`source2toolkit/schema/recipientfilter.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/recipientfilter.h)
 
-**Inheritance**: IRecipientFilter
+## `CRecipientFilter`
 
-### NetChannelBufType_t GetNetworkBufType()
+**Inherits** `IRecipientFilter`
 
-### bool IsInitMessage()
+### Constructors
 
-### const CPlayerBitVec& GetRecipients()
+```cpp
+CRecipientFilter(NetChannelBufType_t nBufType = BUF_RELIABLE, bool bInitMessage = false);
+```
 
-### CPlayerSlot GetPredictedPlayerSlot()
+### `GetNetworkBufType`
 
-### AddRecipient(slot)
+```cpp
+NetChannelBufType_t GetNetworkBufType(void) const override;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+### `IsInitMessage`
 
-- <ApiParam name="slot" type="CPlayerSlot" />
+```cpp
+bool IsInitMessage(void) const override;
+```
 
-### SetFromBitmask(mask)
+### `GetRecipients`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+const CPlayerBitVec& GetRecipients(void) const override;
+```
 
-- <ApiParam name="mask" type="uint64_t" />
+### `GetPredictedPlayerSlot`
 
-### MakeReliable()
+```cpp
+CPlayerSlot GetPredictedPlayerSlot(void) const override;
+```
 
-## CSingleRecipientFilter
+### `AddRecipient`
 
-**Inheritance**: [CRecipientFilter](/docs/schema/Recipientfilter)
+```cpp
+void AddRecipient(CPlayerSlot slot);
+```
 
+| Parameter | Type |
+|---|---|
+| `slot` | `CPlayerSlot` |
+
+### `SetFromBitmask`
+
+```cpp
+void SetFromBitmask(uint64_t mask);
+```
+
+| Parameter | Type |
+|---|---|
+| `mask` | `uint64_t` |
+
+### `MakeReliable`
+
+```cpp
+void MakeReliable();
+```
+
+## `CSingleRecipientFilter`
+
+**Inherits** [`CRecipientFilter`](/docs/schema/Recipientfilter#crecipientfilter)
+
+### Constructors
+
+```cpp
+CSingleRecipientFilter(CPlayerSlot nRecipientSlot, NetChannelBufType_t nBufType = BUF_RELIABLE, bool bInitMessage = false);
+```

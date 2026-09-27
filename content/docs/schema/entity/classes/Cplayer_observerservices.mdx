@@ -1,15 +1,20 @@
 ---
-title: CPlayer_ObserverServices
+title: "CPlayer_ObserverServices"
+description: "Schema class CPlayer_ObserverServices, derived from CPlayerPawnComponent."
 ---
 
-# CPlayer_ObserverServices
 
-**Inheritance**: CPlayerPawnComponent
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPlayer_ObserverServices.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPlayer_ObserverServices.h)
+
+**Inherits** [`CPlayerPawnComponent`](/docs/schema/entity/classes/CPlayerPawnComponent)
 
 ## Fields
 
-- <ApiParam name="m_iObserverMode" type="uint8_t" />
-- <ApiParam name="m_hObserverTarget" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_iObserverLastMode" type="ObserverMode_t" />
-- <ApiParam name="m_bForcedObserverMode" type="bool" />
+| Field | Type |
+|---|---|
+| `m_iObserverMode` | `uint8_t` |
+| `m_hObserverTarget` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_iObserverLastMode` | `ObserverMode_t` |
+| `m_bForcedObserverMode` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

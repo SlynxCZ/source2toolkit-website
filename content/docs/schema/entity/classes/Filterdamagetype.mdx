@@ -1,34 +1,17 @@
 ---
-title: FilterDamageType
+title: "FilterDamageType"
+description: "Schema class FilterDamageType, derived from CBaseFilter."
 ---
 
-# FilterDamageType
 
-**Inheritance**: [CBaseFilter](/docs/schema/entity/classes/Cbasefilter)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/FilterDamageType.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/FilterDamageType.h)
+
+**Inherits** [`CBaseFilter`](/docs/schema/entity/classes/CBaseFilter)
 
 ## Fields
 
-- <ApiParam name="m_iDamageType" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_iDamageType` | `int32_t` |
 
-## Methods
-
-### FilterDamageType* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### FilterDamageType* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### FilterDamageType* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;FilterDamageType&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

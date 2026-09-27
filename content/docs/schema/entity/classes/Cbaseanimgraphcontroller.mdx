@@ -1,42 +1,47 @@
 ---
-title: CBaseAnimGraphController
+title: "CBaseAnimGraphController"
+description: "Schema class CBaseAnimGraphController, derived from CSkeletonAnimationController."
 ---
 
-# CBaseAnimGraphController
 
-**Inheritance**: CSkeletonAnimationController
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseAnimGraphController.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseAnimGraphController.h)
+
+**Inherits** [`CSkeletonAnimationController`](/docs/schema/entity/classes/CSkeletonAnimationController)
 
 ## Fields
 
-- <ApiParam name="m_nAnimationAlgorithm" type="AnimationAlgorithm_t" />
-- <ApiParam name="m_nNextExternalGraphHandle" type="ExternalAnimGraphHandle_t" />
-- <ApiParam name="m_vecSecondarySkeletonSlotIDs" type="CUtlVector&lt;CGlobalSymbol&gt;" />
-- <ApiParam name="m_vecSecondarySkeletons" type="CUtlVector&lt;CHandle&lt;CBaseAnimGraph&gt;&gt;" />
-- <ApiParam name="m_nSecondarySkeletonMasterCount" type="int32_t" />
-- <ApiParam name="m_flSoundSyncTime" type="float" />
-- <ApiParam name="m_nActiveIKChainMask" type="uint32_t" />
-- <ApiParam name="m_hSequence" type="int32_t" />
-- <ApiParam name="m_flSeqStartTime" type="float" />
-- <ApiParam name="m_flSeqFixedCycle" type="float" />
-- <ApiParam name="m_nAnimLoopMode" type="AnimLoopMode_t" />
-- <ApiParam name="m_flPlaybackRate" type="float" />
-- <ApiParam name="m_nNotifyState" type="SequenceFinishNotifyState_t" />
-- <ApiParam name="m_bNetworkedAnimationInputsChanged" type="bool" />
-- <ApiParam name="m_bNetworkedSequenceChanged" type="bool" />
-- <ApiParam name="m_bLastUpdateSkipped" type="bool" />
-- <ApiParam name="m_bSequenceFinished" type="bool" />
-- <ApiParam name="m_nPrevAnimUpdateTick" type="int32_t" />
-- <ApiParam name="m_hGraphDefinitionAG2" type="CStrongHandle&lt;InfoForResourceTypeCNmGraphDefinition&gt;" />
-- <ApiParam name="m_SerializePoseRecipeAG2Slots" type="CUtlVector&lt;AnimGraph2SerializedPoseRecipeSlot_t&gt;" />
-- <ApiParam name="m_SerializePoseRecipeAG2Dynamic" type="CUtlVector&lt;uint8_t&gt;" />
-- <ApiParam name="m_nSerializePoseRecipeAG2ActiveSlot" type="uint32_t" />
-- <ApiParam name="m_nSerializePoseRecipeVersionAG2" type="int32_t" />
-- <ApiParam name="m_nServerGraphInstanceIteration" type="int32_t" />
-- <ApiParam name="m_nServerSerializationContextIteration" type="int32_t" />
-- <ApiParam name="m_primaryGraphId" type="ResourceId_t" />
-- <ApiParam name="m_vecExternalGraphIds" type="CUtlVector&lt;ResourceId_t&gt;" />
-- <ApiParam name="m_vecExternalClipIds" type="CUtlVector&lt;ResourceId_t&gt;" />
-- <ApiParam name="m_sAnimGraph2Identifier" type="CGlobalSymbol" />
-- <ApiParam name="m_pGraphInstanceAG2" type="CAnimGraph2InstancePtr" />
-- <ApiParam name="m_vecExternalGraphs" type="CExternalAnimGraphList" />
+| Field | Type |
+|---|---|
+| `m_nAnimationAlgorithm` | [`AnimationAlgorithm_t`](/docs/schema/entity/enums/AnimationAlgorithm_t) |
+| `m_nNextExternalGraphHandle` | [`ExternalAnimGraphHandle_t`](/docs/schema/entity/classes/ExternalAnimGraphHandle_t) |
+| `m_vecSecondarySkeletonSlotIDs` | [`CUtlVector<CGlobalSymbol>`](/docs/core-api/Schema#cglobalsymbol) |
+| `m_vecSecondarySkeletons` | [`CUtlVector<CHandle<CBaseAnimGraph>>`](/docs/schema/entity/classes/CBaseAnimGraph) |
+| `m_nSecondarySkeletonMasterCount` | `int32_t` |
+| `m_flSoundSyncTime` | `float` |
+| `m_nActiveIKChainMask` | `uint32_t` |
+| `m_hSequence` | `int32_t` |
+| `m_flSeqStartTime` | `float` |
+| `m_flSeqFixedCycle` | `float` |
+| `m_nAnimLoopMode` | [`AnimLoopMode_t`](/docs/schema/entity/enums/AnimLoopMode_t) |
+| `m_flPlaybackRate` | `float` |
+| `m_nNotifyState` | [`SequenceFinishNotifyState_t`](/docs/schema/entity/enums/SequenceFinishNotifyState_t) |
+| `m_bNetworkedAnimationInputsChanged` | `bool` |
+| `m_bNetworkedSequenceChanged` | `bool` |
+| `m_bLastUpdateSkipped` | `bool` |
+| `m_bSequenceFinished` | `bool` |
+| `m_nPrevAnimUpdateTick` | `int32_t` |
+| `m_hGraphDefinitionAG2` | [`CStrongHandle<InfoForResourceTypeCNmGraphDefinition>`](/docs/core-api/Schema#cstronghandle) |
+| `m_SerializePoseRecipeAG2Slots` | [`CUtlVector<AnimGraph2SerializedPoseRecipeSlot_t>`](/docs/schema/entity/classes/AnimGraph2SerializedPoseRecipeSlot_t) |
+| `m_SerializePoseRecipeAG2Dynamic` | `CUtlVector<uint8_t>` |
+| `m_nSerializePoseRecipeAG2ActiveSlot` | `uint32_t` |
+| `m_nSerializePoseRecipeVersionAG2` | `int32_t` |
+| `m_nServerGraphInstanceIteration` | `int32_t` |
+| `m_nServerSerializationContextIteration` | `int32_t` |
+| `m_primaryGraphId` | [`ResourceId_t`](/docs/schema/entity/classes/ResourceId_t) |
+| `m_vecExternalGraphIds` | [`CUtlVector<ResourceId_t>`](/docs/schema/entity/classes/ResourceId_t) |
+| `m_vecExternalClipIds` | [`CUtlVector<ResourceId_t>`](/docs/schema/entity/classes/ResourceId_t) |
+| `m_sAnimGraph2Identifier` | [`CGlobalSymbol`](/docs/core-api/Schema#cglobalsymbol) |
+| `m_pGraphInstanceAG2` | [`CAnimGraph2InstancePtr`](/docs/schema/entity/classes/CAnimGraph2InstancePtr) |
+| `m_vecExternalGraphs` | [`CExternalAnimGraphList`](/docs/schema/entity/classes/CExternalAnimGraphList) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

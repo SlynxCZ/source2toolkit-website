@@ -1,38 +1,21 @@
 ---
-title: CSoundEventMultiPointEntity
+title: "CSoundEventMultiPointEntity"
+description: "Schema class CSoundEventMultiPointEntity, derived from CSoundEventEntity."
 ---
 
-# CSoundEventMultiPointEntity
 
-**Inheritance**: CSoundEventEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundEventMultiPointEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundEventMultiPointEntity.h)
+
+**Inherits** [`CSoundEventEntity`](/docs/schema/entity/classes/CSoundEventEntity)
 
 ## Fields
 
-- <ApiParam name="m_iCountMax" type="int32_t" />
-- <ApiParam name="m_flDistanceMax" type="float" />
-- <ApiParam name="m_flDistMaxSqr" type="float" />
-- <ApiParam name="m_flDotProductMax" type="float" />
-- <ApiParam name="m_bPlaying" type="bool" />
+| Field | Type |
+|---|---|
+| `m_iCountMax` | `int32_t` |
+| `m_flDistanceMax` | `float` |
+| `m_flDistMaxSqr` | `float` |
+| `m_flDotProductMax` | `float` |
+| `m_bPlaying` | `bool` |
 
-## Methods
-
-### CSoundEventMultiPointEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundEventMultiPointEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundEventMultiPointEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundEventMultiPointEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,34 +1,17 @@
 ---
-title: CScriptTriggerOnce
+title: "CScriptTriggerOnce"
+description: "Schema class CScriptTriggerOnce, derived from CTriggerOnce."
 ---
 
-# CScriptTriggerOnce
 
-**Inheritance**: [CTriggerOnce](/docs/schema/entity/classes/Ctriggeronce)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CScriptTriggerOnce.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CScriptTriggerOnce.h)
+
+**Inherits** [`CTriggerOnce`](/docs/schema/entity/classes/CTriggerOnce)
 
 ## Fields
 
-- <ApiParam name="m_vExtent" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_vExtent` | `Vector` |
 
-## Methods
-
-### CScriptTriggerOnce* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CScriptTriggerOnce* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CScriptTriggerOnce* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CScriptTriggerOnce&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

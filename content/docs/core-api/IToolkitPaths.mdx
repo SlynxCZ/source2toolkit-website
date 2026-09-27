@@ -1,40 +1,111 @@
 ---
-title: IToolkitPaths
+title: "IToolkitPaths"
+description: "Where the toolkit keeps things on disk."
 ---
 
-# IToolkitPaths
+
+Every path a plugin needs comes from here rather than being spelled out against the game directory, so the layout can move without every plugin having to be found and edited.
+
+The toolkit's on-disk layout.
+
+Under the game directory:
+
+```cpp
+addons/source2toolkit/
+  configs/              core.json, and one directory per plugin
+    <PluginName>/       this plugin's own configs
+  gamedata/             every .json here is read into the game config
+  plugins/              the .stx files themselves
+  shared/               data more than one plugin reads
+```
+
+The returned strings are owned by the toolkit and stay valid for as long as it is loaded; copy them if you need to keep one past that.
+
+**Interface id** `IToolkitPaths001` (`TOOLKIT_PATHS_INTERFACE`) · **Global** `g_pToolkitPaths` · **Header** [`source2toolkit/IToolkitPaths.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitPaths.h)
 
 ## Methods
 
-### const char* GameDirectory()
+### `GameDirectory`
+
+```cpp
+virtual const char* GameDirectory() = 0;
+```
 
 The game directory, e.g. ".../game/csgo".
 
-### const char* RootDirectory()
+### `RootDirectory`
+
+```cpp
+virtual const char* RootDirectory() = 0;
+```
 
 addons/source2toolkit.
 
-### const char* ConfigsDirectory()
+### `ConfigsDirectory`
+
+```cpp
+virtual const char* ConfigsDirectory() = 0;
+```
 
 addons/source2toolkit/configs.
 
-### const char* GamedataDirectory()
+### `GamedataDirectory`
+
+```cpp
+virtual const char* GamedataDirectory() = 0;
+```
 
 addons/source2toolkit/gamedata.
 
-### const char* PluginsDirectory()
+### `PluginsDirectory`
+
+```cpp
+virtual const char* PluginsDirectory() = 0;
+```
 
 addons/source2toolkit/plugins, where the .stx files live.
 
-### const char* SharedDirectory()
+### `SharedDirectory`
+
+```cpp
+virtual const char* SharedDirectory() = 0;
+```
 
 addons/source2toolkit/shared, for data more than one plugin reads.
 
-### const char* PluginConfigDirectory(owner)
+### `PluginConfigDirectory`
+
+```cpp
+virtual const char* PluginConfigDirectory(PluginId owner) = 0;
+```
 
 This plugin's own config directory, configs/&lt;PluginName&gt;.
 
-<ApiLabel>Parameters</ApiLabel>
+The directory is not created for you; it is where the plugin's files are expected to have been installed.
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin ID to look up
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID to look up |
 
+**Returns** `const char*` — The path, or nullptr when there is no such plugin
+
+## Macros
+
+### `PLUGIN_CONFIG_DIR`
+
+```cpp
+#define PLUGIN_CONFIG_DIR() g_pToolkitPaths->PluginConfigDirectory(g_PluginID)
+```
+
+This plugin's config directory; the plugin ID is filled in for you.
+
+### Other macros
+
+| Macro | Expands to |
+|---|---|
+| `TOOLKIT_GAME_DIR()` | `g_pToolkitPaths->GameDirectory()` |
+| `TOOLKIT_ROOT_DIR()` | `g_pToolkitPaths->RootDirectory()` |
+| `TOOLKIT_CONFIGS_DIR()` | `g_pToolkitPaths->ConfigsDirectory()` |
+| `TOOLKIT_GAMEDATA_DIR()` | `g_pToolkitPaths->GamedataDirectory()` |
+| `TOOLKIT_PLUGINS_DIR()` | `g_pToolkitPaths->PluginsDirectory()` |
+| `TOOLKIT_SHARED_DIR()` | `g_pToolkitPaths->SharedDirectory()` |

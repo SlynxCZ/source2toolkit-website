@@ -1,35 +1,18 @@
 ---
-title: CSkyCameraVolumeTarget
+title: "CSkyCameraVolumeTarget"
+description: "Schema class CSkyCameraVolumeTarget, derived from CBaseEntity."
 ---
 
-# CSkyCameraVolumeTarget
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSkyCameraVolumeTarget.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSkyCameraVolumeTarget.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_nSkyboxScale" type="int16_t" />
-- <ApiParam name="m_hSkyMaterial" type="CStrongHandle&lt;InfoForResourceTypeIMaterial2&gt;" />
+| Field | Type |
+|---|---|
+| `m_nSkyboxScale` | `int16_t` |
+| `m_hSkyMaterial` | [`CStrongHandle<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandle) |
 
-## Methods
-
-### CSkyCameraVolumeTarget* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSkyCameraVolumeTarget* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSkyCameraVolumeTarget* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSkyCameraVolumeTarget&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

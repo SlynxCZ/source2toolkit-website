@@ -1,35 +1,18 @@
 ---
-title: CTonemapTrigger
+title: "CTonemapTrigger"
+description: "Schema class CTonemapTrigger, derived from CBaseTrigger."
 ---
 
-# CTonemapTrigger
 
-**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTonemapTrigger.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTonemapTrigger.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_tonemapControllerName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hTonemapController" type="CEntityHandle" />
+| Field | Type |
+|---|---|
+| `m_tonemapControllerName` | `CUtlSymbolLarge` |
+| `m_hTonemapController` | `CEntityHandle` |
 
-## Methods
-
-### CTonemapTrigger* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTonemapTrigger* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTonemapTrigger* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTonemapTrigger&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

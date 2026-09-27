@@ -1,40 +1,23 @@
 ---
-title: CPointOrient
+title: "CPointOrient"
+description: "Schema class CPointOrient, derived from CBaseEntity."
 ---
 
-# CPointOrient
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointOrient.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointOrient.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszSpawnTargetName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hTarget" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_bActive" type="bool" />
-- <ApiParam name="m_nGoalDirection" type="PointOrientGoalDirectionType_t" />
-- <ApiParam name="m_nConstraint" type="PointOrientConstraint_t" />
-- <ApiParam name="m_flMaxTurnRate" type="float" />
-- <ApiParam name="m_flLastGameTime" type="float" />
+| Field | Type |
+|---|---|
+| `m_iszSpawnTargetName` | `CUtlSymbolLarge` |
+| `m_hTarget` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_bActive` | `bool` |
+| `m_nGoalDirection` | [`PointOrientGoalDirectionType_t`](/docs/schema/entity/enums/PointOrientGoalDirectionType_t) |
+| `m_nConstraint` | [`PointOrientConstraint_t`](/docs/schema/entity/enums/PointOrientConstraint_t) |
+| `m_flMaxTurnRate` | `float` |
+| `m_flLastGameTime` | `float` |
 
-## Methods
-
-### CPointOrient* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointOrient* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointOrient* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointOrient&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

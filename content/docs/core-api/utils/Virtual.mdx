@@ -1,0 +1,132 @@
+---
+title: "utils/virtual.h"
+description: "Virtual method table (VMT) utilities for calling virtual functions."
+---
+
+
+Provides low-level helpers for:
+- Retrieving virtual functions from objects
+- Calling virtual methods by index
+
+<Callout type="warn">This is unsafe low-level functionality. Incorrect usage may lead to crashes or undefined behavior.</Callout>
+
+**Header** [`source2toolkit/utils/virtual.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/utils/virtual.h)
+
+## Functions
+
+### `GetVMethod`
+
+```cpp
+template <typename T = void*> inline T GetVMethod(uint32 uIndex, void* pClass);
+```
+
+Retrieves a virtual function pointer from an object's VTable.
+
+<Callout type="warn">No bounds checking is performed.</Callout>
+
+| Parameter | Type | Description |
+|---|---|---|
+| `uIndex` | `uint32` | Index in virtual table |
+| `pClass` | `void*` | Pointer to class instance |
+
+**Returns** `T` — Function pointer or nullptr if invalid
+
+### `CallVirtual`
+
+```cpp
+template <typename T, typename... Args> inline T CallVirtual(uint32 uIndex, void* pClass, Args... args);
+```
+
+Calls a virtual function by index.
+
+```cpp
+int result = vmt::CallVirtual<int>(10, entity, arg1);
+```
+
+<Callout type="info">Calling convention differs between platforms: - Windows: __thiscall - Linux: __cdecl</Callout>
+
+<Callout type="warn">Index must match correct function signature.</Callout>
+
+| Parameter | Type | Description |
+|---|---|---|
+| `uIndex` | `uint32` | Virtual table index |
+| `pClass` | `void*` | Pointer to class instance |
+| `args` | `Args...` | Arguments passed to function |
+
+**Returns** `T` — Function result or default value if failed
+
+### `CallVirtualOverrideVTable`
+
+```cpp
+template <typename T = void, typename... Args> inline T CallVirtualOverrideVTable(uint32 uIndex, void** pVTable, void* pClass, Args... args);
+```
+
+Calls a virtual function through a caller-supplied vtable.
+
+Same as CallVirtual, except the table is passed in rather than read out of the object. Needed when the instance does not carry the vtable you want to dispatch through -- e.g. a trace filter whose table was resolved from the server module by name.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `uIndex` | `uint32` | Virtual table index |
+| `pVTable` | `void**` | The vtable to dispatch through |
+| `pClass` | `void*` | Pointer passed as the implicit this |
+| `args` | `Args...` | Arguments passed to the function |
+
+**Returns** `T` — Function result, or a default-constructed T if the table or entry is null.
+
+### `CallVirtualChain`
+
+```cpp
+template <typename T, typename... Args> inline T CallVirtualChain(uint32 uIndex, HookChain eChain, void* pClass, Args... args);
+```
+
+Calls a virtual function by index, running or bypassing the hooks on it as eChain says (see HookChain in IToolkitTypes.h).
+
+| Parameter | Type |
+|---|---|
+| `uIndex` | `uint32` |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) |
+| `pClass` | `void*` |
+| `args` | `Args...` |
+
+**Returns** `T` — Function result, or a default-constructed T if the slot is null.
+
+## Macros
+
+### `CALL_VIRTUAL`
+
+```cpp
+#define CALL_VIRTUAL(retType, idx, ...) vmt::CallVirtual<retType>(idx, __VA_ARGS__)
+```
+
+Convenience macro for calling virtual functions.
+
+```cpp
+CALL_VIRTUAL(void, 5, entity, arg1, arg2);
+```
+
+### `CALL_VIRTUAL_CHAIN`
+
+```cpp
+#define CALL_VIRTUAL_CHAIN(retType, idx, eChain, ...) vmt::CallVirtualChain<retType>(idx, eChain, __VA_ARGS__)
+```
+
+CALL_VIRTUAL that runs or bypasses the hooks on the function.
+
+```cpp
+CALL_VIRTUAL_CHAIN(void, offset, HookChain::Bypass, this, bExplode, bForce);
+```
+
+### `CALL_VIRTUAL_OVERRIDE_VTBL`
+
+```cpp
+#define CALL_VIRTUAL_OVERRIDE_VTBL(retType, idx, vtable, ...) vmt::CallVirtualOverrideVTable<retType>(idx, vtable, __VA_ARGS__)
+```
+
+Calls a virtual function through a vtable the caller supplies.
+
+For objects whose vtable is not the one stored in the instance -- a filter whose table was looked up in the server module by name, say -- where CALL_VIRTUAL would dispatch through the wrong table.
+
+```cpp
+CALL_VIRTUAL_OVERRIDE_VTBL(bool, offset, pVTable, this, pEntity);
+```

@@ -1,51 +1,34 @@
 ---
-title: CEnvVolumetricFogVolume
+title: "CEnvVolumetricFogVolume"
+description: "Schema class CEnvVolumetricFogVolume, derived from CBaseEntity."
 ---
 
-# CEnvVolumetricFogVolume
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvVolumetricFogVolume.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvVolumetricFogVolume.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_bActive" type="bool" />
-- <ApiParam name="m_vBoxMins" type="Vector" />
-- <ApiParam name="m_vBoxMaxs" type="Vector" />
-- <ApiParam name="m_bStartDisabled" type="bool" />
-- <ApiParam name="m_bIndirectUseLPVs" type="bool" />
-- <ApiParam name="m_flStrength" type="float" />
-- <ApiParam name="m_nFalloffShape" type="int32_t" />
-- <ApiParam name="m_flFalloffExponent" type="float" />
-- <ApiParam name="m_flHeightFogDepth" type="float" />
-- <ApiParam name="m_fHeightFogEdgeWidth" type="float" />
-- <ApiParam name="m_fIndirectLightStrength" type="float" />
-- <ApiParam name="m_fSunLightStrength" type="float" />
-- <ApiParam name="m_fNoiseStrength" type="float" />
-- <ApiParam name="m_TintColor" type="Color" />
-- <ApiParam name="m_bOverrideTintColor" type="bool" />
-- <ApiParam name="m_bOverrideIndirectLightStrength" type="bool" />
-- <ApiParam name="m_bOverrideSunLightStrength" type="bool" />
-- <ApiParam name="m_bOverrideNoiseStrength" type="bool" />
+| Field | Type |
+|---|---|
+| `m_bActive` | `bool` |
+| `m_vBoxMins` | `Vector` |
+| `m_vBoxMaxs` | `Vector` |
+| `m_bStartDisabled` | `bool` |
+| `m_bIndirectUseLPVs` | `bool` |
+| `m_flStrength` | `float` |
+| `m_nFalloffShape` | `int32_t` |
+| `m_flFalloffExponent` | `float` |
+| `m_flHeightFogDepth` | `float` |
+| `m_fHeightFogEdgeWidth` | `float` |
+| `m_fIndirectLightStrength` | `float` |
+| `m_fSunLightStrength` | `float` |
+| `m_fNoiseStrength` | `float` |
+| `m_TintColor` | `Color` |
+| `m_bOverrideTintColor` | `bool` |
+| `m_bOverrideIndirectLightStrength` | `bool` |
+| `m_bOverrideSunLightStrength` | `bool` |
+| `m_bOverrideNoiseStrength` | `bool` |
 
-## Methods
-
-### CEnvVolumetricFogVolume* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvVolumetricFogVolume* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvVolumetricFogVolume* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvVolumetricFogVolume&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

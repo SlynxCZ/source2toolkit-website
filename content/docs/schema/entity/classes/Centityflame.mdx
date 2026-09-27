@@ -1,43 +1,26 @@
 ---
-title: CEntityFlame
+title: "CEntityFlame"
+description: "Schema class CEntityFlame, derived from CBaseEntity."
 ---
 
-# CEntityFlame
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEntityFlame.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEntityFlame.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_hEntAttached" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_bCheapEffect" type="bool" />
-- <ApiParam name="m_flSize" type="float" />
-- <ApiParam name="m_bUseHitboxes" type="bool" />
-- <ApiParam name="m_iNumHitboxFires" type="int32_t" />
-- <ApiParam name="m_flHitboxFireScale" type="float" />
-- <ApiParam name="m_flLifetime" type="float" />
-- <ApiParam name="m_hAttacker" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_flDirectDamagePerSecond" type="float" />
-- <ApiParam name="m_iCustomDamageType" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_hEntAttached` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_bCheapEffect` | `bool` |
+| `m_flSize` | `float` |
+| `m_bUseHitboxes` | `bool` |
+| `m_iNumHitboxFires` | `int32_t` |
+| `m_flHitboxFireScale` | `float` |
+| `m_flLifetime` | `float` |
+| `m_hAttacker` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_flDirectDamagePerSecond` | `float` |
+| `m_iCustomDamageType` | `int32_t` |
 
-## Methods
-
-### CEntityFlame* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEntityFlame* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEntityFlame* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEntityFlame&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

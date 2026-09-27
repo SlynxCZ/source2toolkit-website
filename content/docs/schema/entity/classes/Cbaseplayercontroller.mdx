@@ -1,189 +1,262 @@
 ---
-title: CBasePlayerController
+title: "CBasePlayerController"
+description: "Schema class CBasePlayerController, derived from CBaseEntity."
 ---
 
-# CBasePlayerController
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBasePlayerController.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBasePlayerController.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_nInButtonsWhichAreToggles" type="uint64_t" />
-- <ApiParam name="m_nTickBase" type="uint32_t" />
-- <ApiParam name="m_hPawn" type="CHandle&lt;CBasePlayerPawn&gt;" />
-- <ApiParam name="m_bKnownTeamMismatch" type="bool" />
-- <ApiParam name="m_nSplitScreenSlot" type="int32_t" />
-- <ApiParam name="m_hSplitOwner" type="CHandle&lt;CBasePlayerController&gt;" />
-- <ApiParam name="m_hSplitScreenPlayers" type="CUtlVector&lt;CHandle&lt;CBasePlayerController&gt;&gt;" />
-- <ApiParam name="m_bIsHLTV" type="bool" />
-- <ApiParam name="m_iConnected" type="PlayerConnectedState" />
-- <ApiParam name="m_iMostConnected" type="PlayerConnectedState" />
-- <ApiParam name="m_iszPlayerName" type="char" />
-- <ApiParam name="m_szNetworkIDString" type="CUtlString" />
-- <ApiParam name="m_fLerpTime" type="float" />
-- <ApiParam name="m_bLagCompensation" type="bool" />
-- <ApiParam name="m_bPredict" type="bool" />
-- <ApiParam name="m_bIsLowViolence" type="bool" />
-- <ApiParam name="m_bGamePaused" type="bool" />
-- <ApiParam name="m_iIgnoreGlobalChat" type="ChatIgnoreType_t" />
-- <ApiParam name="m_flLastPlayerTalkTime" type="float" />
-- <ApiParam name="m_flLastEntitySteadyState" type="float" />
-- <ApiParam name="m_nAvailableEntitySteadyState" type="int32_t" />
-- <ApiParam name="m_bHasAnySteadyStateEnts" type="bool" />
-- <ApiParam name="m_steamID" type="uint64_t" />
-- <ApiParam name="m_bNoClipEnabled" type="bool" />
-- <ApiParam name="m_iDesiredFOV" type="uint32_t" />
+| Field | Type |
+|---|---|
+| `m_nInButtonsWhichAreToggles` | `uint64_t` |
+| `m_nTickBase` | `uint32_t` |
+| `m_hPawn` | [`CHandle<CBasePlayerPawn>`](/docs/schema/entity/classes/CBasePlayerPawn) |
+| `m_bKnownTeamMismatch` | `bool` |
+| `m_nSplitScreenSlot` | `int32_t` |
+| `m_hSplitOwner` | `CHandle<CBasePlayerController>` |
+| `m_hSplitScreenPlayers` | `CUtlVector<CHandle<CBasePlayerController>>` |
+| `m_bIsHLTV` | `bool` |
+| `m_iConnected` | [`PlayerConnectedState`](/docs/schema/entity/enums/PlayerConnectedState) |
+| `m_iMostConnected` | [`PlayerConnectedState`](/docs/schema/entity/enums/PlayerConnectedState) |
+| `m_iszPlayerName` | `char` |
+| `m_szNetworkIDString` | `CUtlString` |
+| `m_fLerpTime` | `float` |
+| `m_bLagCompensation` | `bool` |
+| `m_bPredict` | `bool` |
+| `m_bIsLowViolence` | `bool` |
+| `m_bGamePaused` | `bool` |
+| `m_iIgnoreGlobalChat` | [`ChatIgnoreType_t`](/docs/schema/entity/enums/ChatIgnoreType_t) |
+| `m_flLastPlayerTalkTime` | `float` |
+| `m_flLastEntitySteadyState` | `float` |
+| `m_nAvailableEntitySteadyState` | `int32_t` |
+| `m_bHasAnySteadyStateEnts` | `bool` |
+| `m_steamID` | `uint64_t` |
+| `m_bNoClipEnabled` | `bool` |
+| `m_iDesiredFOV` | `uint32_t` |
+
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).
 
 ## Methods
 
-### SetPawn(pPawn, eChain)
+### `SetPawn`
+
+```cpp
+void SetPawn(CBasePlayerPawn* pPawn, HookChain eChain = HookChain::Run);
+```
 
 Set pawn for controller.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `pPawn` | [`CBasePlayerPawn*`](/docs/schema/entity/classes/CBasePlayerPawn) |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |
 
-- <ApiParam name="pPawn" type="[CBasePlayerPawn*](/docs/schema/entity/classes/Cbaseplayerpawn)" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+### `GetPawn`
 
-### CCSPlayerPawn* GetPawn()
+```cpp
+CCSPlayerPawn* GetPawn();
+```
 
 Get pawn.
 
-### PrintToConsole(pszMessage)
+### `PrintToConsole`
+
+```cpp
+void PrintToConsole(const char* pszMessage);
+```
 
 Print to console.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pszMessage` | `const char*` |
 
-- <ApiParam name="pszMessage" type="const char*" />
+### `PrintToChat`
 
-### PrintToChat(pszMessage)
+```cpp
+void PrintToChat(const char* pszMessage);
+```
 
 Print to chat.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pszMessage` | `const char*` |
 
-- <ApiParam name="pszMessage" type="const char*" />
+### `PrintToCenter`
 
-### PrintToCenter(pszMessage)
+```cpp
+void PrintToCenter(const char* pszMessage);
+```
 
 Print to center.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pszMessage` | `const char*` |
 
-- <ApiParam name="pszMessage" type="const char*" />
+### `PrintToCenterAlert`
 
-### PrintToCenterAlert(pszMessage)
+```cpp
+void PrintToCenterAlert(const char* pszMessage);
+```
 
 Print alert.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pszMessage` | `const char*` |
 
-- <ApiParam name="pszMessage" type="const char*" />
+### `IsBot`
 
-### bool IsBot()
+```cpp
+bool IsBot();
+```
 
 Is bot.
 
-### Disconnect(eReason, pszInternalReason)
+### `Disconnect`
+
+```cpp
+void Disconnect(ENetworkDisconnectionReason eReason, const char* pszInternalReason = nullptr);
+```
 
 Disconnect player.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `eReason` | `ENetworkDisconnectionReason` |  |
+| `pszInternalReason` | `const char*` | `nullptr` |
 
-- <ApiParam name="eReason" type="ENetworkDisconnectionReason" />
-- <ApiParam name="pszInternalReason" type="const char*" />
+### `ExecuteClientCommand`
 
-### ExecuteClientCommand(pszCommand)
+```cpp
+void ExecuteClientCommand(const char* pszCommand);
+```
 
 Execute client command.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pszCommand` | `const char*` |
 
-- <ApiParam name="pszCommand" type="const char*" />
+### `ExecuteClientCommandFromServer`
 
-### ExecuteClientCommandFromServer(pszCommand)
+```cpp
+void ExecuteClientCommandFromServer(const char* pszCommand);
+```
 
 Execute command from server.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pszCommand` | `const char*` |
 
-- <ApiParam name="pszCommand" type="const char*" />
+### `GetServerSideClient`
 
-### CServerSideClient* GetServerSideClient()
+```cpp
+CServerSideClient* GetServerSideClient();
+```
 
 Get server side engine client.
 
-### CEntityIndex GetPlayerIndex()
+### `GetPlayerIndex`
+
+```cpp
+CEntityIndex GetPlayerIndex();
+```
 
 Get player index.
 
-### int GetSlot()
+### `GetSlot`
+
+```cpp
+int GetSlot();
+```
 
 Get slot.
 
-### CPlayerSlot GetPlayerSlot()
+### `GetPlayerSlot`
+
+```cpp
+CPlayerSlot GetPlayerSlot();
+```
 
 Get player slot.
 
-### int GetUserID()
+### `GetUserID`
+
+```cpp
+int GetUserID();
+```
 
 Get steamid.
 
-### CPlayerUserId GetPlayerUserID()
+### `GetPlayerUserID`
+
+```cpp
+CPlayerUserId GetPlayerUserID();
+```
 
 Get player userid.
 
-### uint64 GetSteamID()
+### `GetSteamID`
+
+```cpp
+uint64 GetSteamID();
+```
 
 Get steamid.
 
-### CSteamID GetPlayerSteamID()
+### `GetPlayerSteamID`
+
+```cpp
+CSteamID GetPlayerSteamID();
+```
 
 Get player steamid.
 
-### const char* GetPlayerName()
+### `GetPlayerName`
+
+```cpp
+const char* GetPlayerName();
+```
 
 Get player name.
 
-### CUtlString GetIpAddress()
+### `GetIpAddress`
+
+```cpp
+CUtlString GetIpAddress();
+```
 
 Get IP address.
 
-### ReplicateConVar(pszConVar, pszValue)
+### `ReplicateConVar`
+
+```cpp
+void ReplicateConVar(const char* pszConVar, const char* pszValue);
+```
 
 Replicate convar.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pszConVar` | `const char*` |
+| `pszValue` | `const char*` |
 
-- <ApiParam name="pszConVar" type="const char*" />
-- <ApiParam name="pszValue" type="const char*" />
+### `FireEventToClient`
 
-### FireEventToClient(pEvent)
+```cpp
+void FireEventToClient(IGameEvent* pEvent);
+```
 
 Fires gameEvent to client's legacy listener.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="pEvent" type="IGameEvent*" />
-
-### CBasePlayerController* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBasePlayerController* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBasePlayerController* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBasePlayerController&gt; GetHandle()
-
+| Parameter | Type |
+|---|---|
+| `pEvent` | `IGameEvent*` |

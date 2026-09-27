@@ -1,35 +1,18 @@
 ---
-title: CGameText
+title: "CGameText"
+description: "Schema class CGameText, derived from CRulePointEntity."
 ---
 
-# CGameText
 
-**Inheritance**: CRulePointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CGameText.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CGameText.h)
+
+**Inherits** [`CRulePointEntity`](/docs/schema/entity/classes/CRulePointEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszMessage" type="CUtlSymbolLarge" />
-- <ApiParam name="m_textParms" type="hudtextparms_t" />
+| Field | Type |
+|---|---|
+| `m_iszMessage` | `CUtlSymbolLarge` |
+| `m_textParms` | [`hudtextparms_t`](/docs/schema/entity/classes/hudtextparms_t) |
 
-## Methods
-
-### CGameText* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CGameText* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CGameText* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CGameText&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

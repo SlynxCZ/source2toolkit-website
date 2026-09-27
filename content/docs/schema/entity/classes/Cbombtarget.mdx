@@ -1,42 +1,25 @@
 ---
-title: CBombTarget
+title: "CBombTarget"
+description: "Schema class CBombTarget, derived from CBaseTrigger."
 ---
 
-# CBombTarget
 
-**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBombTarget.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBombTarget.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_OnBombExplode" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnBombPlanted" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnBombDefused" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bIsBombSiteB" type="bool" />
-- <ApiParam name="m_bIsHeistBombTarget" type="bool" />
-- <ApiParam name="m_bBombPlantedHere" type="bool" />
-- <ApiParam name="m_szMountTarget" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hInstructorHint" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_nBombSiteDesignation" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_OnBombExplode` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnBombPlanted` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnBombDefused` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bIsBombSiteB` | `bool` |
+| `m_bIsHeistBombTarget` | `bool` |
+| `m_bBombPlantedHere` | `bool` |
+| `m_szMountTarget` | `CUtlSymbolLarge` |
+| `m_hInstructorHint` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_nBombSiteDesignation` | `int32_t` |
 
-## Methods
-
-### CBombTarget* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBombTarget* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBombTarget* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBombTarget&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

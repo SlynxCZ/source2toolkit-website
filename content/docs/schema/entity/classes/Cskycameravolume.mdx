@@ -1,44 +1,27 @@
 ---
-title: CSkyCameraVolume
+title: "CSkyCameraVolume"
+description: "Schema class CSkyCameraVolume, derived from CBaseEntity."
 ---
 
-# CSkyCameraVolume
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSkyCameraVolume.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSkyCameraVolume.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_vBoxMins" type="Vector" />
-- <ApiParam name="m_vBoxMaxs" type="Vector" />
-- <ApiParam name="m_hTarget" type="CHandle&lt;CSkyCameraVolumeTarget&gt;" />
-- <ApiParam name="m_nPriority" type="int32_t" />
-- <ApiParam name="m_bIsEnabled" type="bool" />
-- <ApiParam name="m_bSkyboxBlurEffect" type="bool" />
-- <ApiParam name="m_vBlurOrigin" type="Vector" />
-- <ApiParam name="m_bSkyboxReceivesWorldCsm" type="bool" />
-- <ApiParam name="m_bWorldReceivesSkyboxCsm" type="bool" />
-- <ApiParam name="m_bStartDisabled" type="bool" />
-- <ApiParam name="m_iszTargetName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_vBoxMins` | `Vector` |
+| `m_vBoxMaxs` | `Vector` |
+| `m_hTarget` | [`CHandle<CSkyCameraVolumeTarget>`](/docs/schema/entity/classes/CSkyCameraVolumeTarget) |
+| `m_nPriority` | `int32_t` |
+| `m_bIsEnabled` | `bool` |
+| `m_bSkyboxBlurEffect` | `bool` |
+| `m_vBlurOrigin` | `Vector` |
+| `m_bSkyboxReceivesWorldCsm` | `bool` |
+| `m_bWorldReceivesSkyboxCsm` | `bool` |
+| `m_bStartDisabled` | `bool` |
+| `m_iszTargetName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CSkyCameraVolume* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSkyCameraVolume* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSkyCameraVolume* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSkyCameraVolume&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

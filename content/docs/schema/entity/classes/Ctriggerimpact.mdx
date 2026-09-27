@@ -1,36 +1,19 @@
 ---
-title: CTriggerImpact
+title: "CTriggerImpact"
+description: "Schema class CTriggerImpact, derived from CTriggerMultiple."
 ---
 
-# CTriggerImpact
 
-**Inheritance**: [CTriggerMultiple](/docs/schema/entity/classes/Ctriggermultiple)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTriggerImpact.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTriggerImpact.h)
+
+**Inherits** [`CTriggerMultiple`](/docs/schema/entity/classes/CTriggerMultiple)
 
 ## Fields
 
-- <ApiParam name="m_flMagnitude" type="float" />
-- <ApiParam name="m_flNoise" type="float" />
-- <ApiParam name="m_flViewkick" type="float" />
+| Field | Type |
+|---|---|
+| `m_flMagnitude` | `float` |
+| `m_flNoise` | `float` |
+| `m_flViewkick` | `float` |
 
-## Methods
-
-### CTriggerImpact* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTriggerImpact* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTriggerImpact* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTriggerImpact&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

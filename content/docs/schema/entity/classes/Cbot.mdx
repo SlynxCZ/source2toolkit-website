@@ -1,22 +1,27 @@
 ---
-title: CBot
+title: "CBot"
+description: "Schema class CBot."
 ---
 
-# CBot
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBot.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBot.h)
 
 ## Fields
 
-- <ApiParam name="m_pController" type="CCSPlayerController*" />
-- <ApiParam name="m_pPlayer" type="CCSPlayerPawn*" />
-- <ApiParam name="m_bHasSpawned" type="bool" />
-- <ApiParam name="m_id" type="uint32_t" />
-- <ApiParam name="m_isRunning" type="bool" />
-- <ApiParam name="m_isCrouching" type="bool" />
-- <ApiParam name="m_forwardSpeed" type="float" />
-- <ApiParam name="m_leftSpeed" type="float" />
-- <ApiParam name="m_verticalSpeed" type="float" />
-- <ApiParam name="m_buttonFlags" type="uint64_t" />
-- <ApiParam name="m_jumpTimestamp" type="float" />
-- <ApiParam name="m_viewForward" type="Vector" />
-- <ApiParam name="m_postureStackIndex" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_pController` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) |
+| `m_pPlayer` | [`CCSPlayerPawn*`](/docs/schema/entity/classes/CCSPlayerPawn) |
+| `m_bHasSpawned` | `bool` |
+| `m_id` | `uint32_t` |
+| `m_isRunning` | `bool` |
+| `m_isCrouching` | `bool` |
+| `m_forwardSpeed` | `float` |
+| `m_leftSpeed` | `float` |
+| `m_verticalSpeed` | `float` |
+| `m_buttonFlags` | `uint64_t` |
+| `m_jumpTimestamp` | `float` |
+| `m_viewForward` | `Vector` |
+| `m_postureStackIndex` | `int32_t` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,71 +1,54 @@
 ---
-title: CFuncTrackTrain
+title: "CFuncTrackTrain"
+description: "Schema class CFuncTrackTrain, derived from CBaseModelEntity."
 ---
 
-# CFuncTrackTrain
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncTrackTrain.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncTrackTrain.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_ppath" type="CHandle&lt;CPathTrack&gt;" />
-- <ApiParam name="m_length" type="float" />
-- <ApiParam name="m_vPosPrev" type="Vector" />
-- <ApiParam name="m_angPrev" type="QAngle" />
-- <ApiParam name="m_flSpeed" type="float" />
-- <ApiParam name="m_controlMins" type="Vector" />
-- <ApiParam name="m_controlMaxs" type="Vector" />
-- <ApiParam name="m_lastBlockPos" type="Vector" />
-- <ApiParam name="m_lastBlockTick" type="int32_t" />
-- <ApiParam name="m_flVolume" type="float" />
-- <ApiParam name="m_flBank" type="float" />
-- <ApiParam name="m_oldSpeed" type="float" />
-- <ApiParam name="m_flBlockDamage" type="float" />
-- <ApiParam name="m_height" type="float" />
-- <ApiParam name="m_maxSpeed" type="float" />
-- <ApiParam name="m_dir" type="float" />
-- <ApiParam name="m_iszSoundMove" type="CGameSoundEventName" />
-- <ApiParam name="m_iszSoundMovePing" type="CGameSoundEventName" />
-- <ApiParam name="m_iszSoundStart" type="CGameSoundEventName" />
-- <ApiParam name="m_iszSoundStop" type="CGameSoundEventName" />
-- <ApiParam name="m_strPathTarget" type="CGameSoundEventName" />
-- <ApiParam name="m_flMoveSoundMinDuration" type="float" />
-- <ApiParam name="m_flMoveSoundMaxDuration" type="float" />
-- <ApiParam name="m_flNextMoveSoundTime" type="float" />
-- <ApiParam name="m_flMoveSoundMinPitch" type="float" />
-- <ApiParam name="m_flMoveSoundMaxPitch" type="float" />
-- <ApiParam name="m_eOrientationType" type="TrainOrientationType_t" />
-- <ApiParam name="m_eVelocityType" type="TrainVelocityType_t" />
-- <ApiParam name="m_OnStart" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnNext" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnArrivedAtDestinationNode" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bManualSpeedChanges" type="bool" />
-- <ApiParam name="m_flDesiredSpeed" type="float" />
-- <ApiParam name="m_flSpeedChangeTime" type="float" />
-- <ApiParam name="m_flAccelSpeed" type="float" />
-- <ApiParam name="m_flDecelSpeed" type="float" />
-- <ApiParam name="m_bAccelToSpeed" type="bool" />
-- <ApiParam name="m_flNextMPSoundTime" type="float" />
+| Field | Type |
+|---|---|
+| `m_ppath` | [`CHandle<CPathTrack>`](/docs/schema/entity/classes/CPathTrack) |
+| `m_length` | `float` |
+| `m_vPosPrev` | `Vector` |
+| `m_angPrev` | `QAngle` |
+| `m_flSpeed` | `float` |
+| `m_controlMins` | `Vector` |
+| `m_controlMaxs` | `Vector` |
+| `m_lastBlockPos` | `Vector` |
+| `m_lastBlockTick` | `int32_t` |
+| `m_flVolume` | `float` |
+| `m_flBank` | `float` |
+| `m_oldSpeed` | `float` |
+| `m_flBlockDamage` | `float` |
+| `m_height` | `float` |
+| `m_maxSpeed` | `float` |
+| `m_dir` | `float` |
+| `m_iszSoundMove` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_iszSoundMovePing` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_iszSoundStart` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_iszSoundStop` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_strPathTarget` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_flMoveSoundMinDuration` | `float` |
+| `m_flMoveSoundMaxDuration` | `float` |
+| `m_flNextMoveSoundTime` | `float` |
+| `m_flMoveSoundMinPitch` | `float` |
+| `m_flMoveSoundMaxPitch` | `float` |
+| `m_eOrientationType` | [`TrainOrientationType_t`](/docs/schema/entity/enums/TrainOrientationType_t) |
+| `m_eVelocityType` | [`TrainVelocityType_t`](/docs/schema/entity/enums/TrainVelocityType_t) |
+| `m_OnStart` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnNext` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnArrivedAtDestinationNode` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bManualSpeedChanges` | `bool` |
+| `m_flDesiredSpeed` | `float` |
+| `m_flSpeedChangeTime` | `float` |
+| `m_flAccelSpeed` | `float` |
+| `m_flDecelSpeed` | `float` |
+| `m_bAccelToSpeed` | `bool` |
+| `m_flNextMPSoundTime` | `float` |
 
-## Methods
-
-### CFuncTrackTrain* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncTrackTrain* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncTrackTrain* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncTrackTrain&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

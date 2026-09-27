@@ -1,37 +1,20 @@
 ---
-title: CBaseClientUIEntity
+title: "CBaseClientUIEntity"
+description: "Schema class CBaseClientUIEntity, derived from CBaseModelEntity."
 ---
 
-# CBaseClientUIEntity
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseClientUIEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseClientUIEntity.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_bEnabled" type="bool" />
-- <ApiParam name="m_DialogXMLName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_PanelClassName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_PanelID" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_bEnabled` | `bool` |
+| `m_DialogXMLName` | `CUtlSymbolLarge` |
+| `m_PanelClassName` | `CUtlSymbolLarge` |
+| `m_PanelID` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CBaseClientUIEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBaseClientUIEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBaseClientUIEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBaseClientUIEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

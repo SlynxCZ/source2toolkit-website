@@ -1,37 +1,20 @@
 ---
-title: CLogicPlayerProxyBase
+title: "CLogicPlayerProxyBase"
+description: "Schema class CLogicPlayerProxyBase, derived from CLogicalEntity."
 ---
 
-# CLogicPlayerProxyBase
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicPlayerProxyBase.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicPlayerProxyBase.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_PlayerHasAmmo" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_PlayerHasNoAmmo" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_PlayerDied" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_hPlayer" type="CHandle&lt;CBaseEntity&gt;" />
+| Field | Type |
+|---|---|
+| `m_PlayerHasAmmo` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_PlayerHasNoAmmo` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_PlayerDied` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_hPlayer` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
 
-## Methods
-
-### CLogicPlayerProxyBase* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicPlayerProxyBase* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicPlayerProxyBase* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicPlayerProxyBase&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

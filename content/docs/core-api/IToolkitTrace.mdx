@@ -1,16 +1,296 @@
 ---
-title: IToolkitTrace
+title: "IToolkitTrace"
+description: "Interface and utilities for ray tracing and collision queries."
 ---
 
-# IToolkitTrace
 
-## CTraceFilterEx
+This module provides functionality for:
+- Raycasting (line traces)
+- Hull traces (box collision)
+- Physics queries
+- Visibility and hit detection
 
-**Inheritance**: CTraceFilter
+<Callout type="info">Commonly used for shooting, line-of-sight checks and movement.</Callout>
 
-### explicit CTraceFilterEx(pEntityToIgnore)
+Interface for performing trace operations.
 
-<ApiLabel>Parameters</ApiLabel>
+**Interface id** `IToolkitTrace001` (`TOOLKIT_TRACE_INTERFACE`) · **Global** `g_pToolkitTrace` · **Header** [`source2toolkit/IToolkitTrace.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitTrace.h)
 
-- <ApiParam name="pEntityToIgnore" type="CBaseEntity*" />
+## Methods
 
+### `TraceShape`
+
+```cpp
+virtual TraceResult TraceShape(const Vector& vecStart, const QAngle& angAngles, CBaseEntity* pIgnoreEntity, TraceOptions* pTraceOptions) = 0;
+```
+
+Performs directional trace using angles.
+
+| Parameter | Type |
+|---|---|
+| `vecStart` | `const Vector&` |
+| `angAngles` | `const QAngle&` |
+| `pIgnoreEntity` | [`CBaseEntity*`](/docs/schema/entity/classes/CBaseEntity) |
+| `pTraceOptions` | [`TraceOptions*`](/docs/core-api/IToolkitTrace#traceoptions) |
+
+### `TraceEndShape`
+
+```cpp
+virtual TraceResult TraceEndShape(const Vector& vecStart, const Vector& vecEnd, CBaseEntity* pIgnoreEntity, TraceOptions* pTraceOptions) = 0;
+```
+
+Performs trace between two points.
+
+| Parameter | Type |
+|---|---|
+| `vecStart` | `const Vector&` |
+| `vecEnd` | `const Vector&` |
+| `pIgnoreEntity` | [`CBaseEntity*`](/docs/schema/entity/classes/CBaseEntity) |
+| `pTraceOptions` | [`TraceOptions*`](/docs/core-api/IToolkitTrace#traceoptions) |
+
+### `TraceHullShape`
+
+```cpp
+virtual TraceResult TraceHullShape(const Vector& vecStart, const Vector& vecEnd, const Vector& vecMins, const Vector& vecMaxs, CBaseEntity* pIgnoreEntity, TraceOptions* pTraceOptions) = 0;
+```
+
+Performs hull (box) trace.
+
+| Parameter | Type |
+|---|---|
+| `vecStart` | `const Vector&` |
+| `vecEnd` | `const Vector&` |
+| `vecMins` | `const Vector&` |
+| `vecMaxs` | `const Vector&` |
+| `pIgnoreEntity` | [`CBaseEntity*`](/docs/schema/entity/classes/CBaseEntity) |
+| `pTraceOptions` | [`TraceOptions*`](/docs/core-api/IToolkitTrace#traceoptions) |
+
+### `TraceShapeEx`
+
+```cpp
+virtual TraceResult TraceShapeEx(const Vector& vecStart, const Vector& vecEnd, CTraceFilter* pTraceFilter, Ray_t* pRay) = 0;
+```
+
+Advanced trace with custom filter.
+
+| Parameter | Type |
+|---|---|
+| `vecStart` | `const Vector&` |
+| `vecEnd` | `const Vector&` |
+| `pTraceFilter` | `CTraceFilter*` |
+| `pRay` | `Ray_t*` |
+
+### `PointContents`
+
+```cpp
+virtual uint64 PointContents(const Vector* const vTestPos, uint64 nContentsMask) = 0;
+```
+
+Returns the contents bitmask at a world position.
+
+| Parameter | Type |
+|---|---|
+| `vTestPos` | `const Vector* const` |
+| `nContentsMask` | `uint64` |
+
+### `CheckAreaOverlappingEntity`
+
+```cpp
+virtual bool CheckAreaOverlappingEntity(const CCSNavArea* const rArea, const CBaseEntity* const rEntity, bool bExtrudeHullHeight) = 0;
+```
+
+Checks whether a nav area overlaps with an entity.
+
+| Parameter | Type |
+|---|---|
+| `rArea` | [`const CCSNavArea* const`](/docs/schema/Navarea) |
+| `rEntity` | [`const CBaseEntity* const`](/docs/schema/entity/classes/CBaseEntity) |
+| `bExtrudeHullHeight` | `bool` |
+
+### `GetEntityWorldSpaceAABB`
+
+```cpp
+virtual void GetEntityWorldSpaceAABB(const CBaseEntity* const rEntity, Vector* pMinsOut, Vector* pMaxsOut) = 0;
+```
+
+Retrieves the world-space AABB of an entity.
+
+| Parameter | Type |
+|---|---|
+| `rEntity` | [`const CBaseEntity* const`](/docs/schema/entity/classes/CBaseEntity) |
+| `pMinsOut` | `Vector*` |
+| `pMaxsOut` | `Vector*` |
+
+## `CTraceFilterEx`
+
+The filter TraceShapeEx expects when you have an entity to ignore.
+
+The toolkit uses this one internally; it is here because a plugin calling TraceShapeEx needs a CTraceFilter of its own and this covers the ordinary case -- ignore an entity, its owner and everything sharing its hierarchy.
+
+**Inherits** `CTraceFilter`
+
+### Constructors
+
+```cpp
+explicit CTraceFilterEx(CBaseEntity* pEntityToIgnore);
+CTraceFilterEx();
+```
+
+## `TraceOptions`
+
+Options controlling trace behavior.
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `InteractsAs` | `uint64_t` |
+| `InteractsWith` | `uint64_t` |
+| `InteractsExclude` | `uint64_t` |
+
+## `TraceResult`
+
+Result of a trace query.
+
+Contains information about collision, hit entity, hit position, surface data, and more.
+
+### Constructors
+
+```cpp
+TraceResult();
+explicit TraceResult(const CGameTrace* pTrace);
+TraceResult(const TraceResult&) = delete;
+TraceResult(TraceResult&&) = default;
+```
+
+### `StartPos`
+
+```cpp
+const Vector& StartPos() const;
+```
+
+### `EndPos`
+
+```cpp
+const Vector& EndPos() const;
+```
+
+### `HitPoint`
+
+```cpp
+const Vector& HitPoint() const;
+```
+
+### `Normal`
+
+```cpp
+const Vector& Normal() const;
+```
+
+### `Fraction`
+
+```cpp
+float Fraction() const;
+```
+
+### `HitOffset`
+
+```cpp
+float HitOffset() const;
+```
+
+### `DidHit`
+
+```cpp
+bool DidHit() const;
+```
+
+### `IsAllSolid`
+
+```cpp
+bool IsAllSolid() const;
+```
+
+### `HasExactHit`
+
+```cpp
+bool HasExactHit() const;
+```
+
+### `HitEntity`
+
+```cpp
+CEntityInstance* HitEntity() const;
+```
+
+### `TriangleIndex`
+
+```cpp
+int TriangleIndex() const;
+```
+
+### `HitboxBoneIndex`
+
+```cpp
+int HitboxBoneIndex() const;
+```
+
+### `Hitbox`
+
+```cpp
+CHitBox* Hitbox() const;
+```
+
+### `Contents`
+
+```cpp
+int Contents() const;
+```
+
+### `RayType`
+
+```cpp
+RayType_t RayType() const;
+```
+
+### `Body`
+
+```cpp
+IPhysicsBody* Body() const;
+```
+
+### `Shape`
+
+```cpp
+IPhysicsShape* Shape() const;
+```
+
+### `BodyTransform`
+
+```cpp
+const CTransform& BodyTransform() const;
+```
+
+### `ShapeAttributes`
+
+```cpp
+const RnCollisionAttr_t& ShapeAttributes() const;
+```
+
+### `Surface`
+
+```cpp
+CPhysSurfaceProperties* Surface() const;
+```
+
+## Macros
+
+| Macro | Expands to |
+|---|---|
+| `TRACE_SHAPE(start, angles, ent, opts)` | `g_pToolkitTrace->TraceShape(start, angles, ent, opts)` |
+| `TRACE_END_SHAPE(start, end, ent, opts)` | `g_pToolkitTrace->TraceEndShape(start, end, ent, opts)` |
+| `TRACE_HULL_SHAPE(start, end, mins, maxs, ent, opts)` | `g_pToolkitTrace->TraceHullShape(start, end, mins, maxs, ent, opts)` |
+| `TRACE_SHAPE_EX(start, end, filter, ray)` | `g_pToolkitTrace->TraceShapeEx(start, end, filter, ray)` |
+| `POINT_CONTENTS(pos, mask)` | `g_pToolkitTrace->PointContents(pos, mask)` |
+| `ENTITY_WORLD_AABB(ent, mins, maxs)` | `g_pToolkitTrace->GetEntityWorldSpaceAABB(ent, mins, maxs)` |
+| `CHECK_AREA_OVERLAPPING_ENTITY(area, ent, extrudeHull)` | `g_pToolkitTrace->CheckAreaOverlappingEntity(area, ent, extrudeHull)` |

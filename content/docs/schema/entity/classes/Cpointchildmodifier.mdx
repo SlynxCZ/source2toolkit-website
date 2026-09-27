@@ -1,34 +1,17 @@
 ---
-title: CPointChildModifier
+title: "CPointChildModifier"
+description: "Schema class CPointChildModifier, derived from CPointEntity."
 ---
 
-# CPointChildModifier
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointChildModifier.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointChildModifier.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_bOrphanInsteadOfDeletingChildrenOnRemove" type="bool" />
+| Field | Type |
+|---|---|
+| `m_bOrphanInsteadOfDeletingChildrenOnRemove` | `bool` |
 
-## Methods
-
-### CPointChildModifier* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointChildModifier* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointChildModifier* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointChildModifier&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

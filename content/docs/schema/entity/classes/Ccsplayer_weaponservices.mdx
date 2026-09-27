@@ -1,24 +1,29 @@
 ---
-title: CCSPlayer_WeaponServices
+title: "CCSPlayer_WeaponServices"
+description: "Schema class CCSPlayer_WeaponServices, derived from CPlayer_WeaponServices."
 ---
 
-# CCSPlayer_WeaponServices
 
-**Inheritance**: [CPlayer_WeaponServices](/docs/schema/entity/classes/Cplayer_weaponservices)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSPlayer_WeaponServices.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSPlayer_WeaponServices.h)
+
+**Inherits** [`CPlayer_WeaponServices`](/docs/schema/entity/classes/CPlayer_WeaponServices)
 
 ## Fields
 
-- <ApiParam name="m_flNextAttack" type="float" />
-- <ApiParam name="m_hSavedWeapon" type="CHandle&lt;CBasePlayerWeapon&gt;" />
-- <ApiParam name="m_nTimeToMelee" type="int32_t" />
-- <ApiParam name="m_nTimeToSecondary" type="int32_t" />
-- <ApiParam name="m_nTimeToPrimary" type="int32_t" />
-- <ApiParam name="m_nTimeToSniperRifle" type="int32_t" />
-- <ApiParam name="m_bIsBeingGivenItem" type="bool" />
-- <ApiParam name="m_bIsPickingUpItemWithUse" type="bool" />
-- <ApiParam name="m_bPickedUpWeapon" type="bool" />
-- <ApiParam name="m_bDisableAutoDeploy" type="bool" />
-- <ApiParam name="m_bIsPickingUpGroundWeapon" type="bool" />
-- <ApiParam name="m_networkAnimTiming" type="CUtlVector&lt;uint8_t&gt;" />
-- <ApiParam name="m_bBlockInspectUntilNextGraphUpdate" type="bool" />
+| Field | Type |
+|---|---|
+| `m_flNextAttack` | `float` |
+| `m_hSavedWeapon` | [`CHandle<CBasePlayerWeapon>`](/docs/schema/entity/classes/CBasePlayerWeapon) |
+| `m_nTimeToMelee` | `int32_t` |
+| `m_nTimeToSecondary` | `int32_t` |
+| `m_nTimeToPrimary` | `int32_t` |
+| `m_nTimeToSniperRifle` | `int32_t` |
+| `m_bIsBeingGivenItem` | `bool` |
+| `m_bIsPickingUpItemWithUse` | `bool` |
+| `m_bPickedUpWeapon` | `bool` |
+| `m_bDisableAutoDeploy` | `bool` |
+| `m_bIsPickingUpGroundWeapon` | `bool` |
+| `m_networkAnimTiming` | `CUtlVector<uint8_t>` |
+| `m_bBlockInspectUntilNextGraphUpdate` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

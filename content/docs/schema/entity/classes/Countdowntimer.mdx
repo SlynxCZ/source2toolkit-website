@@ -1,13 +1,18 @@
 ---
-title: CountdownTimer
+title: "CountdownTimer"
+description: "Schema class CountdownTimer."
 ---
 
-# CountdownTimer
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CountdownTimer.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CountdownTimer.h)
 
 ## Fields
 
-- <ApiParam name="m_duration" type="float" />
-- <ApiParam name="m_timestamp" type="float" />
-- <ApiParam name="m_timescale" type="float" />
-- <ApiParam name="m_nWorldGroupId" type="WorldGroupId_t" />
+| Field | Type |
+|---|---|
+| `m_duration` | `float` |
+| `m_timestamp` | `float` |
+| `m_timescale` | `float` |
+| `m_nWorldGroupId` | `WorldGroupId_t` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

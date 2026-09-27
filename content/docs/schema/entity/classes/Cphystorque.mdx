@@ -1,34 +1,17 @@
 ---
-title: CPhysTorque
+title: "CPhysTorque"
+description: "Schema class CPhysTorque, derived from CPhysForce."
 ---
 
-# CPhysTorque
 
-**Inheritance**: CPhysForce
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysTorque.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysTorque.h)
+
+**Inherits** [`CPhysForce`](/docs/schema/entity/classes/CPhysForce)
 
 ## Fields
 
-- <ApiParam name="m_axis" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_axis` | `Vector` |
 
-## Methods
-
-### CPhysTorque* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysTorque* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysTorque* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysTorque&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

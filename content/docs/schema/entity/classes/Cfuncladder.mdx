@@ -1,45 +1,28 @@
 ---
-title: CFuncLadder
+title: "CFuncLadder"
+description: "Schema class CFuncLadder, derived from CBaseModelEntity."
 ---
 
-# CFuncLadder
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncLadder.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncLadder.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_vecLadderDir" type="Vector" />
-- <ApiParam name="m_Dismounts" type="CUtlVector&lt;CHandle&lt;CInfoLadderDismount&gt;&gt;" />
-- <ApiParam name="m_vecLocalTop" type="Vector" />
-- <ApiParam name="m_vecPlayerMountPositionTop" type="Vector" />
-- <ApiParam name="m_vecPlayerMountPositionBottom" type="Vector" />
-- <ApiParam name="m_flAutoRideSpeed" type="float" />
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_bFakeLadder" type="bool" />
-- <ApiParam name="m_bHasSlack" type="bool" />
-- <ApiParam name="m_surfacePropName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_OnPlayerGotOnLadder" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnPlayerGotOffLadder" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_vecLadderDir` | `Vector` |
+| `m_Dismounts` | [`CUtlVector<CHandle<CInfoLadderDismount>>`](/docs/schema/entity/classes/CInfoLadderDismount) |
+| `m_vecLocalTop` | `Vector` |
+| `m_vecPlayerMountPositionTop` | `Vector` |
+| `m_vecPlayerMountPositionBottom` | `Vector` |
+| `m_flAutoRideSpeed` | `float` |
+| `m_bDisabled` | `bool` |
+| `m_bFakeLadder` | `bool` |
+| `m_bHasSlack` | `bool` |
+| `m_surfacePropName` | `CUtlSymbolLarge` |
+| `m_OnPlayerGotOnLadder` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnPlayerGotOffLadder` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CFuncLadder* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncLadder* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncLadder* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncLadder&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

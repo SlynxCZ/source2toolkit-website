@@ -1,50 +1,39 @@
 ---
-title: CDecoyProjectile
+title: "CDecoyProjectile"
+description: "Schema class CDecoyProjectile, derived from CBaseCSGrenadeProjectile."
 ---
 
-# CDecoyProjectile
 
-**Inheritance**: CBaseCSGrenadeProjectile
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CDecoyProjectile.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CDecoyProjectile.h)
+
+**Inherits** [`CBaseCSGrenadeProjectile`](/docs/schema/entity/classes/CBaseCSGrenadeProjectile)
 
 ## Fields
 
-- <ApiParam name="m_nDecoyShotTick" type="int32_t" />
-- <ApiParam name="m_shotsRemaining" type="int32_t" />
-- <ApiParam name="m_fExpireTime" type="float" />
-- <ApiParam name="m_decoyWeaponDefIndex" type="uint16_t" />
+| Field | Type |
+|---|---|
+| `m_nDecoyShotTick` | `int32_t` |
+| `m_shotsRemaining` | `int32_t` |
+| `m_fExpireTime` | `float` |
+| `m_decoyWeaponDefIndex` | `uint16_t` |
+
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).
 
 ## Methods
 
-### CDecoyProjectile* EmitGrenade(vecPosition, angAngle, vecVelocity, pOwner, nItemDefIndex, eChain)
+### `EmitGrenade`
+
+```cpp
+static CDecoyProjectile* EmitGrenade(const Vector& vecPosition, const QAngle& angAngle, const Vector& vecVelocity, CBaseEntity* pOwner, uint32_t nItemDefIndex, HookChain eChain = HookChain::Run);
+```
 
 Spawns a live grenade of this type. Ported from SwiftlyS2.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="vecPosition" type="const Vector&" />
-- <ApiParam name="angAngle" type="const QAngle&" />
-- <ApiParam name="vecVelocity" type="const Vector&" />
-- <ApiParam name="pOwner" type="CBaseEntity*" />
-- <ApiParam name="nItemDefIndex" type="uint32_t" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
-
-### CDecoyProjectile* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CDecoyProjectile* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CDecoyProjectile* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CDecoyProjectile&gt; GetHandle()
-
+| Parameter | Type | Default |
+|---|---|---|
+| `vecPosition` | `const Vector&` |  |
+| `angAngle` | `const QAngle&` |  |
+| `vecVelocity` | `const Vector&` |  |
+| `pOwner` | [`CBaseEntity*`](/docs/schema/entity/classes/CBaseEntity) |  |
+| `nItemDefIndex` | `uint32_t` |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |

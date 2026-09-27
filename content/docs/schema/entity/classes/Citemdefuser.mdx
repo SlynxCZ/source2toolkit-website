@@ -1,35 +1,18 @@
 ---
-title: CItemDefuser
+title: "CItemDefuser"
+description: "Schema class CItemDefuser, derived from CItem."
 ---
 
-# CItemDefuser
 
-**Inheritance**: [CItem](/docs/schema/entity/classes/Citem)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CItemDefuser.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CItemDefuser.h)
+
+**Inherits** [`CItem`](/docs/schema/entity/classes/CItem)
 
 ## Fields
 
-- <ApiParam name="m_entitySpottedState" type="EntitySpottedState_t" />
-- <ApiParam name="m_nSpotRules" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_entitySpottedState` | [`EntitySpottedState_t`](/docs/schema/entity/classes/EntitySpottedState_t) |
+| `m_nSpotRules` | `int32_t` |
 
-## Methods
-
-### CItemDefuser* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CItemDefuser* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CItemDefuser* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CItemDefuser&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

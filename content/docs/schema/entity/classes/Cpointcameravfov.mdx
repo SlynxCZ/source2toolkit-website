@@ -1,34 +1,17 @@
 ---
-title: CPointCameraVFOV
+title: "CPointCameraVFOV"
+description: "Schema class CPointCameraVFOV, derived from CPointCamera."
 ---
 
-# CPointCameraVFOV
 
-**Inheritance**: CPointCamera
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointCameraVFOV.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointCameraVFOV.h)
+
+**Inherits** [`CPointCamera`](/docs/schema/entity/classes/CPointCamera)
 
 ## Fields
 
-- <ApiParam name="m_flVerticalFOV" type="float" />
+| Field | Type |
+|---|---|
+| `m_flVerticalFOV` | `float` |
 
-## Methods
-
-### CPointCameraVFOV* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointCameraVFOV* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointCameraVFOV* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointCameraVFOV&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

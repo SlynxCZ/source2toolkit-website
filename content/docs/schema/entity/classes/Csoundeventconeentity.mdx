@@ -1,38 +1,21 @@
 ---
-title: CSoundEventConeEntity
+title: "CSoundEventConeEntity"
+description: "Schema class CSoundEventConeEntity, derived from CSoundEventEntity."
 ---
 
-# CSoundEventConeEntity
 
-**Inheritance**: [CSoundEventEntity](/docs/schema/entity/classes/Csoundevententity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundEventConeEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundEventConeEntity.h)
+
+**Inherits** [`CSoundEventEntity`](/docs/schema/entity/classes/CSoundEventEntity)
 
 ## Fields
 
-- <ApiParam name="m_flEmitterAngle" type="float" />
-- <ApiParam name="m_flSweetSpotAngle" type="float" />
-- <ApiParam name="m_flAttenMin" type="float" />
-- <ApiParam name="m_flAttenMax" type="float" />
-- <ApiParam name="m_iszParameterName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_flEmitterAngle` | `float` |
+| `m_flSweetSpotAngle` | `float` |
+| `m_flAttenMin` | `float` |
+| `m_flAttenMax` | `float` |
+| `m_iszParameterName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CSoundEventConeEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundEventConeEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundEventConeEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundEventConeEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

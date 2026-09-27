@@ -1,34 +1,17 @@
 ---
-title: CMarkupVolume
+title: "CMarkupVolume"
+description: "Schema class CMarkupVolume, derived from CBaseModelEntity."
 ---
 
-# CMarkupVolume
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMarkupVolume.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMarkupVolume.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_bDisabled" type="bool" />
+| Field | Type |
+|---|---|
+| `m_bDisabled` | `bool` |
 
-## Methods
-
-### CMarkupVolume* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMarkupVolume* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMarkupVolume* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMarkupVolume&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

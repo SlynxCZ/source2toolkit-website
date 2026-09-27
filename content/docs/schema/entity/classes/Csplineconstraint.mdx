@@ -1,48 +1,31 @@
 ---
-title: CSplineConstraint
+title: "CSplineConstraint"
+description: "Schema class CSplineConstraint, derived from CPhysConstraint."
 ---
 
-# CSplineConstraint
 
-**Inheritance**: CPhysConstraint
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSplineConstraint.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSplineConstraint.h)
+
+**Inherits** [`CPhysConstraint`](/docs/schema/entity/classes/CPhysConstraint)
 
 ## Fields
 
-- <ApiParam name="m_vAnchorOffsetRestore" type="Vector" />
-- <ApiParam name="m_hSplineEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_pSplineBody" type="IPhysicsBody*" />
-- <ApiParam name="m_bEnableLateralConstraint" type="bool" />
-- <ApiParam name="m_bEnableVerticalConstraint" type="bool" />
-- <ApiParam name="m_bEnableAngularConstraint" type="bool" />
-- <ApiParam name="m_bEnableLimit" type="bool" />
-- <ApiParam name="m_bFireEventsOnPath" type="bool" />
-- <ApiParam name="m_flLinearFrequency" type="float" />
-- <ApiParam name="m_flLinarDampingRatio" type="float" />
-- <ApiParam name="m_flJointFriction" type="float" />
-- <ApiParam name="m_flTransitionTime" type="float" />
-- <ApiParam name="m_vPreSolveAnchorPos" type="Vector" />
-- <ApiParam name="m_StartTransitionTime" type="float" />
-- <ApiParam name="m_vTangentSpaceAnchorAtTransitionStart" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_vAnchorOffsetRestore` | `Vector` |
+| `m_hSplineEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_pSplineBody` | [`IPhysicsBody*`](/docs/schema/entity/classes/IPhysicsBody) |
+| `m_bEnableLateralConstraint` | `bool` |
+| `m_bEnableVerticalConstraint` | `bool` |
+| `m_bEnableAngularConstraint` | `bool` |
+| `m_bEnableLimit` | `bool` |
+| `m_bFireEventsOnPath` | `bool` |
+| `m_flLinearFrequency` | `float` |
+| `m_flLinarDampingRatio` | `float` |
+| `m_flJointFriction` | `float` |
+| `m_flTransitionTime` | `float` |
+| `m_vPreSolveAnchorPos` | `Vector` |
+| `m_StartTransitionTime` | `float` |
+| `m_vTangentSpaceAnchorAtTransitionStart` | `Vector` |
 
-## Methods
-
-### CSplineConstraint* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSplineConstraint* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSplineConstraint* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSplineConstraint&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

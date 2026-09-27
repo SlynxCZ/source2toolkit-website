@@ -1,39 +1,22 @@
 ---
-title: CFuncBrush
+title: "CFuncBrush"
+description: "Schema class CFuncBrush, derived from CBaseModelEntity."
 ---
 
-# CFuncBrush
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncBrush.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncBrush.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_iSolidity" type="BrushSolidities_e" />
-- <ApiParam name="m_iDisabled" type="int32_t" />
-- <ApiParam name="m_bSolidBsp" type="bool" />
-- <ApiParam name="m_iszExcludedClass" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bInvertExclusion" type="bool" />
-- <ApiParam name="m_bScriptedMovement" type="bool" />
+| Field | Type |
+|---|---|
+| `m_iSolidity` | [`BrushSolidities_e`](/docs/schema/entity/enums/BrushSolidities_e) |
+| `m_iDisabled` | `int32_t` |
+| `m_bSolidBsp` | `bool` |
+| `m_iszExcludedClass` | `CUtlSymbolLarge` |
+| `m_bInvertExclusion` | `bool` |
+| `m_bScriptedMovement` | `bool` |
 
-## Methods
-
-### CFuncBrush* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncBrush* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncBrush* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncBrush&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

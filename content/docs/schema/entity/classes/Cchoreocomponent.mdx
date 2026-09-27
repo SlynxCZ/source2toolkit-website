@@ -1,15 +1,20 @@
 ---
-title: CChoreoComponent
+title: "CChoreoComponent"
+description: "Schema class CChoreoComponent."
 ---
 
-# CChoreoComponent
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CChoreoComponent.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CChoreoComponent.h)
 
 ## Fields
 
-- <ApiParam name="__m_pChainEntity" type="CEntityInstance*" />
-- <ApiParam name="m_hOwner" type="CHandle&lt;CBaseModelEntity&gt;" />
-- <ApiParam name="m_nExernalChoreoGraphCount" type="int32_t" />
-- <ApiParam name="m_sActiveExternalChoreoGraphSlotID" type="CGlobalSymbol" />
-- <ApiParam name="m_nNextSceneEventId" type="[SceneEventId_t](/docs/schema/entity/classes/SceneEventId_t)" />
-- <ApiParam name="m_flAllowResponsesEndTime" type="float" />
+| Field | Type |
+|---|---|
+| `__m_pChainEntity` | `CEntityInstance*` |
+| `m_hOwner` | [`CHandle<CBaseModelEntity>`](/docs/schema/entity/classes/CBaseModelEntity) |
+| `m_nExernalChoreoGraphCount` | `int32_t` |
+| `m_sActiveExternalChoreoGraphSlotID` | [`CGlobalSymbol`](/docs/core-api/Schema#cglobalsymbol) |
+| `m_nNextSceneEventId` | [`SceneEventId_t`](/docs/schema/entity/classes/SceneEventId_t) |
+| `m_flAllowResponsesEndTime` | `float` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

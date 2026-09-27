@@ -1,13 +1,18 @@
 ---
-title: RelationshipOverride_t
+title: "RelationshipOverride_t"
+description: "Schema class RelationshipOverride_t, derived from Relationship_t."
 ---
 
-# RelationshipOverride_t
 
-**Inheritance**: Relationship_t
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/RelationshipOverride_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/RelationshipOverride_t.h)
+
+**Inherits** [`Relationship_t`](/docs/schema/entity/classes/Relationship_t)
 
 ## Fields
 
-- <ApiParam name="entity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="classType" type="Class_T" />
+| Field | Type |
+|---|---|
+| `entity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `classType` | `Class_T` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,36 +1,19 @@
 ---
-title: FilterHealth
+title: "FilterHealth"
+description: "Schema class FilterHealth, derived from CBaseFilter."
 ---
 
-# FilterHealth
 
-**Inheritance**: CBaseFilter
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/FilterHealth.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/FilterHealth.h)
+
+**Inherits** [`CBaseFilter`](/docs/schema/entity/classes/CBaseFilter)
 
 ## Fields
 
-- <ApiParam name="m_bAdrenalineActive" type="bool" />
-- <ApiParam name="m_iHealthMin" type="int32_t" />
-- <ApiParam name="m_iHealthMax" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_bAdrenalineActive` | `bool` |
+| `m_iHealthMin` | `int32_t` |
+| `m_iHealthMax` | `int32_t` |
 
-## Methods
-
-### FilterHealth* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### FilterHealth* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### FilterHealth* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;FilterHealth&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,49 +1,42 @@
 ---
-title: CBasePlayerWeapon
+title: "CBasePlayerWeapon"
+description: "Schema class CBasePlayerWeapon, derived from CEconEntity."
 ---
 
-# CBasePlayerWeapon
 
-**Inheritance**: [CEconEntity](/docs/schema/entity/classes/Ceconentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBasePlayerWeapon.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBasePlayerWeapon.h)
+
+**Inherits** [`CEconEntity`](/docs/schema/entity/classes/CEconEntity)
 
 ## Fields
 
-- <ApiParam name="m_nNextPrimaryAttackTick" type="int32_t" />
-- <ApiParam name="m_flNextPrimaryAttackTickRatio" type="float" />
-- <ApiParam name="m_nNextSecondaryAttackTick" type="int32_t" />
-- <ApiParam name="m_flNextSecondaryAttackTickRatio" type="float" />
-- <ApiParam name="m_iClip1" type="int32_t" />
-- <ApiParam name="m_iClip2" type="int32_t" />
-- <ApiParam name="m_pReserveAmmo" type="int32_t" />
-- <ApiParam name="m_OnPlayerUse" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_nNextPrimaryAttackTick` | `int32_t` |
+| `m_flNextPrimaryAttackTickRatio` | `float` |
+| `m_nNextSecondaryAttackTick` | `int32_t` |
+| `m_flNextSecondaryAttackTickRatio` | `float` |
+| `m_iClip1` | `int32_t` |
+| `m_iClip2` | `int32_t` |
+| `m_pReserveAmmo` | `int32_t` |
+| `m_OnPlayerUse` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).
 
 ## Methods
 
-### CCSWeaponBaseVData* GetWeaponVData()
+### `GetWeaponVData`
+
+```cpp
+CCSWeaponBaseVData* GetWeaponVData();
+```
 
 Get weapon VData.
 
-### const char* GetWeaponClassname()
+### `GetWeaponClassname`
+
+```cpp
+const char* GetWeaponClassname();
+```
 
 Get weapon classname.
-
-### CBasePlayerWeapon* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBasePlayerWeapon* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBasePlayerWeapon* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBasePlayerWeapon&gt; GetHandle()
-

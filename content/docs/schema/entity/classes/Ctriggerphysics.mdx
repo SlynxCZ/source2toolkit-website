@@ -1,48 +1,31 @@
 ---
-title: CTriggerPhysics
+title: "CTriggerPhysics"
+description: "Schema class CTriggerPhysics, derived from CBaseTrigger."
 ---
 
-# CTriggerPhysics
 
-**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTriggerPhysics.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTriggerPhysics.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_pController" type="[IPhysicsMotionController*](/docs/schema/entity/classes/Iphysicsmotioncontroller)" />
-- <ApiParam name="m_gravityScale" type="float" />
-- <ApiParam name="m_linearLimit" type="float" />
-- <ApiParam name="m_linearDamping" type="float" />
-- <ApiParam name="m_angularLimit" type="float" />
-- <ApiParam name="m_angularDamping" type="float" />
-- <ApiParam name="m_linearForce" type="float" />
-- <ApiParam name="m_flFrequency" type="float" />
-- <ApiParam name="m_flDampingRatio" type="float" />
-- <ApiParam name="m_vecLinearForcePointAt" type="Vector" />
-- <ApiParam name="m_bCollapseToForcePoint" type="bool" />
-- <ApiParam name="m_vecLinearForcePointAtWorld" type="Vector" />
-- <ApiParam name="m_vecLinearForceDirection" type="Vector" />
-- <ApiParam name="m_bForceDirectionIsInLocalSpace" type="bool" />
-- <ApiParam name="m_bConvertToDebrisWhenPossible" type="bool" />
+| Field | Type |
+|---|---|
+| `m_pController` | [`IPhysicsMotionController*`](/docs/schema/entity/classes/IPhysicsMotionController) |
+| `m_gravityScale` | `float` |
+| `m_linearLimit` | `float` |
+| `m_linearDamping` | `float` |
+| `m_angularLimit` | `float` |
+| `m_angularDamping` | `float` |
+| `m_linearForce` | `float` |
+| `m_flFrequency` | `float` |
+| `m_flDampingRatio` | `float` |
+| `m_vecLinearForcePointAt` | `Vector` |
+| `m_bCollapseToForcePoint` | `bool` |
+| `m_vecLinearForcePointAtWorld` | `Vector` |
+| `m_vecLinearForceDirection` | `Vector` |
+| `m_bForceDirectionIsInLocalSpace` | `bool` |
+| `m_bConvertToDebrisWhenPossible` | `bool` |
 
-## Methods
-
-### CTriggerPhysics* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTriggerPhysics* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTriggerPhysics* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTriggerPhysics&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

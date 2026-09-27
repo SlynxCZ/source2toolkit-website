@@ -1,35 +1,18 @@
 ---
-title: CFuncPlat
+title: "CFuncPlat"
+description: "Schema class CFuncPlat, derived from CBasePlatTrain."
 ---
 
-# CFuncPlat
 
-**Inheritance**: [CBasePlatTrain](/docs/schema/entity/classes/Cbaseplattrain)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncPlat.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncPlat.h)
+
+**Inherits** [`CBasePlatTrain`](/docs/schema/entity/classes/CBasePlatTrain)
 
 ## Fields
 
-- <ApiParam name="m_flSpeed" type="float" />
-- <ApiParam name="m_sNoise" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_flSpeed` | `float` |
+| `m_sNoise` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CFuncPlat* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncPlat* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncPlat* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncPlat&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

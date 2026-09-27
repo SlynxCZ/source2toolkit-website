@@ -1,36 +1,19 @@
 ---
-title: CPhysImpact
+title: "CPhysImpact"
+description: "Schema class CPhysImpact, derived from CPointEntity."
 ---
 
-# CPhysImpact
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysImpact.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysImpact.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_damage" type="float" />
-- <ApiParam name="m_distance" type="float" />
-- <ApiParam name="m_directionEntityName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_damage` | `float` |
+| `m_distance` | `float` |
+| `m_directionEntityName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CPhysImpact* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysImpact* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysImpact* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysImpact&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

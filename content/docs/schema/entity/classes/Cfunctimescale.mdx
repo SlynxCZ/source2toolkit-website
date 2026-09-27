@@ -1,38 +1,21 @@
 ---
-title: CFuncTimescale
+title: "CFuncTimescale"
+description: "Schema class CFuncTimescale, derived from CBaseEntity."
 ---
 
-# CFuncTimescale
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncTimescale.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncTimescale.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_flDesiredTimescale" type="float" />
-- <ApiParam name="m_flAcceleration" type="float" />
-- <ApiParam name="m_flMinBlendRate" type="float" />
-- <ApiParam name="m_flBlendDeltaMultiplier" type="float" />
-- <ApiParam name="m_isStarted" type="bool" />
+| Field | Type |
+|---|---|
+| `m_flDesiredTimescale` | `float` |
+| `m_flAcceleration` | `float` |
+| `m_flMinBlendRate` | `float` |
+| `m_flBlendDeltaMultiplier` | `float` |
+| `m_isStarted` | `bool` |
 
-## Methods
-
-### CFuncTimescale* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncTimescale* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncTimescale* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncTimescale&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

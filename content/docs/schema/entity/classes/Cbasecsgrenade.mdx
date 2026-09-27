@@ -1,46 +1,29 @@
 ---
-title: CBaseCSGrenade
+title: "CBaseCSGrenade"
+description: "Schema class CBaseCSGrenade, derived from CCSWeaponBase."
 ---
 
-# CBaseCSGrenade
 
-**Inheritance**: [CCSWeaponBase](/docs/schema/entity/classes/Ccsweaponbase)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseCSGrenade.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseCSGrenade.h)
+
+**Inherits** [`CCSWeaponBase`](/docs/schema/entity/classes/CCSWeaponBase)
 
 ## Fields
 
-- <ApiParam name="m_bRedraw" type="bool" />
-- <ApiParam name="m_bIsHeldByPlayer" type="bool" />
-- <ApiParam name="m_bPinPulled" type="bool" />
-- <ApiParam name="m_bJumpThrow" type="bool" />
-- <ApiParam name="m_bThrowAnimating" type="bool" />
-- <ApiParam name="m_fThrowTime" type="float" />
-- <ApiParam name="m_flThrowStrength" type="float" />
-- <ApiParam name="m_fDropTime" type="float" />
-- <ApiParam name="m_fPinPullTime" type="float" />
-- <ApiParam name="m_bJustPulledPin" type="bool" />
-- <ApiParam name="m_nNextHoldTick" type="int32_t" />
-- <ApiParam name="m_flNextHoldFrac" type="float" />
-- <ApiParam name="m_hSwitchToWeaponAfterThrow" type="CHandle&lt;CCSWeaponBase&gt;" />
+| Field | Type |
+|---|---|
+| `m_bRedraw` | `bool` |
+| `m_bIsHeldByPlayer` | `bool` |
+| `m_bPinPulled` | `bool` |
+| `m_bJumpThrow` | `bool` |
+| `m_bThrowAnimating` | `bool` |
+| `m_fThrowTime` | `float` |
+| `m_flThrowStrength` | `float` |
+| `m_fDropTime` | `float` |
+| `m_fPinPullTime` | `float` |
+| `m_bJustPulledPin` | `bool` |
+| `m_nNextHoldTick` | `int32_t` |
+| `m_flNextHoldFrac` | `float` |
+| `m_hSwitchToWeaponAfterThrow` | [`CHandle<CCSWeaponBase>`](/docs/schema/entity/classes/CCSWeaponBase) |
 
-## Methods
-
-### CBaseCSGrenade* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBaseCSGrenade* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBaseCSGrenade* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBaseCSGrenade&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

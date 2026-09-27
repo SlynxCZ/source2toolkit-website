@@ -1,37 +1,20 @@
 ---
-title: CPointTeleport
+title: "CPointTeleport"
+description: "Schema class CPointTeleport, derived from CServerOnlyPointEntity."
 ---
 
-# CPointTeleport
 
-**Inheritance**: CServerOnlyPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointTeleport.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointTeleport.h)
+
+**Inherits** [`CServerOnlyPointEntity`](/docs/schema/entity/classes/CServerOnlyPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_vSaveOrigin" type="Vector" />
-- <ApiParam name="m_vSaveAngles" type="QAngle" />
-- <ApiParam name="m_bTeleportParentedEntities" type="bool" />
-- <ApiParam name="m_bTeleportUseCurrentAngle" type="bool" />
+| Field | Type |
+|---|---|
+| `m_vSaveOrigin` | `Vector` |
+| `m_vSaveAngles` | `QAngle` |
+| `m_bTeleportParentedEntities` | `bool` |
+| `m_bTeleportUseCurrentAngle` | `bool` |
 
-## Methods
-
-### CPointTeleport* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointTeleport* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointTeleport* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointTeleport&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

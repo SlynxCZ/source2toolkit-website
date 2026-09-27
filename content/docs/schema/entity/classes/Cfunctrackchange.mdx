@@ -1,42 +1,25 @@
 ---
-title: CFuncTrackChange
+title: "CFuncTrackChange"
+description: "Schema class CFuncTrackChange, derived from CFuncPlatRot."
 ---
 
-# CFuncTrackChange
 
-**Inheritance**: CFuncPlatRot
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncTrackChange.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncTrackChange.h)
+
+**Inherits** [`CFuncPlatRot`](/docs/schema/entity/classes/CFuncPlatRot)
 
 ## Fields
 
-- <ApiParam name="m_trackTop" type="CHandle&lt;CPathTrack&gt;" />
-- <ApiParam name="m_trackBottom" type="CHandle&lt;CPathTrack&gt;" />
-- <ApiParam name="m_train" type="CHandle&lt;CFuncTrackTrain&gt;" />
-- <ApiParam name="m_trackTopName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_trackBottomName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_trainName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_code" type="TRAIN_CODE" />
-- <ApiParam name="m_targetState" type="int32_t" />
-- <ApiParam name="m_use" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_trackTop` | [`CHandle<CPathTrack>`](/docs/schema/entity/classes/CPathTrack) |
+| `m_trackBottom` | [`CHandle<CPathTrack>`](/docs/schema/entity/classes/CPathTrack) |
+| `m_train` | [`CHandle<CFuncTrackTrain>`](/docs/schema/entity/classes/CFuncTrackTrain) |
+| `m_trackTopName` | `CUtlSymbolLarge` |
+| `m_trackBottomName` | `CUtlSymbolLarge` |
+| `m_trainName` | `CUtlSymbolLarge` |
+| `m_code` | [`TRAIN_CODE`](/docs/schema/entity/enums/TRAIN_CODE) |
+| `m_targetState` | `int32_t` |
+| `m_use` | `int32_t` |
 
-## Methods
-
-### CFuncTrackChange* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncTrackChange* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncTrackChange* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncTrackChange&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

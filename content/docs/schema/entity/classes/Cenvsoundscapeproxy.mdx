@@ -1,34 +1,17 @@
 ---
-title: CEnvSoundscapeProxy
+title: "CEnvSoundscapeProxy"
+description: "Schema class CEnvSoundscapeProxy, derived from CEnvSoundscape."
 ---
 
-# CEnvSoundscapeProxy
 
-**Inheritance**: [CEnvSoundscape](/docs/schema/entity/classes/Cenvsoundscape)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvSoundscapeProxy.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvSoundscapeProxy.h)
+
+**Inherits** [`CEnvSoundscape`](/docs/schema/entity/classes/CEnvSoundscape)
 
 ## Fields
 
-- <ApiParam name="m_MainSoundscapeName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_MainSoundscapeName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CEnvSoundscapeProxy* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvSoundscapeProxy* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvSoundscapeProxy* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvSoundscapeProxy&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

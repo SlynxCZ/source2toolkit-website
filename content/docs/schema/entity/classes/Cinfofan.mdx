@@ -1,37 +1,20 @@
 ---
-title: CInfoFan
+title: "CInfoFan"
+description: "Schema class CInfoFan, derived from CPointEntity."
 ---
 
-# CInfoFan
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CInfoFan.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CInfoFan.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_fFanForceMaxRadius" type="float" />
-- <ApiParam name="m_fFanForceMinRadius" type="float" />
-- <ApiParam name="m_flCurveDistRange" type="float" />
-- <ApiParam name="m_FanForceCurveString" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_fFanForceMaxRadius` | `float` |
+| `m_fFanForceMinRadius` | `float` |
+| `m_flCurveDistRange` | `float` |
+| `m_FanForceCurveString` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CInfoFan* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CInfoFan* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CInfoFan* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CInfoFan&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

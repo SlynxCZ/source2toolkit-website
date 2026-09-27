@@ -1,43 +1,26 @@
 ---
-title: CCSWeaponBaseGun
+title: "CCSWeaponBaseGun"
+description: "Schema class CCSWeaponBaseGun, derived from CCSWeaponBase."
 ---
 
-# CCSWeaponBaseGun
 
-**Inheritance**: [CCSWeaponBase](/docs/schema/entity/classes/Ccsweaponbase)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSWeaponBaseGun.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSWeaponBaseGun.h)
+
+**Inherits** [`CCSWeaponBase`](/docs/schema/entity/classes/CCSWeaponBase)
 
 ## Fields
 
-- <ApiParam name="m_zoomLevel" type="int32_t" />
-- <ApiParam name="m_iBurstShotsRemaining" type="int32_t" />
-- <ApiParam name="m_silencedModelIndex" type="int32_t" />
-- <ApiParam name="m_inPrecache" type="bool" />
-- <ApiParam name="m_bNeedsBoltAction" type="bool" />
-- <ApiParam name="m_nRevolverCylinderIdx" type="int32_t" />
-- <ApiParam name="m_bSkillReloadAvailable" type="bool" />
-- <ApiParam name="m_bSkillReloadLiftedReloadKey" type="bool" />
-- <ApiParam name="m_bSkillBoltInterruptAvailable" type="bool" />
-- <ApiParam name="m_bSkillBoltLiftedFireKey" type="bool" />
+| Field | Type |
+|---|---|
+| `m_zoomLevel` | `int32_t` |
+| `m_iBurstShotsRemaining` | `int32_t` |
+| `m_silencedModelIndex` | `int32_t` |
+| `m_inPrecache` | `bool` |
+| `m_bNeedsBoltAction` | `bool` |
+| `m_nRevolverCylinderIdx` | `int32_t` |
+| `m_bSkillReloadAvailable` | `bool` |
+| `m_bSkillReloadLiftedReloadKey` | `bool` |
+| `m_bSkillBoltInterruptAvailable` | `bool` |
+| `m_bSkillBoltLiftedFireKey` | `bool` |
 
-## Methods
-
-### CCSWeaponBaseGun* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CCSWeaponBaseGun* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CCSWeaponBaseGun* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CCSWeaponBaseGun&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

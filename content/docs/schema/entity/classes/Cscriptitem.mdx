@@ -1,34 +1,17 @@
 ---
-title: CScriptItem
+title: "CScriptItem"
+description: "Schema class CScriptItem, derived from CItem."
 ---
 
-# CScriptItem
 
-**Inheritance**: [CItem](/docs/schema/entity/classes/Citem)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CScriptItem.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CScriptItem.h)
+
+**Inherits** [`CItem`](/docs/schema/entity/classes/CItem)
 
 ## Fields
 
-- <ApiParam name="m_MoveTypeOverride" type="MoveType_t" />
+| Field | Type |
+|---|---|
+| `m_MoveTypeOverride` | `MoveType_t` |
 
-## Methods
-
-### CScriptItem* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CScriptItem* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CScriptItem* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CScriptItem&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

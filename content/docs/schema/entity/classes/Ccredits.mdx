@@ -1,36 +1,19 @@
 ---
-title: CCredits
+title: "CCredits"
+description: "Schema class CCredits, derived from CPointEntity."
 ---
 
-# CCredits
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCredits.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCredits.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_OnCreditsDone" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bRolledOutroCredits" type="bool" />
-- <ApiParam name="m_flLogoLength" type="float" />
+| Field | Type |
+|---|---|
+| `m_OnCreditsDone` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bRolledOutroCredits` | `bool` |
+| `m_flLogoLength` | `float` |
 
-## Methods
-
-### CCredits* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CCredits* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CCredits* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CCredits&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

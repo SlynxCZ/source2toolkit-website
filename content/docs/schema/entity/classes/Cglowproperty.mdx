@@ -1,20 +1,25 @@
 ---
-title: CGlowProperty
+title: "CGlowProperty"
+description: "Schema class CGlowProperty."
 ---
 
-# CGlowProperty
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CGlowProperty.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CGlowProperty.h)
 
 ## Fields
 
-- <ApiParam name="m_fGlowColor" type="Vector" />
-- <ApiParam name="m_iGlowType" type="int32_t" />
-- <ApiParam name="m_iGlowTeam" type="int32_t" />
-- <ApiParam name="m_nGlowRange" type="int32_t" />
-- <ApiParam name="m_nGlowRangeMin" type="int32_t" />
-- <ApiParam name="m_glowColorOverride" type="Color" />
-- <ApiParam name="m_bFlashing" type="bool" />
-- <ApiParam name="m_flGlowTime" type="float" />
-- <ApiParam name="m_flGlowStartTime" type="float" />
-- <ApiParam name="m_bEligibleForScreenHighlight" type="bool" />
-- <ApiParam name="m_bGlowing" type="bool" />
+| Field | Type |
+|---|---|
+| `m_fGlowColor` | `Vector` |
+| `m_iGlowType` | `int32_t` |
+| `m_iGlowTeam` | `int32_t` |
+| `m_nGlowRange` | `int32_t` |
+| `m_nGlowRangeMin` | `int32_t` |
+| `m_glowColorOverride` | `Color` |
+| `m_bFlashing` | `bool` |
+| `m_flGlowTime` | `float` |
+| `m_flGlowStartTime` | `float` |
+| `m_bEligibleForScreenHighlight` | `bool` |
+| `m_bGlowing` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

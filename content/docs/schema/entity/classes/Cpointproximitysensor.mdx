@@ -1,35 +1,18 @@
 ---
-title: CPointProximitySensor
+title: "CPointProximitySensor"
+description: "Schema class CPointProximitySensor, derived from CPointEntity."
 ---
 
-# CPointProximitySensor
 
-**Inheritance**: CPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointProximitySensor.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointProximitySensor.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_hTargetEntity" type="CHandle&lt;CBaseEntity&gt;" />
+| Field | Type |
+|---|---|
+| `m_bDisabled` | `bool` |
+| `m_hTargetEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
 
-## Methods
-
-### CPointProximitySensor* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointProximitySensor* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointProximitySensor* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointProximitySensor&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

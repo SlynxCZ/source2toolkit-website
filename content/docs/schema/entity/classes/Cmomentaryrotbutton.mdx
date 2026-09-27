@@ -1,46 +1,29 @@
 ---
-title: CMomentaryRotButton
+title: "CMomentaryRotButton"
+description: "Schema class CMomentaryRotButton, derived from CRotButton."
 ---
 
-# CMomentaryRotButton
 
-**Inheritance**: [CRotButton](/docs/schema/entity/classes/Crotbutton)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMomentaryRotButton.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMomentaryRotButton.h)
+
+**Inherits** [`CRotButton`](/docs/schema/entity/classes/CRotButton)
 
 ## Fields
 
-- <ApiParam name="m_OnUnpressed" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnFullyOpen" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnFullyClosed" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnReachedPosition" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_lastUsed" type="int32_t" />
-- <ApiParam name="m_start" type="QAngle" />
-- <ApiParam name="m_end" type="QAngle" />
-- <ApiParam name="m_IdealYaw" type="float" />
-- <ApiParam name="m_sNoise" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bUpdateTarget" type="bool" />
-- <ApiParam name="m_direction" type="int32_t" />
-- <ApiParam name="m_returnSpeed" type="float" />
-- <ApiParam name="m_flStartPosition" type="float" />
+| Field | Type |
+|---|---|
+| `m_OnUnpressed` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnFullyOpen` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnFullyClosed` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnReachedPosition` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_lastUsed` | `int32_t` |
+| `m_start` | `QAngle` |
+| `m_end` | `QAngle` |
+| `m_IdealYaw` | `float` |
+| `m_sNoise` | `CUtlSymbolLarge` |
+| `m_bUpdateTarget` | `bool` |
+| `m_direction` | `int32_t` |
+| `m_returnSpeed` | `float` |
+| `m_flStartPosition` | `float` |
 
-## Methods
-
-### CMomentaryRotButton* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMomentaryRotButton* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMomentaryRotButton* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMomentaryRotButton&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

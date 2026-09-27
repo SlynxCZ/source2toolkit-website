@@ -1,21 +1,26 @@
 ---
-title: CPropDataComponent
+title: "CPropDataComponent"
+description: "Schema class CPropDataComponent, derived from CEntityComponent."
 ---
 
-# CPropDataComponent
 
-**Inheritance**: CEntityComponent
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPropDataComponent.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPropDataComponent.h)
+
+**Inherits** `CEntityComponent`
 
 ## Fields
 
-- <ApiParam name="m_flDmgModBullet" type="float" />
-- <ApiParam name="m_flDmgModClub" type="float" />
-- <ApiParam name="m_flDmgModExplosive" type="float" />
-- <ApiParam name="m_flDmgModFire" type="float" />
-- <ApiParam name="m_iszPhysicsDamageTableName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszBasePropData" type="CUtlSymbolLarge" />
-- <ApiParam name="m_nInteractions" type="int32_t" />
-- <ApiParam name="m_bSpawnMotionDisabled" type="bool" />
-- <ApiParam name="m_nDisableTakePhysicsDamageSpawnFlag" type="int32_t" />
-- <ApiParam name="m_nMotionDisabledSpawnFlag" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_flDmgModBullet` | `float` |
+| `m_flDmgModClub` | `float` |
+| `m_flDmgModExplosive` | `float` |
+| `m_flDmgModFire` | `float` |
+| `m_iszPhysicsDamageTableName` | `CUtlSymbolLarge` |
+| `m_iszBasePropData` | `CUtlSymbolLarge` |
+| `m_nInteractions` | `int32_t` |
+| `m_bSpawnMotionDisabled` | `bool` |
+| `m_nDisableTakePhysicsDamageSpawnFlag` | `int32_t` |
+| `m_nMotionDisabledSpawnFlag` | `int32_t` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

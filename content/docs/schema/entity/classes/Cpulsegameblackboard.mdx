@@ -1,35 +1,18 @@
 ---
-title: CPulseGameBlackboard
+title: "CPulseGameBlackboard"
+description: "Schema class CPulseGameBlackboard, derived from CBaseEntity."
 ---
 
-# CPulseGameBlackboard
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPulseGameBlackboard.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPulseGameBlackboard.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_strGraphName" type="CUtlString" />
-- <ApiParam name="m_strStateBlob" type="CUtlString" />
+| Field | Type |
+|---|---|
+| `m_strGraphName` | `CUtlString` |
+| `m_strStateBlob` | `CUtlString` |
 
-## Methods
-
-### CPulseGameBlackboard* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPulseGameBlackboard* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPulseGameBlackboard* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPulseGameBlackboard&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,36 +1,19 @@
 ---
-title: CCommentaryAuto
+title: "CCommentaryAuto"
+description: "Schema class CCommentaryAuto, derived from CBaseEntity."
 ---
 
-# CCommentaryAuto
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCommentaryAuto.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCommentaryAuto.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_OnCommentaryNewGame" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnCommentaryMidGame" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnCommentaryMultiplayerSpawn" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_OnCommentaryNewGame` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnCommentaryMidGame` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnCommentaryMultiplayerSpawn` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CCommentaryAuto* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CCommentaryAuto* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CCommentaryAuto* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CCommentaryAuto&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

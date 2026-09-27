@@ -1,13 +1,18 @@
 ---
-title: Thinkfunc_t
+title: "thinkfunc_t"
+description: "Schema class thinkfunc_t."
 ---
 
-# thinkfunc_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/thinkfunc_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/thinkfunc_t.h)
 
 ## Fields
 
-- <ApiParam name="m_think" type="BASEPTR" />
-- <ApiParam name="m_nContext" type="CUtlStringToken" />
-- <ApiParam name="m_nNextThinkTick" type="int32_t" />
-- <ApiParam name="m_nLastThinkTick" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_think` | `BASEPTR` |
+| `m_nContext` | `CUtlStringToken` |
+| `m_nNextThinkTick` | `int32_t` |
+| `m_nLastThinkTick` | `int32_t` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

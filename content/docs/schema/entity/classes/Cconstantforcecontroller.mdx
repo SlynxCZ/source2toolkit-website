@@ -1,13 +1,18 @@
 ---
-title: CConstantForceController
+title: "CConstantForceController"
+description: "Schema class CConstantForceController."
 ---
 
-# CConstantForceController
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CConstantForceController.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CConstantForceController.h)
 
 ## Fields
 
-- <ApiParam name="m_linear" type="Vector" />
-- <ApiParam name="m_angular" type="RotationVector" />
-- <ApiParam name="m_linearSave" type="Vector" />
-- <ApiParam name="m_angularSave" type="RotationVector" />
+| Field | Type |
+|---|---|
+| `m_linear` | `Vector` |
+| `m_angular` | [`RotationVector`](/docs/core-api/Schema#rotationvector) |
+| `m_linearSave` | `Vector` |
+| `m_angularSave` | [`RotationVector`](/docs/core-api/Schema#rotationvector) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

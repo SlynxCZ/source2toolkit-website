@@ -1,36 +1,19 @@
 ---
-title: CTriggerSoundscape
+title: "CTriggerSoundscape"
+description: "Schema class CTriggerSoundscape, derived from CBaseTrigger."
 ---
 
-# CTriggerSoundscape
 
-**Inheritance**: CBaseTrigger
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTriggerSoundscape.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTriggerSoundscape.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_hSoundscape" type="CHandle&lt;CEnvSoundscapeTriggerable&gt;" />
-- <ApiParam name="m_SoundscapeName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_spectators" type="CUtlVector&lt;CHandle&lt;CBasePlayerPawn&gt;&gt;" />
+| Field | Type |
+|---|---|
+| `m_hSoundscape` | [`CHandle<CEnvSoundscapeTriggerable>`](/docs/schema/entity/classes/CEnvSoundscapeTriggerable) |
+| `m_SoundscapeName` | `CUtlSymbolLarge` |
+| `m_spectators` | [`CUtlVector<CHandle<CBasePlayerPawn>>`](/docs/schema/entity/classes/CBasePlayerPawn) |
 
-## Methods
-
-### CTriggerSoundscape* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTriggerSoundscape* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTriggerSoundscape* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTriggerSoundscape&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

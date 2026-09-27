@@ -1,49 +1,32 @@
 ---
-title: CBaseCSGrenadeProjectile
+title: "CBaseCSGrenadeProjectile"
+description: "Schema class CBaseCSGrenadeProjectile, derived from CBaseGrenade."
 ---
 
-# CBaseCSGrenadeProjectile
 
-**Inheritance**: [CBaseGrenade](/docs/schema/entity/classes/Cbasegrenade)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseCSGrenadeProjectile.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseCSGrenadeProjectile.h)
+
+**Inherits** [`CBaseGrenade`](/docs/schema/entity/classes/CBaseGrenade)
 
 ## Fields
 
-- <ApiParam name="m_vInitialPosition" type="Vector" />
-- <ApiParam name="m_vInitialVelocity" type="Vector" />
-- <ApiParam name="m_nBounces" type="int32_t" />
-- <ApiParam name="m_nExplodeEffectIndex" type="CStrongHandle&lt;InfoForResourceTypeIParticleSystemDefinition&gt;" />
-- <ApiParam name="m_nExplodeEffectTickBegin" type="int32_t" />
-- <ApiParam name="m_vecExplodeEffectOrigin" type="Vector" />
-- <ApiParam name="m_flSpawnTime" type="float" />
-- <ApiParam name="m_unOGSExtraFlags" type="uint8_t" />
-- <ApiParam name="m_bDetonationRecorded" type="bool" />
-- <ApiParam name="m_nItemIndex" type="uint16_t" />
-- <ApiParam name="m_vecOriginalSpawnLocation" type="Vector" />
-- <ApiParam name="m_flLastBounceSoundTime" type="float" />
-- <ApiParam name="m_vecGrenadeSpin" type="RotationVector" />
-- <ApiParam name="m_vecLastHitSurfaceNormal" type="Vector" />
-- <ApiParam name="m_nTicksAtZeroVelocity" type="int32_t" />
-- <ApiParam name="m_bHasEverHitEnemy" type="bool" />
+| Field | Type |
+|---|---|
+| `m_vInitialPosition` | `Vector` |
+| `m_vInitialVelocity` | `Vector` |
+| `m_nBounces` | `int32_t` |
+| `m_nExplodeEffectIndex` | [`CStrongHandle<InfoForResourceTypeIParticleSystemDefinition>`](/docs/core-api/Schema#cstronghandle) |
+| `m_nExplodeEffectTickBegin` | `int32_t` |
+| `m_vecExplodeEffectOrigin` | `Vector` |
+| `m_flSpawnTime` | `float` |
+| `m_unOGSExtraFlags` | `uint8_t` |
+| `m_bDetonationRecorded` | `bool` |
+| `m_nItemIndex` | `uint16_t` |
+| `m_vecOriginalSpawnLocation` | `Vector` |
+| `m_flLastBounceSoundTime` | `float` |
+| `m_vecGrenadeSpin` | [`RotationVector`](/docs/core-api/Schema#rotationvector) |
+| `m_vecLastHitSurfaceNormal` | `Vector` |
+| `m_nTicksAtZeroVelocity` | `int32_t` |
+| `m_bHasEverHitEnemy` | `bool` |
 
-## Methods
-
-### CBaseCSGrenadeProjectile* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBaseCSGrenadeProjectile* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBaseCSGrenadeProjectile* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBaseCSGrenadeProjectile&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

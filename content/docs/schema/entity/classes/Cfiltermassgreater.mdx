@@ -1,34 +1,17 @@
 ---
-title: CFilterMassGreater
+title: "CFilterMassGreater"
+description: "Schema class CFilterMassGreater, derived from CBaseFilter."
 ---
 
-# CFilterMassGreater
 
-**Inheritance**: [CBaseFilter](/docs/schema/entity/classes/Cbasefilter)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFilterMassGreater.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFilterMassGreater.h)
+
+**Inherits** [`CBaseFilter`](/docs/schema/entity/classes/CBaseFilter)
 
 ## Fields
 
-- <ApiParam name="m_fFilterMass" type="float" />
+| Field | Type |
+|---|---|
+| `m_fFilterMass` | `float` |
 
-## Methods
-
-### CFilterMassGreater* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFilterMassGreater* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFilterMassGreater* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFilterMassGreater&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

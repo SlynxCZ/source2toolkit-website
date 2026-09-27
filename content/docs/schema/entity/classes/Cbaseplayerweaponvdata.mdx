@@ -1,37 +1,42 @@
 ---
-title: CBasePlayerWeaponVData
+title: "CBasePlayerWeaponVData"
+description: "Schema class CBasePlayerWeaponVData, derived from CEntitySubclassVDataBase."
 ---
 
-# CBasePlayerWeaponVData
 
-**Inheritance**: CEntitySubclassVDataBase
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBasePlayerWeaponVData.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBasePlayerWeaponVData.h)
+
+**Inherits** [`CEntitySubclassVDataBase`](/docs/schema/entity/classes/CEntitySubclassVDataBase)
 
 ## Fields
 
-- <ApiParam name="m_bBuiltRightHanded" type="bool" />
-- <ApiParam name="m_bAllowFlipping" type="bool" />
-- <ApiParam name="m_szMuzzleFlashParticleConfig" type="CUtlString" />
-- <ApiParam name="m_nMuzzleSmokeShotThreshold" type="uint8_t" />
-- <ApiParam name="m_flMuzzleSmokeTimeout" type="float" />
-- <ApiParam name="m_flMuzzleSmokeDecrementRate" type="float" />
-- <ApiParam name="m_bGenerateMuzzleLight" type="bool" />
-- <ApiParam name="m_bShouldAnimateInWorld" type="bool" />
-- <ApiParam name="m_bLinkedCooldowns" type="bool" />
-- <ApiParam name="m_iFlags" type="ItemFlagTypes_t" />
-- <ApiParam name="m_iWeight" type="int32_t" />
-- <ApiParam name="m_bAutoSwitchTo" type="bool" />
-- <ApiParam name="m_bAutoSwitchFrom" type="bool" />
-- <ApiParam name="m_nPrimaryAmmoType" type="uint8_t" />
-- <ApiParam name="m_nSecondaryAmmoType" type="uint8_t" />
-- <ApiParam name="m_iMaxClip1" type="int32_t" />
-- <ApiParam name="m_iMaxClip2" type="int32_t" />
-- <ApiParam name="m_iDefaultClip1" type="int32_t" />
-- <ApiParam name="m_iDefaultClip2" type="int32_t" />
-- <ApiParam name="m_bReserveAmmoAsClips" type="bool" />
-- <ApiParam name="m_bTreatAsSingleClip" type="bool" />
-- <ApiParam name="m_bKeepLoadedAmmo" type="bool" />
-- <ApiParam name="m_iRumbleEffect" type="RumbleEffect_t" />
-- <ApiParam name="m_flDropSpeed" type="float" />
-- <ApiParam name="m_iSlot" type="int32_t" />
-- <ApiParam name="m_iPosition" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_bBuiltRightHanded` | `bool` |
+| `m_bAllowFlipping` | `bool` |
+| `m_szMuzzleFlashParticleConfig` | `CUtlString` |
+| `m_nMuzzleSmokeShotThreshold` | `uint8_t` |
+| `m_flMuzzleSmokeTimeout` | `float` |
+| `m_flMuzzleSmokeDecrementRate` | `float` |
+| `m_bGenerateMuzzleLight` | `bool` |
+| `m_bShouldAnimateInWorld` | `bool` |
+| `m_bLinkedCooldowns` | `bool` |
+| `m_iFlags` | `ItemFlagTypes_t` |
+| `m_iWeight` | `int32_t` |
+| `m_bAutoSwitchTo` | `bool` |
+| `m_bAutoSwitchFrom` | `bool` |
+| `m_nPrimaryAmmoType` | `uint8_t` |
+| `m_nSecondaryAmmoType` | `uint8_t` |
+| `m_iMaxClip1` | `int32_t` |
+| `m_iMaxClip2` | `int32_t` |
+| `m_iDefaultClip1` | `int32_t` |
+| `m_iDefaultClip2` | `int32_t` |
+| `m_bReserveAmmoAsClips` | `bool` |
+| `m_bTreatAsSingleClip` | `bool` |
+| `m_bKeepLoadedAmmo` | `bool` |
+| `m_iRumbleEffect` | [`RumbleEffect_t`](/docs/schema/entity/enums/RumbleEffect_t) |
+| `m_flDropSpeed` | `float` |
+| `m_iSlot` | `int32_t` |
+| `m_iPosition` | `int32_t` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,57 +1,40 @@
 ---
-title: CEnvInstructorHint
+title: "CEnvInstructorHint"
+description: "Schema class CEnvInstructorHint, derived from CPointEntity."
 ---
 
-# CEnvInstructorHint
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvInstructorHint.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvInstructorHint.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszReplace_Key" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszHintTargetEntity" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iTimeout" type="int32_t" />
-- <ApiParam name="m_iDisplayLimit" type="int32_t" />
-- <ApiParam name="m_iszIcon_Onscreen" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszIcon_Offscreen" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszCaption" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszActivatorCaption" type="CUtlSymbolLarge" />
-- <ApiParam name="m_Color" type="Color" />
-- <ApiParam name="m_fIconOffset" type="float" />
-- <ApiParam name="m_fRange" type="float" />
-- <ApiParam name="m_iPulseOption" type="uint8_t" />
-- <ApiParam name="m_iAlphaOption" type="uint8_t" />
-- <ApiParam name="m_iShakeOption" type="uint8_t" />
-- <ApiParam name="m_bStatic" type="bool" />
-- <ApiParam name="m_bNoOffscreen" type="bool" />
-- <ApiParam name="m_bForceCaption" type="bool" />
-- <ApiParam name="m_iInstanceType" type="int32_t" />
-- <ApiParam name="m_bSuppressRest" type="bool" />
-- <ApiParam name="m_iszBinding" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bAllowNoDrawTarget" type="bool" />
-- <ApiParam name="m_bAutoStart" type="bool" />
-- <ApiParam name="m_bLocalPlayerOnly" type="bool" />
+| Field | Type |
+|---|---|
+| `m_iszName` | `CUtlSymbolLarge` |
+| `m_iszReplace_Key` | `CUtlSymbolLarge` |
+| `m_iszHintTargetEntity` | `CUtlSymbolLarge` |
+| `m_iTimeout` | `int32_t` |
+| `m_iDisplayLimit` | `int32_t` |
+| `m_iszIcon_Onscreen` | `CUtlSymbolLarge` |
+| `m_iszIcon_Offscreen` | `CUtlSymbolLarge` |
+| `m_iszCaption` | `CUtlSymbolLarge` |
+| `m_iszActivatorCaption` | `CUtlSymbolLarge` |
+| `m_Color` | `Color` |
+| `m_fIconOffset` | `float` |
+| `m_fRange` | `float` |
+| `m_iPulseOption` | `uint8_t` |
+| `m_iAlphaOption` | `uint8_t` |
+| `m_iShakeOption` | `uint8_t` |
+| `m_bStatic` | `bool` |
+| `m_bNoOffscreen` | `bool` |
+| `m_bForceCaption` | `bool` |
+| `m_iInstanceType` | `int32_t` |
+| `m_bSuppressRest` | `bool` |
+| `m_iszBinding` | `CUtlSymbolLarge` |
+| `m_bAllowNoDrawTarget` | `bool` |
+| `m_bAutoStart` | `bool` |
+| `m_bLocalPlayerOnly` | `bool` |
 
-## Methods
-
-### CEnvInstructorHint* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvInstructorHint* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvInstructorHint* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvInstructorHint&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

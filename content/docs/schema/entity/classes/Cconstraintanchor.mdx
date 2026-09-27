@@ -1,34 +1,17 @@
 ---
-title: CConstraintAnchor
+title: "CConstraintAnchor"
+description: "Schema class CConstraintAnchor, derived from CBaseAnimGraph."
 ---
 
-# CConstraintAnchor
 
-**Inheritance**: CBaseAnimGraph
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CConstraintAnchor.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CConstraintAnchor.h)
+
+**Inherits** [`CBaseAnimGraph`](/docs/schema/entity/classes/CBaseAnimGraph)
 
 ## Fields
 
-- <ApiParam name="m_massScale" type="float" />
+| Field | Type |
+|---|---|
+| `m_massScale` | `float` |
 
-## Methods
-
-### CConstraintAnchor* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CConstraintAnchor* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CConstraintAnchor* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CConstraintAnchor&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

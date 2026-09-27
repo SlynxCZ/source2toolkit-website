@@ -1,34 +1,17 @@
 ---
-title: CMarkupVolumeTagged_Nav
+title: "CMarkupVolumeTagged_Nav"
+description: "Schema class CMarkupVolumeTagged_Nav, derived from CMarkupVolumeTagged."
 ---
 
-# CMarkupVolumeTagged_Nav
 
-**Inheritance**: [CMarkupVolumeTagged](/docs/schema/entity/classes/Cmarkupvolumetagged)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMarkupVolumeTagged_Nav.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMarkupVolumeTagged_Nav.h)
+
+**Inherits** [`CMarkupVolumeTagged`](/docs/schema/entity/classes/CMarkupVolumeTagged)
 
 ## Fields
 
-- <ApiParam name="m_nScopes" type="NavScopeFlags_t" />
+| Field | Type |
+|---|---|
+| `m_nScopes` | [`NavScopeFlags_t`](/docs/schema/entity/enums/NavScopeFlags_t) |
 
-## Methods
-
-### CMarkupVolumeTagged_Nav* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMarkupVolumeTagged_Nav* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMarkupVolumeTagged_Nav* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMarkupVolumeTagged_Nav&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

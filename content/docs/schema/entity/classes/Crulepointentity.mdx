@@ -1,34 +1,17 @@
 ---
-title: CRulePointEntity
+title: "CRulePointEntity"
+description: "Schema class CRulePointEntity, derived from CRuleEntity."
 ---
 
-# CRulePointEntity
 
-**Inheritance**: [CRuleEntity](/docs/schema/entity/classes/Cruleentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CRulePointEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CRulePointEntity.h)
+
+**Inherits** [`CRuleEntity`](/docs/schema/entity/classes/CRuleEntity)
 
 ## Fields
 
-- <ApiParam name="m_Score" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_Score` | `int32_t` |
 
-## Methods
-
-### CRulePointEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CRulePointEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CRulePointEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CRulePointEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

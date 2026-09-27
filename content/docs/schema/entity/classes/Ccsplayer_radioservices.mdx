@@ -1,16 +1,21 @@
 ---
-title: CCSPlayer_RadioServices
+title: "CCSPlayer_RadioServices"
+description: "Schema class CCSPlayer_RadioServices, derived from CPlayerPawnComponent."
 ---
 
-# CCSPlayer_RadioServices
 
-**Inheritance**: CPlayerPawnComponent
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSPlayer_RadioServices.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSPlayer_RadioServices.h)
+
+**Inherits** [`CPlayerPawnComponent`](/docs/schema/entity/classes/CPlayerPawnComponent)
 
 ## Fields
 
-- <ApiParam name="m_flGotHostageTalkTimer" type="float" />
-- <ApiParam name="m_flDefusingTalkTimer" type="float" />
-- <ApiParam name="m_flC4PlantTalkTimer" type="float" />
-- <ApiParam name="m_flRadioTokenSlots" type="float" />
-- <ApiParam name="m_bIgnoreRadio" type="bool" />
+| Field | Type |
+|---|---|
+| `m_flGotHostageTalkTimer` | `float` |
+| `m_flDefusingTalkTimer` | `float` |
+| `m_flC4PlantTalkTimer` | `float` |
+| `m_flRadioTokenSlots` | `float` |
+| `m_bIgnoreRadio` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

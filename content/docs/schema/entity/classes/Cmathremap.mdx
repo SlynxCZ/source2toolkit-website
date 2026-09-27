@@ -1,43 +1,26 @@
 ---
-title: CMathRemap
+title: "CMathRemap"
+description: "Schema class CMathRemap, derived from CLogicalEntity."
 ---
 
-# CMathRemap
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMathRemap.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMathRemap.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_flInMin" type="float" />
-- <ApiParam name="m_flInMax" type="float" />
-- <ApiParam name="m_flOut1" type="float" />
-- <ApiParam name="m_flOut2" type="float" />
-- <ApiParam name="m_flOldInValue" type="float" />
-- <ApiParam name="m_bEnabled" type="bool" />
-- <ApiParam name="m_OnRoseAboveMin" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnRoseAboveMax" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnFellBelowMin" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnFellBelowMax" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_flInMin` | `float` |
+| `m_flInMax` | `float` |
+| `m_flOut1` | `float` |
+| `m_flOut2` | `float` |
+| `m_flOldInValue` | `float` |
+| `m_bEnabled` | `bool` |
+| `m_OnRoseAboveMin` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnRoseAboveMax` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnFellBelowMin` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnFellBelowMax` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CMathRemap* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMathRemap* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMathRemap* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMathRemap&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

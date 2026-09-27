@@ -1,13 +1,18 @@
 ---
-title: CCSCustomHudLayoutState
+title: "CCSCustomHudLayoutState"
+description: "Schema class CCSCustomHudLayoutState."
 ---
 
-# CCSCustomHudLayoutState
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSCustomHudLayoutState.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSCustomHudLayoutState.h)
 
 ## Fields
 
-- <ApiParam name="m_playerSlot" type="int32_t" />
-- <ApiParam name="m_bInputCaptureEnabled" type="bool" />
-- <ApiParam name="m_vecHasClasses" type="CUtlVector&lt;HUDPanelHasClass_t&gt;" />
-- <ApiParam name="m_vecDialogVariableStrings" type="CUtlVector&lt;HUDPanelDialogVariableString_t&gt;" />
+| Field | Type |
+|---|---|
+| `m_playerSlot` | `int32_t` |
+| `m_bInputCaptureEnabled` | `bool` |
+| `m_vecHasClasses` | [`CUtlVector<HUDPanelHasClass_t>`](/docs/schema/entity/classes/HUDPanelHasClass_t) |
+| `m_vecDialogVariableStrings` | [`CUtlVector<HUDPanelDialogVariableString_t>`](/docs/schema/entity/classes/HUDPanelDialogVariableString_t) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

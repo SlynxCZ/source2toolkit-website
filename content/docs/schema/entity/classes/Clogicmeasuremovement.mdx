@@ -1,42 +1,25 @@
 ---
-title: CLogicMeasureMovement
+title: "CLogicMeasureMovement"
+description: "Schema class CLogicMeasureMovement, derived from CLogicalEntity."
 ---
 
-# CLogicMeasureMovement
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicMeasureMovement.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicMeasureMovement.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_strMeasureTarget" type="CUtlSymbolLarge" />
-- <ApiParam name="m_strMeasureReference" type="CUtlSymbolLarge" />
-- <ApiParam name="m_strTargetReference" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hMeasureTarget" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_hMeasureReference" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_hTarget" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_hTargetReference" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_flScale" type="float" />
-- <ApiParam name="m_nMeasureType" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_strMeasureTarget` | `CUtlSymbolLarge` |
+| `m_strMeasureReference` | `CUtlSymbolLarge` |
+| `m_strTargetReference` | `CUtlSymbolLarge` |
+| `m_hMeasureTarget` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hMeasureReference` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hTarget` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hTargetReference` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_flScale` | `float` |
+| `m_nMeasureType` | `int32_t` |
 
-## Methods
-
-### CLogicMeasureMovement* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicMeasureMovement* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicMeasureMovement* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicMeasureMovement&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,40 +1,23 @@
 ---
-title: CMarkupVolumeTagged
+title: "CMarkupVolumeTagged"
+description: "Schema class CMarkupVolumeTagged, derived from CMarkupVolume."
 ---
 
-# CMarkupVolumeTagged
 
-**Inheritance**: CMarkupVolume
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMarkupVolumeTagged.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMarkupVolumeTagged.h)
+
+**Inherits** [`CMarkupVolume`](/docs/schema/entity/classes/CMarkupVolume)
 
 ## Fields
 
-- <ApiParam name="m_GroupNames" type="CUtlVector&lt;CGlobalSymbol&gt;" />
-- <ApiParam name="m_Tags" type="CUtlVector&lt;CGlobalSymbol&gt;" />
-- <ApiParam name="m_bIsGroup" type="bool" />
-- <ApiParam name="m_bGroupByPrefab" type="bool" />
-- <ApiParam name="m_bGroupByVolume" type="bool" />
-- <ApiParam name="m_bGroupOtherGroups" type="bool" />
-- <ApiParam name="m_bIsInGroup" type="bool" />
+| Field | Type |
+|---|---|
+| `m_GroupNames` | [`CUtlVector<CGlobalSymbol>`](/docs/core-api/Schema#cglobalsymbol) |
+| `m_Tags` | [`CUtlVector<CGlobalSymbol>`](/docs/core-api/Schema#cglobalsymbol) |
+| `m_bIsGroup` | `bool` |
+| `m_bGroupByPrefab` | `bool` |
+| `m_bGroupByVolume` | `bool` |
+| `m_bGroupOtherGroups` | `bool` |
+| `m_bIsInGroup` | `bool` |
 
-## Methods
-
-### CMarkupVolumeTagged* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMarkupVolumeTagged* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMarkupVolumeTagged* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMarkupVolumeTagged&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

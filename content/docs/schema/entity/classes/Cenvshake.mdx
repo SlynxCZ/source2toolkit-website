@@ -1,44 +1,27 @@
 ---
-title: CEnvShake
+title: "CEnvShake"
+description: "Schema class CEnvShake, derived from CPointEntity."
 ---
 
-# CEnvShake
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvShake.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvShake.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_limitToEntity" type="CUtlSymbolLarge" />
-- <ApiParam name="m_Amplitude" type="float" />
-- <ApiParam name="m_Frequency" type="float" />
-- <ApiParam name="m_Duration" type="float" />
-- <ApiParam name="m_Radius" type="float" />
-- <ApiParam name="m_stopTime" type="float" />
-- <ApiParam name="m_nextShake" type="float" />
-- <ApiParam name="m_currentAmp" type="float" />
-- <ApiParam name="m_maxForce" type="Vector" />
-- <ApiParam name="m_pShakeController" type="[IPhysicsMotionController*](/docs/schema/entity/classes/Iphysicsmotioncontroller)" />
-- <ApiParam name="m_shakeCallback" type="CPhysicsShake" />
+| Field | Type |
+|---|---|
+| `m_limitToEntity` | `CUtlSymbolLarge` |
+| `m_Amplitude` | `float` |
+| `m_Frequency` | `float` |
+| `m_Duration` | `float` |
+| `m_Radius` | `float` |
+| `m_stopTime` | `float` |
+| `m_nextShake` | `float` |
+| `m_currentAmp` | `float` |
+| `m_maxForce` | `Vector` |
+| `m_pShakeController` | [`IPhysicsMotionController*`](/docs/schema/entity/classes/IPhysicsMotionController) |
+| `m_shakeCallback` | [`CPhysicsShake`](/docs/schema/entity/classes/CPhysicsShake) |
 
-## Methods
-
-### CEnvShake* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvShake* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvShake* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvShake&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

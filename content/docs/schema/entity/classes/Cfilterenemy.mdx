@@ -1,38 +1,21 @@
 ---
-title: CFilterEnemy
+title: "CFilterEnemy"
+description: "Schema class CFilterEnemy, derived from CBaseFilter."
 ---
 
-# CFilterEnemy
 
-**Inheritance**: CBaseFilter
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFilterEnemy.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFilterEnemy.h)
+
+**Inherits** [`CBaseFilter`](/docs/schema/entity/classes/CBaseFilter)
 
 ## Fields
 
-- <ApiParam name="m_iszEnemyName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flRadius" type="float" />
-- <ApiParam name="m_flOuterRadius" type="float" />
-- <ApiParam name="m_nMaxSquadmatesPerEnemy" type="int32_t" />
-- <ApiParam name="m_iszPlayerName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_iszEnemyName` | `CUtlSymbolLarge` |
+| `m_flRadius` | `float` |
+| `m_flOuterRadius` | `float` |
+| `m_nMaxSquadmatesPerEnemy` | `int32_t` |
+| `m_iszPlayerName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CFilterEnemy* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFilterEnemy* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFilterEnemy* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFilterEnemy&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

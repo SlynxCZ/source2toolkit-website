@@ -1,339 +1,543 @@
 ---
-title: IToolkitConVars
+title: "IToolkitConVars"
+description: "Interface for managing and interacting with console variables (ConVars)."
 ---
 
-# IToolkitConVars
+
+Provides functionality for:
+- Querying ConVars by name
+- Reading and writing values
+- Accessing metadata (type, flags, help text)
+- Creating and deleting ConVars
+
+<Callout type="info">ConVars are identified by an internal access index.</Callout>
+
+**Interface id** `IToolkitConVars001` (`TOOLKIT_CONVARS_INTERFACE`) · **Global** `g_pToolkitConVars` · **Header** [`source2toolkit/IToolkitConVars.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitConVars.h)
+
+## Types
+
+### `ConVarChangeHandler`
+
+```cpp
+using ConVarChangeHandler = std::function<void(ConVarRefAbstract* ref, CSplitScreenSlot slot, const char* pszNewValue, const char* pszOldValue)>;
+```
+
+Callback type for ConVar value changes.
 
 ## Methods
 
-### uint16 GetConvarAccessIndexByName(name)
+### `GetConvarAccessIndexByName`
+
+```cpp
+virtual uint16 GetConvarAccessIndexByName(const char* name) = 0;
+```
 
 Retrieves access index of a ConVar by name.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `name` | `const char*` | ConVar name |
 
-- <ApiParam name="name" type="const char*" /> — ConVar name
+**Returns** `uint16` — Access index
 
-### ConVarRefAbstract GetConvarRef(accessIndex)
+### `GetConvarRef`
+
+```cpp
+virtual ConVarRefAbstract GetConvarRef(uint16 accessIndex) = 0;
+```
 
 Gets a ConVar reference wrapper.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `accessIndex` | `uint16` |
 
-- <ApiParam name="accessIndex" type="uint16" />
+### `GetName`
 
-### const char* GetName(accessIndex)
+```cpp
+virtual const char* GetName(uint16 accessIndex) = 0;
+```
 
 Gets ConVar name.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `accessIndex` | `uint16` |
 
-- <ApiParam name="accessIndex" type="uint16" />
+### `GetHelpText`
 
-### const char* GetHelpText(accessIndex)
+```cpp
+virtual const char* GetHelpText(uint16 accessIndex) = 0;
+```
 
 Gets help/description text.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `accessIndex` | `uint16` |
 
-- <ApiParam name="accessIndex" type="uint16" />
+### `GetType`
 
-### EConVarType GetType(accessIndex)
+```cpp
+virtual EConVarType GetType(uint16 accessIndex) = 0;
+```
 
 Gets ConVar type.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `accessIndex` | `uint16` |
 
-- <ApiParam name="accessIndex" type="uint16" />
+### `GetFlags`
 
-### uint64 GetFlags(accessIndex)
+```cpp
+virtual uint64 GetFlags(uint16 accessIndex) = 0;
+```
 
 Gets flags (FCVAR_*).
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `accessIndex` | `uint16` |
 
-- <ApiParam name="accessIndex" type="uint16" />
+### `SetFlags`
 
-### SetFlags(accessIndex, flags)
+```cpp
+virtual void SetFlags(uint16 accessIndex, uint64 flags) = 0;
+```
 
 Sets flags (FCVAR_*).
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `accessIndex` | `uint16` |
+| `flags` | `uint64` |
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="flags" type="uint64" />
+### `GetValueAddress`
 
-### void* GetValueAddress(accessIndex, slot)
+```cpp
+virtual void* GetValueAddress(uint16 accessIndex, CSplitScreenSlot slot = -1) = 0;
+```
 
 Gets pointer to underlying value.
 
-<ApiLabel>Parameters</ApiLabel>
+<Callout type="info">Type depends on ConVar type.</Callout>
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### const char* GetString(accessIndex, slot)
+### `GetString`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual const char* GetString(uint16 accessIndex, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### bool GetBool(accessIndex, slot)
+### `GetBool`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual bool GetBool(uint16 accessIndex, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### int32 GetInt(accessIndex, slot)
+### `GetInt`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual int32 GetInt(uint16 accessIndex, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### float GetFloat(accessIndex, slot)
+### `GetFloat`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual float GetFloat(uint16 accessIndex, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### double GetDouble(accessIndex, slot)
+### `GetDouble`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual double GetDouble(uint16 accessIndex, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### SetString(accessIndex, value, slot)
+### `SetString`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual void SetString(uint16 accessIndex, const char* value, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="value" type="const char*" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `value` | `const char*` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### SetBool(accessIndex, value, slot)
+### `SetBool`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual void SetBool(uint16 accessIndex, bool value, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="value" type="bool" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `value` | `bool` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### SetInt(accessIndex, value, slot)
+### `SetInt`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual void SetInt(uint16 accessIndex, int32 value, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="value" type="int32" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `value` | `int32` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### SetFloat(accessIndex, value, slot)
+### `SetFloat`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual void SetFloat(uint16 accessIndex, float value, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="value" type="float" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `value` | `float` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### SetDouble(accessIndex, value, slot)
+### `SetDouble`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual void SetDouble(uint16 accessIndex, double value, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="value" type="double" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `value` | `double` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### Vector2D GetVector2(accessIndex, slot)
+### `GetVector2`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual Vector2D GetVector2(uint16 accessIndex, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### Vector GetVector3(accessIndex, slot)
+### `GetVector3`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual Vector GetVector3(uint16 accessIndex, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### Vector4D GetVector4(accessIndex, slot)
+### `GetVector4`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual Vector4D GetVector4(uint16 accessIndex, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### QAngle GetQAngle(accessIndex, slot)
+### `GetQAngle`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual QAngle GetQAngle(uint16 accessIndex, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### Color GetColor(accessIndex, slot)
+### `GetColor`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual Color GetColor(uint16 accessIndex, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### SetVector2(accessIndex, value, slot)
+### `SetVector2`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual void SetVector2(uint16 accessIndex, const Vector2D& value, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="value" type="const Vector2D&" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `value` | `const Vector2D&` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### SetVector3(accessIndex, value, slot)
+### `SetVector3`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual void SetVector3(uint16 accessIndex, const Vector& value, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="value" type="const Vector&" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `value` | `const Vector&` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### SetVector4(accessIndex, value, slot)
+### `SetVector4`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual void SetVector4(uint16 accessIndex, const Vector4D& value, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="value" type="const Vector4D&" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `value` | `const Vector4D&` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### SetQAngle(accessIndex, value, slot)
+### `SetQAngle`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual void SetQAngle(uint16 accessIndex, const QAngle& value, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="value" type="const QAngle&" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `value` | `const QAngle&` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### SetColor(accessIndex, value, slot)
+### `SetColor`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual void SetColor(uint16 accessIndex, const Color& value, CSplitScreenSlot slot = -1) = 0;
+```
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="value" type="const Color&" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `value` | `const Color&` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-### GetValue(accessIndex, outValue, slot)
+### `GetValue`
+
+```cpp
+virtual void GetValue(uint16 accessIndex, void* outValue, CSplitScreenSlot slot = -1) = 0;
+```
 
 Gets value into user-provided buffer.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `outValue` | `void*` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="outValue" type="void*" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+### `HookConVarChange`
 
-### HookConVarChange(owner, handler)
+```cpp
+virtual void HookConVarChange(PluginId owner, ConVarChangeHandler handler) = 0;
+```
 
 Registers a listener for every ConVar value change.
 
-<ApiLabel>Parameters</ApiLabel>
+The engine only takes plain function pointers here, and only keeps one list of them for the whole process. The toolkit installs a single one of those and fans out to the handlers registered through this, so a plugin can use a capturing lambda and does not have to unregister on unload.
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the listener
-- <ApiParam name="handler" type="ConVarChangeHandler" /> — Callback function
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the listener |
+| `handler` | [`ConVarChangeHandler`](/docs/core-api/IToolkitConVars#convarchangehandler) | Callback function |
 
-### UnhookConVarChange(owner)
+### `UnhookConVarChange`
+
+```cpp
+virtual void UnhookConVarChange(PluginId owner) = 0;
+```
 
 Drops every change listener a plugin registered.
 
-<ApiLabel>Parameters</ApiLabel>
+Done for you when the plugin unloads; call it only to stop listening earlier than that.
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin ID whose listeners to drop
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID whose listeners to drop |
 
-### SetValue(accessIndex, value, slot)
+### `SetValue`
+
+```cpp
+virtual void SetValue(uint16 accessIndex, const void* value, CSplitScreenSlot slot = -1) = 0;
+```
 
 Sets value from user-provided buffer.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `accessIndex` | `uint16` |  |
+| `value` | `const void*` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
 
-- <ApiParam name="accessIndex" type="uint16" />
-- <ApiParam name="value" type="const void*" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+### `CreateConVar`
 
-### DeleteConVar(accessIndex)
+```cpp
+virtual uint16 CreateConVar(const char* name, EConVarType type, const char* help, uint64 flags, bool hasMin, bool hasMax, void* defaultValue, const void* minValue, const void* maxValue) = 0;
+```
+
+Creates a new ConVar.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `name` | `const char*` | ConVar name |
+| `type` | `EConVarType` | Variable type |
+| `help` | `const char*` | Description text |
+| `flags` | `uint64` | FCVAR flags |
+| `hasMin` | `bool` | Whether min value is enforced |
+| `hasMax` | `bool` | Whether max value is enforced |
+| `defaultValue` | `void*` | Default value pointer |
+| `minValue` | `const void*` | Minimum value pointer |
+| `maxValue` | `const void*` | Maximum value pointer |
+
+**Returns** `uint16` — Access index of created ConVar
+
+### `DeleteConVar`
+
+```cpp
+virtual void DeleteConVar(uint16 accessIndex) = 0;
+```
 
 Deletes a ConVar.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="accessIndex" type="uint16" />
+| Parameter | Type |
+|---|---|
+| `accessIndex` | `uint16` |
 
 ## Functions
 
-### UTIL_RemoveConVarFlags(pszName, nFlags)
+### `UTIL_RemoveConVarFlags`
+
+```cpp
+inline bool UTIL_RemoveConVarFlags(const char* pszName, uint64 nFlags);
+```
 
 Clears flags on a ConVar found by name, e.g. FCVAR_CHEAT.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pszName` | `const char*` |
+| `nFlags` | `uint64` |
 
-- <ApiParam name="pszName" type="const char*" />
-- <ApiParam name="nFlags" type="uint64" />
+**Returns** `bool` — false when there is no such ConVar, or its data is not available.
 
-### UTIL_AddConVarFlags(pszName, nFlags)
+### `UTIL_AddConVarFlags`
+
+```cpp
+inline bool UTIL_AddConVarFlags(const char* pszName, uint64 nFlags);
+```
 
 Sets flags on a ConVar found by name.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pszName` | `const char*` |
+| `nFlags` | `uint64` |
 
-- <ApiParam name="pszName" type="const char*" />
-- <ApiParam name="nFlags" type="uint64" />
+### `UTIL_SetConVar`
 
-### UTIL_SetConVar(pszName, value, slot)
-
-Sets a ConVar by name.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="pszName" type="const char*" />
-- <ApiParam name="value" type="const T&" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
-
-### UTIL_SetConVar(pszName, v, slot)
+```cpp
+template <typename T> inline bool UTIL_SetConVar(const char* pszName, const T& value, CSplitScreenSlot slot = -1);
+inline bool UTIL_SetConVar(const char* pszName, double v, CSplitScreenSlot slot = -1);
+inline bool UTIL_SetConVar(const char* pszName, float v, CSplitScreenSlot slot = -1);
+inline bool UTIL_SetConVar(const char* pszName, int v, CSplitScreenSlot slot = -1);
+inline bool UTIL_SetConVar(const char* pszName, unsigned v, CSplitScreenSlot slot = -1);
+```
 
 Sets a ConVar by name.
 
-<ApiLabel>Parameters</ApiLabel>
+The type is what decides how the value is written, so call it as UTIL_SetConVar&lt;int&gt;("mp_freezetime", 5) when the literal would deduce to something else.
 
-- <ApiParam name="pszName" type="const char*" />
-- <ApiParam name="v" type="double" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+| Parameter | Type | Default |
+|---|---|---|
+| `pszName` | `const char*` |  |
+| `value` | `const T&` |  |
+| `slot` | `CSplitScreenSlot` | `-1` |
+| `v` | `double` |  |
+| `v` | `float` |  |
+| `v` | `int` |  |
+| `—` | `unsigned v` |  |
 
-### UTIL_SetConVar(pszName, v, slot)
+**Returns** `bool` — false when there is no such ConVar, or its data is not available.
 
-Sets a ConVar by name.
+## Macros
 
-<ApiLabel>Parameters</ApiLabel>
+### `HOOK_CONVAR_CHANGE`
 
-- <ApiParam name="pszName" type="const char*" />
-- <ApiParam name="v" type="float" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+```cpp
+#define HOOK_CONVAR_CHANGE(passfunc) g_pToolkitConVars->HookConVarChange(g_PluginID, passfunc)
+```
 
-### UTIL_SetConVar(pszName, v, slot)
+Macro for listening to ConVar value changes.
 
-Sets a ConVar by name.
+### `UNHOOK_CONVAR_CHANGE`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+#define UNHOOK_CONVAR_CHANGE() g_pToolkitConVars->UnhookConVarChange(g_PluginID)
+```
 
-- <ApiParam name="pszName" type="const char*" />
-- <ApiParam name="v" type="int" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
+Macro for dropping the ConVar change hook.
 
-### UTIL_SetConVar(pszName, v, slot)
+### Other macros
 
-Sets a ConVar by name.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="pszName" type="const char*" />
-- <ApiParam name="v" type="unsigned" />
-- <ApiParam name="slot" type="CSplitScreenSlot" />
-
+| Macro | Expands to |
+|---|---|
+| `CVAR_IDX(name)` | `g_pToolkitConVars->GetConvarAccessIndexByName(name)` |
+| `CVAR_REF(idx)` | `g_pToolkitConVars->GetConvarRef(idx)` |
+| `CVAR_GET_STR(idx, ...)` | `g_pToolkitConVars->GetString(idx, ##__VA_ARGS__)` |
+| `CVAR_GET_BOOL(idx, ...)` | `g_pToolkitConVars->GetBool(idx, ##__VA_ARGS__)` |
+| `CVAR_GET_INT(idx, ...)` | `g_pToolkitConVars->GetInt(idx, ##__VA_ARGS__)` |
+| `CVAR_GET_FLOAT(idx, ...)` | `g_pToolkitConVars->GetFloat(idx, ##__VA_ARGS__)` |
+| `CVAR_GET_DOUBLE(idx, ...)` | `g_pToolkitConVars->GetDouble(idx, ##__VA_ARGS__)` |
+| `CVAR_SET_STR(idx, v, ...)` | `g_pToolkitConVars->SetString(idx, v, ##__VA_ARGS__)` |
+| `CVAR_SET_BOOL(idx, v, ...)` | `g_pToolkitConVars->SetBool(idx, v, ##__VA_ARGS__)` |
+| `CVAR_SET_INT(idx, v, ...)` | `g_pToolkitConVars->SetInt(idx, v, ##__VA_ARGS__)` |
+| `CVAR_SET_FLOAT(idx, v, ...)` | `g_pToolkitConVars->SetFloat(idx, v, ##__VA_ARGS__)` |
+| `CVAR_SET_DOUBLE(idx, v, ...)` | `g_pToolkitConVars->SetDouble(idx, v, ##__VA_ARGS__)` |
+| `CVAR_CREATE(name, type, help, flags, hasMin, hasMax, def, minVal, maxVal)` | `g_pToolkitConVars->CreateConVar(name, type, help, flags, hasMin, hasMax, def, minVal, maxVal)` |
+| `CVAR_DELETE(idx)` | `g_pToolkitConVars->DeleteConVar(idx)` |

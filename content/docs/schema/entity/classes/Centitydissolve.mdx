@@ -1,43 +1,26 @@
 ---
-title: CEntityDissolve
+title: "CEntityDissolve"
+description: "Schema class CEntityDissolve, derived from CBaseModelEntity."
 ---
 
-# CEntityDissolve
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEntityDissolve.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEntityDissolve.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_flFadeInStart" type="float" />
-- <ApiParam name="m_flFadeInLength" type="float" />
-- <ApiParam name="m_flFadeOutModelStart" type="float" />
-- <ApiParam name="m_flFadeOutModelLength" type="float" />
-- <ApiParam name="m_flFadeOutStart" type="float" />
-- <ApiParam name="m_flFadeOutLength" type="float" />
-- <ApiParam name="m_flStartTime" type="float" />
-- <ApiParam name="m_nDissolveType" type="EntityDissolveType_t" />
-- <ApiParam name="m_vDissolverOrigin" type="Vector" />
-- <ApiParam name="m_nMagnitude" type="uint32_t" />
+| Field | Type |
+|---|---|
+| `m_flFadeInStart` | `float` |
+| `m_flFadeInLength` | `float` |
+| `m_flFadeOutModelStart` | `float` |
+| `m_flFadeOutModelLength` | `float` |
+| `m_flFadeOutStart` | `float` |
+| `m_flFadeOutLength` | `float` |
+| `m_flStartTime` | `float` |
+| `m_nDissolveType` | `EntityDissolveType_t` |
+| `m_vDissolverOrigin` | `Vector` |
+| `m_nMagnitude` | `uint32_t` |
 
-## Methods
-
-### CEntityDissolve* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEntityDissolve* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEntityDissolve* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEntityDissolve&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

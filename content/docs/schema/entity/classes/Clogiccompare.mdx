@@ -1,35 +1,18 @@
 ---
-title: CLogicCompare
+title: "CLogicCompare"
+description: "Schema class CLogicCompare, derived from CLogicalEntity."
 ---
 
-# CLogicCompare
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicCompare.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicCompare.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_flInValue" type="float" />
-- <ApiParam name="m_flCompareValue" type="float" />
+| Field | Type |
+|---|---|
+| `m_flInValue` | `float` |
+| `m_flCompareValue` | `float` |
 
-## Methods
-
-### CLogicCompare* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicCompare* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicCompare* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicCompare&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

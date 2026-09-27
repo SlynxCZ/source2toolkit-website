@@ -1,40 +1,23 @@
 ---
-title: CPhysForce
+title: "CPhysForce"
+description: "Schema class CPhysForce, derived from CPointEntity."
 ---
 
-# CPhysForce
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysForce.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysForce.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_pController" type="[IPhysicsMotionController*](/docs/schema/entity/classes/Iphysicsmotioncontroller)" />
-- <ApiParam name="m_nameAttach" type="CUtlSymbolLarge" />
-- <ApiParam name="m_force" type="float" />
-- <ApiParam name="m_forceTime" type="float" />
-- <ApiParam name="m_attachedObject" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_wasRestored" type="bool" />
-- <ApiParam name="m_integrator" type="[CConstantForceController](/docs/schema/entity/classes/Cconstantforcecontroller)" />
+| Field | Type |
+|---|---|
+| `m_pController` | [`IPhysicsMotionController*`](/docs/schema/entity/classes/IPhysicsMotionController) |
+| `m_nameAttach` | `CUtlSymbolLarge` |
+| `m_force` | `float` |
+| `m_forceTime` | `float` |
+| `m_attachedObject` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_wasRestored` | `bool` |
+| `m_integrator` | [`CConstantForceController`](/docs/schema/entity/classes/CConstantForceController) |
 
-## Methods
-
-### CPhysForce* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysForce* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysForce* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysForce&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

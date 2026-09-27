@@ -1,44 +1,27 @@
 ---
-title: CLogicAuto
+title: "CLogicAuto"
+description: "Schema class CLogicAuto, derived from CBaseEntity."
 ---
 
-# CLogicAuto
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicAuto.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicAuto.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_OnMapSpawn" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnDemoMapSpawn" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnNewGame" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnLoadGame" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnMapTransition" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnBackgroundMap" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnMultiNewMap" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnMultiNewRound" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnVREnabled" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnVRNotEnabled" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_globalstate" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_OnMapSpawn` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnDemoMapSpawn` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnNewGame` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnLoadGame` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnMapTransition` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnBackgroundMap` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnMultiNewMap` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnMultiNewRound` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnVREnabled` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnVRNotEnabled` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_globalstate` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CLogicAuto* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicAuto* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicAuto* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicAuto&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

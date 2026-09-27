@@ -1,34 +1,17 @@
 ---
-title: CFogTrigger
+title: "CFogTrigger"
+description: "Schema class CFogTrigger, derived from CBaseTrigger."
 ---
 
-# CFogTrigger
 
-**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFogTrigger.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFogTrigger.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_fog" type="fogparams_t" />
+| Field | Type |
+|---|---|
+| `m_fog` | [`fogparams_t`](/docs/schema/entity/classes/fogparams_t) |
 
-## Methods
-
-### CFogTrigger* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFogTrigger* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFogTrigger* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFogTrigger&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

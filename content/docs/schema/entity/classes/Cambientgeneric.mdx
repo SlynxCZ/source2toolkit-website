@@ -1,43 +1,26 @@
 ---
-title: CAmbientGeneric
+title: "CAmbientGeneric"
+description: "Schema class CAmbientGeneric, derived from CPointEntity."
 ---
 
-# CAmbientGeneric
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CAmbientGeneric.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CAmbientGeneric.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_radius" type="float" />
-- <ApiParam name="m_flMaxRadius" type="float" />
-- <ApiParam name="m_iSoundLevel" type="soundlevel_t" />
-- <ApiParam name="m_dpv" type="[dynpitchvol_t](/docs/schema/entity/classes/dynpitchvol_t)" />
-- <ApiParam name="m_fActive" type="bool" />
-- <ApiParam name="m_fLooping" type="bool" />
-- <ApiParam name="m_iszSound" type="CGameSoundEventName" />
-- <ApiParam name="m_sSourceEntName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hSoundSource" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_nSoundSourceEntIndex" type="CEntityIndex" />
+| Field | Type |
+|---|---|
+| `m_radius` | `float` |
+| `m_flMaxRadius` | `float` |
+| `m_iSoundLevel` | `soundlevel_t` |
+| `m_dpv` | [`dynpitchvol_t`](/docs/schema/entity/classes/dynpitchvol_t) |
+| `m_fActive` | `bool` |
+| `m_fLooping` | `bool` |
+| `m_iszSound` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_sSourceEntName` | `CUtlSymbolLarge` |
+| `m_hSoundSource` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_nSoundSourceEntIndex` | `CEntityIndex` |
 
-## Methods
-
-### CAmbientGeneric* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CAmbientGeneric* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CAmbientGeneric* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CAmbientGeneric&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

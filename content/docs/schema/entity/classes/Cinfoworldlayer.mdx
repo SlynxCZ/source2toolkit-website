@@ -1,40 +1,23 @@
 ---
-title: CInfoWorldLayer
+title: "CInfoWorldLayer"
+description: "Schema class CInfoWorldLayer, derived from CBaseEntity."
 ---
 
-# CInfoWorldLayer
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CInfoWorldLayer.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CInfoWorldLayer.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_pOutputOnEntitiesSpawned" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_worldName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_layerName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bWorldLayerVisible" type="bool" />
-- <ApiParam name="m_bEntitiesSpawned" type="bool" />
-- <ApiParam name="m_bCreateAsChildSpawnGroup" type="bool" />
-- <ApiParam name="m_hLayerSpawnGroup" type="uint32_t" />
+| Field | Type |
+|---|---|
+| `m_pOutputOnEntitiesSpawned` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_worldName` | `CUtlSymbolLarge` |
+| `m_layerName` | `CUtlSymbolLarge` |
+| `m_bWorldLayerVisible` | `bool` |
+| `m_bEntitiesSpawned` | `bool` |
+| `m_bCreateAsChildSpawnGroup` | `bool` |
+| `m_hLayerSpawnGroup` | `uint32_t` |
 
-## Methods
-
-### CInfoWorldLayer* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CInfoWorldLayer* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CInfoWorldLayer* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CInfoWorldLayer&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

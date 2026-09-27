@@ -1,41 +1,24 @@
 ---
-title: CSoundOpvarSetOBBWindEntity
+title: "CSoundOpvarSetOBBWindEntity"
+description: "Schema class CSoundOpvarSetOBBWindEntity, derived from CSoundOpvarSetPointBase."
 ---
 
-# CSoundOpvarSetOBBWindEntity
 
-**Inheritance**: [CSoundOpvarSetPointBase](/docs/schema/entity/classes/Csoundopvarsetpointbase)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundOpvarSetOBBWindEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundOpvarSetOBBWindEntity.h)
+
+**Inherits** [`CSoundOpvarSetPointBase`](/docs/schema/entity/classes/CSoundOpvarSetPointBase)
 
 ## Fields
 
-- <ApiParam name="m_vMins" type="Vector" />
-- <ApiParam name="m_vMaxs" type="Vector" />
-- <ApiParam name="m_vDistanceMins" type="Vector" />
-- <ApiParam name="m_vDistanceMaxs" type="Vector" />
-- <ApiParam name="m_flWindMin" type="float" />
-- <ApiParam name="m_flWindMax" type="float" />
-- <ApiParam name="m_flWindMapMin" type="float" />
-- <ApiParam name="m_flWindMapMax" type="float" />
+| Field | Type |
+|---|---|
+| `m_vMins` | `Vector` |
+| `m_vMaxs` | `Vector` |
+| `m_vDistanceMins` | `Vector` |
+| `m_vDistanceMaxs` | `Vector` |
+| `m_flWindMin` | `float` |
+| `m_flWindMax` | `float` |
+| `m_flWindMapMin` | `float` |
+| `m_flWindMapMax` | `float` |
 
-## Methods
-
-### CSoundOpvarSetOBBWindEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundOpvarSetOBBWindEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundOpvarSetOBBWindEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundOpvarSetOBBWindEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,48 +1,31 @@
 ---
-title: CPlayerSprayDecal
+title: "CPlayerSprayDecal"
+description: "Schema class CPlayerSprayDecal, derived from CModelPointEntity."
 ---
 
-# CPlayerSprayDecal
 
-**Inheritance**: CModelPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPlayerSprayDecal.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPlayerSprayDecal.h)
+
+**Inherits** [`CModelPointEntity`](/docs/schema/entity/classes/CModelPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_nUniqueID" type="int32_t" />
-- <ApiParam name="m_unAccountID" type="uint32_t" />
-- <ApiParam name="m_unTraceID" type="uint32_t" />
-- <ApiParam name="m_rtGcTime" type="uint32_t" />
-- <ApiParam name="m_vecEndPos" type="Vector" />
-- <ApiParam name="m_vecStart" type="Vector" />
-- <ApiParam name="m_vecLeft" type="Vector" />
-- <ApiParam name="m_vecNormal" type="Vector" />
-- <ApiParam name="m_nPlayer" type="int32_t" />
-- <ApiParam name="m_nEntity" type="int32_t" />
-- <ApiParam name="m_nHitbox" type="int32_t" />
-- <ApiParam name="m_flCreationTime" type="float" />
-- <ApiParam name="m_nTintID" type="int32_t" />
-- <ApiParam name="m_nVersion" type="uint8_t" />
-- <ApiParam name="m_ubSignature" type="uint8_t" />
+| Field | Type |
+|---|---|
+| `m_nUniqueID` | `int32_t` |
+| `m_unAccountID` | `uint32_t` |
+| `m_unTraceID` | `uint32_t` |
+| `m_rtGcTime` | `uint32_t` |
+| `m_vecEndPos` | `Vector` |
+| `m_vecStart` | `Vector` |
+| `m_vecLeft` | `Vector` |
+| `m_vecNormal` | `Vector` |
+| `m_nPlayer` | `int32_t` |
+| `m_nEntity` | `int32_t` |
+| `m_nHitbox` | `int32_t` |
+| `m_flCreationTime` | `float` |
+| `m_nTintID` | `int32_t` |
+| `m_nVersion` | `uint8_t` |
+| `m_ubSignature` | `uint8_t` |
 
-## Methods
-
-### CPlayerSprayDecal* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPlayerSprayDecal* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPlayerSprayDecal* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPlayerSprayDecal&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

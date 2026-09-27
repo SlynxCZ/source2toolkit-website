@@ -1,35 +1,18 @@
 ---
-title: CSoundEventBoxEntity
+title: "CSoundEventBoxEntity"
+description: "Schema class CSoundEventBoxEntity, derived from CSoundEventMultiPointEntity."
 ---
 
-# CSoundEventBoxEntity
 
-**Inheritance**: [CSoundEventMultiPointEntity](/docs/schema/entity/classes/Csoundeventmultipointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundEventBoxEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundEventBoxEntity.h)
+
+**Inherits** [`CSoundEventMultiPointEntity`](/docs/schema/entity/classes/CSoundEventMultiPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszBoxEntities" type="CUtlSymbolLarge" />
-- <ApiParam name="m_vecBoxHelpersNetworked" type="CUtlVector&lt;SoundeventBoxHelperNetworked_t&gt;" />
+| Field | Type |
+|---|---|
+| `m_iszBoxEntities` | `CUtlSymbolLarge` |
+| `m_vecBoxHelpersNetworked` | [`CUtlVector<SoundeventBoxHelperNetworked_t>`](/docs/schema/entity/classes/SoundeventBoxHelperNetworked_t) |
 
-## Methods
-
-### CSoundEventBoxEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundEventBoxEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundEventBoxEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundEventBoxEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,43 +1,26 @@
 ---
-title: CBaseCombatCharacter
+title: "CBaseCombatCharacter"
+description: "Schema class CBaseCombatCharacter, derived from CBaseAnimGraph."
 ---
 
-# CBaseCombatCharacter
 
-**Inheritance**: CBaseAnimGraph
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseCombatCharacter.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseCombatCharacter.h)
+
+**Inherits** [`CBaseAnimGraph`](/docs/schema/entity/classes/CBaseAnimGraph)
 
 ## Fields
 
-- <ApiParam name="m_bForceServerRagdoll" type="bool" />
-- <ApiParam name="m_hMyWearables" type="CUtlVector&lt;CHandle&lt;CEconWearable&gt;&gt;" />
-- <ApiParam name="m_impactEnergyScale" type="float" />
-- <ApiParam name="m_bApplyStressDamage" type="bool" />
-- <ApiParam name="m_bDeathEventsDispatched" type="bool" />
-- <ApiParam name="m_vecRelationships" type="CUtlVector&lt;RelationshipOverride_t&gt;" />
-- <ApiParam name="m_strRelationships" type="CUtlSymbolLarge" />
-- <ApiParam name="m_eHull" type="Hull_t" />
-- <ApiParam name="m_nNavHullIdx" type="uint32_t" />
-- <ApiParam name="m_movementStats" type="CMovementStatsProperty" />
+| Field | Type |
+|---|---|
+| `m_bForceServerRagdoll` | `bool` |
+| `m_hMyWearables` | [`CUtlVector<CHandle<CEconWearable>>`](/docs/schema/entity/classes/CEconWearable) |
+| `m_impactEnergyScale` | `float` |
+| `m_bApplyStressDamage` | `bool` |
+| `m_bDeathEventsDispatched` | `bool` |
+| `m_vecRelationships` | [`CUtlVector<RelationshipOverride_t>`](/docs/schema/entity/classes/RelationshipOverride_t) |
+| `m_strRelationships` | `CUtlSymbolLarge` |
+| `m_eHull` | [`Hull_t`](/docs/schema/entity/enums/Hull_t) |
+| `m_nNavHullIdx` | `uint32_t` |
+| `m_movementStats` | [`CMovementStatsProperty`](/docs/schema/entity/classes/CMovementStatsProperty) |
 
-## Methods
-
-### CBaseCombatCharacter* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBaseCombatCharacter* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBaseCombatCharacter* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBaseCombatCharacter&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

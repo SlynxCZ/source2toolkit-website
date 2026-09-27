@@ -1,41 +1,24 @@
 ---
-title: CPhysFixed
+title: "CPhysFixed"
+description: "Schema class CPhysFixed, derived from CPhysConstraint."
 ---
 
-# CPhysFixed
 
-**Inheritance**: CPhysConstraint
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysFixed.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysFixed.h)
+
+**Inherits** [`CPhysConstraint`](/docs/schema/entity/classes/CPhysConstraint)
 
 ## Fields
 
-- <ApiParam name="m_flLinearFrequency" type="float" />
-- <ApiParam name="m_flLinearDampingRatio" type="float" />
-- <ApiParam name="m_flAngularFrequency" type="float" />
-- <ApiParam name="m_flAngularDampingRatio" type="float" />
-- <ApiParam name="m_bEnableLinearConstraint" type="bool" />
-- <ApiParam name="m_bEnableAngularConstraint" type="bool" />
-- <ApiParam name="m_sBoneName1" type="CUtlSymbolLarge" />
-- <ApiParam name="m_sBoneName2" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_flLinearFrequency` | `float` |
+| `m_flLinearDampingRatio` | `float` |
+| `m_flAngularFrequency` | `float` |
+| `m_flAngularDampingRatio` | `float` |
+| `m_bEnableLinearConstraint` | `bool` |
+| `m_bEnableAngularConstraint` | `bool` |
+| `m_sBoneName1` | `CUtlSymbolLarge` |
+| `m_sBoneName2` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CPhysFixed* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysFixed* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysFixed* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysFixed&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,15 +1,20 @@
 ---
-title: CNmTarget
+title: "CNmTarget"
+description: "Schema class CNmTarget."
 ---
 
-# CNmTarget
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CNmTarget.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CNmTarget.h)
 
 ## Fields
 
-- <ApiParam name="m_transform" type="CTransform" />
-- <ApiParam name="m_boneID" type="CGlobalSymbol" />
-- <ApiParam name="m_bIsBoneTarget" type="bool" />
-- <ApiParam name="m_bIsUsingBoneSpaceOffsets" type="bool" />
-- <ApiParam name="m_bHasOffsets" type="bool" />
-- <ApiParam name="m_bIsSet" type="bool" />
+| Field | Type |
+|---|---|
+| `m_transform` | `CTransform` |
+| `m_boneID` | [`CGlobalSymbol`](/docs/core-api/Schema#cglobalsymbol) |
+| `m_bIsBoneTarget` | `bool` |
+| `m_bIsUsingBoneSpaceOffsets` | `bool` |
+| `m_bHasOffsets` | `bool` |
+| `m_bIsSet` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

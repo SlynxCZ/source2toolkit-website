@@ -1,40 +1,23 @@
 ---
-title: CLogicCollisionPair
+title: "CLogicCollisionPair"
+description: "Schema class CLogicCollisionPair, derived from CLogicalEntity."
 ---
 
-# CLogicCollisionPair
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicCollisionPair.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicCollisionPair.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_nameAttach1" type="CUtlSymbolLarge" />
-- <ApiParam name="m_nameAttach2" type="CUtlSymbolLarge" />
-- <ApiParam name="m_includeHierarchy" type="bool" />
-- <ApiParam name="m_supportMultipleEntitiesWithSameName" type="bool" />
-- <ApiParam name="m_disabled" type="bool" />
-- <ApiParam name="m_succeeded" type="bool" />
-- <ApiParam name="m_allowMissing" type="bool" />
+| Field | Type |
+|---|---|
+| `m_nameAttach1` | `CUtlSymbolLarge` |
+| `m_nameAttach2` | `CUtlSymbolLarge` |
+| `m_includeHierarchy` | `bool` |
+| `m_supportMultipleEntitiesWithSameName` | `bool` |
+| `m_disabled` | `bool` |
+| `m_succeeded` | `bool` |
+| `m_allowMissing` | `bool` |
 
-## Methods
-
-### CLogicCollisionPair* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicCollisionPair* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicCollisionPair* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicCollisionPair&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

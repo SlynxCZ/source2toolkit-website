@@ -1,46 +1,29 @@
 ---
-title: CTimerEntity
+title: "CTimerEntity"
+description: "Schema class CTimerEntity, derived from CLogicalEntity."
 ---
 
-# CTimerEntity
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTimerEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTimerEntity.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_OnTimer" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnTimerHigh" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnTimerLow" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_iDisabled" type="int32_t" />
-- <ApiParam name="m_flInitialDelay" type="float" />
-- <ApiParam name="m_flRefireTime" type="float" />
-- <ApiParam name="m_bUpDownState" type="bool" />
-- <ApiParam name="m_iUseRandomTime" type="int32_t" />
-- <ApiParam name="m_bPauseAfterFiring" type="bool" />
-- <ApiParam name="m_flLowerRandomBound" type="float" />
-- <ApiParam name="m_flUpperRandomBound" type="float" />
-- <ApiParam name="m_flRemainingTime" type="float" />
-- <ApiParam name="m_bPaused" type="bool" />
+| Field | Type |
+|---|---|
+| `m_OnTimer` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnTimerHigh` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnTimerLow` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_iDisabled` | `int32_t` |
+| `m_flInitialDelay` | `float` |
+| `m_flRefireTime` | `float` |
+| `m_bUpDownState` | `bool` |
+| `m_iUseRandomTime` | `int32_t` |
+| `m_bPauseAfterFiring` | `bool` |
+| `m_flLowerRandomBound` | `float` |
+| `m_flUpperRandomBound` | `float` |
+| `m_flRemainingTime` | `float` |
+| `m_bPaused` | `bool` |
 
-## Methods
-
-### CTimerEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTimerEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTimerEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTimerEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

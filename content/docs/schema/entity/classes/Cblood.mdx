@@ -1,37 +1,20 @@
 ---
-title: CBlood
+title: "CBlood"
+description: "Schema class CBlood, derived from CPointEntity."
 ---
 
-# CBlood
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBlood.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBlood.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_vecSprayAngles" type="QAngle" />
-- <ApiParam name="m_vecSprayDir" type="Vector" />
-- <ApiParam name="m_flAmount" type="float" />
-- <ApiParam name="m_Color" type="BloodType" />
+| Field | Type |
+|---|---|
+| `m_vecSprayAngles` | `QAngle` |
+| `m_vecSprayDir` | `Vector` |
+| `m_flAmount` | `float` |
+| `m_Color` | [`BloodType`](/docs/schema/entity/enums/BloodType) |
 
-## Methods
-
-### CBlood* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBlood* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBlood* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBlood&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

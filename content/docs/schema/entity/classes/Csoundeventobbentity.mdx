@@ -1,35 +1,18 @@
 ---
-title: CSoundEventOBBEntity
+title: "CSoundEventOBBEntity"
+description: "Schema class CSoundEventOBBEntity, derived from CSoundEventEntity."
 ---
 
-# CSoundEventOBBEntity
 
-**Inheritance**: CSoundEventEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundEventOBBEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundEventOBBEntity.h)
+
+**Inherits** [`CSoundEventEntity`](/docs/schema/entity/classes/CSoundEventEntity)
 
 ## Fields
 
-- <ApiParam name="m_vMins" type="Vector" />
-- <ApiParam name="m_vMaxs" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_vMins` | `Vector` |
+| `m_vMaxs` | `Vector` |
 
-## Methods
-
-### CSoundEventOBBEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundEventOBBEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundEventOBBEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundEventOBBEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

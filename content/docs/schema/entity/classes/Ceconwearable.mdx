@@ -1,35 +1,18 @@
 ---
-title: CEconWearable
+title: "CEconWearable"
+description: "Schema class CEconWearable, derived from CEconEntity."
 ---
 
-# CEconWearable
 
-**Inheritance**: [CEconEntity](/docs/schema/entity/classes/Ceconentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEconWearable.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEconWearable.h)
+
+**Inherits** [`CEconEntity`](/docs/schema/entity/classes/CEconEntity)
 
 ## Fields
 
-- <ApiParam name="m_nForceSkin" type="int32_t" />
-- <ApiParam name="m_bAlwaysAllow" type="bool" />
+| Field | Type |
+|---|---|
+| `m_nForceSkin` | `int32_t` |
+| `m_bAlwaysAllow` | `bool` |
 
-## Methods
-
-### CEconWearable* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEconWearable* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEconWearable* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEconWearable&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

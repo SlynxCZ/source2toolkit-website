@@ -1,38 +1,21 @@
 ---
-title: CFogVolume
+title: "CFogVolume"
+description: "Schema class CFogVolume, derived from CServerOnlyModelEntity."
 ---
 
-# CFogVolume
 
-**Inheritance**: [CServerOnlyModelEntity](/docs/schema/entity/classes/Cserveronlymodelentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFogVolume.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFogVolume.h)
+
+**Inherits** [`CServerOnlyModelEntity`](/docs/schema/entity/classes/CServerOnlyModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_fogName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_postProcessName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_colorCorrectionName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_bInFogVolumesList" type="bool" />
+| Field | Type |
+|---|---|
+| `m_fogName` | `CUtlSymbolLarge` |
+| `m_postProcessName` | `CUtlSymbolLarge` |
+| `m_colorCorrectionName` | `CUtlSymbolLarge` |
+| `m_bDisabled` | `bool` |
+| `m_bInFogVolumesList` | `bool` |
 
-## Methods
-
-### CFogVolume* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFogVolume* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFogVolume* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFogVolume&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

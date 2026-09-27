@@ -1,85 +1,86 @@
 ---
-title: CBasePlayerPawn
+title: "CBasePlayerPawn"
+description: "Schema class CBasePlayerPawn, derived from CBaseCombatCharacter."
 ---
 
-# CBasePlayerPawn
 
-**Inheritance**: [CBaseCombatCharacter](/docs/schema/entity/classes/Cbasecombatcharacter)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBasePlayerPawn.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBasePlayerPawn.h)
+
+**Inherits** [`CBaseCombatCharacter`](/docs/schema/entity/classes/CBaseCombatCharacter)
 
 ## Fields
 
-- <ApiParam name="m_pWeaponServices" type="[CPlayer_WeaponServices*](/docs/schema/entity/classes/Cplayer_weaponservices)" />
-- <ApiParam name="m_pItemServices" type="CPlayer_ItemServices*" />
-- <ApiParam name="m_pAutoaimServices" type="CPlayer_AutoaimServices*" />
-- <ApiParam name="m_pObserverServices" type="[CPlayer_ObserverServices*](/docs/schema/entity/classes/Cplayer_observerservices)" />
-- <ApiParam name="m_pWaterServices" type="[CPlayer_WaterServices*](/docs/schema/entity/classes/Cplayer_waterservices)" />
-- <ApiParam name="m_pUseServices" type="CPlayer_UseServices*" />
-- <ApiParam name="m_pFlashlightServices" type="[CPlayer_FlashlightServices*](/docs/schema/entity/classes/Cplayer_flashlightservices)" />
-- <ApiParam name="m_pCameraServices" type="[CPlayer_CameraServices*](/docs/schema/entity/classes/Cplayer_cameraservices)" />
-- <ApiParam name="m_pMovementServices" type="[CPlayer_MovementServices*](/docs/schema/entity/classes/Cplayer_movementservices)" />
-- <ApiParam name="m_ServerViewAngleChanges" type="CUtlVector&lt;ViewAngleServerChange_t&gt;" />
-- <ApiParam name="v_angle" type="QAngle" />
-- <ApiParam name="v_anglePrevious" type="QAngle" />
-- <ApiParam name="m_iHideHUD" type="uint32_t" />
-- <ApiParam name="m_skybox3d" type="[sky3dparams_t](/docs/schema/entity/classes/sky3dparams_t)" />
-- <ApiParam name="m_fTimeLastHurt" type="float" />
-- <ApiParam name="m_flDeathTime" type="float" />
-- <ApiParam name="m_fNextSuicideTime" type="float" />
-- <ApiParam name="m_fInitHUD" type="bool" />
-- <ApiParam name="m_pExpresser" type="CAI_Expresser*" />
-- <ApiParam name="m_hController" type="CHandle&lt;CBasePlayerController&gt;" />
-- <ApiParam name="m_hDefaultController" type="CHandle&lt;CBasePlayerController&gt;" />
-- <ApiParam name="m_fHltvReplayDelay" type="float" />
-- <ApiParam name="m_fHltvReplayEnd" type="float" />
-- <ApiParam name="m_iHltvReplayEntity" type="CEntityIndex" />
-- <ApiParam name="m_sndOpvarLatchData" type="CUtlVector&lt;sndopvarlatchdata_t&gt;" />
+| Field | Type |
+|---|---|
+| `m_pWeaponServices` | [`CPlayer_WeaponServices*`](/docs/schema/entity/classes/CPlayer_WeaponServices) |
+| `m_pItemServices` | [`CPlayer_ItemServices*`](/docs/schema/entity/classes/CPlayer_ItemServices) |
+| `m_pAutoaimServices` | [`CPlayer_AutoaimServices*`](/docs/schema/entity/classes/CPlayer_AutoaimServices) |
+| `m_pObserverServices` | [`CPlayer_ObserverServices*`](/docs/schema/entity/classes/CPlayer_ObserverServices) |
+| `m_pWaterServices` | [`CPlayer_WaterServices*`](/docs/schema/entity/classes/CPlayer_WaterServices) |
+| `m_pUseServices` | [`CPlayer_UseServices*`](/docs/schema/entity/classes/CPlayer_UseServices) |
+| `m_pFlashlightServices` | [`CPlayer_FlashlightServices*`](/docs/schema/entity/classes/CPlayer_FlashlightServices) |
+| `m_pCameraServices` | [`CPlayer_CameraServices*`](/docs/schema/entity/classes/CPlayer_CameraServices) |
+| `m_pMovementServices` | [`CPlayer_MovementServices*`](/docs/schema/entity/classes/CPlayer_MovementServices) |
+| `m_ServerViewAngleChanges` | [`CUtlVector<ViewAngleServerChange_t>`](/docs/schema/entity/classes/ViewAngleServerChange_t) |
+| `v_angle` | `QAngle` |
+| `v_anglePrevious` | `QAngle` |
+| `m_iHideHUD` | `uint32_t` |
+| `m_skybox3d` | [`sky3dparams_t`](/docs/schema/entity/classes/sky3dparams_t) |
+| `m_fTimeLastHurt` | `float` |
+| `m_flDeathTime` | `float` |
+| `m_fNextSuicideTime` | `float` |
+| `m_fInitHUD` | `bool` |
+| `m_pExpresser` | [`CAI_Expresser*`](/docs/schema/entity/classes/CAI_Expresser) |
+| `m_hController` | [`CHandle<CBasePlayerController>`](/docs/schema/entity/classes/CBasePlayerController) |
+| `m_hDefaultController` | [`CHandle<CBasePlayerController>`](/docs/schema/entity/classes/CBasePlayerController) |
+| `m_fHltvReplayDelay` | `float` |
+| `m_fHltvReplayEnd` | `float` |
+| `m_iHltvReplayEntity` | `CEntityIndex` |
+| `m_sndOpvarLatchData` | [`CUtlVector<sndopvarlatchdata_t>`](/docs/schema/entity/classes/sndopvarlatchdata_t) |
+
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).
 
 ## Methods
 
-### CommitSuicide(bExplode, bForce, eChain)
+### `CommitSuicide`
+
+```cpp
+void CommitSuicide(bool bExplode, bool bForce, HookChain eChain = HookChain::Run);
+```
 
 Force suicide.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `bExplode` | `bool` |  |
+| `bForce` | `bool` |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |
 
-- <ApiParam name="bExplode" type="bool" />
-- <ApiParam name="bForce" type="bool" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+### `SnapViewAngles`
 
-### SnapViewAngles(angEyeAngles, eChain)
+```cpp
+void SnapViewAngles(const QAngle& angEyeAngles, HookChain eChain = HookChain::Run);
+```
 
 Snaps the pawn's view angles. No-op where the engine function could not be resolved.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `angEyeAngles` | `const QAngle&` |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |
 
-- <ApiParam name="angEyeAngles" type="const QAngle&" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+### `GetController`
 
-### CCSPlayerController* GetController()
+```cpp
+CCSPlayerController* GetController();
+```
 
 Get controller.
 
-### CCSPlayerController* GetDefaultController()
+### `GetDefaultController`
+
+```cpp
+CCSPlayerController* GetDefaultController();
+```
 
 Get default controller.
-
-### CBasePlayerPawn* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBasePlayerPawn* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBasePlayerPawn* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBasePlayerPawn&gt; GetHandle()
-

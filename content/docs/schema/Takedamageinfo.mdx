@@ -1,10 +1,52 @@
 ---
-title: Takedamageinfo
+title: "CTakeDamageInfo"
+description: "Engine structures the SDK declares by hand: CTakeDamageInfo."
 ---
 
-# CTakeDamageInfo
+
+**Header** [`source2toolkit/schema/takedamageinfo.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/takedamageinfo.h)
+
+## Fields
+
+| Field | Type |
+|---|---|
+| `m_vecDamageForce` | `Vector` |
+| `m_vecDamagePosition` | `Vector` |
+| `m_vecReportedPosition` | `Vector` |
+| `m_vecDamageDirection` | `Vector` |
+| `m_hInflictor` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hAttacker` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hAbility` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_flDamage` | `float` |
+| `m_flTotalledDamage` | `float` |
+| `m_bitsDamageType` | `int32_t` |
+| `m_iDamageCustom` | `int32_t` |
+| `m_iAmmoType` | `int8_t` |
+| `m_flOriginalDamage` | `float` |
+| `m_bShouldBleed` | `bool` |
+| `m_bShouldSpark` | `bool` |
+| `m_pTrace` | `CGameTrace*` |
+| `m_nDamageFlags` | [`TakeDamageFlags_t`](/docs/schema/entity/enums/TakeDamageFlags_t) |
+| `m_iHitGroupId` | `HitGroup_t` |
+| `m_nNumObjectsPenetrated` | `int32_t` |
+| `m_flFriendlyFireDamageReductionRatio` | `float` |
+| `m_bStoppedBullet` | `bool` |
+| `m_hScriptInstance` | `void*` |
+| `m_AttackerInfo` | [`AttackerInfo_t`](/docs/schema/Attackerinfo) |
+| `m_DestructibleHitGroupRequests` | `CUtlLeanVector<int>` |
+| `m_bInTakeDamageFlow` | `bool` |
+
+## Constructors
+
+```cpp
+CTakeDamageInfo();
+CTakeDamageInfo(CBaseEntity* pInflictor, CBaseEntity* pAttacker, CBaseEntity* pAbility, float flDamage, DamageTypes_t bitsDamageType);
+```
 
 ## Methods
 
-### HitGroup_t GetHitGroup()
+### `GetHitGroup`
 
+```cpp
+HitGroup_t GetHitGroup() const;
+```

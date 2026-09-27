@@ -1,34 +1,17 @@
 ---
-title: CScriptTriggerMultiple
+title: "CScriptTriggerMultiple"
+description: "Schema class CScriptTriggerMultiple, derived from CTriggerMultiple."
 ---
 
-# CScriptTriggerMultiple
 
-**Inheritance**: [CTriggerMultiple](/docs/schema/entity/classes/Ctriggermultiple)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CScriptTriggerMultiple.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CScriptTriggerMultiple.h)
+
+**Inherits** [`CTriggerMultiple`](/docs/schema/entity/classes/CTriggerMultiple)
 
 ## Fields
 
-- <ApiParam name="m_vExtent" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_vExtent` | `Vector` |
 
-## Methods
-
-### CScriptTriggerMultiple* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CScriptTriggerMultiple* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CScriptTriggerMultiple* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CScriptTriggerMultiple&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

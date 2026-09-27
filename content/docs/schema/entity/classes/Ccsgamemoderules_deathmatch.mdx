@@ -1,14 +1,19 @@
 ---
-title: CCSGameModeRules_Deathmatch
+title: "CCSGameModeRules_Deathmatch"
+description: "Schema class CCSGameModeRules_Deathmatch, derived from CCSGameModeRules."
 ---
 
-# CCSGameModeRules_Deathmatch
 
-**Inheritance**: CCSGameModeRules
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSGameModeRules_Deathmatch.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSGameModeRules_Deathmatch.h)
+
+**Inherits** [`CCSGameModeRules`](/docs/schema/entity/classes/CCSGameModeRules)
 
 ## Fields
 
-- <ApiParam name="m_flDMBonusStartTime" type="float" />
-- <ApiParam name="m_flDMBonusTimeLength" type="float" />
-- <ApiParam name="m_sDMBonusWeapon" type="CUtlString" />
+| Field | Type |
+|---|---|
+| `m_flDMBonusStartTime` | `float` |
+| `m_flDMBonusTimeLength` | `float` |
+| `m_sDMBonusWeapon` | `CUtlString` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

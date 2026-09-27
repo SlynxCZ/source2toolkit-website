@@ -1,36 +1,19 @@
 ---
-title: CBaseFilter
+title: "CBaseFilter"
+description: "Schema class CBaseFilter, derived from CLogicalEntity."
 ---
 
-# CBaseFilter
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseFilter.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseFilter.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_bNegated" type="bool" />
-- <ApiParam name="m_OnPass" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnFail" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_bNegated` | `bool` |
+| `m_OnPass` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnFail` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CBaseFilter* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBaseFilter* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBaseFilter* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBaseFilter&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

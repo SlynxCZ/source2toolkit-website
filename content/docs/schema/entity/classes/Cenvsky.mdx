@@ -1,45 +1,28 @@
 ---
-title: CEnvSky
+title: "CEnvSky"
+description: "Schema class CEnvSky, derived from CBaseModelEntity."
 ---
 
-# CEnvSky
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvSky.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvSky.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_hSkyMaterial" type="CStrongHandle&lt;InfoForResourceTypeIMaterial2&gt;" />
-- <ApiParam name="m_hSkyMaterialLightingOnly" type="CStrongHandle&lt;InfoForResourceTypeIMaterial2&gt;" />
-- <ApiParam name="m_bStartDisabled" type="bool" />
-- <ApiParam name="m_vTintColor" type="Color" />
-- <ApiParam name="m_vTintColorLightingOnly" type="Color" />
-- <ApiParam name="m_flBrightnessScale" type="float" />
-- <ApiParam name="m_nFogType" type="int32_t" />
-- <ApiParam name="m_flFogMinStart" type="float" />
-- <ApiParam name="m_flFogMinEnd" type="float" />
-- <ApiParam name="m_flFogMaxStart" type="float" />
-- <ApiParam name="m_flFogMaxEnd" type="float" />
-- <ApiParam name="m_bEnabled" type="bool" />
+| Field | Type |
+|---|---|
+| `m_hSkyMaterial` | [`CStrongHandle<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandle) |
+| `m_hSkyMaterialLightingOnly` | [`CStrongHandle<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandle) |
+| `m_bStartDisabled` | `bool` |
+| `m_vTintColor` | `Color` |
+| `m_vTintColorLightingOnly` | `Color` |
+| `m_flBrightnessScale` | `float` |
+| `m_nFogType` | `int32_t` |
+| `m_flFogMinStart` | `float` |
+| `m_flFogMinEnd` | `float` |
+| `m_flFogMaxStart` | `float` |
+| `m_flFogMaxEnd` | `float` |
+| `m_bEnabled` | `bool` |
 
-## Methods
-
-### CEnvSky* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvSky* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvSky* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvSky&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

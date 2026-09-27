@@ -1,34 +1,17 @@
 ---
-title: CRectLight
+title: "CRectLight"
+description: "Schema class CRectLight, derived from CBarnLight."
 ---
 
-# CRectLight
 
-**Inheritance**: CBarnLight
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CRectLight.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CRectLight.h)
+
+**Inherits** [`CBarnLight`](/docs/schema/entity/classes/CBarnLight)
 
 ## Fields
 
-- <ApiParam name="m_bShowLight" type="bool" />
+| Field | Type |
+|---|---|
+| `m_bShowLight` | `bool` |
 
-## Methods
-
-### CRectLight* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CRectLight* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CRectLight* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CRectLight&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

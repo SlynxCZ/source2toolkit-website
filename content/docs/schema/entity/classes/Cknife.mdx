@@ -1,34 +1,17 @@
 ---
-title: CKnife
+title: "CKnife"
+description: "Schema class CKnife, derived from CCSWeaponBase."
 ---
 
-# CKnife
 
-**Inheritance**: CCSWeaponBase
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CKnife.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CKnife.h)
+
+**Inherits** [`CCSWeaponBase`](/docs/schema/entity/classes/CCSWeaponBase)
 
 ## Fields
 
-- <ApiParam name="m_bFirstAttack" type="bool" />
+| Field | Type |
+|---|---|
+| `m_bFirstAttack` | `bool` |
 
-## Methods
-
-### CKnife* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CKnife* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CKnife* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CKnife&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

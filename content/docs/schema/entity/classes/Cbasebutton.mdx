@@ -1,59 +1,42 @@
 ---
-title: CBaseButton
+title: "CBaseButton"
+description: "Schema class CBaseButton, derived from CBaseToggle."
 ---
 
-# CBaseButton
 
-**Inheritance**: [CBaseToggle](/docs/schema/entity/classes/Cbasetoggle)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseButton.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseButton.h)
+
+**Inherits** [`CBaseToggle`](/docs/schema/entity/classes/CBaseToggle)
 
 ## Fields
 
-- <ApiParam name="m_angMoveEntitySpace" type="QAngle" />
-- <ApiParam name="m_fStayPushed" type="bool" />
-- <ApiParam name="m_fRotating" type="bool" />
-- <ApiParam name="m_ls" type="locksound_t" />
-- <ApiParam name="m_sUseSound" type="CGameSoundEventName" />
-- <ApiParam name="m_sLockedSound" type="CGameSoundEventName" />
-- <ApiParam name="m_sUnlockedSound" type="CGameSoundEventName" />
-- <ApiParam name="m_sOverrideAnticipationName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bLocked" type="bool" />
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_flSpeed" type="float" />
-- <ApiParam name="m_flUseLockedTime" type="float" />
-- <ApiParam name="m_bSolidBsp" type="bool" />
-- <ApiParam name="m_OnDamaged" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnPressed" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnUseLocked" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnIn" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnOut" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_nState" type="int32_t" />
-- <ApiParam name="m_hConstraint" type="CEntityHandle" />
-- <ApiParam name="m_hConstraintParent" type="CEntityHandle" />
-- <ApiParam name="m_bForceNpcExclude" type="bool" />
-- <ApiParam name="m_sGlowEntity" type="CUtlSymbolLarge" />
-- <ApiParam name="m_glowEntity" type="CHandle&lt;CBaseModelEntity&gt;" />
-- <ApiParam name="m_usable" type="bool" />
-- <ApiParam name="m_szDisplayText" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_angMoveEntitySpace` | `QAngle` |
+| `m_fStayPushed` | `bool` |
+| `m_fRotating` | `bool` |
+| `m_ls` | [`locksound_t`](/docs/schema/entity/classes/locksound_t) |
+| `m_sUseSound` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_sLockedSound` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_sUnlockedSound` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_sOverrideAnticipationName` | `CUtlSymbolLarge` |
+| `m_bLocked` | `bool` |
+| `m_bDisabled` | `bool` |
+| `m_flSpeed` | `float` |
+| `m_flUseLockedTime` | `float` |
+| `m_bSolidBsp` | `bool` |
+| `m_OnDamaged` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnPressed` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnUseLocked` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnIn` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnOut` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_nState` | `int32_t` |
+| `m_hConstraint` | `CEntityHandle` |
+| `m_hConstraintParent` | `CEntityHandle` |
+| `m_bForceNpcExclude` | `bool` |
+| `m_sGlowEntity` | `CUtlSymbolLarge` |
+| `m_glowEntity` | [`CHandle<CBaseModelEntity>`](/docs/schema/entity/classes/CBaseModelEntity) |
+| `m_usable` | `bool` |
+| `m_szDisplayText` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CBaseButton* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBaseButton* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBaseButton* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBaseButton&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

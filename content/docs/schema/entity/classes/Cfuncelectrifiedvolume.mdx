@@ -1,37 +1,20 @@
 ---
-title: CFuncElectrifiedVolume
+title: "CFuncElectrifiedVolume"
+description: "Schema class CFuncElectrifiedVolume, derived from CFuncBrush."
 ---
 
-# CFuncElectrifiedVolume
 
-**Inheritance**: [CFuncBrush](/docs/schema/entity/classes/Cfuncbrush)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncElectrifiedVolume.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncElectrifiedVolume.h)
+
+**Inherits** [`CFuncBrush`](/docs/schema/entity/classes/CFuncBrush)
 
 ## Fields
 
-- <ApiParam name="m_EffectName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_EffectInterpenetrateName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_EffectZapName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszEffectSource" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_EffectName` | `CUtlSymbolLarge` |
+| `m_EffectInterpenetrateName` | `CUtlSymbolLarge` |
+| `m_EffectZapName` | `CUtlSymbolLarge` |
+| `m_iszEffectSource` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CFuncElectrifiedVolume* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncElectrifiedVolume* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncElectrifiedVolume* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncElectrifiedVolume&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

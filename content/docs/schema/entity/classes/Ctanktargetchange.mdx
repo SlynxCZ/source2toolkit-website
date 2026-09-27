@@ -1,34 +1,17 @@
 ---
-title: CTankTargetChange
+title: "CTankTargetChange"
+description: "Schema class CTankTargetChange, derived from CPointEntity."
 ---
 
-# CTankTargetChange
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTankTargetChange.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTankTargetChange.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_newTargetName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_newTargetName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CTankTargetChange* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTankTargetChange* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTankTargetChange* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTankTargetChange&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,26 +1,31 @@
 ---
-title: CCollisionProperty
+title: "CCollisionProperty"
+description: "Schema class CCollisionProperty."
 ---
 
-# CCollisionProperty
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCollisionProperty.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCollisionProperty.h)
 
 ## Fields
 
-- <ApiParam name="m_collisionAttribute" type="VPhysicsCollisionAttribute_t" />
-- <ApiParam name="m_vecMins" type="Vector" />
-- <ApiParam name="m_vecMaxs" type="Vector" />
-- <ApiParam name="m_usSolidFlags" type="uint8_t" />
-- <ApiParam name="m_nSolidType" type="SolidType_t" />
-- <ApiParam name="m_triggerBloat" type="uint8_t" />
-- <ApiParam name="m_nSurroundType" type="SurroundingBoundsType_t" />
-- <ApiParam name="m_CollisionGroup" type="uint8_t" />
-- <ApiParam name="m_nEnablePhysics" type="uint8_t" />
-- <ApiParam name="m_flBoundingRadius" type="float" />
-- <ApiParam name="m_vecSpecifiedSurroundingMins" type="Vector" />
-- <ApiParam name="m_vecSpecifiedSurroundingMaxs" type="Vector" />
-- <ApiParam name="m_vecSurroundingMaxs" type="Vector" />
-- <ApiParam name="m_vecSurroundingMins" type="Vector" />
-- <ApiParam name="m_vCapsuleCenter1" type="Vector" />
-- <ApiParam name="m_vCapsuleCenter2" type="Vector" />
-- <ApiParam name="m_flCapsuleRadius" type="float" />
+| Field | Type |
+|---|---|
+| `m_collisionAttribute` | [`VPhysicsCollisionAttribute_t`](/docs/schema/entity/classes/VPhysicsCollisionAttribute_t) |
+| `m_vecMins` | `Vector` |
+| `m_vecMaxs` | `Vector` |
+| `m_usSolidFlags` | `uint8_t` |
+| `m_nSolidType` | `SolidType_t` |
+| `m_triggerBloat` | `uint8_t` |
+| `m_nSurroundType` | [`SurroundingBoundsType_t`](/docs/schema/entity/enums/SurroundingBoundsType_t) |
+| `m_CollisionGroup` | `uint8_t` |
+| `m_nEnablePhysics` | `uint8_t` |
+| `m_flBoundingRadius` | `float` |
+| `m_vecSpecifiedSurroundingMins` | `Vector` |
+| `m_vecSpecifiedSurroundingMaxs` | `Vector` |
+| `m_vecSurroundingMaxs` | `Vector` |
+| `m_vecSurroundingMins` | `Vector` |
+| `m_vCapsuleCenter1` | `Vector` |
+| `m_vCapsuleCenter2` | `Vector` |
+| `m_flCapsuleRadius` | `float` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

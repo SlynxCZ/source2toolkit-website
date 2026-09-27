@@ -1,37 +1,20 @@
 ---
-title: CShatterGlassShardPhysics
+title: "CShatterGlassShardPhysics"
+description: "Schema class CShatterGlassShardPhysics, derived from CBaseModelEntity."
 ---
 
-# CShatterGlassShardPhysics
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CShatterGlassShardPhysics.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CShatterGlassShardPhysics.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_hParentShard" type="uint32_t" />
-- <ApiParam name="m_ShardDesc" type="[shard_model_desc_t](/docs/schema/entity/classes/shard_model_desc_t)" />
-- <ApiParam name="m_nPoolState" type="ShatterGlassEntityPoolState_t" />
-- <ApiParam name="m_bTouchedByPlayer" type="bool" />
+| Field | Type |
+|---|---|
+| `m_hParentShard` | `uint32_t` |
+| `m_ShardDesc` | [`shard_model_desc_t`](/docs/schema/entity/classes/shard_model_desc_t) |
+| `m_nPoolState` | [`ShatterGlassEntityPoolState_t`](/docs/schema/entity/enums/ShatterGlassEntityPoolState_t) |
+| `m_bTouchedByPlayer` | `bool` |
 
-## Methods
-
-### CShatterGlassShardPhysics* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CShatterGlassShardPhysics* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CShatterGlassShardPhysics* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CShatterGlassShardPhysics&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

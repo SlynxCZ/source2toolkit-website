@@ -1,37 +1,20 @@
 ---
-title: CBaseProp
+title: "CBaseProp"
+description: "Schema class CBaseProp, derived from CBaseAnimGraph."
 ---
 
-# CBaseProp
 
-**Inheritance**: CBaseAnimGraph
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseProp.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseProp.h)
+
+**Inherits** [`CBaseAnimGraph`](/docs/schema/entity/classes/CBaseAnimGraph)
 
 ## Fields
 
-- <ApiParam name="m_bModelOverrodeBlockLOS" type="bool" />
-- <ApiParam name="m_iShapeType" type="int32_t" />
-- <ApiParam name="m_bConformToCollisionBounds" type="bool" />
-- <ApiParam name="m_mPreferredCatchTransform" type="CTransform" />
+| Field | Type |
+|---|---|
+| `m_bModelOverrodeBlockLOS` | `bool` |
+| `m_iShapeType` | `int32_t` |
+| `m_bConformToCollisionBounds` | `bool` |
+| `m_mPreferredCatchTransform` | `CTransform` |
 
-## Methods
-
-### CBaseProp* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBaseProp* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBaseProp* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBaseProp&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

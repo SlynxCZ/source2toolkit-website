@@ -1,37 +1,20 @@
 ---
-title: CPhysPulley
+title: "CPhysPulley"
+description: "Schema class CPhysPulley, derived from CPhysConstraint."
 ---
 
-# CPhysPulley
 
-**Inheritance**: CPhysConstraint
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysPulley.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysPulley.h)
+
+**Inherits** [`CPhysConstraint`](/docs/schema/entity/classes/CPhysConstraint)
 
 ## Fields
 
-- <ApiParam name="m_position2" type="Vector" />
-- <ApiParam name="m_offset" type="Vector" />
-- <ApiParam name="m_addLength" type="float" />
-- <ApiParam name="m_gearRatio" type="float" />
+| Field | Type |
+|---|---|
+| `m_position2` | `Vector` |
+| `m_offset` | `Vector` |
+| `m_addLength` | `float` |
+| `m_gearRatio` | `float` |
 
-## Methods
-
-### CPhysPulley* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysPulley* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysPulley* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysPulley&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

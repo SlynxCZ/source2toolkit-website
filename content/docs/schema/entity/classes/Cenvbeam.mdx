@@ -1,52 +1,35 @@
 ---
-title: CEnvBeam
+title: "CEnvBeam"
+description: "Schema class CEnvBeam, derived from CBeam."
 ---
 
-# CEnvBeam
 
-**Inheritance**: CBeam
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvBeam.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvBeam.h)
+
+**Inherits** [`CBeam`](/docs/schema/entity/classes/CBeam)
 
 ## Fields
 
-- <ApiParam name="m_active" type="int32_t" />
-- <ApiParam name="m_spriteTexture" type="CStrongHandle&lt;InfoForResourceTypeIMaterial2&gt;" />
-- <ApiParam name="m_iszStartEntity" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszEndEntity" type="CUtlSymbolLarge" />
-- <ApiParam name="m_life" type="float" />
-- <ApiParam name="m_boltWidth" type="float" />
-- <ApiParam name="m_noiseAmplitude" type="float" />
-- <ApiParam name="m_speed" type="int32_t" />
-- <ApiParam name="m_restrike" type="float" />
-- <ApiParam name="m_iszSpriteName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_frameStart" type="int32_t" />
-- <ApiParam name="m_vEndPointWorld" type="Vector" />
-- <ApiParam name="m_vEndPointRelative" type="Vector" />
-- <ApiParam name="m_radius" type="float" />
-- <ApiParam name="m_TouchType" type="Touch_t" />
-- <ApiParam name="m_iFilterName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hFilter" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_iszDecal" type="CUtlSymbolLarge" />
-- <ApiParam name="m_OnTouchedByEntity" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_active` | `int32_t` |
+| `m_spriteTexture` | [`CStrongHandle<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandle) |
+| `m_iszStartEntity` | `CUtlSymbolLarge` |
+| `m_iszEndEntity` | `CUtlSymbolLarge` |
+| `m_life` | `float` |
+| `m_boltWidth` | `float` |
+| `m_noiseAmplitude` | `float` |
+| `m_speed` | `int32_t` |
+| `m_restrike` | `float` |
+| `m_iszSpriteName` | `CUtlSymbolLarge` |
+| `m_frameStart` | `int32_t` |
+| `m_vEndPointWorld` | `Vector` |
+| `m_vEndPointRelative` | `Vector` |
+| `m_radius` | `float` |
+| `m_TouchType` | [`Touch_t`](/docs/schema/entity/enums/Touch_t) |
+| `m_iFilterName` | `CUtlSymbolLarge` |
+| `m_hFilter` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_iszDecal` | `CUtlSymbolLarge` |
+| `m_OnTouchedByEntity` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CEnvBeam* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvBeam* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvBeam* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvBeam&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

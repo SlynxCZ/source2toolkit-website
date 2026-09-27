@@ -1,37 +1,20 @@
 ---
-title: CMathColorBlend
+title: "CMathColorBlend"
+description: "Schema class CMathColorBlend, derived from CLogicalEntity."
 ---
 
-# CMathColorBlend
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMathColorBlend.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMathColorBlend.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_flInMin" type="float" />
-- <ApiParam name="m_flInMax" type="float" />
-- <ApiParam name="m_OutColor1" type="Color" />
-- <ApiParam name="m_OutColor2" type="Color" />
+| Field | Type |
+|---|---|
+| `m_flInMin` | `float` |
+| `m_flInMax` | `float` |
+| `m_OutColor1` | `Color` |
+| `m_OutColor2` | `Color` |
 
-## Methods
-
-### CMathColorBlend* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMathColorBlend* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMathColorBlend* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMathColorBlend&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

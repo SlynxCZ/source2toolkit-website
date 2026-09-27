@@ -1,52 +1,35 @@
 ---
-title: CRopeKeyframe
+title: "CRopeKeyframe"
+description: "Schema class CRopeKeyframe, derived from CBaseModelEntity."
 ---
 
-# CRopeKeyframe
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CRopeKeyframe.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CRopeKeyframe.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_RopeFlags" type="uint16_t" />
-- <ApiParam name="m_iNextLinkName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_Slack" type="int16_t" />
-- <ApiParam name="m_Width" type="float" />
-- <ApiParam name="m_TextureScale" type="float" />
-- <ApiParam name="m_nSegments" type="uint8_t" />
-- <ApiParam name="m_bConstrainBetweenEndpoints" type="bool" />
-- <ApiParam name="m_strRopeMaterialModel" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iRopeMaterialModelIndex" type="CStrongHandle&lt;InfoForResourceTypeIMaterial2&gt;" />
-- <ApiParam name="m_Subdiv" type="uint8_t" />
-- <ApiParam name="m_nChangeCount" type="uint8_t" />
-- <ApiParam name="m_RopeLength" type="int16_t" />
-- <ApiParam name="m_fLockedPoints" type="uint8_t" />
-- <ApiParam name="m_bCreatedFromMapFile" type="bool" />
-- <ApiParam name="m_flScrollSpeed" type="float" />
-- <ApiParam name="m_bStartPointValid" type="bool" />
-- <ApiParam name="m_bEndPointValid" type="bool" />
-- <ApiParam name="m_hStartPoint" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_hEndPoint" type="CHandle&lt;CBaseEntity&gt;" />
+| Field | Type |
+|---|---|
+| `m_RopeFlags` | `uint16_t` |
+| `m_iNextLinkName` | `CUtlSymbolLarge` |
+| `m_Slack` | `int16_t` |
+| `m_Width` | `float` |
+| `m_TextureScale` | `float` |
+| `m_nSegments` | `uint8_t` |
+| `m_bConstrainBetweenEndpoints` | `bool` |
+| `m_strRopeMaterialModel` | `CUtlSymbolLarge` |
+| `m_iRopeMaterialModelIndex` | [`CStrongHandle<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandle) |
+| `m_Subdiv` | `uint8_t` |
+| `m_nChangeCount` | `uint8_t` |
+| `m_RopeLength` | `int16_t` |
+| `m_fLockedPoints` | `uint8_t` |
+| `m_bCreatedFromMapFile` | `bool` |
+| `m_flScrollSpeed` | `float` |
+| `m_bStartPointValid` | `bool` |
+| `m_bEndPointValid` | `bool` |
+| `m_hStartPoint` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hEndPoint` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
 
-## Methods
-
-### CRopeKeyframe* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CRopeKeyframe* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CRopeKeyframe* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CRopeKeyframe&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

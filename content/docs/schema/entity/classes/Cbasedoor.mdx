@@ -1,62 +1,45 @@
 ---
-title: CBaseDoor
+title: "CBaseDoor"
+description: "Schema class CBaseDoor, derived from CBaseToggle."
 ---
 
-# CBaseDoor
 
-**Inheritance**: [CBaseToggle](/docs/schema/entity/classes/Cbasetoggle)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseDoor.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseDoor.h)
+
+**Inherits** [`CBaseToggle`](/docs/schema/entity/classes/CBaseToggle)
 
 ## Fields
 
-- <ApiParam name="m_angMoveEntitySpace" type="QAngle" />
-- <ApiParam name="m_vecMoveDirParentSpace" type="Vector" />
-- <ApiParam name="m_ls" type="locksound_t" />
-- <ApiParam name="m_bForceClosed" type="bool" />
-- <ApiParam name="m_bDoorGroup" type="bool" />
-- <ApiParam name="m_bLocked" type="bool" />
-- <ApiParam name="m_bIgnoreDebris" type="bool" />
-- <ApiParam name="m_bNoNPCs" type="bool" />
-- <ApiParam name="m_eSpawnPosition" type="FuncDoorSpawnPos_t" />
-- <ApiParam name="m_flBlockDamage" type="float" />
-- <ApiParam name="m_NoiseMoving" type="CGameSoundEventName" />
-- <ApiParam name="m_NoiseArrived" type="CGameSoundEventName" />
-- <ApiParam name="m_NoiseMovingClosed" type="CGameSoundEventName" />
-- <ApiParam name="m_NoiseArrivedClosed" type="CGameSoundEventName" />
-- <ApiParam name="m_ChainTarget" type="CUtlSymbolLarge" />
-- <ApiParam name="m_OnBlockedClosing" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnBlockedOpening" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnUnblockedClosing" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnUnblockedOpening" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnFullyClosed" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnFullyOpen" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnClose" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnOpen" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnLockedUse" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bLoopMoveSound" type="bool" />
-- <ApiParam name="m_bCreateNavObstacle" type="bool" />
-- <ApiParam name="m_flSpeed" type="float" />
-- <ApiParam name="m_isChaining" type="bool" />
-- <ApiParam name="m_bIsUsable" type="bool" />
+| Field | Type |
+|---|---|
+| `m_angMoveEntitySpace` | `QAngle` |
+| `m_vecMoveDirParentSpace` | `Vector` |
+| `m_ls` | [`locksound_t`](/docs/schema/entity/classes/locksound_t) |
+| `m_bForceClosed` | `bool` |
+| `m_bDoorGroup` | `bool` |
+| `m_bLocked` | `bool` |
+| `m_bIgnoreDebris` | `bool` |
+| `m_bNoNPCs` | `bool` |
+| `m_eSpawnPosition` | [`FuncDoorSpawnPos_t`](/docs/schema/entity/enums/FuncDoorSpawnPos_t) |
+| `m_flBlockDamage` | `float` |
+| `m_NoiseMoving` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_NoiseArrived` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_NoiseMovingClosed` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_NoiseArrivedClosed` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_ChainTarget` | `CUtlSymbolLarge` |
+| `m_OnBlockedClosing` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnBlockedOpening` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnUnblockedClosing` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnUnblockedOpening` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnFullyClosed` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnFullyOpen` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnClose` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnOpen` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnLockedUse` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bLoopMoveSound` | `bool` |
+| `m_bCreateNavObstacle` | `bool` |
+| `m_flSpeed` | `float` |
+| `m_isChaining` | `bool` |
+| `m_bIsUsable` | `bool` |
 
-## Methods
-
-### CBaseDoor* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBaseDoor* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBaseDoor* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBaseDoor&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

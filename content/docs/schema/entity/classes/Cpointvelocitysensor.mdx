@@ -1,38 +1,21 @@
 ---
-title: CPointVelocitySensor
+title: "CPointVelocitySensor"
+description: "Schema class CPointVelocitySensor, derived from CPointEntity."
 ---
 
-# CPointVelocitySensor
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointVelocitySensor.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointVelocitySensor.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_hTargetEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_vecAxis" type="Vector" />
-- <ApiParam name="m_bEnabled" type="bool" />
-- <ApiParam name="m_fPrevVelocity" type="float" />
-- <ApiParam name="m_flAvgInterval" type="float" />
+| Field | Type |
+|---|---|
+| `m_hTargetEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_vecAxis` | `Vector` |
+| `m_bEnabled` | `bool` |
+| `m_fPrevVelocity` | `float` |
+| `m_flAvgInterval` | `float` |
 
-## Methods
-
-### CPointVelocitySensor* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointVelocitySensor* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointVelocitySensor* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointVelocitySensor&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

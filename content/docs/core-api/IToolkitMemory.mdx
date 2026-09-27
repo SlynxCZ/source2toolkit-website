@@ -1,72 +1,145 @@
 ---
-title: IToolkitMemory
+title: "IToolkitMemory"
+description: "Toolkit-facing memory address wrapper (mirrors DynLibUtils::CMemory)."
 ---
 
-# IToolkitMemory
+
+Plugins use this value type instead of DynLibUtils::CMemory directly so they remain decoupled from the DynLibUtils headers.  The implementation is identical: every method delegates 1:1 to the underlying arithmetic.
+
+**Header** [`source2toolkit/IToolkitMemory.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitMemory.h)
+
+## Constructors
+
+```cpp
+IToolkitMemory();
+IToolkitMemory(const IToolkitMemory&) noexcept = default;
+IToolkitMemory(IToolkitMemory&& other) noexcept;
+IToolkitMemory(const uintptr_t ptr);
+IToolkitMemory(const void* ptr);
+```
 
 ## Methods
 
-### operator uintptr_t()
+### `GetPtr`
 
-### explicit inline operator bool()
-
-### void* GetPtr()
+```cpp
+inline void* GetPtr() const noexcept;
+```
 
 The address as a pointer.
 
-### uintptr_t GetAddr()
+### `GetAddr`
+
+```cpp
+inline uintptr_t GetAddr() const noexcept;
+```
 
 The same address as an integer.
 
-### IToolkitMemory Offset(offset)
+### `GetValue`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+template<class T> inline T GetValue() const noexcept;
+```
 
-- <ApiParam name="offset" type="ptrdiff_t" />
+### `CCast`
 
-### IToolkitMemory& OffsetSelf(offset)
+```cpp
+template<typename T> inline T CCast() const noexcept;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+### `RCast`
 
-- <ApiParam name="offset" type="ptrdiff_t" />
+```cpp
+template<typename T> inline T RCast() const noexcept;
+```
 
-### IToolkitMemory Deref(deref)
+### `UCast`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+template<typename T> inline T UCast() const noexcept;
+```
 
-- <ApiParam name="deref" type="int" />
+### `Offset`
 
-### IToolkitMemory& DerefSelf(deref)
+```cpp
+inline IToolkitMemory Offset(ptrdiff_t offset) const noexcept;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `offset` | `ptrdiff_t` |
 
-- <ApiParam name="deref" type="int" />
+### `OffsetSelf`
 
-### IToolkitMemory FollowNearCall(opcodeOffset, nextInstructionOffset)
+```cpp
+inline IToolkitMemory& OffsetSelf(ptrdiff_t offset) noexcept;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `offset` | `ptrdiff_t` |
 
-- <ApiParam name="opcodeOffset" type="const ptrdiff_t" />
-- <ApiParam name="nextInstructionOffset" type="const ptrdiff_t" />
+### `Deref`
 
-### IToolkitMemory& FollowNearCallSelf(opcodeOffset, nextInstructionOffset)
+```cpp
+inline IToolkitMemory Deref(int deref = 1) const;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `deref` | `int` | `1` |
 
-- <ApiParam name="opcodeOffset" type="const ptrdiff_t" />
-- <ApiParam name="nextInstructionOffset" type="const ptrdiff_t" />
+### `DerefSelf`
 
-### IToolkitMemory ResolveRelativeAddress(registerOffset, nextInstructionOffset)
+```cpp
+inline IToolkitMemory& DerefSelf(int deref = 1);
+```
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `deref` | `int` | `1` |
 
-- <ApiParam name="registerOffset" type="const ptrdiff_t" />
-- <ApiParam name="nextInstructionOffset" type="const ptrdiff_t" />
+### `FollowNearCall`
 
-### IToolkitMemory& ResolveRelativeAddressSelf(registerOffset, nextInstructionOffset)
+```cpp
+inline IToolkitMemory FollowNearCall(const ptrdiff_t opcodeOffset = 0x1, const ptrdiff_t nextInstructionOffset = 0x5) const;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `opcodeOffset` | `const ptrdiff_t` | `0x1` |
+| `nextInstructionOffset` | `const ptrdiff_t` | `0x5` |
 
-- <ApiParam name="registerOffset" type="const ptrdiff_t" />
-- <ApiParam name="nextInstructionOffset" type="const ptrdiff_t" />
+### `FollowNearCallSelf`
 
+```cpp
+inline IToolkitMemory& FollowNearCallSelf(const ptrdiff_t opcodeOffset = 0x1, const ptrdiff_t nextInstructionOffset = 0x5);
+```
+
+| Parameter | Type | Default |
+|---|---|---|
+| `opcodeOffset` | `const ptrdiff_t` | `0x1` |
+| `nextInstructionOffset` | `const ptrdiff_t` | `0x5` |
+
+### `ResolveRelativeAddress`
+
+```cpp
+inline IToolkitMemory ResolveRelativeAddress(const ptrdiff_t registerOffset = 0x0, const ptrdiff_t nextInstructionOffset = 0x4) const;
+```
+
+| Parameter | Type | Default |
+|---|---|---|
+| `registerOffset` | `const ptrdiff_t` | `0x0` |
+| `nextInstructionOffset` | `const ptrdiff_t` | `0x4` |
+
+### `ResolveRelativeAddressSelf`
+
+```cpp
+inline IToolkitMemory& ResolveRelativeAddressSelf(const ptrdiff_t registerOffset = 0x0, const ptrdiff_t nextInstructionOffset = 0x4);
+```
+
+| Parameter | Type | Default |
+|---|---|---|
+| `registerOffset` | `const ptrdiff_t` | `0x0` |
+| `nextInstructionOffset` | `const ptrdiff_t` | `0x4` |

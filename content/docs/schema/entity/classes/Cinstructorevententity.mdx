@@ -1,36 +1,19 @@
 ---
-title: CInstructorEventEntity
+title: "CInstructorEventEntity"
+description: "Schema class CInstructorEventEntity, derived from CPointEntity."
 ---
 
-# CInstructorEventEntity
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CInstructorEventEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CInstructorEventEntity.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszHintTargetEntity" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hTargetPlayer" type="CHandle&lt;CBasePlayerPawn&gt;" />
+| Field | Type |
+|---|---|
+| `m_iszName` | `CUtlSymbolLarge` |
+| `m_iszHintTargetEntity` | `CUtlSymbolLarge` |
+| `m_hTargetPlayer` | [`CHandle<CBasePlayerPawn>`](/docs/schema/entity/classes/CBasePlayerPawn) |
 
-## Methods
-
-### CInstructorEventEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CInstructorEventEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CInstructorEventEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CInstructorEventEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

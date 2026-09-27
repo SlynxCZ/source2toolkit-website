@@ -1,100 +1,101 @@
 ---
-title: CBaseModelEntity
+title: "CBaseModelEntity"
+description: "Schema class CBaseModelEntity, derived from CBaseEntity."
 ---
 
-# CBaseModelEntity
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseModelEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseModelEntity.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_CRenderComponent" type="[CRenderComponent*](/docs/schema/entity/classes/Crendercomponent)" />
-- <ApiParam name="m_CHitboxComponent" type="[CHitboxComponent](/docs/schema/entity/classes/Chitboxcomponent)" />
-- <ApiParam name="m_pChoreoComponent" type="[CChoreoComponent*](/docs/schema/entity/classes/Cchoreocomponent)" />
-- <ApiParam name="m_nDestructiblePartInitialStateDestructed0" type="HitGroup_t" />
-- <ApiParam name="m_nDestructiblePartInitialStateDestructed1" type="HitGroup_t" />
-- <ApiParam name="m_nDestructiblePartInitialStateDestructed2" type="HitGroup_t" />
-- <ApiParam name="m_nDestructiblePartInitialStateDestructed3" type="HitGroup_t" />
-- <ApiParam name="m_nDestructiblePartInitialStateDestructed4" type="HitGroup_t" />
-- <ApiParam name="m_nDestructiblePartInitialStateDestructed0_PartIndex" type="int32_t" />
-- <ApiParam name="m_nDestructiblePartInitialStateDestructed1_PartIndex" type="int32_t" />
-- <ApiParam name="m_nDestructiblePartInitialStateDestructed2_PartIndex" type="int32_t" />
-- <ApiParam name="m_nDestructiblePartInitialStateDestructed3_PartIndex" type="int32_t" />
-- <ApiParam name="m_nDestructiblePartInitialStateDestructed4_PartIndex" type="int32_t" />
-- <ApiParam name="m_bDestructiblePartInitialStateDestructed0_GenerateBreakpieces" type="bool" />
-- <ApiParam name="m_bDestructiblePartInitialStateDestructed1_GenerateBreakpieces" type="bool" />
-- <ApiParam name="m_bDestructiblePartInitialStateDestructed2_GenerateBreakpieces" type="bool" />
-- <ApiParam name="m_bDestructiblePartInitialStateDestructed3_GenerateBreakpieces" type="bool" />
-- <ApiParam name="m_bDestructiblePartInitialStateDestructed4_GenerateBreakpieces" type="bool" />
-- <ApiParam name="m_pDestructiblePartsSystemComponent" type="[CDestructiblePartsComponent*](/docs/schema/entity/classes/Cdestructiblepartscomponent)" />
-- <ApiParam name="m_flDissolveStartTime" type="float" />
-- <ApiParam name="m_OnIgnite" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_nRenderMode" type="RenderMode_t" />
-- <ApiParam name="m_nRenderFX" type="RenderFx_t" />
-- <ApiParam name="m_bAllowFadeInView" type="bool" />
-- <ApiParam name="m_clrRender" type="Color" />
-- <ApiParam name="m_vecRenderAttributes" type="CUtlVector&lt;EntityRenderAttribute_t&gt;" />
-- <ApiParam name="m_bRenderToCubemaps" type="bool" />
-- <ApiParam name="m_bExpandRenderBoundsToIncludeCloth" type="bool" />
-- <ApiParam name="m_bNoInterpolate" type="bool" />
-- <ApiParam name="m_Collision" type="[CCollisionProperty](/docs/schema/entity/classes/Ccollisionproperty)" />
-- <ApiParam name="m_Glow" type="[CGlowProperty](/docs/schema/entity/classes/Cglowproperty)" />
-- <ApiParam name="m_flGlowBackfaceMult" type="float" />
-- <ApiParam name="m_fadeMinDist" type="float" />
-- <ApiParam name="m_fadeMaxDist" type="float" />
-- <ApiParam name="m_flFadeScale" type="float" />
-- <ApiParam name="m_flShadowStrength" type="float" />
-- <ApiParam name="m_nObjectCulling" type="uint8_t" />
-- <ApiParam name="m_bodyGroupTotalRequestCount" type="uint32_t" />
-- <ApiParam name="m_bodyGroupRequests" type="CUtlVector&lt;CBaseModelEntity__BodyGroupRequest_t&gt;" />
-- <ApiParam name="m_vecViewOffset" type="[CNetworkViewOffsetVector](/docs/schema/entity/classes/Cnetworkviewoffsetvector)" />
-- <ApiParam name="m_bvDisabledHitGroups" type="uint32_t" />
+| Field | Type |
+|---|---|
+| `m_CRenderComponent` | [`CRenderComponent*`](/docs/schema/entity/classes/CRenderComponent) |
+| `m_CHitboxComponent` | [`CHitboxComponent`](/docs/schema/entity/classes/CHitboxComponent) |
+| `m_pChoreoComponent` | [`CChoreoComponent*`](/docs/schema/entity/classes/CChoreoComponent) |
+| `m_nDestructiblePartInitialStateDestructed0` | `HitGroup_t` |
+| `m_nDestructiblePartInitialStateDestructed1` | `HitGroup_t` |
+| `m_nDestructiblePartInitialStateDestructed2` | `HitGroup_t` |
+| `m_nDestructiblePartInitialStateDestructed3` | `HitGroup_t` |
+| `m_nDestructiblePartInitialStateDestructed4` | `HitGroup_t` |
+| `m_nDestructiblePartInitialStateDestructed0_PartIndex` | `int32_t` |
+| `m_nDestructiblePartInitialStateDestructed1_PartIndex` | `int32_t` |
+| `m_nDestructiblePartInitialStateDestructed2_PartIndex` | `int32_t` |
+| `m_nDestructiblePartInitialStateDestructed3_PartIndex` | `int32_t` |
+| `m_nDestructiblePartInitialStateDestructed4_PartIndex` | `int32_t` |
+| `m_bDestructiblePartInitialStateDestructed0_GenerateBreakpieces` | `bool` |
+| `m_bDestructiblePartInitialStateDestructed1_GenerateBreakpieces` | `bool` |
+| `m_bDestructiblePartInitialStateDestructed2_GenerateBreakpieces` | `bool` |
+| `m_bDestructiblePartInitialStateDestructed3_GenerateBreakpieces` | `bool` |
+| `m_bDestructiblePartInitialStateDestructed4_GenerateBreakpieces` | `bool` |
+| `m_pDestructiblePartsSystemComponent` | [`CDestructiblePartsComponent*`](/docs/schema/entity/classes/CDestructiblePartsComponent) |
+| `m_flDissolveStartTime` | `float` |
+| `m_OnIgnite` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_nRenderMode` | `RenderMode_t` |
+| `m_nRenderFX` | `RenderFx_t` |
+| `m_bAllowFadeInView` | `bool` |
+| `m_clrRender` | `Color` |
+| `m_vecRenderAttributes` | [`CUtlVector<EntityRenderAttribute_t>`](/docs/schema/entity/classes/EntityRenderAttribute_t) |
+| `m_bRenderToCubemaps` | `bool` |
+| `m_bExpandRenderBoundsToIncludeCloth` | `bool` |
+| `m_bNoInterpolate` | `bool` |
+| `m_Collision` | [`CCollisionProperty`](/docs/schema/entity/classes/CCollisionProperty) |
+| `m_Glow` | [`CGlowProperty`](/docs/schema/entity/classes/CGlowProperty) |
+| `m_flGlowBackfaceMult` | `float` |
+| `m_fadeMinDist` | `float` |
+| `m_fadeMaxDist` | `float` |
+| `m_flFadeScale` | `float` |
+| `m_flShadowStrength` | `float` |
+| `m_nObjectCulling` | `uint8_t` |
+| `m_bodyGroupTotalRequestCount` | `uint32_t` |
+| `m_bodyGroupRequests` | [`CUtlVector<CBaseModelEntity__BodyGroupRequest_t>`](/docs/schema/entity/classes/CBaseModelEntity__BodyGroupRequest_t) |
+| `m_vecViewOffset` | [`CNetworkViewOffsetVector`](/docs/schema/entity/classes/CNetworkViewOffsetVector) |
+| `m_bvDisabledHitGroups` | `uint32_t` |
+
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).
 
 ## Methods
 
-### CUtlSymbolLarge GetModelName()
+### `GetModelName`
+
+```cpp
+CUtlSymbolLarge GetModelName();
+```
 
 Get model name.
 
-### Vector GetEyePosition()
+### `GetEyePosition`
+
+```cpp
+Vector GetEyePosition();
+```
 
 Get eye position.
 
-### SetModel(pszModel, eChain)
+### `SetModel`
+
+```cpp
+void SetModel(const char* pszModel, HookChain eChain = HookChain::Run);
+```
 
 Set entity model.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `pszModel` | `const char*` |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |
 
-- <ApiParam name="pszModel" type="const char*" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+### `SetBodyGroup`
 
-### SetBodyGroup(pszName, nValue)
+```cpp
+void SetBodyGroup(const char* pszName, int nValue);
+```
 
 Switch a bodygroup on the model.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="pszName" type="const char*" />
-- <ApiParam name="nValue" type="int" />
-
-### CBaseModelEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBaseModelEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBaseModelEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBaseModelEntity&gt; GetHandle()
-
+| Parameter | Type |
+|---|---|
+| `pszName` | `const char*` |
+| `nValue` | `int` |

@@ -1,35 +1,18 @@
 ---
-title: CGamePlayerZone
+title: "CGamePlayerZone"
+description: "Schema class CGamePlayerZone, derived from CRuleBrushEntity."
 ---
 
-# CGamePlayerZone
 
-**Inheritance**: [CRuleBrushEntity](/docs/schema/entity/classes/Crulebrushentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CGamePlayerZone.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CGamePlayerZone.h)
+
+**Inherits** [`CRuleBrushEntity`](/docs/schema/entity/classes/CRuleBrushEntity)
 
 ## Fields
 
-- <ApiParam name="m_OnPlayerInZone" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnPlayerOutZone" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_OnPlayerInZone` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnPlayerOutZone` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CGamePlayerZone* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CGamePlayerZone* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CGamePlayerZone* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CGamePlayerZone&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

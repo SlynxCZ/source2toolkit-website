@@ -1,13 +1,18 @@
 ---
-title: CDestructiblePartsComponent
+title: "CDestructiblePartsComponent"
+description: "Schema class CDestructiblePartsComponent."
 ---
 
-# CDestructiblePartsComponent
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CDestructiblePartsComponent.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CDestructiblePartsComponent.h)
 
 ## Fields
 
-- <ApiParam name="__m_pChainEntity" type="CEntityInstance*" />
-- <ApiParam name="m_vecDamageTakenByHitGroup" type="CUtlVector&lt;uint16_t&gt;" />
-- <ApiParam name="m_hOwner" type="CHandle&lt;CBaseModelEntity&gt;" />
-- <ApiParam name="m_pAnimGraphDestructibleGraphController" type="CAnimGraphControllerPtr" />
+| Field | Type |
+|---|---|
+| `__m_pChainEntity` | `CEntityInstance*` |
+| `m_vecDamageTakenByHitGroup` | `CUtlVector<uint16_t>` |
+| `m_hOwner` | [`CHandle<CBaseModelEntity>`](/docs/schema/entity/classes/CBaseModelEntity) |
+| `m_pAnimGraphDestructibleGraphController` | [`CAnimGraphControllerPtr`](/docs/schema/entity/classes/CAnimGraphControllerPtr) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

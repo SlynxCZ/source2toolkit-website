@@ -1,24 +1,29 @@
 ---
-title: CDamageRecord
+title: "CDamageRecord"
+description: "Schema class CDamageRecord."
 ---
 
-# CDamageRecord
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CDamageRecord.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CDamageRecord.h)
 
 ## Fields
 
-- <ApiParam name="m_PlayerDamager" type="CHandle&lt;CCSPlayerPawn&gt;" />
-- <ApiParam name="m_PlayerRecipient" type="CHandle&lt;CCSPlayerPawn&gt;" />
-- <ApiParam name="m_hPlayerControllerDamager" type="CHandle&lt;CCSPlayerController&gt;" />
-- <ApiParam name="m_hPlayerControllerRecipient" type="CHandle&lt;CCSPlayerController&gt;" />
-- <ApiParam name="m_szPlayerDamagerName" type="CUtlString" />
-- <ApiParam name="m_szPlayerRecipientName" type="CUtlString" />
-- <ApiParam name="m_DamagerXuid" type="uint64_t" />
-- <ApiParam name="m_RecipientXuid" type="uint64_t" />
-- <ApiParam name="m_flBulletsDamage" type="float" />
-- <ApiParam name="m_flDamage" type="float" />
-- <ApiParam name="m_flActualHealthRemoved" type="float" />
-- <ApiParam name="m_iNumHits" type="int32_t" />
-- <ApiParam name="m_iLastBulletUpdate" type="int32_t" />
-- <ApiParam name="m_bIsOtherEnemy" type="bool" />
-- <ApiParam name="m_killType" type="EKillTypes_t" />
+| Field | Type |
+|---|---|
+| `m_PlayerDamager` | [`CHandle<CCSPlayerPawn>`](/docs/schema/entity/classes/CCSPlayerPawn) |
+| `m_PlayerRecipient` | [`CHandle<CCSPlayerPawn>`](/docs/schema/entity/classes/CCSPlayerPawn) |
+| `m_hPlayerControllerDamager` | [`CHandle<CCSPlayerController>`](/docs/schema/entity/classes/CCSPlayerController) |
+| `m_hPlayerControllerRecipient` | [`CHandle<CCSPlayerController>`](/docs/schema/entity/classes/CCSPlayerController) |
+| `m_szPlayerDamagerName` | `CUtlString` |
+| `m_szPlayerRecipientName` | `CUtlString` |
+| `m_DamagerXuid` | `uint64_t` |
+| `m_RecipientXuid` | `uint64_t` |
+| `m_flBulletsDamage` | `float` |
+| `m_flDamage` | `float` |
+| `m_flActualHealthRemoved` | `float` |
+| `m_iNumHits` | `int32_t` |
+| `m_iLastBulletUpdate` | `int32_t` |
+| `m_bIsOtherEnemy` | `bool` |
+| `m_killType` | [`EKillTypes_t`](/docs/schema/entity/enums/EKillTypes_t) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

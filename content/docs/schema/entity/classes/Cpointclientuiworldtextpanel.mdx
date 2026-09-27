@@ -1,34 +1,17 @@
 ---
-title: CPointClientUIWorldTextPanel
+title: "CPointClientUIWorldTextPanel"
+description: "Schema class CPointClientUIWorldTextPanel, derived from CPointClientUIWorldPanel."
 ---
 
-# CPointClientUIWorldTextPanel
 
-**Inheritance**: CPointClientUIWorldPanel
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointClientUIWorldTextPanel.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointClientUIWorldTextPanel.h)
+
+**Inherits** [`CPointClientUIWorldPanel`](/docs/schema/entity/classes/CPointClientUIWorldPanel)
 
 ## Fields
 
-- <ApiParam name="m_messageText" type="char" />
+| Field | Type |
+|---|---|
+| `m_messageText` | `char` |
 
-## Methods
-
-### CPointClientUIWorldTextPanel* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointClientUIWorldTextPanel* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointClientUIWorldTextPanel* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointClientUIWorldTextPanel&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,43 +1,26 @@
 ---
-title: CPathCorner
+title: "CPathCorner"
+description: "Schema class CPathCorner, derived from CPointEntity."
 ---
 
-# CPathCorner
 
-**Inheritance**: CPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPathCorner.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPathCorner.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_bTriggerLocomotionStop" type="bool" />
-- <ApiParam name="m_bSmoothArrival" type="bool" />
-- <ApiParam name="m_bExactPositioning" type="bool" />
-- <ApiParam name="m_flWait" type="float" />
-- <ApiParam name="m_flRadius" type="float" />
-- <ApiParam name="m_flWaypointSuccessRadiusWhenBlocked" type="float" />
-- <ApiParam name="m_flWaypointSuccessRadius" type="float" />
-- <ApiParam name="m_flPathEndDistanceFromGoal" type="float" />
-- <ApiParam name="m_flSpeed" type="float" />
-- <ApiParam name="m_OnPass" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_bTriggerLocomotionStop` | `bool` |
+| `m_bSmoothArrival` | `bool` |
+| `m_bExactPositioning` | `bool` |
+| `m_flWait` | `float` |
+| `m_flRadius` | `float` |
+| `m_flWaypointSuccessRadiusWhenBlocked` | `float` |
+| `m_flWaypointSuccessRadius` | `float` |
+| `m_flPathEndDistanceFromGoal` | `float` |
+| `m_flSpeed` | `float` |
+| `m_OnPass` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CPathCorner* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPathCorner* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPathCorner* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPathCorner&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

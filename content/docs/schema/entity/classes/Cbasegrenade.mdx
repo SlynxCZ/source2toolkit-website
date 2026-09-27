@@ -1,48 +1,31 @@
 ---
-title: CBaseGrenade
+title: "CBaseGrenade"
+description: "Schema class CBaseGrenade, derived from CBaseAnimGraph."
 ---
 
-# CBaseGrenade
 
-**Inheritance**: CBaseAnimGraph
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseGrenade.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseGrenade.h)
+
+**Inherits** [`CBaseAnimGraph`](/docs/schema/entity/classes/CBaseAnimGraph)
 
 ## Fields
 
-- <ApiParam name="m_bDamageDetonating" type="bool" />
-- <ApiParam name="m_OnPlayerPickup" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnExplode" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bHasWarnedAI" type="bool" />
-- <ApiParam name="m_bIsSmokeGrenade" type="bool" />
-- <ApiParam name="m_bIsLive" type="bool" />
-- <ApiParam name="m_DmgRadius" type="float" />
-- <ApiParam name="m_flDetonateTime" type="float" />
-- <ApiParam name="m_flWarnAITime" type="float" />
-- <ApiParam name="m_flDamage" type="float" />
-- <ApiParam name="m_iszBounceSound" type="CUtlSymbolLarge" />
-- <ApiParam name="m_ExplosionSound" type="CUtlString" />
-- <ApiParam name="m_hThrower" type="CHandle&lt;CCSPlayerPawn&gt;" />
-- <ApiParam name="m_flNextAttack" type="float" />
-- <ApiParam name="m_hOriginalThrower" type="CHandle&lt;CCSPlayerPawn&gt;" />
+| Field | Type |
+|---|---|
+| `m_bDamageDetonating` | `bool` |
+| `m_OnPlayerPickup` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnExplode` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bHasWarnedAI` | `bool` |
+| `m_bIsSmokeGrenade` | `bool` |
+| `m_bIsLive` | `bool` |
+| `m_DmgRadius` | `float` |
+| `m_flDetonateTime` | `float` |
+| `m_flWarnAITime` | `float` |
+| `m_flDamage` | `float` |
+| `m_iszBounceSound` | `CUtlSymbolLarge` |
+| `m_ExplosionSound` | `CUtlString` |
+| `m_hThrower` | [`CHandle<CCSPlayerPawn>`](/docs/schema/entity/classes/CCSPlayerPawn) |
+| `m_flNextAttack` | `float` |
+| `m_hOriginalThrower` | [`CHandle<CCSPlayerPawn>`](/docs/schema/entity/classes/CCSPlayerPawn) |
 
-## Methods
-
-### CBaseGrenade* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBaseGrenade* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBaseGrenade* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBaseGrenade&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

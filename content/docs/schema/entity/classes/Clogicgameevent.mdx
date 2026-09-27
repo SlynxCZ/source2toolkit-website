@@ -1,34 +1,17 @@
 ---
-title: CLogicGameEvent
+title: "CLogicGameEvent"
+description: "Schema class CLogicGameEvent, derived from CLogicalEntity."
 ---
 
-# CLogicGameEvent
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicGameEvent.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicGameEvent.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszEventName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_iszEventName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CLogicGameEvent* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicGameEvent* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicGameEvent* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicGameEvent&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

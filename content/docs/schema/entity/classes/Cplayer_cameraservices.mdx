@@ -1,23 +1,28 @@
 ---
-title: CPlayer_CameraServices
+title: "CPlayer_CameraServices"
+description: "Schema class CPlayer_CameraServices, derived from CPlayerPawnComponent."
 ---
 
-# CPlayer_CameraServices
 
-**Inheritance**: CPlayerPawnComponent
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPlayer_CameraServices.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPlayer_CameraServices.h)
+
+**Inherits** [`CPlayerPawnComponent`](/docs/schema/entity/classes/CPlayerPawnComponent)
 
 ## Fields
 
-- <ApiParam name="m_vecCsViewPunchAngle" type="QAngle" />
-- <ApiParam name="m_nCsViewPunchAngleTick" type="int32_t" />
-- <ApiParam name="m_flCsViewPunchAngleTickRatio" type="float" />
-- <ApiParam name="m_PlayerFog" type="[fogplayerparams_t](/docs/schema/entity/classes/fogplayerparams_t)" />
-- <ApiParam name="m_hColorCorrectionCtrl" type="CHandle&lt;CColorCorrection&gt;" />
-- <ApiParam name="m_hViewEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_hTonemapController" type="CHandle&lt;CTonemapController2&gt;" />
-- <ApiParam name="m_audio" type="[audioparams_t](/docs/schema/entity/classes/audioparams_t)" />
-- <ApiParam name="m_PostProcessingVolumes" type="CUtlVector&lt;CHandle&lt;CPostProcessingVolume&gt;&gt;" />
-- <ApiParam name="m_flOldPlayerZ" type="float" />
-- <ApiParam name="m_flOldPlayerViewOffsetZ" type="float" />
-- <ApiParam name="m_hTriggerSoundscapeList" type="CUtlVector&lt;CHandle&lt;CEnvSoundscapeTriggerable&gt;&gt;" />
+| Field | Type |
+|---|---|
+| `m_vecCsViewPunchAngle` | `QAngle` |
+| `m_nCsViewPunchAngleTick` | `int32_t` |
+| `m_flCsViewPunchAngleTickRatio` | `float` |
+| `m_PlayerFog` | [`fogplayerparams_t`](/docs/schema/entity/classes/fogplayerparams_t) |
+| `m_hColorCorrectionCtrl` | [`CHandle<CColorCorrection>`](/docs/schema/entity/classes/CColorCorrection) |
+| `m_hViewEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hTonemapController` | [`CHandle<CTonemapController2>`](/docs/schema/entity/classes/CTonemapController2) |
+| `m_audio` | [`audioparams_t`](/docs/schema/entity/classes/audioparams_t) |
+| `m_PostProcessingVolumes` | [`CUtlVector<CHandle<CPostProcessingVolume>>`](/docs/schema/entity/classes/CPostProcessingVolume) |
+| `m_flOldPlayerZ` | `float` |
+| `m_flOldPlayerViewOffsetZ` | `float` |
+| `m_hTriggerSoundscapeList` | [`CUtlVector<CHandle<CEnvSoundscapeTriggerable>>`](/docs/schema/entity/classes/CEnvSoundscapeTriggerable) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

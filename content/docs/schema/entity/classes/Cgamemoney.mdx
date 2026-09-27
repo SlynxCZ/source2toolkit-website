@@ -1,37 +1,20 @@
 ---
-title: CGameMoney
+title: "CGameMoney"
+description: "Schema class CGameMoney, derived from CRulePointEntity."
 ---
 
-# CGameMoney
 
-**Inheritance**: [CRulePointEntity](/docs/schema/entity/classes/Crulepointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CGameMoney.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CGameMoney.h)
+
+**Inherits** [`CRulePointEntity`](/docs/schema/entity/classes/CRulePointEntity)
 
 ## Fields
 
-- <ApiParam name="m_OnMoneySpent" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnMoneySpentFail" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_nMoney" type="int32_t" />
-- <ApiParam name="m_strAwardText" type="CUtlString" />
+| Field | Type |
+|---|---|
+| `m_OnMoneySpent` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnMoneySpentFail` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_nMoney` | `int32_t` |
+| `m_strAwardText` | `CUtlString` |
 
-## Methods
-
-### CGameMoney* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CGameMoney* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CGameMoney* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CGameMoney&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

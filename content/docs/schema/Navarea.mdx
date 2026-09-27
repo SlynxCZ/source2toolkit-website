@@ -1,119 +1,203 @@
 ---
-title: Navarea
+title: "Navigation mesh"
+description: "Engine structures the SDK declares by hand: CCSNavArea."
 ---
 
-# CCSNavArea
+
+**Header** [`source2toolkit/schema/navarea.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/navarea.h)
+
+## Constructors
+
+```cpp
+CCSNavArea() = delete;
+CCSNavArea(const CCSNavArea&) = delete;
+```
 
 ## Methods
 
-### uint32_t Id()
+### `Id`
+
+```cpp
+uint32_t Id() const;
+```
 
 Nav area identifier.
 
-### const Vector& Center()
+### `Center`
+
+```cpp
+const Vector& Center() const;
+```
 
 Centre of the area.
 
-### const Vector& Normal()
+### `Normal`
+
+```cpp
+const Vector& Normal() const;
+```
 
 Surface normal, which is what gives the area its slope.
 
-### Vector Min()
+### `Min`
+
+```cpp
+Vector Min() const;
+```
 
 Corner with the smaller components on every axis.
 
-### Vector Max()
+### `Max`
+
+```cpp
+Vector Max() const;
+```
 
 Corner with the larger components on every axis.
 
-### float Width()
+### `Width`
+
+```cpp
+float Width() const;
+```
 
 Extent along X.
 
-### float Height()
+### `Height`
+
+```cpp
+float Height() const;
+```
 
 Extent along Y.
 
-### float Area2D()
+### `Area2D`
+
+```cpp
+float Area2D() const;
+```
 
 Width times height; the area ignoring slope.
 
-### float GetHeightAtPosition(x, y)
+### `GetHeightAtPosition`
+
+```cpp
+float GetHeightAtPosition(float x, float y) const;
+```
 
 Height of the area's surface directly under a world position.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `x` | `float` |
+| `y` | `float` |
 
-- <ApiParam name="x" type="float" />
-- <ApiParam name="y" type="float" />
+### `ContainsPoint`
 
-### bool ContainsPoint(vecPosition, flZTolerance)
+```cpp
+bool ContainsPoint(const Vector& vecPosition, float flZTolerance = 32.0f) const;
+```
 
 Whether a position sits on this area, within flZTolerance of its surface.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `vecPosition` | `const Vector&` |  |
+| `flZTolerance` | `float` | `32.0f` |
 
-- <ApiParam name="vecPosition" type="const Vector&" />
-- <ApiParam name="flZTolerance" type="float" />
+### `ContainsBox`
 
-### bool ContainsBox(vecMins, vecMaxs, flZTolerance)
+```cpp
+bool ContainsBox(const Vector& vecMins, const Vector& vecMaxs, float flZTolerance = 32.0f) const;
+```
 
 Whether a box sits entirely on this area.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `vecMins` | `const Vector&` |  |
+| `vecMaxs` | `const Vector&` |  |
+| `flZTolerance` | `float` | `32.0f` |
 
-- <ApiParam name="vecMins" type="const Vector&" />
-- <ApiParam name="vecMaxs" type="const Vector&" />
-- <ApiParam name="flZTolerance" type="float" />
+### `IntersectsBox`
 
-### bool IntersectsBox(vecMins, vecMaxs, flZTolerance)
+```cpp
+bool IntersectsBox(const Vector& vecMins, const Vector& vecMaxs, float flZTolerance = 32.0f) const;
+```
 
 Whether a box overlaps this area at all.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `vecMins` | `const Vector&` |  |
+| `vecMaxs` | `const Vector&` |  |
+| `flZTolerance` | `float` | `32.0f` |
 
-- <ApiParam name="vecMins" type="const Vector&" />
-- <ApiParam name="vecMaxs" type="const Vector&" />
-- <ApiParam name="flZTolerance" type="float" />
+### `GetClosestPoint`
 
-### Vector GetClosestPoint(vecPosition)
+```cpp
+Vector GetClosestPoint(const Vector& vecPosition) const;
+```
 
 Point of this area nearest a world position.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `vecPosition` | `const Vector&` |
 
-- <ApiParam name="vecPosition" type="const Vector&" />
+### `GetDistanceToPoint`
 
-### float GetDistanceToPoint(vecPosition)
+```cpp
+float GetDistanceToPoint(const Vector& vecPosition) const;
+```
 
 Distance from a world position to this area.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `vecPosition` | `const Vector&` |
 
-- <ApiParam name="vecPosition" type="const Vector&" />
+### `GetDistanceSquaredToPoint`
 
-### float GetDistanceSquaredToPoint(vecPosition)
+```cpp
+float GetDistanceSquaredToPoint(const Vector& vecPosition) const;
+```
 
 Squared distance, for comparing without the square root.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `vecPosition` | `const Vector&` |
 
-- <ApiParam name="vecPosition" type="const Vector&" />
+### `GetAllNavAreas`
 
-### std::vector&lt;CCSNavArea*&gt; GetAllNavAreas()
+```cpp
+static std::vector<CCSNavArea*> GetAllNavAreas();
+```
 
 Every area of the current nav mesh, or empty when there is none.
 
-### CCSNavArea* GetClosestNavArea(vecPosition, flMaximumDistance)
+### `GetClosestNavArea`
 
-Area nearest a position, or null when the mesh is missing or nothing is in range. Search limit; zero or less means no limit.
+```cpp
+static CCSNavArea* GetClosestNavArea(const Vector& vecPosition, float flMaximumDistance = -1.0f);
+static CCSNavArea* GetClosestNavArea(const Vector& vecPosition, float* pflDistanceOut, float flMaximumDistance = -1.0f);
+```
 
-<ApiLabel>Parameters</ApiLabel>
+Area nearest a position, or null when the mesh is missing or nothing is in range.
 
-- <ApiParam name="vecPosition" type="const Vector&" />
-- <ApiParam name="flMaximumDistance" type="float" />
+As above, and writes the distance it found to pflDistanceOut.
 
-### bool IsValidNavMesh()
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `vecPosition` | `const Vector&` |  |  |
+| `flMaximumDistance` | `float` | `-1.0f` | Search limit; zero or less means no limit. |
+| `pflDistanceOut` | `float*` |  |  |
 
-As above, and writes the distance it found to pflDistanceOut. Whether the game has a nav mesh loaded.
+### `IsValidNavMesh`
 
+```cpp
+static bool IsValidNavMesh();
+```
+
+Whether the game has a nav mesh loaded.

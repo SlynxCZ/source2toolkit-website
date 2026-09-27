@@ -1,12 +1,17 @@
 ---
-title: Locksound_t
+title: "locksound_t"
+description: "Schema class locksound_t."
 ---
 
-# locksound_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/locksound_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/locksound_t.h)
 
 ## Fields
 
-- <ApiParam name="sLockedSound" type="CGameSoundEventName" />
-- <ApiParam name="sUnlockedSound" type="CGameSoundEventName" />
-- <ApiParam name="flwaitSound" type="float" />
+| Field | Type |
+|---|---|
+| `sLockedSound` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `sUnlockedSound` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `flwaitSound` | `float` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

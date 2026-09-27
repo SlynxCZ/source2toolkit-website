@@ -1,12 +1,17 @@
 ---
-title: PhysicsRagdollPose_t
+title: "PhysicsRagdollPose_t"
+description: "Schema class PhysicsRagdollPose_t."
 ---
 
-# PhysicsRagdollPose_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/PhysicsRagdollPose_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/PhysicsRagdollPose_t.h)
 
 ## Fields
 
-- <ApiParam name="m_RelativeTransforms" type="CUtlVector&lt;CTransform&gt;" />
-- <ApiParam name="m_hOwner" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_bSetFromDebugHistory" type="bool" />
+| Field | Type |
+|---|---|
+| `m_RelativeTransforms` | `CUtlVector<CTransform>` |
+| `m_hOwner` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_bSetFromDebugHistory` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,52 +1,35 @@
 ---
-title: CMapVetoPickController
+title: "CMapVetoPickController"
+description: "Schema class CMapVetoPickController, derived from CBaseEntity."
 ---
 
-# CMapVetoPickController
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMapVetoPickController.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMapVetoPickController.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_bPlayedIntroVcd" type="bool" />
-- <ApiParam name="m_bNeedToPlayFiveSecondsRemaining" type="bool" />
-- <ApiParam name="m_dblPreMatchDraftSequenceTime" type="double" />
-- <ApiParam name="m_bPreMatchDraftStateChanged" type="bool" />
-- <ApiParam name="m_nDraftType" type="int32_t" />
-- <ApiParam name="m_nTeamWinningCoinToss" type="int32_t" />
-- <ApiParam name="m_nTeamWithFirstChoice" type="int32_t" />
-- <ApiParam name="m_nVoteMapIdsList" type="int32_t" />
-- <ApiParam name="m_nAccountIDs" type="int32_t" />
-- <ApiParam name="m_nMapId0" type="int32_t" />
-- <ApiParam name="m_nMapId1" type="int32_t" />
-- <ApiParam name="m_nMapId2" type="int32_t" />
-- <ApiParam name="m_nMapId3" type="int32_t" />
-- <ApiParam name="m_nMapId4" type="int32_t" />
-- <ApiParam name="m_nMapId5" type="int32_t" />
-- <ApiParam name="m_nStartingSide0" type="int32_t" />
-- <ApiParam name="m_nCurrentPhase" type="int32_t" />
-- <ApiParam name="m_nPhaseStartTick" type="int32_t" />
-- <ApiParam name="m_nPhaseDurationTicks" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_bPlayedIntroVcd` | `bool` |
+| `m_bNeedToPlayFiveSecondsRemaining` | `bool` |
+| `m_dblPreMatchDraftSequenceTime` | `double` |
+| `m_bPreMatchDraftStateChanged` | `bool` |
+| `m_nDraftType` | `int32_t` |
+| `m_nTeamWinningCoinToss` | `int32_t` |
+| `m_nTeamWithFirstChoice` | `int32_t` |
+| `m_nVoteMapIdsList` | `int32_t` |
+| `m_nAccountIDs` | `int32_t` |
+| `m_nMapId0` | `int32_t` |
+| `m_nMapId1` | `int32_t` |
+| `m_nMapId2` | `int32_t` |
+| `m_nMapId3` | `int32_t` |
+| `m_nMapId4` | `int32_t` |
+| `m_nMapId5` | `int32_t` |
+| `m_nStartingSide0` | `int32_t` |
+| `m_nCurrentPhase` | `int32_t` |
+| `m_nPhaseStartTick` | `int32_t` |
+| `m_nPhaseDurationTicks` | `int32_t` |
 
-## Methods
-
-### CMapVetoPickController* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMapVetoPickController* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMapVetoPickController* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMapVetoPickController&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

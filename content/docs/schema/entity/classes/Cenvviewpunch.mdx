@@ -1,35 +1,18 @@
 ---
-title: CEnvViewPunch
+title: "CEnvViewPunch"
+description: "Schema class CEnvViewPunch, derived from CPointEntity."
 ---
 
-# CEnvViewPunch
 
-**Inheritance**: CPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvViewPunch.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvViewPunch.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_flRadius" type="float" />
-- <ApiParam name="m_angViewPunch" type="QAngle" />
+| Field | Type |
+|---|---|
+| `m_flRadius` | `float` |
+| `m_angViewPunch` | `QAngle` |
 
-## Methods
-
-### CEnvViewPunch* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvViewPunch* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvViewPunch* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvViewPunch&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

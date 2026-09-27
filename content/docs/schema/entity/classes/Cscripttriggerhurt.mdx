@@ -1,34 +1,17 @@
 ---
-title: CScriptTriggerHurt
+title: "CScriptTriggerHurt"
+description: "Schema class CScriptTriggerHurt, derived from CTriggerHurt."
 ---
 
-# CScriptTriggerHurt
 
-**Inheritance**: CTriggerHurt
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CScriptTriggerHurt.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CScriptTriggerHurt.h)
+
+**Inherits** [`CTriggerHurt`](/docs/schema/entity/classes/CTriggerHurt)
 
 ## Fields
 
-- <ApiParam name="m_vExtent" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_vExtent` | `Vector` |
 
-## Methods
-
-### CScriptTriggerHurt* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CScriptTriggerHurt* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CScriptTriggerHurt* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CScriptTriggerHurt&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

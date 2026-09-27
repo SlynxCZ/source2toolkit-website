@@ -1,139 +1,122 @@
 ---
-title: CFuncMover
+title: "CFuncMover"
+description: "Schema class CFuncMover, derived from CBaseModelEntity."
 ---
 
-# CFuncMover
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncMover.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncMover.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszPathName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hPathMover" type="CHandle&lt;CPathMover&gt;" />
-- <ApiParam name="m_hPrevPathMover" type="CHandle&lt;CPathMover&gt;" />
-- <ApiParam name="m_iszPathNodeStart" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszPathNodeEnd" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bIgnoreEndNode" type="bool" />
-- <ApiParam name="m_eMoveType" type="CFuncMover__Move_t" />
-- <ApiParam name="m_bIsReversing" type="bool" />
-- <ApiParam name="m_flStartSpeed" type="float" />
-- <ApiParam name="m_flPathLocation" type="float" />
-- <ApiParam name="m_flT" type="float" />
-- <ApiParam name="m_nCurrentNodeIndex" type="int32_t" />
-- <ApiParam name="m_nPreviousNodeIndex" type="int32_t" />
-- <ApiParam name="m_eSolidType" type="SolidType_t" />
-- <ApiParam name="m_bIsMoving" type="bool" />
-- <ApiParam name="m_flTimeToReachMaxSpeed" type="float" />
-- <ApiParam name="m_flDistanceToReachMaxSpeed" type="float" />
-- <ApiParam name="m_flTimeToReachZeroSpeed" type="float" />
-- <ApiParam name="m_flComputedDistanceToReachMaxSpeed" type="float" />
-- <ApiParam name="m_flComputedDistanceToReachZeroSpeed" type="float" />
-- <ApiParam name="m_flStartCurveScale" type="float" />
-- <ApiParam name="m_flStopCurveScale" type="float" />
-- <ApiParam name="m_flDistanceToReachZeroSpeed" type="float" />
-- <ApiParam name="m_flTimeMovementStart" type="float" />
-- <ApiParam name="m_flTimeMovementStop" type="float" />
-- <ApiParam name="m_hStopAtNode" type="CHandle&lt;CMoverPathNode&gt;" />
-- <ApiParam name="m_flPathLocationToBeginStop" type="float" />
-- <ApiParam name="m_flPathLocationStart" type="float" />
-- <ApiParam name="m_flBeginStopT" type="float" />
-- <ApiParam name="m_iszStartForwardSound" type="CGameSoundEventName" />
-- <ApiParam name="m_iszLoopForwardSound" type="CGameSoundEventName" />
-- <ApiParam name="m_iszStopForwardSound" type="CGameSoundEventName" />
-- <ApiParam name="m_iszStartReverseSound" type="CGameSoundEventName" />
-- <ApiParam name="m_iszLoopReverseSound" type="CGameSoundEventName" />
-- <ApiParam name="m_iszStopReverseSound" type="CGameSoundEventName" />
-- <ApiParam name="m_iszArriveAtDestinationSound" type="CGameSoundEventName" />
-- <ApiParam name="m_OnMovementEnd" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bStartAtClosestPoint" type="bool" />
-- <ApiParam name="m_bStartAtEnd" type="bool" />
-- <ApiParam name="m_bStartFollowingClosestMover" type="bool" />
-- <ApiParam name="m_flStartFollowingClosestMoverWhenWithinDistance" type="float" />
-- <ApiParam name="m_flStartFollowingClosestMoverWhenOutsideDistance" type="float" />
-- <ApiParam name="m_eOrientationUpdate" type="CFuncMover__OrientationUpdate_t" />
-- <ApiParam name="m_flTimeStartOrientationChange" type="float" />
-- <ApiParam name="m_flTimeToBlendToNewOrientation" type="float" />
-- <ApiParam name="m_flDurationBlendToNewOrientationRan" type="float" />
-- <ApiParam name="m_bCreateMovableNavMesh" type="bool" />
-- <ApiParam name="m_bCreateMovableSurfaceGraph" type="bool" />
-- <ApiParam name="m_bAllowMovableNavMeshDockingOnEntireEntity" type="bool" />
-- <ApiParam name="m_iszOrientationMatchEntityName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hOrientationMatchEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_vLerpToNewPosStartWS" type="Vector" />
-- <ApiParam name="m_flLerpToPositionTargetT" type="float" />
-- <ApiParam name="m_flLerpToPositionT" type="float" />
-- <ApiParam name="m_flLerpToPositionDeltaT" type="float" />
-- <ApiParam name="m_hTransitionSourcePath" type="CHandle&lt;CPathMover&gt;" />
-- <ApiParam name="m_flTransitionSourceT" type="float" />
-- <ApiParam name="m_flTransitionSourcePathLocation" type="float" />
-- <ApiParam name="m_iszTransitionSourcePathNodeStart" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bStoppedDuringTransition" type="bool" />
-- <ApiParam name="m_OnLerpToPositionComplete" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bIsPaused" type="bool" />
-- <ApiParam name="m_eTransitionedToPathNodeAction" type="CFuncMover__TransitionToPathNodeAction_t" />
-- <ApiParam name="m_qTransitionSourceOrientation" type="Quaternion" />
-- <ApiParam name="m_nDelayedTeleportToNode" type="int32_t" />
-- <ApiParam name="m_bIsImGuiLogging" type="bool" />
-- <ApiParam name="m_bIsImGuiEntTextLogging" type="bool" />
-- <ApiParam name="m_flSpeed" type="float" />
-- <ApiParam name="m_hFollowEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_flFollowDistance" type="float" />
-- <ApiParam name="m_flFollowMinimumSpeed" type="float" />
-- <ApiParam name="m_flCurFollowEntityT" type="float" />
-- <ApiParam name="m_flCurFollowSpeed" type="float" />
-- <ApiParam name="m_strOrientationFaceEntityName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hOrientationFaceEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_OnStart" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnStartForward" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnStartReverse" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnStop" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnStopped" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bNextNodeReturnsCurrent" type="bool" />
-- <ApiParam name="m_bStartedMoving" type="bool" />
-- <ApiParam name="m_eFollowEntityDirection" type="CFuncMover__FollowEntityDirection_t" />
-- <ApiParam name="m_hFollowMover" type="CHandle&lt;CFuncMover&gt;" />
-- <ApiParam name="m_iszFollowEntityName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszFollowMoverEntityName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flFollowMoverDistance" type="float" />
-- <ApiParam name="m_flFollowMoverRatio" type="float" />
-- <ApiParam name="m_flFollowMoverCalculatedDistance" type="float" />
-- <ApiParam name="m_flFollowMoverSpringStrength" type="float" />
-- <ApiParam name="m_nFollowMoverConstraintPriority" type="int32_t" />
-- <ApiParam name="m_vecFollowMoverCouplerRange" type="Vector2D" />
-- <ApiParam name="m_bFollowConstraintsInitialized" type="bool" />
-- <ApiParam name="m_eFollowConstraint" type="CFuncMover__FollowConstraint_t" />
-- <ApiParam name="m_flFollowMoverSpeed" type="float" />
-- <ApiParam name="m_flFollowMoverVelocity" type="float" />
-- <ApiParam name="m_nTickMovementRan" type="int32_t" />
-- <ApiParam name="m_movementSummary" type="FuncMoverMovementSummary_t" />
-- <ApiParam name="m_bStopFromBeginStopTarget" type="bool" />
-- <ApiParam name="m_bQueueStop" type="bool" />
-- <ApiParam name="m_bQueueStopMoving" type="bool" />
-- <ApiParam name="m_bQueueSetupPathMover" type="bool" />
-- <ApiParam name="m_ePathRebuildStrategy" type="CFuncMover__PathRebuildStrategy_t" />
-- <ApiParam name="m_eFindFollowMoverStrategy" type="CFuncMover__FindFollowMoverStrategy_t" />
-- <ApiParam name="m_bDisableDecelerationToStop" type="bool" />
-- <ApiParam name="m_vOffsetFromPath" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_iszPathName` | `CUtlSymbolLarge` |
+| `m_hPathMover` | [`CHandle<CPathMover>`](/docs/schema/entity/classes/CPathMover) |
+| `m_hPrevPathMover` | [`CHandle<CPathMover>`](/docs/schema/entity/classes/CPathMover) |
+| `m_iszPathNodeStart` | `CUtlSymbolLarge` |
+| `m_iszPathNodeEnd` | `CUtlSymbolLarge` |
+| `m_bIgnoreEndNode` | `bool` |
+| `m_eMoveType` | [`CFuncMover__Move_t`](/docs/schema/entity/enums/CFuncMover__Move_t) |
+| `m_bIsReversing` | `bool` |
+| `m_flStartSpeed` | `float` |
+| `m_flPathLocation` | `float` |
+| `m_flT` | `float` |
+| `m_nCurrentNodeIndex` | `int32_t` |
+| `m_nPreviousNodeIndex` | `int32_t` |
+| `m_eSolidType` | `SolidType_t` |
+| `m_bIsMoving` | `bool` |
+| `m_flTimeToReachMaxSpeed` | `float` |
+| `m_flDistanceToReachMaxSpeed` | `float` |
+| `m_flTimeToReachZeroSpeed` | `float` |
+| `m_flComputedDistanceToReachMaxSpeed` | `float` |
+| `m_flComputedDistanceToReachZeroSpeed` | `float` |
+| `m_flStartCurveScale` | `float` |
+| `m_flStopCurveScale` | `float` |
+| `m_flDistanceToReachZeroSpeed` | `float` |
+| `m_flTimeMovementStart` | `float` |
+| `m_flTimeMovementStop` | `float` |
+| `m_hStopAtNode` | [`CHandle<CMoverPathNode>`](/docs/schema/entity/classes/CMoverPathNode) |
+| `m_flPathLocationToBeginStop` | `float` |
+| `m_flPathLocationStart` | `float` |
+| `m_flBeginStopT` | `float` |
+| `m_iszStartForwardSound` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_iszLoopForwardSound` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_iszStopForwardSound` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_iszStartReverseSound` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_iszLoopReverseSound` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_iszStopReverseSound` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_iszArriveAtDestinationSound` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_OnMovementEnd` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bStartAtClosestPoint` | `bool` |
+| `m_bStartAtEnd` | `bool` |
+| `m_bStartFollowingClosestMover` | `bool` |
+| `m_flStartFollowingClosestMoverWhenWithinDistance` | `float` |
+| `m_flStartFollowingClosestMoverWhenOutsideDistance` | `float` |
+| `m_eOrientationUpdate` | [`CFuncMover__OrientationUpdate_t`](/docs/schema/entity/enums/CFuncMover__OrientationUpdate_t) |
+| `m_flTimeStartOrientationChange` | `float` |
+| `m_flTimeToBlendToNewOrientation` | `float` |
+| `m_flDurationBlendToNewOrientationRan` | `float` |
+| `m_bCreateMovableNavMesh` | `bool` |
+| `m_bCreateMovableSurfaceGraph` | `bool` |
+| `m_bAllowMovableNavMeshDockingOnEntireEntity` | `bool` |
+| `m_iszOrientationMatchEntityName` | `CUtlSymbolLarge` |
+| `m_hOrientationMatchEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_vLerpToNewPosStartWS` | `Vector` |
+| `m_flLerpToPositionTargetT` | `float` |
+| `m_flLerpToPositionT` | `float` |
+| `m_flLerpToPositionDeltaT` | `float` |
+| `m_hTransitionSourcePath` | [`CHandle<CPathMover>`](/docs/schema/entity/classes/CPathMover) |
+| `m_flTransitionSourceT` | `float` |
+| `m_flTransitionSourcePathLocation` | `float` |
+| `m_iszTransitionSourcePathNodeStart` | `CUtlSymbolLarge` |
+| `m_bStoppedDuringTransition` | `bool` |
+| `m_OnLerpToPositionComplete` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bIsPaused` | `bool` |
+| `m_eTransitionedToPathNodeAction` | [`CFuncMover__TransitionToPathNodeAction_t`](/docs/schema/entity/enums/CFuncMover__TransitionToPathNodeAction_t) |
+| `m_qTransitionSourceOrientation` | `Quaternion` |
+| `m_nDelayedTeleportToNode` | `int32_t` |
+| `m_bIsImGuiLogging` | `bool` |
+| `m_bIsImGuiEntTextLogging` | `bool` |
+| `m_flSpeed` | `float` |
+| `m_hFollowEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_flFollowDistance` | `float` |
+| `m_flFollowMinimumSpeed` | `float` |
+| `m_flCurFollowEntityT` | `float` |
+| `m_flCurFollowSpeed` | `float` |
+| `m_strOrientationFaceEntityName` | `CUtlSymbolLarge` |
+| `m_hOrientationFaceEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_OnStart` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnStartForward` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnStartReverse` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnStop` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnStopped` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bNextNodeReturnsCurrent` | `bool` |
+| `m_bStartedMoving` | `bool` |
+| `m_eFollowEntityDirection` | [`CFuncMover__FollowEntityDirection_t`](/docs/schema/entity/enums/CFuncMover__FollowEntityDirection_t) |
+| `m_hFollowMover` | `CHandle<CFuncMover>` |
+| `m_iszFollowEntityName` | `CUtlSymbolLarge` |
+| `m_iszFollowMoverEntityName` | `CUtlSymbolLarge` |
+| `m_flFollowMoverDistance` | `float` |
+| `m_flFollowMoverRatio` | `float` |
+| `m_flFollowMoverCalculatedDistance` | `float` |
+| `m_flFollowMoverSpringStrength` | `float` |
+| `m_nFollowMoverConstraintPriority` | `int32_t` |
+| `m_vecFollowMoverCouplerRange` | `Vector2D` |
+| `m_bFollowConstraintsInitialized` | `bool` |
+| `m_eFollowConstraint` | [`CFuncMover__FollowConstraint_t`](/docs/schema/entity/enums/CFuncMover__FollowConstraint_t) |
+| `m_flFollowMoverSpeed` | `float` |
+| `m_flFollowMoverVelocity` | `float` |
+| `m_nTickMovementRan` | `int32_t` |
+| `m_movementSummary` | [`FuncMoverMovementSummary_t`](/docs/schema/entity/classes/FuncMoverMovementSummary_t) |
+| `m_bStopFromBeginStopTarget` | `bool` |
+| `m_bQueueStop` | `bool` |
+| `m_bQueueStopMoving` | `bool` |
+| `m_bQueueSetupPathMover` | `bool` |
+| `m_ePathRebuildStrategy` | [`CFuncMover__PathRebuildStrategy_t`](/docs/schema/entity/enums/CFuncMover__PathRebuildStrategy_t) |
+| `m_eFindFollowMoverStrategy` | [`CFuncMover__FindFollowMoverStrategy_t`](/docs/schema/entity/enums/CFuncMover__FindFollowMoverStrategy_t) |
+| `m_bDisableDecelerationToStop` | `bool` |
+| `m_vOffsetFromPath` | `Vector` |
 
-## Methods
-
-### CFuncMover* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncMover* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncMover* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncMover&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

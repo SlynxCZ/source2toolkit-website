@@ -1,16 +1,186 @@
 ---
-title: Entityio
+title: "Entity I/O"
+description: "Entity I/O system (inputs/outputs) for Source2Toolkit."
 ---
 
-# entityio
 
-## CSingleEntityIOListener
+Provides:
+- Access to entity outputs (OnTrigger, OnUse, etc.)
+- Hooking system for listening to outputs
+- Filtering by entity + classname + output name
 
-**Inheritance**: [IEntityIOListener](/docs/schema/Entityio)
+<Callout type="info">Equivalent to Hammer I/O system (FireOutput / AcceptInput).</Callout>
 
-## CEntityIOListenerHandle
+**Header** [`source2toolkit/schema/entityio.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entityio.h)
 
-### Unhook()
+## `EntityIOConnectionDesc_t`
+
+Describes a single output connection.
+
+Example (Hammer): OnTrigger -&gt; target_entity -&gt; input_name
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `m_targetDesc` | `string_t` | Target entity name |
+| `m_targetInput` | `string_t` | Input name to call |
+| `m_valueOverride` | `string_t` | Override value |
+| `m_hTarget` | `CEntityHandle` | Target handle |
+| `m_nTargetType` | [`EntityIOTargetType_t`](/docs/schema/entity/enums/EntityIOTargetType_t) |  |
+| `m_nTimesToFire` | `int32` | How many times it can fire |
+| `m_flDelay` | `float` | Delay before firing |
+
+## `EntityIOConnection_t`
+
+Runtime connection node.
+
+**Inherits** [`EntityIOConnectionDesc_t`](/docs/schema/Entityio#entityioconnectiondesc_t)
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `m_bMarkedForRemoval` | `bool` |
+| `m_pNext` | [`EntityIOConnection_t*`](/docs/schema/Entityio#entityioconnection_t) |
+
+## `EntityIOOutputDesc_t`
+
+Output metadata.
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `m_pName` | `const char*` | Output name (e.g. "OnTrigger") |
+| `m_nFlags` | `uint32` |  |
+| `m_nOutputOffset` | `uint32` |  |
+
+## `CEntityIOOutput`
+
+Represents an entity output.
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `vtable` | `void*` |  |
+| `m_pConnections` | [`EntityIOConnection_t*`](/docs/schema/Entityio#entityioconnection_t) | Linked list of connections |
+| `m_pDesc` | [`EntityIOOutputDesc_t*`](/docs/schema/Entityio#entityiooutputdesc_t) | Output descriptor |
+
+## `InputData_t`
+
+Data passed to inputs.
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `pActivator` | [`CBaseEntity*`](/docs/schema/entity/classes/CBaseEntity) | Entity that triggered the input |
+| `pCaller` | [`CBaseEntity*`](/docs/schema/entity/classes/CBaseEntity) | Entity owning the output |
+| `value` | `variant_t` | Passed value |
+| `nOutputID` | `int` |  |
+
+## `IEntityIOListener`
+
+Interface for listening to entity outputs.
+
+### `OnEntityOutput`
+
+```cpp
+virtual Action OnEntityOutput(const char* pchOutputName, CEntityInstance* pActivator, CEntityInstance* pCaller, float flDelay, bool post);
+```
+
+Called when an entity fires an output.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `pchOutputName` | `const char*` | Output name (e.g. "OnTrigger") |
+| `pActivator` | `CEntityInstance*` | Activator entity |
+| `pCaller` | `CEntityInstance*` | Caller entity |
+| `flDelay` | `float` | Delay before execution |
+| `post` | `bool` | false when called before the output fires, true after |
+
+**Returns** [`Action`](/docs/core-api/IToolkitTypes#action) — Action (Action::Ignore / Action::Override / Action::Supersede)
+
+## `CSingleEntityIOListener`
+
+Listener bound to a specific entity.
+
+**Inherits** [`IEntityIOListener`](/docs/schema/Entityio#ientityiolistener)
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `m_pTarget` | `CEntityInstance*` |  |
+| `m_Callback` | [`std::function<Action(const char*, CEntityInstance*, CEntityInstance*, float, bool)>`](/docs/core-api/IToolkitTypes#action) | Callback handler |
+
+### Constructors
+
+```cpp
+CSingleEntityIOListener(CEntityInstance* target, std::function<Action(const char*, CEntityInstance*, CEntityInstance*, float, bool)> cb);
+```
+
+### `OnEntityOutput`
+
+```cpp
+Action OnEntityOutput(const char* outputName, CEntityInstance* pActivator, CEntityInstance* pCaller, float delay, bool post) override;
+```
+
+| Parameter | Type |
+|---|---|
+| `outputName` | `const char*` |
+| `pActivator` | `CEntityInstance*` |
+| `pCaller` | `CEntityInstance*` |
+| `delay` | `float` |
+| `post` | `bool` |
+
+## `CEntityIOListenerHandle`
+
+RAII handle for entity output listeners.
+
+Automatically unregisters listener on destruction.
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `m_pListener` | [`CSingleEntityIOListener*`](/docs/schema/Entityio#csingleentityiolistener) |
+| `m_szClassname` | `std::string` |
+| `m_szOutput` | `std::string` |
+| `m_bPost` | `bool` |
+
+### `Unhook`
+
+```cpp
+void Unhook();
+```
 
 Removes listener.
 
+## `EntityIOCallbackPair`
+
+Stores listeners per output.
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `m_vecPre` | [`std::vector<IEntityIOListener*>`](/docs/schema/Entityio#ientityiolistener) |
+| `m_vecPost` | [`std::vector<IEntityIOListener*>`](/docs/schema/Entityio#ientityiolistener) |
+
+## `OutputKey`
+
+Key for output lookup.
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `m_szClassName` | `std::string` |
+| `m_szOutputName` | `std::string` |
+
+## `OutputKeyHash`
+
+Hash function for OutputKey.

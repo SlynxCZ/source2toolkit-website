@@ -1,23 +1,28 @@
 ---
-title: Fogplayerparams_t
+title: "fogplayerparams_t"
+description: "Schema class fogplayerparams_t."
 ---
 
-# fogplayerparams_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/fogplayerparams_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/fogplayerparams_t.h)
 
 ## Fields
 
-- <ApiParam name="m_hCtrl" type="CHandle&lt;CFogController&gt;" />
-- <ApiParam name="m_flTransitionTime" type="float" />
-- <ApiParam name="m_OldColor" type="Color" />
-- <ApiParam name="m_flOldStart" type="float" />
-- <ApiParam name="m_flOldEnd" type="float" />
-- <ApiParam name="m_flOldMaxDensity" type="float" />
-- <ApiParam name="m_flOldHDRColorScale" type="float" />
-- <ApiParam name="m_flOldFarZ" type="float" />
-- <ApiParam name="m_NewColor" type="Color" />
-- <ApiParam name="m_flNewStart" type="float" />
-- <ApiParam name="m_flNewEnd" type="float" />
-- <ApiParam name="m_flNewMaxDensity" type="float" />
-- <ApiParam name="m_flNewHDRColorScale" type="float" />
-- <ApiParam name="m_flNewFarZ" type="float" />
+| Field | Type |
+|---|---|
+| `m_hCtrl` | [`CHandle<CFogController>`](/docs/schema/entity/classes/CFogController) |
+| `m_flTransitionTime` | `float` |
+| `m_OldColor` | `Color` |
+| `m_flOldStart` | `float` |
+| `m_flOldEnd` | `float` |
+| `m_flOldMaxDensity` | `float` |
+| `m_flOldHDRColorScale` | `float` |
+| `m_flOldFarZ` | `float` |
+| `m_NewColor` | `Color` |
+| `m_flNewStart` | `float` |
+| `m_flNewEnd` | `float` |
+| `m_flNewMaxDensity` | `float` |
+| `m_flNewHDRColorScale` | `float` |
+| `m_flNewFarZ` | `float` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,46 +1,29 @@
 ---
-title: CInfoSpawnGroupLoadUnload
+title: "CInfoSpawnGroupLoadUnload"
+description: "Schema class CInfoSpawnGroupLoadUnload, derived from CLogicalEntity."
 ---
 
-# CInfoSpawnGroupLoadUnload
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CInfoSpawnGroupLoadUnload.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CInfoSpawnGroupLoadUnload.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_OnSpawnGroupLoadStarted" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnSpawnGroupLoadFinished" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnSpawnGroupUnloadStarted" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnSpawnGroupUnloadFinished" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_iszSpawnGroupName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszSpawnGroupFilterName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszLandmarkName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_sFixedSpawnGroupName" type="CUtlString" />
-- <ApiParam name="m_flTimeoutInterval" type="float" />
-- <ApiParam name="m_bAutoActivate" type="bool" />
-- <ApiParam name="m_bUnloadingStarted" type="bool" />
-- <ApiParam name="m_bQueueActiveSpawnGroupChange" type="bool" />
-- <ApiParam name="m_bQueueFinishLoading" type="bool" />
+| Field | Type |
+|---|---|
+| `m_OnSpawnGroupLoadStarted` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnSpawnGroupLoadFinished` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnSpawnGroupUnloadStarted` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnSpawnGroupUnloadFinished` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_iszSpawnGroupName` | `CUtlSymbolLarge` |
+| `m_iszSpawnGroupFilterName` | `CUtlSymbolLarge` |
+| `m_iszLandmarkName` | `CUtlSymbolLarge` |
+| `m_sFixedSpawnGroupName` | `CUtlString` |
+| `m_flTimeoutInterval` | `float` |
+| `m_bAutoActivate` | `bool` |
+| `m_bUnloadingStarted` | `bool` |
+| `m_bQueueActiveSpawnGroupChange` | `bool` |
+| `m_bQueueFinishLoading` | `bool` |
 
-## Methods
-
-### CInfoSpawnGroupLoadUnload* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CInfoSpawnGroupLoadUnload* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CInfoSpawnGroupLoadUnload* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CInfoSpawnGroupLoadUnload&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,63 +1,46 @@
 ---
-title: CPointCommentaryNode
+title: "CPointCommentaryNode"
+description: "Schema class CPointCommentaryNode, derived from CBaseAnimGraph."
 ---
 
-# CPointCommentaryNode
 
-**Inheritance**: CBaseAnimGraph
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointCommentaryNode.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointCommentaryNode.h)
+
+**Inherits** [`CBaseAnimGraph`](/docs/schema/entity/classes/CBaseAnimGraph)
 
 ## Fields
 
-- <ApiParam name="m_iszPreCommands" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszPostCommands" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszCommentaryFile" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszViewTarget" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hViewTarget" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_hViewTargetAngles" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_iszViewPosition" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hViewPosition" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_hViewPositionMover" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_bPreventMovement" type="bool" />
-- <ApiParam name="m_bUnderCrosshair" type="bool" />
-- <ApiParam name="m_bUnstoppable" type="bool" />
-- <ApiParam name="m_flFinishedTime" type="float" />
-- <ApiParam name="m_vecFinishOrigin" type="Vector" />
-- <ApiParam name="m_vecOriginalAngles" type="QAngle" />
-- <ApiParam name="m_vecFinishAngles" type="QAngle" />
-- <ApiParam name="m_bPreventChangesWhileMoving" type="bool" />
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_vecTeleportOrigin" type="Vector" />
-- <ApiParam name="m_flAbortedPlaybackAt" type="float" />
-- <ApiParam name="m_pOnCommentaryStarted" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_pOnCommentaryStopped" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bActive" type="bool" />
-- <ApiParam name="m_flStartTime" type="float" />
-- <ApiParam name="m_flStartTimeInCommentary" type="float" />
-- <ApiParam name="m_iszTitle" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszSpeakers" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iNodeNumber" type="int32_t" />
-- <ApiParam name="m_iNodeNumberMax" type="int32_t" />
-- <ApiParam name="m_bListenedTo" type="bool" />
+| Field | Type |
+|---|---|
+| `m_iszPreCommands` | `CUtlSymbolLarge` |
+| `m_iszPostCommands` | `CUtlSymbolLarge` |
+| `m_iszCommentaryFile` | `CUtlSymbolLarge` |
+| `m_iszViewTarget` | `CUtlSymbolLarge` |
+| `m_hViewTarget` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hViewTargetAngles` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_iszViewPosition` | `CUtlSymbolLarge` |
+| `m_hViewPosition` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hViewPositionMover` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_bPreventMovement` | `bool` |
+| `m_bUnderCrosshair` | `bool` |
+| `m_bUnstoppable` | `bool` |
+| `m_flFinishedTime` | `float` |
+| `m_vecFinishOrigin` | `Vector` |
+| `m_vecOriginalAngles` | `QAngle` |
+| `m_vecFinishAngles` | `QAngle` |
+| `m_bPreventChangesWhileMoving` | `bool` |
+| `m_bDisabled` | `bool` |
+| `m_vecTeleportOrigin` | `Vector` |
+| `m_flAbortedPlaybackAt` | `float` |
+| `m_pOnCommentaryStarted` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_pOnCommentaryStopped` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bActive` | `bool` |
+| `m_flStartTime` | `float` |
+| `m_flStartTimeInCommentary` | `float` |
+| `m_iszTitle` | `CUtlSymbolLarge` |
+| `m_iszSpeakers` | `CUtlSymbolLarge` |
+| `m_iNodeNumber` | `int32_t` |
+| `m_iNodeNumberMax` | `int32_t` |
+| `m_bListenedTo` | `bool` |
 
-## Methods
-
-### CPointCommentaryNode* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointCommentaryNode* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointCommentaryNode* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointCommentaryNode&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

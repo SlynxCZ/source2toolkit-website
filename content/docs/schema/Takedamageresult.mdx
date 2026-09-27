@@ -1,14 +1,45 @@
 ---
-title: Takedamageresult
+title: "CTakeDamageResult"
+description: "Engine structures the SDK declares by hand: CTakeDamageResult."
 ---
 
-# CTakeDamageResult
+
+**Header** [`source2toolkit/schema/takedamageresult.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/takedamageresult.h)
+
+## Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `m_pOriginatingInfo` | [`CTakeDamageInfo*`](/docs/schema/Takedamageinfo) |  |
+| `m_DestructibleHitGroupRequests` | `CUtlLeanVector<int>` | CUtlLeanVector&lt;DestructiblePartDamageRequest_t&gt; |
+| `m_nHealthLost` | `int32_t` |  |
+| `m_nHealthBefore` | `int32_t` |  |
+| `m_flDamageDealt` | `float` |  |
+| `m_flPreModifiedDamage` | `float` |  |
+| `m_nTotalledHealthLost` | `int32_t` |  |
+| `m_flTotalledDamageDealt` | `float` |  |
+| `m_flTotalledPreModifiedDamage` | `float` |  |
+| `m_flNewDamageAccumulatorValue` | `float` |  |
+| `m_nDamageFlags` | [`TakeDamageFlags_t`](/docs/schema/entity/enums/TakeDamageFlags_t) |  |
+| `m_bWasDamageSuppressed` | `bool` |  |
+| `m_bSuppressFlinch` | `bool` |  |
+| `m_nOverrideFlinchHitGroup` | `HitGroup_t` |  |
+
+## Constructors
+
+```cpp
+CTakeDamageResult() = delete;
+CTakeDamageResult(float damage);
+```
 
 ## Methods
 
-### CopyFrom(pInfo)
+### `CopyFrom`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+void CopyFrom(CTakeDamageInfo* pInfo);
+```
 
-- <ApiParam name="pInfo" type="[CTakeDamageInfo*](/docs/schema/Takedamageinfo)" />
-
+| Parameter | Type |
+|---|---|
+| `pInfo` | [`CTakeDamageInfo*`](/docs/schema/Takedamageinfo) |

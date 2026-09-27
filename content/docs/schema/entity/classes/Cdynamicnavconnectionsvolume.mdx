@@ -1,40 +1,23 @@
 ---
-title: CDynamicNavConnectionsVolume
+title: "CDynamicNavConnectionsVolume"
+description: "Schema class CDynamicNavConnectionsVolume, derived from CTriggerMultiple."
 ---
 
-# CDynamicNavConnectionsVolume
 
-**Inheritance**: CTriggerMultiple
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CDynamicNavConnectionsVolume.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CDynamicNavConnectionsVolume.h)
+
+**Inherits** [`CTriggerMultiple`](/docs/schema/entity/classes/CTriggerMultiple)
 
 ## Fields
 
-- <ApiParam name="m_iszConnectionTarget" type="CUtlSymbolLarge" />
-- <ApiParam name="m_vecConnections" type="CUtlVector&lt;DynamicVolumeDef_t&gt;" />
-- <ApiParam name="m_sTransitionType" type="CGlobalSymbol" />
-- <ApiParam name="m_bConnectionsEnabled" type="bool" />
-- <ApiParam name="m_flTargetAreaSearchRadius" type="float" />
-- <ApiParam name="m_flUpdateDistance" type="float" />
-- <ApiParam name="m_flMaxConnectionDistance" type="float" />
+| Field | Type |
+|---|---|
+| `m_iszConnectionTarget` | `CUtlSymbolLarge` |
+| `m_vecConnections` | [`CUtlVector<DynamicVolumeDef_t>`](/docs/schema/entity/classes/DynamicVolumeDef_t) |
+| `m_sTransitionType` | [`CGlobalSymbol`](/docs/core-api/Schema#cglobalsymbol) |
+| `m_bConnectionsEnabled` | `bool` |
+| `m_flTargetAreaSearchRadius` | `float` |
+| `m_flUpdateDistance` | `float` |
+| `m_flMaxConnectionDistance` | `float` |
 
-## Methods
-
-### CDynamicNavConnectionsVolume* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CDynamicNavConnectionsVolume* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CDynamicNavConnectionsVolume* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CDynamicNavConnectionsVolume&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,37 +1,20 @@
 ---
-title: CFuncMoverRouter
+title: "CFuncMoverRouter"
+description: "Schema class CFuncMoverRouter, derived from CLogicalEntity."
 ---
 
-# CFuncMoverRouter
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncMoverRouter.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncMoverRouter.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_nMoverIndex" type="int32_t" />
-- <ApiParam name="m_bRouteToAllMovers" type="bool" />
-- <ApiParam name="m_hPathMover" type="CHandle&lt;CPathMover&gt;" />
-- <ApiParam name="m_iszPathMoverName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_nMoverIndex` | `int32_t` |
+| `m_bRouteToAllMovers` | `bool` |
+| `m_hPathMover` | [`CHandle<CPathMover>`](/docs/schema/entity/classes/CPathMover) |
+| `m_iszPathMoverName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CFuncMoverRouter* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncMoverRouter* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncMoverRouter* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncMoverRouter&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,39 +1,22 @@
 ---
-title: CMessage
+title: "CMessage"
+description: "Schema class CMessage, derived from CPointEntity."
 ---
 
-# CMessage
 
-**Inheritance**: CPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMessage.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMessage.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszMessage" type="CUtlSymbolLarge" />
-- <ApiParam name="m_MessageVolume" type="float" />
-- <ApiParam name="m_MessageAttenuation" type="int32_t" />
-- <ApiParam name="m_Radius" type="float" />
-- <ApiParam name="m_sNoise" type="CGameSoundEventName" />
-- <ApiParam name="m_OnShowMessage" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_iszMessage` | `CUtlSymbolLarge` |
+| `m_MessageVolume` | `float` |
+| `m_MessageAttenuation` | `int32_t` |
+| `m_Radius` | `float` |
+| `m_sNoise` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_OnShowMessage` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CMessage* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMessage* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMessage* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMessage&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

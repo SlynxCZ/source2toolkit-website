@@ -1,35 +1,18 @@
 ---
-title: CPointGamestatsCounter
+title: "CPointGamestatsCounter"
+description: "Schema class CPointGamestatsCounter, derived from CPointEntity."
 ---
 
-# CPointGamestatsCounter
 
-**Inheritance**: CPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointGamestatsCounter.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointGamestatsCounter.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_strStatisticName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bDisabled" type="bool" />
+| Field | Type |
+|---|---|
+| `m_strStatisticName` | `CUtlSymbolLarge` |
+| `m_bDisabled` | `bool` |
 
-## Methods
-
-### CPointGamestatsCounter* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointGamestatsCounter* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointGamestatsCounter* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointGamestatsCounter&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

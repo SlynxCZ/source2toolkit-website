@@ -1,40 +1,23 @@
 ---
-title: CPointPush
+title: "CPointPush"
+description: "Schema class CPointPush, derived from CPointEntity."
 ---
 
-# CPointPush
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointPush.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointPush.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_bEnabled" type="bool" />
-- <ApiParam name="m_flMagnitude" type="float" />
-- <ApiParam name="m_flRadius" type="float" />
-- <ApiParam name="m_flInnerRadius" type="float" />
-- <ApiParam name="m_flConeOfInfluence" type="float" />
-- <ApiParam name="m_iszFilterName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hFilter" type="CHandle&lt;CBaseFilter&gt;" />
+| Field | Type |
+|---|---|
+| `m_bEnabled` | `bool` |
+| `m_flMagnitude` | `float` |
+| `m_flRadius` | `float` |
+| `m_flInnerRadius` | `float` |
+| `m_flConeOfInfluence` | `float` |
+| `m_iszFilterName` | `CUtlSymbolLarge` |
+| `m_hFilter` | [`CHandle<CBaseFilter>`](/docs/schema/entity/classes/CBaseFilter) |
 
-## Methods
-
-### CPointPush* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointPush* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointPush* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointPush&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

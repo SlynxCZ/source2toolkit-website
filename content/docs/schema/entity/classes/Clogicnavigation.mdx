@@ -1,35 +1,18 @@
 ---
-title: CLogicNavigation
+title: "CLogicNavigation"
+description: "Schema class CLogicNavigation, derived from CLogicalEntity."
 ---
 
-# CLogicNavigation
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicNavigation.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicNavigation.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_isOn" type="bool" />
-- <ApiParam name="m_navProperty" type="navproperties_t" />
+| Field | Type |
+|---|---|
+| `m_isOn` | `bool` |
+| `m_navProperty` | [`navproperties_t`](/docs/schema/entity/enums/navproperties_t) |
 
-## Methods
-
-### CLogicNavigation* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicNavigation* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicNavigation* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicNavigation&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

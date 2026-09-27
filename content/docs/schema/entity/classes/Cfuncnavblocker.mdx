@@ -1,35 +1,18 @@
 ---
-title: CFuncNavBlocker
+title: "CFuncNavBlocker"
+description: "Schema class CFuncNavBlocker, derived from CBaseModelEntity."
 ---
 
-# CFuncNavBlocker
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncNavBlocker.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncNavBlocker.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_nBlockedTeamNumber" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_bDisabled` | `bool` |
+| `m_nBlockedTeamNumber` | `int32_t` |
 
-## Methods
-
-### CFuncNavBlocker* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncNavBlocker* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncNavBlocker* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncNavBlocker&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

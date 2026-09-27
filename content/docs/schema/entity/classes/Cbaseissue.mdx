@@ -1,15 +1,20 @@
 ---
-title: CBaseIssue
+title: "CBaseIssue"
+description: "Schema class CBaseIssue."
 ---
 
-# CBaseIssue
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseIssue.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseIssue.h)
 
 ## Fields
 
-- <ApiParam name="m_szTypeString" type="char" />
-- <ApiParam name="m_szDetailsString" type="char" />
-- <ApiParam name="m_iNumYesVotes" type="int32_t" />
-- <ApiParam name="m_iNumNoVotes" type="int32_t" />
-- <ApiParam name="m_iNumPotentialVotes" type="int32_t" />
-- <ApiParam name="m_pVoteController" type="[CVoteController*](/docs/schema/entity/classes/Cvotecontroller)" />
+| Field | Type |
+|---|---|
+| `m_szTypeString` | `char` |
+| `m_szDetailsString` | `char` |
+| `m_iNumYesVotes` | `int32_t` |
+| `m_iNumNoVotes` | `int32_t` |
+| `m_iNumPotentialVotes` | `int32_t` |
+| `m_pVoteController` | [`CVoteController*`](/docs/schema/entity/classes/CVoteController) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

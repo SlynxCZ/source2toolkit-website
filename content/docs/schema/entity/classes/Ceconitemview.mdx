@@ -1,26 +1,31 @@
 ---
-title: CEconItemView
+title: "CEconItemView"
+description: "Schema class CEconItemView, derived from IEconItemInterface."
 ---
 
-# CEconItemView
 
-**Inheritance**: [IEconItemInterface](/docs/schema/entity/classes/Ieconiteminterface)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEconItemView.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEconItemView.h)
+
+**Inherits** [`IEconItemInterface`](/docs/schema/entity/classes/IEconItemInterface)
 
 ## Fields
 
-- <ApiParam name="m_iItemDefinitionIndex" type="uint16_t" />
-- <ApiParam name="m_iEntityQuality" type="int32_t" />
-- <ApiParam name="m_iEntityLevel" type="uint32_t" />
-- <ApiParam name="m_iItemID" type="uint64_t" />
-- <ApiParam name="m_iItemIDHigh" type="uint32_t" />
-- <ApiParam name="m_iItemIDLow" type="uint32_t" />
-- <ApiParam name="m_iAccountID" type="uint32_t" />
-- <ApiParam name="m_iInventoryPosition" type="uint32_t" />
-- <ApiParam name="m_bInitialized" type="bool" />
-- <ApiParam name="m_AttributeList" type="[CAttributeList](/docs/schema/entity/classes/Cattributelist)" />
-- <ApiParam name="m_NetworkedDynamicAttributes" type="[CAttributeList](/docs/schema/entity/classes/Cattributelist)" />
-- <ApiParam name="m_szCustomName" type="char" />
-- <ApiParam name="m_szCustomNameOverride" type="char" />
-- <ApiParam name="m_szCustomNameOverride2" type="char" />
-- <ApiParam name="m_szCustomNameOverride3" type="char" />
+| Field | Type |
+|---|---|
+| `m_iItemDefinitionIndex` | `uint16_t` |
+| `m_iEntityQuality` | `int32_t` |
+| `m_iEntityLevel` | `uint32_t` |
+| `m_iItemID` | `uint64_t` |
+| `m_iItemIDHigh` | `uint32_t` |
+| `m_iItemIDLow` | `uint32_t` |
+| `m_iAccountID` | `uint32_t` |
+| `m_iInventoryPosition` | `uint32_t` |
+| `m_bInitialized` | `bool` |
+| `m_AttributeList` | [`CAttributeList`](/docs/schema/entity/classes/CAttributeList) |
+| `m_NetworkedDynamicAttributes` | [`CAttributeList`](/docs/schema/entity/classes/CAttributeList) |
+| `m_szCustomName` | `char` |
+| `m_szCustomNameOverride` | `char` |
+| `m_szCustomNameOverride2` | `char` |
+| `m_szCustomNameOverride3` | `char` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

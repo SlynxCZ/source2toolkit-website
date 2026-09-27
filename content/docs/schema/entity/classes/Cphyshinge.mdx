@@ -1,52 +1,35 @@
 ---
-title: CPhysHinge
+title: "CPhysHinge"
+description: "Schema class CPhysHinge, derived from CPhysConstraint."
 ---
 
-# CPhysHinge
 
-**Inheritance**: [CPhysConstraint](/docs/schema/entity/classes/Cphysconstraint)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysHinge.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysHinge.h)
+
+**Inherits** [`CPhysConstraint`](/docs/schema/entity/classes/CPhysConstraint)
 
 ## Fields
 
-- <ApiParam name="m_soundInfo" type="[ConstraintSoundInfo](/docs/schema/entity/classes/Constraintsoundinfo)" />
-- <ApiParam name="m_NotifyMinLimitReached" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_NotifyMaxLimitReached" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bAtMinLimit" type="bool" />
-- <ApiParam name="m_bAtMaxLimit" type="bool" />
-- <ApiParam name="m_hinge" type="[constraint_hingeparams_t](/docs/schema/entity/classes/constraint_hingeparams_t)" />
-- <ApiParam name="m_hingeFriction" type="float" />
-- <ApiParam name="m_systemLoadScale" type="float" />
-- <ApiParam name="m_bIsAxisLocal" type="bool" />
-- <ApiParam name="m_flMinRotation" type="float" />
-- <ApiParam name="m_flMaxRotation" type="float" />
-- <ApiParam name="m_flInitialRotation" type="float" />
-- <ApiParam name="m_flMotorFrequency" type="float" />
-- <ApiParam name="m_flMotorDampingRatio" type="float" />
-- <ApiParam name="m_flAngleSpeed" type="float" />
-- <ApiParam name="m_flAngleSpeedThreshold" type="float" />
-- <ApiParam name="m_flLimitsDebugVisRotation" type="float" />
-- <ApiParam name="m_OnStartMoving" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnStopMoving" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_soundInfo` | [`ConstraintSoundInfo`](/docs/schema/entity/classes/ConstraintSoundInfo) |
+| `m_NotifyMinLimitReached` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_NotifyMaxLimitReached` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bAtMinLimit` | `bool` |
+| `m_bAtMaxLimit` | `bool` |
+| `m_hinge` | [`constraint_hingeparams_t`](/docs/schema/entity/classes/constraint_hingeparams_t) |
+| `m_hingeFriction` | `float` |
+| `m_systemLoadScale` | `float` |
+| `m_bIsAxisLocal` | `bool` |
+| `m_flMinRotation` | `float` |
+| `m_flMaxRotation` | `float` |
+| `m_flInitialRotation` | `float` |
+| `m_flMotorFrequency` | `float` |
+| `m_flMotorDampingRatio` | `float` |
+| `m_flAngleSpeed` | `float` |
+| `m_flAngleSpeedThreshold` | `float` |
+| `m_flLimitsDebugVisRotation` | `float` |
+| `m_OnStartMoving` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnStopMoving` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CPhysHinge* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysHinge* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysHinge* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysHinge&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

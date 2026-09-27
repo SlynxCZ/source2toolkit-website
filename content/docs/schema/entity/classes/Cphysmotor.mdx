@@ -1,48 +1,31 @@
 ---
-title: CPhysMotor
+title: "CPhysMotor"
+description: "Schema class CPhysMotor, derived from CLogicalEntity."
 ---
 
-# CPhysMotor
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysMotor.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysMotor.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_nameAttach" type="CUtlSymbolLarge" />
-- <ApiParam name="m_nameAnchor" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hAttachedObject" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_hAnchorObject" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_spinUp" type="float" />
-- <ApiParam name="m_spinDown" type="float" />
-- <ApiParam name="m_flMotorFriction" type="float" />
-- <ApiParam name="m_additionalAcceleration" type="float" />
-- <ApiParam name="m_angularAcceleration" type="float" />
-- <ApiParam name="m_flTorqueScale" type="float" />
-- <ApiParam name="m_flTargetSpeed" type="float" />
-- <ApiParam name="m_flSpeedWhenSpinUpOrSpinDownStarted" type="float" />
-- <ApiParam name="m_pFixedWorldBody" type="IPhysicsBody*" />
-- <ApiParam name="m_pMotorJoint" type="[IPhysicsJoint*](/docs/schema/entity/classes/Iphysicsjoint)" />
-- <ApiParam name="m_motor" type="[CMotorController](/docs/schema/entity/classes/Cmotorcontroller)" />
+| Field | Type |
+|---|---|
+| `m_nameAttach` | `CUtlSymbolLarge` |
+| `m_nameAnchor` | `CUtlSymbolLarge` |
+| `m_hAttachedObject` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hAnchorObject` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_spinUp` | `float` |
+| `m_spinDown` | `float` |
+| `m_flMotorFriction` | `float` |
+| `m_additionalAcceleration` | `float` |
+| `m_angularAcceleration` | `float` |
+| `m_flTorqueScale` | `float` |
+| `m_flTargetSpeed` | `float` |
+| `m_flSpeedWhenSpinUpOrSpinDownStarted` | `float` |
+| `m_pFixedWorldBody` | [`IPhysicsBody*`](/docs/schema/entity/classes/IPhysicsBody) |
+| `m_pMotorJoint` | [`IPhysicsJoint*`](/docs/schema/entity/classes/IPhysicsJoint) |
+| `m_motor` | [`CMotorController`](/docs/schema/entity/classes/CMotorController) |
 
-## Methods
-
-### CPhysMotor* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysMotor* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysMotor* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysMotor&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

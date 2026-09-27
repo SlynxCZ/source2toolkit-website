@@ -1,41 +1,24 @@
 ---
-title: CCitadelSoundOpvarSetOBB
+title: "CCitadelSoundOpvarSetOBB"
+description: "Schema class CCitadelSoundOpvarSetOBB, derived from CBaseEntity."
 ---
 
-# CCitadelSoundOpvarSetOBB
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCitadelSoundOpvarSetOBB.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCitadelSoundOpvarSetOBB.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszStackName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszOperatorName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszOpvarName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_vDistanceInnerMins" type="Vector" />
-- <ApiParam name="m_vDistanceInnerMaxs" type="Vector" />
-- <ApiParam name="m_vDistanceOuterMins" type="Vector" />
-- <ApiParam name="m_vDistanceOuterMaxs" type="Vector" />
-- <ApiParam name="m_nAABBDirection" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_iszStackName` | `CUtlSymbolLarge` |
+| `m_iszOperatorName` | `CUtlSymbolLarge` |
+| `m_iszOpvarName` | `CUtlSymbolLarge` |
+| `m_vDistanceInnerMins` | `Vector` |
+| `m_vDistanceInnerMaxs` | `Vector` |
+| `m_vDistanceOuterMins` | `Vector` |
+| `m_vDistanceOuterMaxs` | `Vector` |
+| `m_nAABBDirection` | `int32_t` |
 
-## Methods
-
-### CCitadelSoundOpvarSetOBB* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CCitadelSoundOpvarSetOBB* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CCitadelSoundOpvarSetOBB* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CCitadelSoundOpvarSetOBB&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

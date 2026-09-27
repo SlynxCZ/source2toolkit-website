@@ -1,26 +1,31 @@
 ---
-title: CEnvWindShared
+title: "CEnvWindShared"
+description: "Schema class CEnvWindShared."
 ---
 
-# CEnvWindShared
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvWindShared.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvWindShared.h)
 
 ## Fields
 
-- <ApiParam name="m_flStartTime" type="float" />
-- <ApiParam name="m_iWindSeed" type="uint32_t" />
-- <ApiParam name="m_iMinWind" type="uint16_t" />
-- <ApiParam name="m_iMaxWind" type="uint16_t" />
-- <ApiParam name="m_windRadius" type="int32_t" />
-- <ApiParam name="m_iMinGust" type="uint16_t" />
-- <ApiParam name="m_iMaxGust" type="uint16_t" />
-- <ApiParam name="m_flMinGustDelay" type="float" />
-- <ApiParam name="m_flMaxGustDelay" type="float" />
-- <ApiParam name="m_flGustDuration" type="float" />
-- <ApiParam name="m_iGustDirChange" type="uint16_t" />
-- <ApiParam name="m_iInitialWindDir" type="uint16_t" />
-- <ApiParam name="m_flInitialWindSpeed" type="float" />
-- <ApiParam name="m_location" type="Vector" />
-- <ApiParam name="m_OnGustStart" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnGustEnd" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_hEntOwner" type="CHandle&lt;CBaseEntity&gt;" />
+| Field | Type |
+|---|---|
+| `m_flStartTime` | `float` |
+| `m_iWindSeed` | `uint32_t` |
+| `m_iMinWind` | `uint16_t` |
+| `m_iMaxWind` | `uint16_t` |
+| `m_windRadius` | `int32_t` |
+| `m_iMinGust` | `uint16_t` |
+| `m_iMaxGust` | `uint16_t` |
+| `m_flMinGustDelay` | `float` |
+| `m_flMaxGustDelay` | `float` |
+| `m_flGustDuration` | `float` |
+| `m_iGustDirChange` | `uint16_t` |
+| `m_iInitialWindDir` | `uint16_t` |
+| `m_flInitialWindSpeed` | `float` |
+| `m_location` | `Vector` |
+| `m_OnGustStart` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnGustEnd` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_hEntOwner` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

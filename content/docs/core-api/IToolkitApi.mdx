@@ -1,276 +1,540 @@
 ---
-title: IToolkitApi
+title: "IToolkitApi"
+description: "Main entry point for Source2Toolkit API."
 ---
 
-# IToolkitAPI
+
+This interface provides access to:
+- Core engine interfaces
+- Toolkit subsystems (Commands, Events, ConVars, etc.)
+- Logging and console output
+- Interface querying and factory access
+
+<Callout type="info">This is the primary interface passed to plugins during initialization.</Callout>
+
+Main API interface for Source2Toolkit.
+
+Provides access to all toolkit subsystems and engine interfaces.
+
+```cpp
+api->Commands()->RegisterConCommand(...);
+api->Events()->HookGameEvent(...);
+```
+
+**Global** `g_ToolkitAPI` · **Header** [`source2toolkit/IToolkitApi.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitApi.h)
+
+## Types
+
+### `PluginId`
+
+```cpp
+using PluginId = int;
+```
+
+### `CreateInterfaceFn`
+
+```cpp
+typedef void* (*CreateInterfaceFn)(const char* pName, int* pReturnCode);
+```
 
 ## Methods
 
-### Log(plugin, msg, )
+### `Log`
+
+```cpp
+virtual void Log(IToolkitPlugin* plugin, const char* msg, ...) = 0;
+```
 
 Logs a formatted message with plugin context.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `plugin` | [`IToolkitPlugin*`](/docs/core-api/IToolkitPlugin) | Plugin instance |
+| `msg` | `const char*` | Format string |
+| `—` | `...` |  |
 
-- <ApiParam name="plugin" type="[IToolkitPlugin*](/docs/core-api/IToolkitPlugin)" /> — Plugin instance
-- <ApiParam name="msg" type="const char*" /> — Format string
-- <ApiParam type="..." />
+### `ConPrint`
 
-### ConPrint(msg)
+```cpp
+virtual void ConPrint(const char* msg) = 0;
+```
 
 Prints message to console.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `msg` | `const char*` |
 
-- <ApiParam name="msg" type="const char*" />
+### `ConPrintf`
 
-### ConPrintf(fmt, )
+```cpp
+virtual void ConPrintf(const char* fmt, ...) = 0;
+```
 
 Prints formatted message to console.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `fmt` | `const char*` |
+| `—` | `...` |
 
-- <ApiParam name="fmt" type="const char*" />
-- <ApiParam type="..." />
+### `AddListener`
 
-### AddListener(plugin, pListener)
+```cpp
+virtual void AddListener(IToolkitPlugin* plugin, IToolkitListener* pListener) = 0;
+```
 
 Registers a toolkit listener.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `plugin` | [`IToolkitPlugin*`](/docs/core-api/IToolkitPlugin) | Owner plugin |
+| `pListener` | [`IToolkitListener*`](/docs/core-api/IToolkitPlugin#itoolkitlistener) | Listener instance |
 
-- <ApiParam name="plugin" type="[IToolkitPlugin*](/docs/core-api/IToolkitPlugin)" /> — Owner plugin
-- <ApiParam name="pListener" type="[IToolkitListener*](/docs/core-api/IToolkitPlugin)" /> — Listener instance
+### `QueryInterface`
 
-### void* QueryInterface(fn, iface, min)
+```cpp
+virtual void* QueryInterface(CreateInterfaceFn fn, const char* iface, int min = -1) = 0;
+```
 
 Queries interface from factory.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `fn` | [`CreateInterfaceFn`](/docs/core-api/IToolkitApi#createinterfacefn) |  | Factory function |
+| `iface` | `const char*` |  | Interface name |
+| `min` | `int` | `-1` | Minimum version (optional) |
 
-- <ApiParam name="fn" type="CreateInterfaceFn" /> — Factory function
-- <ApiParam name="iface" type="const char*" /> — Interface name
-- <ApiParam name="min" type="int" /> — Minimum version (optional)
+### `InterfaceSearch`
 
-### void* InterfaceSearch(fn, iface, max, ret)
+```cpp
+virtual void* InterfaceSearch(CreateInterfaceFn fn, const char* iface, int max, int* ret) = 0;
+```
 
 Searches for interface by iterating versions.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `fn` | [`CreateInterfaceFn`](/docs/core-api/IToolkitApi#createinterfacefn) |
+| `iface` | `const char*` |
+| `max` | `int` |
+| `ret` | `int*` |
 
-- <ApiParam name="fn" type="CreateInterfaceFn" />
-- <ApiParam name="iface" type="const char*" />
-- <ApiParam name="max" type="int" />
-- <ApiParam name="ret" type="int*" />
+### `FormatIface`
 
-### int FormatIface(, maxlength)
+```cpp
+virtual int FormatIface(char iface[], size_t maxlength) = 0;
+```
 
 Formats interface name with version.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `iface` | `char []` |
+| `maxlength` | `size_t` |
 
-- <ApiParam type="char iface[]" />
-- <ApiParam name="maxlength" type="size_t" />
+### `GetEngineFactory`
 
-### CreateInterfaceFn GetEngineFactory(syn)
+```cpp
+virtual CreateInterfaceFn GetEngineFactory(bool syn = true) = 0;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `syn` | `bool` | `true` |
 
-- <ApiParam name="syn" type="bool" />
+### `GetPhysicsFactory`
 
-### CreateInterfaceFn GetPhysicsFactory(syn)
+```cpp
+virtual CreateInterfaceFn GetPhysicsFactory(bool syn = true) = 0;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `syn` | `bool` | `true` |
 
-- <ApiParam name="syn" type="bool" />
+### `GetFileSystemFactory`
 
-### CreateInterfaceFn GetFileSystemFactory(syn)
+```cpp
+virtual CreateInterfaceFn GetFileSystemFactory(bool syn = true) = 0;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `syn` | `bool` | `true` |
 
-- <ApiParam name="syn" type="bool" />
+### `GetServerFactory`
 
-### CreateInterfaceFn GetServerFactory(syn)
+```cpp
+virtual CreateInterfaceFn GetServerFactory(bool syn = true) = 0;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `syn` | `bool` | `true` |
 
-- <ApiParam name="syn" type="bool" />
+### `ToolkitFactory`
 
-### void* ToolkitFactory(iface, ret, id)
+```cpp
+virtual void* ToolkitFactory(const char* iface, int* ret, PluginId* id) = 0;
+```
 
 Toolkit interface factory.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `iface` | `const char*` |
+| `ret` | `int*` |
+| `id` | [`PluginId*`](/docs/core-api/IToolkitApi#pluginid) |
 
-- <ApiParam name="iface" type="const char*" />
-- <ApiParam name="ret" type="int*" />
-- <ApiParam name="id" type="PluginId*" />
+### `MetaFactory`
 
-### void* MetaFactory(iface, ret, id)
+```cpp
+virtual void* MetaFactory(const char* iface, int* ret, PluginId* id) = 0;
+```
 
 Metamod interface factory.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `iface` | `const char*` |
+| `ret` | `int*` |
+| `id` | [`PluginId*`](/docs/core-api/IToolkitApi#pluginid) |
 
-- <ApiParam name="iface" type="const char*" />
-- <ApiParam name="ret" type="int*" />
-- <ApiParam name="id" type="PluginId*" />
+### `Addresses`
 
-### IToolkitAddresses* Addresses()
+```cpp
+virtual IToolkitAddresses* Addresses() = 0;
+```
 
 Access address/pattern system.
 
-### IToolkitCommands* Commands()
+### `Commands`
+
+```cpp
+virtual IToolkitCommands* Commands() = 0;
+```
 
 Access command system.
 
-### IToolkitConVars* ConVars()
+### `ConVars`
+
+```cpp
+virtual IToolkitConVars* ConVars() = 0;
+```
 
 Access ConVar system.
 
-### IToolkitCustomHud* CustomHud()
+### `CustomHud`
+
+```cpp
+virtual IToolkitCustomHud* CustomHud() = 0;
+```
 
 Access custom HUD layout system.
 
-### IToolkitEntities* Entities()
+### `Entities`
+
+```cpp
+virtual IToolkitEntities* Entities() = 0;
+```
 
 Access entities and Entity I/O system.
 
-### IToolkitEvents* Events()
+### `Events`
+
+```cpp
+virtual IToolkitEvents* Events() = 0;
+```
 
 Access event system.
 
-### IToolkitGameConfig* GameConfig()
+### `GameConfig`
+
+```cpp
+virtual IToolkitGameConfig* GameConfig() = 0;
+```
 
 Access game configuration system.
 
-### IToolkitGameSystems* GameSystems()
+### `GameSystems`
+
+```cpp
+virtual IToolkitGameSystems* GameSystems() = 0;
+```
 
 Access game system registry.
 
-### IToolkitHTTP* HTTP()
+### `HTTP`
+
+```cpp
+virtual IToolkitHTTP* HTTP() = 0;
+```
 
 Access HTTP system.
 
-### IToolkitMenus* Menus()
+### `Menus`
+
+```cpp
+virtual IToolkitMenus* Menus() = 0;
+```
 
 Access menu system.
 
-### IToolkitMySQL* MySQL()
+### `MySQL`
+
+```cpp
+virtual IToolkitMySQL* MySQL() = 0;
+```
 
 Access mysql system.
 
-### IToolkitNetworkMessages* NetworkMessages()
+### `NetworkMessages`
+
+```cpp
+virtual IToolkitNetworkMessages* NetworkMessages() = 0;
+```
 
 Access network messages system.
 
-### IToolkitPaths* Paths()
+### `Paths`
+
+```cpp
+virtual IToolkitPaths* Paths() = 0;
+```
 
 Where the toolkit keeps things on disk.
 
-### IToolkitScheduler* Scheduler()
+### `Scheduler`
+
+```cpp
+virtual IToolkitScheduler* Scheduler() = 0;
+```
 
 Access scheduler system.
 
-### IToolkitSounds* Sounds()
+### `Sounds`
+
+```cpp
+virtual IToolkitSounds* Sounds() = 0;
+```
 
 Access sound system.
 
-### IToolkitTrace* Trace()
+### `Trace`
+
+```cpp
+virtual IToolkitTrace* Trace() = 0;
+```
 
 Access tracing system.
 
-### IToolkitTransmit* Transmit()
+### `Transmit`
+
+```cpp
+virtual IToolkitTransmit* Transmit() = 0;
+```
 
 Access transmit system (per-viewer entity visibility).
 
-### IToolkitModule* LoadModule(name)
+### `LoadModule`
+
+```cpp
+virtual IToolkitModule* LoadModule(const char* name) = 0;
+```
 
 Creates and initialises a module wrapper by name.
 
-<ApiLabel>Parameters</ApiLabel>
+The returned object must be released with FreeModule().
 
-- <ApiParam name="name" type="const char*" /> — Module name without extension (e.g. "server").
+| Parameter | Type | Description |
+|---|---|---|
+| `name` | `const char*` | Module name without extension (e.g. "server"). |
 
-### IToolkitModule* LoadModuleFromMemory(ptr)
+**Returns** [`IToolkitModule*`](/docs/core-api/IToolkitModule) — Heap-allocated IToolkitModule, or nullptr on failure.
+
+### `LoadModuleFromMemory`
+
+```cpp
+virtual IToolkitModule* LoadModuleFromMemory(uintptr_t ptr) = 0;
+```
 
 Creates and initialises a module wrapper from an address inside it.
 
-<ApiLabel>Parameters</ApiLabel>
+The returned object must be released with FreeModule().
 
-- <ApiParam name="ptr" type="uintptr_t" /> — Any address that belongs to the target module.
+| Parameter | Type | Description |
+|---|---|---|
+| `ptr` | `uintptr_t` | Any address that belongs to the target module. |
 
-### FreeModule(module)
+**Returns** [`IToolkitModule*`](/docs/core-api/IToolkitModule) — Heap-allocated IToolkitModule, or nullptr on failure.
+
+### `FreeModule`
+
+```cpp
+virtual void FreeModule(IToolkitModule* module) = 0;
+```
 
 Releases a module previously obtained from LoadModule() / LoadModuleFromMemory().
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `module` | [`IToolkitModule*`](/docs/core-api/IToolkitModule) |
 
-- <ApiParam name="module" type="[IToolkitModule*](/docs/core-api/IToolkitModule)" />
+### `GetSource2Server`
 
-### ISource2Server* GetSource2Server()
+```cpp
+virtual ISource2Server* GetSource2Server() = 0;
+```
 
-### ISource2ServerConfig* GetSource2ServerConfig()
+### `GetSource2ServerConfig`
 
-### ISource2GameClients* GetSource2GameClients()
+```cpp
+virtual ISource2ServerConfig* GetSource2ServerConfig() = 0;
+```
 
-### ISource2GameEntities* GetSource2GameEntities()
+### `GetSource2GameClients`
 
-### IVEngineServer2* GetEngineServer()
+```cpp
+virtual ISource2GameClients* GetSource2GameClients() = 0;
+```
 
-### ICvar* GetCVar()
+### `GetSource2GameEntities`
 
-### CSchemaSystem* GetSchemaSystem()
+```cpp
+virtual ISource2GameEntities* GetSource2GameEntities() = 0;
+```
 
-### IGameResourceService* GetGameResourceService()
+### `GetEngineServer`
 
-### INetworkServerService* GetNetworkServerService()
+```cpp
+virtual IVEngineServer2* GetEngineServer() = 0;
+```
 
-### INetworkSystem* GetNetworkSystem()
+### `GetCVar`
 
-### INetworkMessages* GetNetworkMessages()
+```cpp
+virtual ICvar* GetCVar() = 0;
+```
 
-### INetworkStringTableContainer* GetNetworkStringTableServer()
+### `GetSchemaSystem`
 
-### IEngineServiceMgr* GetEngineServiceMgr()
+```cpp
+virtual CSchemaSystem* GetSchemaSystem() = 0;
+```
 
-### IHostStateMgr* GetHostStateMgr()
+### `GetGameResourceService`
 
-### ILocalize* GetLocalize()
+```cpp
+virtual IGameResourceService* GetGameResourceService() = 0;
+```
 
-### IFileSystem* GetFileSystem()
+### `GetNetworkServerService`
 
-### IGameEventSystem* GetGameEventSystem()
+```cpp
+virtual INetworkServerService* GetNetworkServerService() = 0;
+```
 
-### IGameEventManager2* GetGameEventManager()
+### `GetNetworkSystem`
 
-### CGameEntitySystem* GetEntitySystem()
+```cpp
+virtual INetworkSystem* GetNetworkSystem() = 0;
+```
 
-### CGlobalVars* GetGlobalVars()
+### `GetNetworkMessages`
 
-### const char* GetBaseDir()
+```cpp
+virtual INetworkMessages* GetNetworkMessages() = 0;
+```
+
+### `GetNetworkStringTableServer`
+
+```cpp
+virtual INetworkStringTableContainer* GetNetworkStringTableServer() = 0;
+```
+
+### `GetEngineServiceMgr`
+
+```cpp
+virtual IEngineServiceMgr* GetEngineServiceMgr() = 0;
+```
+
+### `GetHostStateMgr`
+
+```cpp
+virtual IHostStateMgr* GetHostStateMgr() = 0;
+```
+
+### `GetLocalize`
+
+```cpp
+virtual ILocalize* GetLocalize() = 0;
+```
+
+### `GetFileSystem`
+
+```cpp
+virtual IFileSystem* GetFileSystem() = 0;
+```
+
+### `GetGameEventSystem`
+
+```cpp
+virtual IGameEventSystem* GetGameEventSystem() = 0;
+```
+
+### `GetGameEventManager`
+
+```cpp
+virtual IGameEventManager2* GetGameEventManager() = 0;
+```
+
+### `GetEntitySystem`
+
+```cpp
+virtual CGameEntitySystem* GetEntitySystem() = 0;
+```
+
+### `GetGlobalVars`
+
+```cpp
+virtual CGlobalVars* GetGlobalVars() = 0;
+```
+
+### `GetBaseDir`
+
+```cpp
+virtual const char* GetBaseDir() = 0;
+```
 
 Returns base directory of the server.
 
-### size_t Format(buffer, maxlength, format, )
+### `Format`
+
+```cpp
+virtual size_t Format(char* buffer, size_t maxlength, const char* format, ...) = 0;
+```
 
 Formats string into buffer.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `buffer` | `char*` |
+| `maxlength` | `size_t` |
+| `format` | `const char*` |
+| `—` | `...` |
 
-- <ApiParam name="buffer" type="char*" />
-- <ApiParam name="maxlength" type="size_t" />
-- <ApiParam name="format" type="const char*" />
-- <ApiParam type="..." />
+### `FormatArgs`
 
-### size_t FormatArgs(buffer, maxlength, format, ap)
+```cpp
+virtual size_t FormatArgs(char* buffer, size_t maxlength, const char* format, va_list ap) = 0;
+```
 
 Formats string using va_list.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="buffer" type="char*" />
-- <ApiParam name="maxlength" type="size_t" />
-- <ApiParam name="format" type="const char*" />
-- <ApiParam name="ap" type="va_list" />
-
+| Parameter | Type |
+|---|---|
+| `buffer` | `char*` |
+| `maxlength` | `size_t` |
+| `format` | `const char*` |
+| `ap` | `va_list` |

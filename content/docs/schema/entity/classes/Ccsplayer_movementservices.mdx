@@ -1,61 +1,66 @@
 ---
-title: CCSPlayer_MovementServices
+title: "CCSPlayer_MovementServices"
+description: "Schema class CCSPlayer_MovementServices, derived from CPlayer_MovementServices_Humanoid."
 ---
 
-# CCSPlayer_MovementServices
 
-**Inheritance**: CPlayer_MovementServices_Humanoid
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSPlayer_MovementServices.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSPlayer_MovementServices.h)
+
+**Inherits** [`CPlayer_MovementServices_Humanoid`](/docs/schema/entity/classes/CPlayer_MovementServices_Humanoid)
 
 ## Fields
 
-- <ApiParam name="m_AnimationState" type="CCSPlayerAnimationState" />
-- <ApiParam name="m_bUsingGroundTopologyOffset" type="bool" />
-- <ApiParam name="m_flUsingGroundTopologyOffsetTransitionSmoothing" type="float" />
-- <ApiParam name="m_vecLadderNormal" type="Vector" />
-- <ApiParam name="m_nLadderSurfacePropIndex" type="int32_t" />
-- <ApiParam name="m_bDucked" type="bool" />
-- <ApiParam name="m_flDuckAmount" type="float" />
-- <ApiParam name="m_flDuckSpeed" type="float" />
-- <ApiParam name="m_bDuckOverride" type="bool" />
-- <ApiParam name="m_bDesiresDuck" type="bool" />
-- <ApiParam name="m_bDucking" type="bool" />
-- <ApiParam name="m_flDuckRootOffset" type="float" />
-- <ApiParam name="m_flDuckViewOffset" type="float" />
-- <ApiParam name="m_flLastDuckTime" type="float" />
-- <ApiParam name="m_flBombPlantViewOffset" type="float" />
-- <ApiParam name="m_vecLastPositionAtFullCrouchSpeed" type="Vector2D" />
-- <ApiParam name="m_duckUntilOnGround" type="bool" />
-- <ApiParam name="m_bHasWalkMovedSinceLastJump" type="bool" />
-- <ApiParam name="m_bInStuckTest" type="bool" />
-- <ApiParam name="m_nTraceCount" type="int32_t" />
-- <ApiParam name="m_StuckLast" type="int32_t" />
-- <ApiParam name="m_bSpeedCropped" type="bool" />
-- <ApiParam name="m_nOldWaterLevel" type="int32_t" />
-- <ApiParam name="m_flWaterEntryTime" type="float" />
-- <ApiParam name="m_vecForward" type="Vector" />
-- <ApiParam name="m_vecLeft" type="Vector" />
-- <ApiParam name="m_vecUp" type="Vector" />
-- <ApiParam name="m_nGameCodeHasMovedPlayerAfterCommand" type="int32_t" />
-- <ApiParam name="m_bMadeFootstepNoise" type="bool" />
-- <ApiParam name="m_iFootsteps" type="int32_t" />
-- <ApiParam name="m_fStashGrenadeParameterWhen" type="float" />
-- <ApiParam name="m_bUseFrictionStashedSpeed" type="bool" />
-- <ApiParam name="m_flUseFrictionStashedSpeedUntilFrac" type="float" />
-- <ApiParam name="m_flFrictionStashedSpeed" type="float" />
-- <ApiParam name="m_flStamina" type="float" />
-- <ApiParam name="m_flHeightAtJumpStart" type="float" />
-- <ApiParam name="m_flMaxJumpHeightThisJump" type="float" />
-- <ApiParam name="m_flMaxJumpHeightLastJump" type="float" />
-- <ApiParam name="m_flStaminaAtJumpStart" type="float" />
-- <ApiParam name="m_flVelMulAtJumpStart" type="float" />
-- <ApiParam name="m_flAccumulatedJumpError" type="float" />
-- <ApiParam name="m_LegacyJump" type="CCSPlayerLegacyJump" />
-- <ApiParam name="m_ModernJump" type="CCSPlayerModernJump" />
-- <ApiParam name="m_nLastJumpTick" type="int32_t" />
-- <ApiParam name="m_flLastJumpFrac" type="float" />
-- <ApiParam name="m_flLastJumpVelocityZ" type="float" />
-- <ApiParam name="m_bJumpApexPending" type="bool" />
-- <ApiParam name="m_flTicksSinceLastSurfingDetected" type="float" />
-- <ApiParam name="m_vecWalkWishVel" type="Vector2D" />
-- <ApiParam name="m_bHasEverProcessedCommand" type="bool" />
+| Field | Type |
+|---|---|
+| `m_AnimationState` | [`CCSPlayerAnimationState`](/docs/schema/entity/classes/CCSPlayerAnimationState) |
+| `m_bUsingGroundTopologyOffset` | `bool` |
+| `m_flUsingGroundTopologyOffsetTransitionSmoothing` | `float` |
+| `m_vecLadderNormal` | `Vector` |
+| `m_nLadderSurfacePropIndex` | `int32_t` |
+| `m_bDucked` | `bool` |
+| `m_flDuckAmount` | `float` |
+| `m_flDuckSpeed` | `float` |
+| `m_bDuckOverride` | `bool` |
+| `m_bDesiresDuck` | `bool` |
+| `m_bDucking` | `bool` |
+| `m_flDuckRootOffset` | `float` |
+| `m_flDuckViewOffset` | `float` |
+| `m_flLastDuckTime` | `float` |
+| `m_flBombPlantViewOffset` | `float` |
+| `m_vecLastPositionAtFullCrouchSpeed` | `Vector2D` |
+| `m_duckUntilOnGround` | `bool` |
+| `m_bHasWalkMovedSinceLastJump` | `bool` |
+| `m_bInStuckTest` | `bool` |
+| `m_nTraceCount` | `int32_t` |
+| `m_StuckLast` | `int32_t` |
+| `m_bSpeedCropped` | `bool` |
+| `m_nOldWaterLevel` | `int32_t` |
+| `m_flWaterEntryTime` | `float` |
+| `m_vecForward` | `Vector` |
+| `m_vecLeft` | `Vector` |
+| `m_vecUp` | `Vector` |
+| `m_nGameCodeHasMovedPlayerAfterCommand` | `int32_t` |
+| `m_bMadeFootstepNoise` | `bool` |
+| `m_iFootsteps` | `int32_t` |
+| `m_fStashGrenadeParameterWhen` | `float` |
+| `m_bUseFrictionStashedSpeed` | `bool` |
+| `m_flUseFrictionStashedSpeedUntilFrac` | `float` |
+| `m_flFrictionStashedSpeed` | `float` |
+| `m_flStamina` | `float` |
+| `m_flHeightAtJumpStart` | `float` |
+| `m_flMaxJumpHeightThisJump` | `float` |
+| `m_flMaxJumpHeightLastJump` | `float` |
+| `m_flStaminaAtJumpStart` | `float` |
+| `m_flVelMulAtJumpStart` | `float` |
+| `m_flAccumulatedJumpError` | `float` |
+| `m_LegacyJump` | [`CCSPlayerLegacyJump`](/docs/schema/entity/classes/CCSPlayerLegacyJump) |
+| `m_ModernJump` | [`CCSPlayerModernJump`](/docs/schema/entity/classes/CCSPlayerModernJump) |
+| `m_nLastJumpTick` | `int32_t` |
+| `m_flLastJumpFrac` | `float` |
+| `m_flLastJumpVelocityZ` | `float` |
+| `m_bJumpApexPending` | `bool` |
+| `m_flTicksSinceLastSurfingDetected` | `float` |
+| `m_vecWalkWishVel` | `Vector2D` |
+| `m_bHasEverProcessedCommand` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

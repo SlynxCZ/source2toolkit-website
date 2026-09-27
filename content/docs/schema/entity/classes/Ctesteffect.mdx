@@ -1,38 +1,21 @@
 ---
-title: CTestEffect
+title: "CTestEffect"
+description: "Schema class CTestEffect, derived from CBaseEntity."
 ---
 
-# CTestEffect
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTestEffect.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTestEffect.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_iLoop" type="int32_t" />
-- <ApiParam name="m_iBeam" type="int32_t" />
-- <ApiParam name="m_pBeam" type="CHandle&lt;CBeam&gt;" />
-- <ApiParam name="m_flBeamTime" type="float" />
-- <ApiParam name="m_flStartTime" type="float" />
+| Field | Type |
+|---|---|
+| `m_iLoop` | `int32_t` |
+| `m_iBeam` | `int32_t` |
+| `m_pBeam` | [`CHandle<CBeam>`](/docs/schema/entity/classes/CBeam) |
+| `m_flBeamTime` | `float` |
+| `m_flStartTime` | `float` |
 
-## Methods
-
-### CTestEffect* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTestEffect* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTestEffect* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTestEffect&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

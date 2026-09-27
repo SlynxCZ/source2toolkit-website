@@ -1,40 +1,23 @@
 ---
-title: CPointEntityFinder
+title: "CPointEntityFinder"
+description: "Schema class CPointEntityFinder, derived from CBaseEntity."
 ---
 
-# CPointEntityFinder
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointEntityFinder.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointEntityFinder.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_hEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_iFilterName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hFilter" type="CHandle&lt;CBaseFilter&gt;" />
-- <ApiParam name="m_iRefName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hReference" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_FindMethod" type="EntFinderMethod_t" />
-- <ApiParam name="m_OnFoundEntity" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_hEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_iFilterName` | `CUtlSymbolLarge` |
+| `m_hFilter` | [`CHandle<CBaseFilter>`](/docs/schema/entity/classes/CBaseFilter) |
+| `m_iRefName` | `CUtlSymbolLarge` |
+| `m_hReference` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_FindMethod` | [`EntFinderMethod_t`](/docs/schema/entity/enums/EntFinderMethod_t) |
+| `m_OnFoundEntity` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CPointEntityFinder* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointEntityFinder* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointEntityFinder* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointEntityFinder&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

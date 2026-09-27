@@ -1,37 +1,20 @@
 ---
-title: CLogicActivityEvent
+title: "CLogicActivityEvent"
+description: "Schema class CLogicActivityEvent, derived from CLogicalEntity."
 ---
 
-# CLogicActivityEvent
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicActivityEvent.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicActivityEvent.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_nEventType" type="int32_t" />
-- <ApiParam name="m_flDuration" type="float" />
-- <ApiParam name="m_iszSourceEntityName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hSource" type="CEntityHandle" />
+| Field | Type |
+|---|---|
+| `m_nEventType` | `int32_t` |
+| `m_flDuration` | `float` |
+| `m_iszSourceEntityName` | `CUtlSymbolLarge` |
+| `m_hSource` | `CEntityHandle` |
 
-## Methods
-
-### CLogicActivityEvent* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicActivityEvent* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicActivityEvent* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicActivityEvent&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,15 +1,20 @@
 ---
-title: CAttributeManager
+title: "CAttributeManager"
+description: "Schema class CAttributeManager."
 ---
 
-# CAttributeManager
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CAttributeManager.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CAttributeManager.h)
 
 ## Fields
 
-- <ApiParam name="m_Providers" type="CUtlVector&lt;CHandle&lt;CBaseEntity&gt;&gt;" />
-- <ApiParam name="m_iReapplyProvisionParity" type="int32_t" />
-- <ApiParam name="m_hOuter" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_bPreventLoopback" type="bool" />
-- <ApiParam name="m_ProviderType" type="attributeprovidertypes_t" />
-- <ApiParam name="m_CachedResults" type="CUtlVector&lt;CAttributeManager__cached_attribute_float_t&gt;" />
+| Field | Type |
+|---|---|
+| `m_Providers` | [`CUtlVector<CHandle<CBaseEntity>>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_iReapplyProvisionParity` | `int32_t` |
+| `m_hOuter` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_bPreventLoopback` | `bool` |
+| `m_ProviderType` | [`attributeprovidertypes_t`](/docs/schema/entity/enums/attributeprovidertypes_t) |
+| `m_CachedResults` | [`CUtlVector<CAttributeManager__cached_attribute_float_t>`](/docs/schema/entity/classes/CAttributeManager__cached_attribute_float_t) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,56 +1,49 @@
 ---
-title: CCSPlayerPawnBase
+title: "CCSPlayerPawnBase"
+description: "Schema class CCSPlayerPawnBase, derived from CBasePlayerPawn."
 ---
 
-# CCSPlayerPawnBase
 
-**Inheritance**: CBasePlayerPawn
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSPlayerPawnBase.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSPlayerPawnBase.h)
+
+**Inherits** [`CBasePlayerPawn`](/docs/schema/entity/classes/CBasePlayerPawn)
 
 ## Fields
 
-- <ApiParam name="m_CTouchExpansionComponent" type="CTouchExpansionComponent" />
-- <ApiParam name="m_pPingServices" type="CCSPlayer_PingServices*" />
-- <ApiParam name="m_blindUntilTime" type="float" />
-- <ApiParam name="m_blindStartTime" type="float" />
-- <ApiParam name="m_iPlayerState" type="CSPlayerState" />
-- <ApiParam name="m_bRespawning" type="bool" />
-- <ApiParam name="m_bHasMovedSinceSpawn" type="bool" />
-- <ApiParam name="m_iNumSpawns" type="int32_t" />
-- <ApiParam name="m_flIdleTimeSinceLastAction" type="float" />
-- <ApiParam name="m_fNextRadarUpdateTime" type="float" />
-- <ApiParam name="m_flFlashDuration" type="float" />
-- <ApiParam name="m_flFlashMaxAlpha" type="float" />
-- <ApiParam name="m_flProgressBarStartTime" type="float" />
-- <ApiParam name="m_iProgressBarDuration" type="int32_t" />
-- <ApiParam name="m_hOriginalController" type="CHandle&lt;CCSPlayerController&gt;" />
+| Field | Type |
+|---|---|
+| `m_CTouchExpansionComponent` | [`CTouchExpansionComponent`](/docs/schema/entity/classes/CTouchExpansionComponent) |
+| `m_pPingServices` | [`CCSPlayer_PingServices*`](/docs/schema/entity/classes/CCSPlayer_PingServices) |
+| `m_blindUntilTime` | `float` |
+| `m_blindStartTime` | `float` |
+| `m_iPlayerState` | [`CSPlayerState`](/docs/schema/entity/enums/CSPlayerState) |
+| `m_bRespawning` | `bool` |
+| `m_bHasMovedSinceSpawn` | `bool` |
+| `m_iNumSpawns` | `int32_t` |
+| `m_flIdleTimeSinceLastAction` | `float` |
+| `m_fNextRadarUpdateTime` | `float` |
+| `m_flFlashDuration` | `float` |
+| `m_flFlashMaxAlpha` | `float` |
+| `m_flProgressBarStartTime` | `float` |
+| `m_iProgressBarDuration` | `int32_t` |
+| `m_hOriginalController` | [`CHandle<CCSPlayerController>`](/docs/schema/entity/classes/CCSPlayerController) |
+
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).
 
 ## Methods
 
-### CCSPlayerController* GetOriginalController()
+### `GetOriginalController`
+
+```cpp
+CCSPlayerController* GetOriginalController();
+```
 
 Get original controller.
 
-### bool CanMove()
+### `CanMove`
+
+```cpp
+bool CanMove();
+```
 
 Whether the pawn may move (false while frozen, defusing, ...).
-
-### CCSPlayerPawnBase* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CCSPlayerPawnBase* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CCSPlayerPawnBase* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CCSPlayerPawnBase&gt; GetHandle()
-

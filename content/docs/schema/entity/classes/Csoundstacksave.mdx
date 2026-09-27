@@ -1,34 +1,17 @@
 ---
-title: CSoundStackSave
+title: "CSoundStackSave"
+description: "Schema class CSoundStackSave, derived from CLogicalEntity."
 ---
 
-# CSoundStackSave
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundStackSave.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundStackSave.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszStackName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_iszStackName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CSoundStackSave* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundStackSave* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundStackSave* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundStackSave&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

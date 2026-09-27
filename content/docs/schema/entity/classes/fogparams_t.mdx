@@ -1,34 +1,39 @@
 ---
-title: Fogparams_t
+title: "fogparams_t"
+description: "Schema class fogparams_t."
 ---
 
-# fogparams_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/fogparams_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/fogparams_t.h)
 
 ## Fields
 
-- <ApiParam name="dirPrimary" type="Vector" />
-- <ApiParam name="colorPrimary" type="Color" />
-- <ApiParam name="colorSecondary" type="Color" />
-- <ApiParam name="colorPrimaryLerpTo" type="Color" />
-- <ApiParam name="colorSecondaryLerpTo" type="Color" />
-- <ApiParam name="start" type="float" />
-- <ApiParam name="end" type="float" />
-- <ApiParam name="farz" type="float" />
-- <ApiParam name="maxdensity" type="float" />
-- <ApiParam name="exponent" type="float" />
-- <ApiParam name="HDRColorScale" type="float" />
-- <ApiParam name="skyboxFogFactor" type="float" />
-- <ApiParam name="skyboxFogFactorLerpTo" type="float" />
-- <ApiParam name="startLerpTo" type="float" />
-- <ApiParam name="endLerpTo" type="float" />
-- <ApiParam name="maxdensityLerpTo" type="float" />
-- <ApiParam name="lerptime" type="float" />
-- <ApiParam name="duration" type="float" />
-- <ApiParam name="blendtobackground" type="float" />
-- <ApiParam name="scattering" type="float" />
-- <ApiParam name="locallightscale" type="float" />
-- <ApiParam name="enable" type="bool" />
-- <ApiParam name="blend" type="bool" />
-- <ApiParam name="m_bPadding2" type="bool" />
-- <ApiParam name="m_bPadding" type="bool" />
+| Field | Type |
+|---|---|
+| `dirPrimary` | `Vector` |
+| `colorPrimary` | `Color` |
+| `colorSecondary` | `Color` |
+| `colorPrimaryLerpTo` | `Color` |
+| `colorSecondaryLerpTo` | `Color` |
+| `start` | `float` |
+| `end` | `float` |
+| `farz` | `float` |
+| `maxdensity` | `float` |
+| `exponent` | `float` |
+| `HDRColorScale` | `float` |
+| `skyboxFogFactor` | `float` |
+| `skyboxFogFactorLerpTo` | `float` |
+| `startLerpTo` | `float` |
+| `endLerpTo` | `float` |
+| `maxdensityLerpTo` | `float` |
+| `lerptime` | `float` |
+| `duration` | `float` |
+| `blendtobackground` | `float` |
+| `scattering` | `float` |
+| `locallightscale` | `float` |
+| `enable` | `bool` |
+| `blend` | `bool` |
+| `m_bPadding2` | `bool` |
+| `m_bPadding` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

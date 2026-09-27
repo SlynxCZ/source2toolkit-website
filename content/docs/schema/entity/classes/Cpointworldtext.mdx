@@ -1,49 +1,32 @@
 ---
-title: CPointWorldText
+title: "CPointWorldText"
+description: "Schema class CPointWorldText, derived from CModelPointEntity."
 ---
 
-# CPointWorldText
 
-**Inheritance**: [CModelPointEntity](/docs/schema/entity/classes/Cmodelpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointWorldText.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointWorldText.h)
+
+**Inherits** [`CModelPointEntity`](/docs/schema/entity/classes/CModelPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_messageText" type="char" />
-- <ApiParam name="m_FontName" type="char" />
-- <ApiParam name="m_BackgroundMaterialName" type="char" />
-- <ApiParam name="m_bEnabled" type="bool" />
-- <ApiParam name="m_bFullbright" type="bool" />
-- <ApiParam name="m_flWorldUnitsPerPx" type="float" />
-- <ApiParam name="m_flFontSize" type="float" />
-- <ApiParam name="m_flDepthOffset" type="float" />
-- <ApiParam name="m_bDrawBackground" type="bool" />
-- <ApiParam name="m_flBackgroundBorderWidth" type="float" />
-- <ApiParam name="m_flBackgroundBorderHeight" type="float" />
-- <ApiParam name="m_flBackgroundWorldToUV" type="float" />
-- <ApiParam name="m_Color" type="Color" />
-- <ApiParam name="m_nJustifyHorizontal" type="PointWorldTextJustifyHorizontal_t" />
-- <ApiParam name="m_nJustifyVertical" type="PointWorldTextJustifyVertical_t" />
-- <ApiParam name="m_nReorientMode" type="PointWorldTextReorientMode_t" />
+| Field | Type |
+|---|---|
+| `m_messageText` | `char` |
+| `m_FontName` | `char` |
+| `m_BackgroundMaterialName` | `char` |
+| `m_bEnabled` | `bool` |
+| `m_bFullbright` | `bool` |
+| `m_flWorldUnitsPerPx` | `float` |
+| `m_flFontSize` | `float` |
+| `m_flDepthOffset` | `float` |
+| `m_bDrawBackground` | `bool` |
+| `m_flBackgroundBorderWidth` | `float` |
+| `m_flBackgroundBorderHeight` | `float` |
+| `m_flBackgroundWorldToUV` | `float` |
+| `m_Color` | `Color` |
+| `m_nJustifyHorizontal` | [`PointWorldTextJustifyHorizontal_t`](/docs/schema/entity/enums/PointWorldTextJustifyHorizontal_t) |
+| `m_nJustifyVertical` | [`PointWorldTextJustifyVertical_t`](/docs/schema/entity/enums/PointWorldTextJustifyVertical_t) |
+| `m_nReorientMode` | [`PointWorldTextReorientMode_t`](/docs/schema/entity/enums/PointWorldTextReorientMode_t) |
 
-## Methods
-
-### CPointWorldText* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointWorldText* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointWorldText* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointWorldText&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

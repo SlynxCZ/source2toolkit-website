@@ -1,13 +1,18 @@
 ---
-title: CCSPlayer_PingServices
+title: "CCSPlayer_PingServices"
+description: "Schema class CCSPlayer_PingServices, derived from CPlayerPawnComponent."
 ---
 
-# CCSPlayer_PingServices
 
-**Inheritance**: [CPlayerPawnComponent](/docs/schema/entity/classes/Cplayerpawncomponent)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSPlayer_PingServices.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSPlayer_PingServices.h)
+
+**Inherits** [`CPlayerPawnComponent`](/docs/schema/entity/classes/CPlayerPawnComponent)
 
 ## Fields
 
-- <ApiParam name="m_flPlayerPingTokens" type="float" />
-- <ApiParam name="m_hPlayerPing" type="CHandle&lt;CPlayerPing&gt;" />
+| Field | Type |
+|---|---|
+| `m_flPlayerPingTokens` | `float` |
+| `m_hPlayerPing` | [`CHandle<CPlayerPing>`](/docs/schema/entity/classes/CPlayerPing) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

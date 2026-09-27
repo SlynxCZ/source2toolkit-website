@@ -1,38 +1,21 @@
 ---
-title: CBasePlatTrain
+title: "CBasePlatTrain"
+description: "Schema class CBasePlatTrain, derived from CBaseToggle."
 ---
 
-# CBasePlatTrain
 
-**Inheritance**: [CBaseToggle](/docs/schema/entity/classes/Cbasetoggle)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBasePlatTrain.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBasePlatTrain.h)
+
+**Inherits** [`CBaseToggle`](/docs/schema/entity/classes/CBaseToggle)
 
 ## Fields
 
-- <ApiParam name="m_NoiseMoving" type="CGameSoundEventName" />
-- <ApiParam name="m_NoiseArrived" type="CGameSoundEventName" />
-- <ApiParam name="m_volume" type="float" />
-- <ApiParam name="m_flTWidth" type="float" />
-- <ApiParam name="m_flTLength" type="float" />
+| Field | Type |
+|---|---|
+| `m_NoiseMoving` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_NoiseArrived` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_volume` | `float` |
+| `m_flTWidth` | `float` |
+| `m_flTLength` | `float` |
 
-## Methods
-
-### CBasePlatTrain* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBasePlatTrain* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBasePlatTrain* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBasePlatTrain&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

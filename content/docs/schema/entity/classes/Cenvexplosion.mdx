@@ -1,49 +1,32 @@
 ---
-title: CEnvExplosion
+title: "CEnvExplosion"
+description: "Schema class CEnvExplosion, derived from CModelPointEntity."
 ---
 
-# CEnvExplosion
 
-**Inheritance**: CModelPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvExplosion.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvExplosion.h)
+
+**Inherits** [`CModelPointEntity`](/docs/schema/entity/classes/CModelPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_iMagnitude" type="int32_t" />
-- <ApiParam name="m_flPlayerDamage" type="float" />
-- <ApiParam name="m_iRadiusOverride" type="int32_t" />
-- <ApiParam name="m_flInnerRadius" type="float" />
-- <ApiParam name="m_flDamageForce" type="float" />
-- <ApiParam name="m_hInflictor" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_iCustomDamageType" type="DamageTypes_t" />
-- <ApiParam name="m_bHasCustomDamageType" type="bool" />
-- <ApiParam name="m_bCreateDebris" type="bool" />
-- <ApiParam name="m_iszCustomEffectName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszCustomSoundName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bSuppressParticleImpulse" type="bool" />
-- <ApiParam name="m_iClassIgnore" type="Class_T" />
-- <ApiParam name="m_iClassIgnore2" type="Class_T" />
-- <ApiParam name="m_iszEntityIgnoreName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hEntityIgnore" type="CHandle&lt;CBaseEntity&gt;" />
+| Field | Type |
+|---|---|
+| `m_iMagnitude` | `int32_t` |
+| `m_flPlayerDamage` | `float` |
+| `m_iRadiusOverride` | `int32_t` |
+| `m_flInnerRadius` | `float` |
+| `m_flDamageForce` | `float` |
+| `m_hInflictor` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_iCustomDamageType` | `DamageTypes_t` |
+| `m_bHasCustomDamageType` | `bool` |
+| `m_bCreateDebris` | `bool` |
+| `m_iszCustomEffectName` | `CUtlSymbolLarge` |
+| `m_iszCustomSoundName` | `CUtlSymbolLarge` |
+| `m_bSuppressParticleImpulse` | `bool` |
+| `m_iClassIgnore` | `Class_T` |
+| `m_iClassIgnore2` | `Class_T` |
+| `m_iszEntityIgnoreName` | `CUtlSymbolLarge` |
+| `m_hEntityIgnore` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
 
-## Methods
-
-### CEnvExplosion* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvExplosion* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvExplosion* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvExplosion&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

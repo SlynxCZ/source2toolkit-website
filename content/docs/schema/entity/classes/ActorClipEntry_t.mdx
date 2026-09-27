@@ -1,11 +1,16 @@
 ---
-title: ActorClipEntry_t
+title: "ActorClipEntry_t"
+description: "Schema class ActorClipEntry_t."
 ---
 
-# ActorClipEntry_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/ActorClipEntry_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/ActorClipEntry_t.h)
 
 ## Fields
 
-- <ApiParam name="m_sClipName" type="CUtlString" />
-- <ApiParam name="m_bLooping" type="bool" />
+| Field | Type |
+|---|---|
+| `m_sClipName` | `CUtlString` |
+| `m_bLooping` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

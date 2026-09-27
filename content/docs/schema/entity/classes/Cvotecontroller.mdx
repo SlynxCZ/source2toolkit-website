@@ -1,47 +1,30 @@
 ---
-title: CVoteController
+title: "CVoteController"
+description: "Schema class CVoteController, derived from CBaseEntity."
 ---
 
-# CVoteController
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CVoteController.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CVoteController.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_iActiveIssueIndex" type="int32_t" />
-- <ApiParam name="m_iOnlyTeamToVote" type="int32_t" />
-- <ApiParam name="m_nVoteOptionCount" type="int32_t" />
-- <ApiParam name="m_nPotentialVotes" type="int32_t" />
-- <ApiParam name="m_bIsYesNoVote" type="bool" />
-- <ApiParam name="m_acceptingVotesTimer" type="CountdownTimer" />
-- <ApiParam name="m_executeCommandTimer" type="CountdownTimer" />
-- <ApiParam name="m_resetVoteTimer" type="CountdownTimer" />
-- <ApiParam name="m_nVotesCast" type="int32_t" />
-- <ApiParam name="m_playerHoldingVote" type="int32_t" />
-- <ApiParam name="m_playerOverrideForVote" type="int32_t" />
-- <ApiParam name="m_nHighestCountIndex" type="int32_t" />
-- <ApiParam name="m_potentialIssues" type="CUtlVector&lt;CBaseIssue*&gt;" />
-- <ApiParam name="m_VoteOptions" type="CUtlVector&lt;char*&gt;" />
+| Field | Type |
+|---|---|
+| `m_iActiveIssueIndex` | `int32_t` |
+| `m_iOnlyTeamToVote` | `int32_t` |
+| `m_nVoteOptionCount` | `int32_t` |
+| `m_nPotentialVotes` | `int32_t` |
+| `m_bIsYesNoVote` | `bool` |
+| `m_acceptingVotesTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_executeCommandTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_resetVoteTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_nVotesCast` | `int32_t` |
+| `m_playerHoldingVote` | `int32_t` |
+| `m_playerOverrideForVote` | `int32_t` |
+| `m_nHighestCountIndex` | `int32_t` |
+| `m_potentialIssues` | [`CUtlVector<CBaseIssue*>`](/docs/schema/entity/classes/CBaseIssue) |
+| `m_VoteOptions` | `CUtlVector<char*>` |
 
-## Methods
-
-### CVoteController* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CVoteController* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CVoteController* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CVoteController&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

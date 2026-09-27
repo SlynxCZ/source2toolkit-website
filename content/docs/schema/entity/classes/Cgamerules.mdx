@@ -1,17 +1,22 @@
 ---
-title: CGameRules
+title: "CGameRules"
+description: "Schema class CGameRules."
 ---
 
-# CGameRules
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CGameRules.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CGameRules.h)
 
 ## Fields
 
-- <ApiParam name="__m_pChainEntity" type="CEntityInstance*" />
-- <ApiParam name="m_szQuestName" type="char" />
-- <ApiParam name="m_nQuestPhase" type="int32_t" />
-- <ApiParam name="m_nLastMatchTime" type="uint32_t" />
-- <ApiParam name="m_nLastMatchTime_MatchID64" type="uint64_t" />
-- <ApiParam name="m_nTotalPausedTicks" type="int32_t" />
-- <ApiParam name="m_nPauseStartTick" type="int32_t" />
-- <ApiParam name="m_bGamePaused" type="bool" />
+| Field | Type |
+|---|---|
+| `__m_pChainEntity` | `CEntityInstance*` |
+| `m_szQuestName` | `char` |
+| `m_nQuestPhase` | `int32_t` |
+| `m_nLastMatchTime` | `uint32_t` |
+| `m_nLastMatchTime_MatchID64` | `uint64_t` |
+| `m_nTotalPausedTicks` | `int32_t` |
+| `m_nPauseStartTick` | `int32_t` |
+| `m_bGamePaused` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

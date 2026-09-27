@@ -1,39 +1,22 @@
 ---
-title: CPointHurt
+title: "CPointHurt"
+description: "Schema class CPointHurt, derived from CPointEntity."
 ---
 
-# CPointHurt
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointHurt.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointHurt.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_nDamage" type="int32_t" />
-- <ApiParam name="m_bitsDamageType" type="DamageTypes_t" />
-- <ApiParam name="m_flRadius" type="float" />
-- <ApiParam name="m_flDelay" type="float" />
-- <ApiParam name="m_strTarget" type="CUtlSymbolLarge" />
-- <ApiParam name="m_pActivator" type="CHandle&lt;CBaseEntity&gt;" />
+| Field | Type |
+|---|---|
+| `m_nDamage` | `int32_t` |
+| `m_bitsDamageType` | `DamageTypes_t` |
+| `m_flRadius` | `float` |
+| `m_flDelay` | `float` |
+| `m_strTarget` | `CUtlSymbolLarge` |
+| `m_pActivator` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
 
-## Methods
-
-### CPointHurt* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointHurt* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointHurt* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointHurt&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

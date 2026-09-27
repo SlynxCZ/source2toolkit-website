@@ -1,208 +1,484 @@
 ---
-title: IToolkitMySQL
+title: "IToolkitMySQL"
+description: "Interfaces and utilities for MySQL database access."
 ---
 
-# IToolkitMySQL
 
-## IToolkitMySQLResult
+This module provides functionality for:
+- MySQL connections
+- Query execution
+- Transactions
+- Result set handling
+- Data escaping
 
-### int GetRowCount()
+<Callout type="info">Commonly used for persistent storage and asynchronous database operations.</Callout>
 
-Returns the total number of rows in the result set.
+**Interface id** `IToolkitMySQL003` (`TOOLKIT_MYSQL_INTERFACE`) · **Global** `g_pToolkitMySQL` · **Header** [`source2toolkit/IToolkitMySQL.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitMySQL.h)
 
-### int GetFieldCount()
+## Types
 
-Returns the number of columns in the result set.
+### `ToolkitMySQLConnectCallbackFunc`
 
-### bool FieldNameToNum(name, columnId)
+```cpp
+typedef std::function<void(bool)> ToolkitMySQLConnectCallbackFunc;
+```
 
-Converts a field name into a column index.
+### `ToolkitMySQLQueryCallbackFunc`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+typedef std::function<void(IToolkitMySQLQuery*)> ToolkitMySQLQueryCallbackFunc;
+```
 
-- <ApiParam name="name" type="const char*" /> — Field name to search for.
-- <ApiParam name="columnId" type="unsigned int*" /> — Output column index.
+### `ToolkitMySQLTransactionSuccessCallbackFunc`
 
-### const char* FieldNumToName(colId)
+```cpp
+typedef std::function<void(std::vector<IToolkitMySQLQuery*>)> ToolkitMySQLTransactionSuccessCallbackFunc;
+```
 
-Returns the field name for a column index.
+### `ToolkitMySQLTransactionFailureCallbackFunc`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+typedef std::function<void(std::string, int)> ToolkitMySQLTransactionFailureCallbackFunc;
+```
 
-- <ApiParam name="colId" type="unsigned int" /> — Column index.
+### `ToolkitMySQLServerlessCallbackFunc`
 
-### bool MoreRows()
+```cpp
+typedef std::function<void(const ToolkitMySQLServerlessResult&)> ToolkitMySQLServerlessCallbackFunc;
+```
 
-Checks whether additional rows are available.
+Callback for a completed serverless query. Runs on the main thread.
 
-### IToolkitMySQLRow* FetchRow()
+## Methods
 
-Fetches the next row from the result set.
+### `CreateConnection`
 
-### IToolkitMySQLRow* CurrentRow()
-
-Returns the currently active row.
-
-### bool Rewind()
-
-Rewinds the internal row cursor to the beginning.
-
-### int GetFieldType(field)
-
-Returns the MySQL field type of a column.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="field" type="unsigned int" /> — Column index.
-
-### const char* GetString(columnId, length)
-
-Retrieves a string value from a column.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="columnId" type="unsigned int" /> — Column index.
-- <ApiParam name="length" type="size_t*" /> — Optional output string length.
-
-### size_t GetDataSize(columnId)
-
-Returns the raw data size of a column value.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="columnId" type="unsigned int" /> — Column index.
-
-### float GetFloat(columnId)
-
-Retrieves a floating-point value from a column.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="columnId" type="unsigned int" /> — Column index.
-
-### int GetInt(columnId)
-
-Retrieves an integer value from a column.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="columnId" type="unsigned int" /> — Column index.
-
-### int64_t GetInt64(columnId)
-
-Retrieves a 64-bit integer value from a column.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="columnId" type="unsigned int" /> — Column index.
-
-### bool IsNull(columnId)
-
-Checks whether a column contains a NULL value.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="columnId" type="unsigned int" /> — Column index.
-
-## IToolkitMySQLQuery
-
-### IToolkitMySQLResult* GetResultSet()
-
-Returns the current result set.
-
-### bool FetchMoreResults()
-
-Advances to the next available result set.
-
-### unsigned int GetInsertId()
-
-Returns the last inserted row ID.
-
-### unsigned int GetAffectedRows()
-
-Returns the number of affected rows.
-
-## IToolkitMySQLConnection
-
-### Connect(callback)
-
-Establishes a connection to the MySQL server.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="callback" type="ToolkitMySQLConnectCallbackFunc" /> — Callback invoked after connection attempt.
-
-### Query(query, callback)
-
-Executes a raw SQL query.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="query" type="char*" /> — SQL query string.
-- <ApiParam name="callback" type="ToolkitMySQLQueryCallbackFunc" /> — Callback invoked with query result.
-
-### Query(query, callback, )
-
-Executes a formatted SQL query.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="query" type="const char*" /> — SQL format string.
-- <ApiParam name="callback" type="ToolkitMySQLQueryCallbackFunc" /> — Callback invoked with query result.
-- <ApiParam type="..." />
-
-### Destroy()
-
-Destroys and releases the connection instance.
-
-### std::string Escape(string)
-
-Escapes a mutable string for safe SQL usage.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="string" type="char*" /> — Input string.
-
-### std::string Escape(string)
-
-Escapes a constant string for safe SQL usage.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="string" type="const char*" /> — Input string.
-
-## IToolkitMySQLServerless
-
-### Query(query, callback)
-
-Runs one query on a connection of its own.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="query" type="const char*" /> — SQL to run.
-- <ApiParam name="callback" type="ToolkitMySQLServerlessCallbackFunc" /> — Callback invoked with the result, on the main thread.
-
-### Destroy()
-
-Drops these details and cancels what they still have queued. A
-
-## IToolkitMySQL
-
-### IToolkitMySQLConnection* CreateConnection(owner, info)
+```cpp
+virtual IToolkitMySQLConnection* CreateConnection(PluginId owner, ToolkitMySQLConnectionInfo info) = 0;
+```
 
 Creates a new MySQL connection instance.
 
-<ApiLabel>Parameters</ApiLabel>
+<Callout type="info">Destroyed for you if the owning plugin unloads without calling Destroy(): the worker thread runs code, and the query callbacks are std::functions holding code, inside that plugin's library.</Callout>
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin the connection belongs to.
-- <ApiParam name="info" type="ToolkitMySQLConnectionInfo" /> — Connection configuration data.
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin the connection belongs to. |
+| `info` | [`ToolkitMySQLConnectionInfo`](/docs/core-api/IToolkitMySQL#toolkitmysqlconnectioninfo) | Connection configuration data. |
 
-### IToolkitMySQLServerless* CreateServerless(owner, info)
+**Returns** [`IToolkitMySQLConnection*`](/docs/core-api/IToolkitMySQL#itoolkitmysqlconnection) — Newly created MySQL connection.
 
-Creates a handle that runs each of its queries on a connection of
+### `CreateServerless`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual IToolkitMySQLServerless* CreateServerless(PluginId owner, ToolkitMySQLConnectionInfo info) = 0;
+```
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin the handle belongs to.
-- <ApiParam name="info" type="ToolkitMySQLConnectionInfo" /> — Connection configuration data. Copied, strings included --
+Creates a handle that runs each of its queries on a connection of its own, opened and closed around that one query.
 
+<Callout type="info">Destroyed for you if the owning plugin unloads without calling Destroy(), together with every query of its still in the air: a pending callback is a std::function holding code inside that plugin's library.</Callout>
+
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin the handle belongs to. |
+| `info` | [`ToolkitMySQLConnectionInfo`](/docs/core-api/IToolkitMySQL#toolkitmysqlconnectioninfo) | Connection configuration data. Copied, strings included -- it does not have to outlive this call. |
+
+**Returns** [`IToolkitMySQLServerless*`](/docs/core-api/IToolkitMySQL#itoolkitmysqlserverless) — Newly created serverless handle.
+
+## `ToolkitMySQLTransaction`
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `queries` | `std::vector<std::string>` |
+
+## `ToolkitMySQLConnectionInfo`
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `host` | `const char*` |
+| `user` | `const char*` |
+| `pass` | `const char*` |
+| `database` | `const char*` |
+| `port` | `int` |
+| `timeout` | `int` |
+
+## `IToolkitMySQLRow`
+
+## `IToolkitMySQLResult`
+
+### `GetRowCount`
+
+```cpp
+virtual int GetRowCount() = 0;
+```
+
+Returns the total number of rows in the result set.
+
+### `GetFieldCount`
+
+```cpp
+virtual int GetFieldCount() = 0;
+```
+
+Returns the number of columns in the result set.
+
+### `FieldNameToNum`
+
+```cpp
+virtual bool FieldNameToNum(const char* name, unsigned int* columnId) = 0;
+```
+
+Converts a field name into a column index.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `name` | `const char*` | Field name to search for. |
+| `columnId` | `unsigned int*` | Output column index. |
+
+**Returns** `bool` — True if the field exists, false otherwise.
+
+### `FieldNumToName`
+
+```cpp
+virtual const char* FieldNumToName(unsigned int colId) = 0;
+```
+
+Returns the field name for a column index.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `colId` | `unsigned int` | Column index. |
+
+**Returns** `const char*` — Field name string.
+
+### `MoreRows`
+
+```cpp
+virtual bool MoreRows() = 0;
+```
+
+Checks whether additional rows are available.
+
+**Returns** `bool` — True if more rows can be fetched.
+
+### `FetchRow`
+
+```cpp
+virtual IToolkitMySQLRow* FetchRow() = 0;
+```
+
+Fetches the next row from the result set.
+
+**Returns** [`IToolkitMySQLRow*`](/docs/core-api/IToolkitMySQL#itoolkitmysqlrow) — Pointer to the fetched row.
+
+### `CurrentRow`
+
+```cpp
+virtual IToolkitMySQLRow* CurrentRow() = 0;
+```
+
+Returns the currently active row.
+
+**Returns** [`IToolkitMySQLRow*`](/docs/core-api/IToolkitMySQL#itoolkitmysqlrow) — Pointer to the current row.
+
+### `Rewind`
+
+```cpp
+virtual bool Rewind() = 0;
+```
+
+Rewinds the internal row cursor to the beginning.
+
+**Returns** `bool` — True on success.
+
+### `GetFieldType`
+
+```cpp
+virtual int GetFieldType(unsigned int field) = 0;
+```
+
+Returns the MySQL field type of a column.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `field` | `unsigned int` | Column index. |
+
+**Returns** `int` — Field type identifier.
+
+### `GetString`
+
+```cpp
+virtual const char* GetString(unsigned int columnId, size_t* length = nullptr) = 0;
+```
+
+Retrieves a string value from a column.
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `columnId` | `unsigned int` |  | Column index. |
+| `length` | `size_t*` | `nullptr` | Optional output string length. |
+
+**Returns** `const char*` — Pointer to string data.
+
+### `GetDataSize`
+
+```cpp
+virtual size_t GetDataSize(unsigned int columnId) = 0;
+```
+
+Returns the raw data size of a column value.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `columnId` | `unsigned int` | Column index. |
+
+**Returns** `size_t` — Size in bytes.
+
+### `GetFloat`
+
+```cpp
+virtual float GetFloat(unsigned int columnId) = 0;
+```
+
+Retrieves a floating-point value from a column.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `columnId` | `unsigned int` | Column index. |
+
+**Returns** `float` — Float value.
+
+### `GetInt`
+
+```cpp
+virtual int GetInt(unsigned int columnId) = 0;
+```
+
+Retrieves an integer value from a column.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `columnId` | `unsigned int` | Column index. |
+
+**Returns** `int` — Integer value.
+
+### `GetInt64`
+
+```cpp
+virtual int64_t GetInt64(unsigned int columnId) = 0;
+```
+
+Retrieves a 64-bit integer value from a column.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `columnId` | `unsigned int` | Column index. |
+
+**Returns** `int64_t` — 64-bit integer value.
+
+### `IsNull`
+
+```cpp
+virtual bool IsNull(unsigned int columnId) = 0;
+```
+
+Checks whether a column contains a NULL value.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `columnId` | `unsigned int` | Column index. |
+
+**Returns** `bool` — True if the value is NULL.
+
+## `IToolkitMySQLQuery`
+
+### `GetResultSet`
+
+```cpp
+virtual IToolkitMySQLResult* GetResultSet() = 0;
+```
+
+Returns the current result set.
+
+**Returns** [`IToolkitMySQLResult*`](/docs/core-api/IToolkitMySQL#itoolkitmysqlresult) — Pointer to the result set.
+
+### `FetchMoreResults`
+
+```cpp
+virtual bool FetchMoreResults() = 0;
+```
+
+Advances to the next available result set.
+
+**Returns** `bool` — True if another result set exists.
+
+### `GetInsertId`
+
+```cpp
+virtual unsigned int GetInsertId() = 0;
+```
+
+Returns the last inserted row ID.
+
+**Returns** `unsigned int` — Insert ID value.
+
+### `GetAffectedRows`
+
+```cpp
+virtual unsigned int GetAffectedRows() = 0;
+```
+
+Returns the number of affected rows.
+
+**Returns** `unsigned int` — Affected row count.
+
+## `IToolkitMySQLConnection`
+
+### `Connect`
+
+```cpp
+virtual void Connect(ToolkitMySQLConnectCallbackFunc callback) = 0;
+```
+
+Establishes a connection to the MySQL server.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `callback` | [`ToolkitMySQLConnectCallbackFunc`](/docs/core-api/IToolkitMySQL#toolkitmysqlconnectcallbackfunc) | Callback invoked after connection attempt. |
+
+### `Query`
+
+```cpp
+virtual void Query(char* query, ToolkitMySQLQueryCallbackFunc callback) = 0;
+virtual void Query(const char* query, ToolkitMySQLQueryCallbackFunc callback, ...) = 0;
+```
+
+Executes a raw SQL query.
+
+Executes a formatted SQL query.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `query` | `char*` | SQL query string. |
+| `callback` | [`ToolkitMySQLQueryCallbackFunc`](/docs/core-api/IToolkitMySQL#toolkitmysqlquerycallbackfunc) | Callback invoked with query result. |
+| `query` | `const char*` | SQL query string. |
+| `—` | `...` |  |
+
+### `ExecuteTransaction`
+
+```cpp
+virtual void ExecuteTransaction(ToolkitMySQLTransaction txn, ToolkitMySQLTransactionSuccessCallbackFunc success, ToolkitMySQLTransactionFailureCallbackFunc failure) = 0;
+```
+
+Executes multiple queries as a transaction.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `txn` | [`ToolkitMySQLTransaction`](/docs/core-api/IToolkitMySQL#toolkitmysqltransaction) | Transaction query batch. |
+| `success` | [`ToolkitMySQLTransactionSuccessCallbackFunc`](/docs/core-api/IToolkitMySQL#toolkitmysqltransactionsuccesscallbackfunc) | Callback invoked on success. |
+| `failure` | [`ToolkitMySQLTransactionFailureCallbackFunc`](/docs/core-api/IToolkitMySQL#toolkitmysqltransactionfailurecallbackfunc) | Callback invoked on failure. |
+
+### `Destroy`
+
+```cpp
+virtual void Destroy() = 0;
+```
+
+Destroys and releases the connection instance.
+
+### `Escape`
+
+```cpp
+virtual std::string Escape(char* string) = 0;
+virtual std::string Escape(const char* string) = 0;
+```
+
+Escapes a mutable string for safe SQL usage.
+
+Escapes a constant string for safe SQL usage.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `string` | `char*` | Input string. |
+| `string` | `const char*` | Input string. |
+
+**Returns** `std::string` — Escaped string.
+
+## `ToolkitMySQLServerlessResult`
+
+What one serverless query came back with.
+
+<Callout type="info">m_bSuccess is about the query, not about rows -- a SELECT that matched nothing is a success with an empty result set. A query that failed has m_bSuccess false, m_sError filled in and m_pQuery null.</Callout>
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `m_bSuccess` | `bool` |  |
+| `m_nErrorCode` | `unsigned int` | MySQL's own error number, or 0 when the query never reached the server. |
+| `m_sError` | `std::string` |  |
+| `m_pQuery` | [`IToolkitMySQLQuery*`](/docs/core-api/IToolkitMySQL#itoolkitmysqlquery) | Rows, insert id and affected rows, read off the connection before it was closed again. Owned by the toolkit and valid only for the duration of the callback -- copy anything you keep. Null when the query failed. |
+
+## `IToolkitMySQLServerless`
+
+A set of connection details that queries are run against one at a time.
+
+Every query opens its own connection, runs, reads its rows out and closes again -- there is nothing to keep alive, nothing to reconnect, and nothing that can go stale over a map change. None of it happens on the main thread: queries go through the toolkit's shared MySQL worker, one thread for all of them however many plugins are using it, and land back in a callback on the main thread.
+
+Meant for the occasional query -- loading a player on connect, writing their stats on disconnect. A connection costs a handshake and a login every single time, so for anything that runs per tick or per shot, keep an IToolkitMySQLConnection open instead.
+
+```cpp
+// once, when your plugin loads
+m_pDb = api->MySQL()->CreateServerless(g_PLID, { "127.0.0.1", "user", "pass", "db" });
+
+// wherever you need it
+m_pDb->Query("SELECT name, kills FROM players WHERE steamid = ?", { steamid },
+    [](const ToolkitMySQLServerlessResult& r)
+{
+    if (!r.m_bSuccess)
+        return; // r.m_sError says what went wrong
+
+    IToolkitMySQLResult* pSet = r.m_pQuery->GetResultSet();
+    while (pSet && pSet->MoreRows() && pSet->FetchRow())
+    {
+        // pSet->GetString(0), pSet->GetInt(1) -- copy anything you keep.
+    }
+});
+```
+
+### `Query`
+
+```cpp
+virtual void Query(const char* query, ToolkitMySQLServerlessCallbackFunc callback) = 0;
+virtual void Query(const char* query, std::vector<std::string> params, ToolkitMySQLServerlessCallbackFunc callback) = 0;
+```
+
+Runs one query on a connection of its own.
+
+Runs one parameterised query on a connection of its own.
+
+Placeholders are filled in on the worker against the live connection: `?` becomes the escaped value in quotes, `??` becomes a quoted identifier -- a table or column name, which cannot be a `?`. A `?` inside a string literal is left alone, and a placeholder count that does not match @p params fails the query instead of running it.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `query` | `const char*` | SQL to run. |
+| `callback` | [`ToolkitMySQLServerlessCallbackFunc`](/docs/core-api/IToolkitMySQL#toolkitmysqlserverlesscallbackfunc) | Callback invoked with the result, on the main thread. |
+| `params` | `std::vector<std::string>` | Values for the placeholders, in order. |
+
+### `Destroy`
+
+```cpp
+virtual void Destroy() = 0;
+```
+
+Drops these details and cancels what they still have queued. A query already on the wire is left to finish and its result thrown away -- its callback does not run.
+
+## Macros
+
+| Macro | Expands to |
+|---|---|
+| `MYSQL_CREATE_CONNECTION(info)` | `g_pToolkitMySQL->CreateConnection(g_PluginID, info)` |

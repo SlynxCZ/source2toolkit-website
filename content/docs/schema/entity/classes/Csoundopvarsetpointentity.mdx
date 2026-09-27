@@ -1,57 +1,40 @@
 ---
-title: CSoundOpvarSetPointEntity
+title: "CSoundOpvarSetPointEntity"
+description: "Schema class CSoundOpvarSetPointEntity, derived from CSoundOpvarSetPointBase."
 ---
 
-# CSoundOpvarSetPointEntity
 
-**Inheritance**: [CSoundOpvarSetPointBase](/docs/schema/entity/classes/Csoundopvarsetpointbase)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundOpvarSetPointEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundOpvarSetPointEntity.h)
+
+**Inherits** [`CSoundOpvarSetPointBase`](/docs/schema/entity/classes/CSoundOpvarSetPointBase)
 
 ## Fields
 
-- <ApiParam name="m_OnEnter" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnExit" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bAutoDisable" type="bool" />
-- <ApiParam name="m_flDistanceMin" type="float" />
-- <ApiParam name="m_flDistanceMax" type="float" />
-- <ApiParam name="m_flDistanceMapMin" type="float" />
-- <ApiParam name="m_flDistanceMapMax" type="float" />
-- <ApiParam name="m_flOcclusionRadius" type="float" />
-- <ApiParam name="m_flOcclusionMin" type="float" />
-- <ApiParam name="m_flOcclusionMax" type="float" />
-- <ApiParam name="m_flValSetOnDisable" type="float" />
-- <ApiParam name="m_bSetValueOnDisable" type="bool" />
-- <ApiParam name="m_bReloading" type="bool" />
-- <ApiParam name="m_nSimulationMode" type="int32_t" />
-- <ApiParam name="m_nVisibilitySamples" type="int32_t" />
-- <ApiParam name="m_vDynamicProxyPoint" type="Vector" />
-- <ApiParam name="m_flDynamicMaximumOcclusion" type="float" />
-- <ApiParam name="m_hDynamicEntity" type="CEntityHandle" />
-- <ApiParam name="m_iszDynamicEntityName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flPathingDistanceNormFactor" type="float" />
-- <ApiParam name="m_vPathingSourcePos" type="Vector" />
-- <ApiParam name="m_vPathingListenerPos" type="Vector" />
-- <ApiParam name="m_vPathingDirection" type="Vector" />
-- <ApiParam name="m_nPathingSourceIndex" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_OnEnter` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnExit` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bAutoDisable` | `bool` |
+| `m_flDistanceMin` | `float` |
+| `m_flDistanceMax` | `float` |
+| `m_flDistanceMapMin` | `float` |
+| `m_flDistanceMapMax` | `float` |
+| `m_flOcclusionRadius` | `float` |
+| `m_flOcclusionMin` | `float` |
+| `m_flOcclusionMax` | `float` |
+| `m_flValSetOnDisable` | `float` |
+| `m_bSetValueOnDisable` | `bool` |
+| `m_bReloading` | `bool` |
+| `m_nSimulationMode` | `int32_t` |
+| `m_nVisibilitySamples` | `int32_t` |
+| `m_vDynamicProxyPoint` | `Vector` |
+| `m_flDynamicMaximumOcclusion` | `float` |
+| `m_hDynamicEntity` | `CEntityHandle` |
+| `m_iszDynamicEntityName` | `CUtlSymbolLarge` |
+| `m_flPathingDistanceNormFactor` | `float` |
+| `m_vPathingSourcePos` | `Vector` |
+| `m_vPathingListenerPos` | `Vector` |
+| `m_vPathingDirection` | `Vector` |
+| `m_nPathingSourceIndex` | `int32_t` |
 
-## Methods
-
-### CSoundOpvarSetPointEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundOpvarSetPointEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundOpvarSetPointEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundOpvarSetPointEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

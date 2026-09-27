@@ -1,51 +1,34 @@
 ---
-title: CEnvCubemap
+title: "CEnvCubemap"
+description: "Schema class CEnvCubemap, derived from CBaseEntity."
 ---
 
-# CEnvCubemap
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvCubemap.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvCubemap.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_Entity_hCubemapTexture" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
-- <ApiParam name="m_Entity_bCustomCubemapTexture" type="bool" />
-- <ApiParam name="m_Entity_flInfluenceRadius" type="float" />
-- <ApiParam name="m_Entity_vBoxProjectMins" type="Vector" />
-- <ApiParam name="m_Entity_vBoxProjectMaxs" type="Vector" />
-- <ApiParam name="m_Entity_bMoveable" type="bool" />
-- <ApiParam name="m_Entity_nHandshake" type="int32_t" />
-- <ApiParam name="m_Entity_nEnvCubeMapArrayIndex" type="int32_t" />
-- <ApiParam name="m_Entity_nPriority" type="int32_t" />
-- <ApiParam name="m_Entity_flEdgeFadeDist" type="float" />
-- <ApiParam name="m_Entity_vEdgeFadeDists" type="Vector" />
-- <ApiParam name="m_Entity_flDiffuseScale" type="float" />
-- <ApiParam name="m_Entity_bStartDisabled" type="bool" />
-- <ApiParam name="m_Entity_bDefaultEnvMap" type="bool" />
-- <ApiParam name="m_Entity_bDefaultSpecEnvMap" type="bool" />
-- <ApiParam name="m_Entity_bIndoorCubeMap" type="bool" />
-- <ApiParam name="m_Entity_bCopyDiffuseFromDefaultCubemap" type="bool" />
-- <ApiParam name="m_Entity_bEnabled" type="bool" />
+| Field | Type |
+|---|---|
+| `m_Entity_hCubemapTexture` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
+| `m_Entity_bCustomCubemapTexture` | `bool` |
+| `m_Entity_flInfluenceRadius` | `float` |
+| `m_Entity_vBoxProjectMins` | `Vector` |
+| `m_Entity_vBoxProjectMaxs` | `Vector` |
+| `m_Entity_bMoveable` | `bool` |
+| `m_Entity_nHandshake` | `int32_t` |
+| `m_Entity_nEnvCubeMapArrayIndex` | `int32_t` |
+| `m_Entity_nPriority` | `int32_t` |
+| `m_Entity_flEdgeFadeDist` | `float` |
+| `m_Entity_vEdgeFadeDists` | `Vector` |
+| `m_Entity_flDiffuseScale` | `float` |
+| `m_Entity_bStartDisabled` | `bool` |
+| `m_Entity_bDefaultEnvMap` | `bool` |
+| `m_Entity_bDefaultSpecEnvMap` | `bool` |
+| `m_Entity_bIndoorCubeMap` | `bool` |
+| `m_Entity_bCopyDiffuseFromDefaultCubemap` | `bool` |
+| `m_Entity_bEnabled` | `bool` |
 
-## Methods
-
-### CEnvCubemap* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvCubemap* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvCubemap* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvCubemap&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,15 +1,20 @@
 ---
-title: Hudtextparms_t
+title: "hudtextparms_t"
+description: "Schema class hudtextparms_t."
 ---
 
-# hudtextparms_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/hudtextparms_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/hudtextparms_t.h)
 
 ## Fields
 
-- <ApiParam name="color1" type="Color" />
-- <ApiParam name="color2" type="Color" />
-- <ApiParam name="effect" type="uint8_t" />
-- <ApiParam name="channel" type="uint8_t" />
-- <ApiParam name="x" type="float" />
-- <ApiParam name="y" type="float" />
+| Field | Type |
+|---|---|
+| `color1` | `Color` |
+| `color2` | `Color` |
+| `effect` | `uint8_t` |
+| `channel` | `uint8_t` |
+| `x` | `float` |
+| `y` | `float` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

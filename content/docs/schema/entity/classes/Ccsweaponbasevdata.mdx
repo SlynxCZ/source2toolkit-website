@@ -1,103 +1,112 @@
 ---
-title: CCSWeaponBaseVData
+title: "CCSWeaponBaseVData"
+description: "Schema class CCSWeaponBaseVData, derived from CBasePlayerWeaponVData."
 ---
 
-# CCSWeaponBaseVData
 
-**Inheritance**: CBasePlayerWeaponVData
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSWeaponBaseVData.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSWeaponBaseVData.h)
+
+**Inherits** [`CBasePlayerWeaponVData`](/docs/schema/entity/classes/CBasePlayerWeaponVData)
 
 ## Fields
 
-- <ApiParam name="m_WeaponType" type="CSWeaponType" />
-- <ApiParam name="m_WeaponCategory" type="CSWeaponCategory" />
-- <ApiParam name="m_vecMuzzlePos0" type="Vector" />
-- <ApiParam name="m_vecMuzzlePos1" type="Vector" />
-- <ApiParam name="m_GearSlot" type="gear_slot_t" />
-- <ApiParam name="m_GearSlotPosition" type="int32_t" />
-- <ApiParam name="m_DefaultLoadoutSlot" type="loadout_slot_t" />
-- <ApiParam name="m_nPrice" type="int32_t" />
-- <ApiParam name="m_nKillAward" type="int32_t" />
-- <ApiParam name="m_nPrimaryReserveAmmoMax" type="int32_t" />
-- <ApiParam name="m_nSecondaryReserveAmmoMax" type="int32_t" />
-- <ApiParam name="m_bMeleeWeapon" type="bool" />
-- <ApiParam name="m_bHasBurstMode" type="bool" />
-- <ApiParam name="m_bIsRevolver" type="bool" />
-- <ApiParam name="m_bCannotShootUnderwater" type="bool" />
-- <ApiParam name="m_szName" type="CGlobalSymbol" />
-- <ApiParam name="m_eSilencerType" type="CSWeaponSilencerType" />
-- <ApiParam name="m_bShowCrosshair" type="bool" />
-- <ApiParam name="m_bIsFullAuto" type="bool" />
-- <ApiParam name="m_nNumBullets" type="int32_t" />
-- <ApiParam name="m_bReloadsSingleShells" type="bool" />
-- <ApiParam name="m_flCycleTime" type="CFiringModeFloat" />
-- <ApiParam name="m_flCycleTimeWhenInBurstMode" type="float" />
-- <ApiParam name="m_flTimeBetweenBurstShots" type="float" />
-- <ApiParam name="m_flMaxSpeed" type="CFiringModeFloat" />
-- <ApiParam name="m_flSpread" type="CFiringModeFloat" />
-- <ApiParam name="m_flInaccuracyCrouch" type="CFiringModeFloat" />
-- <ApiParam name="m_flInaccuracyStand" type="CFiringModeFloat" />
-- <ApiParam name="m_flInaccuracyJump" type="CFiringModeFloat" />
-- <ApiParam name="m_flInaccuracyLand" type="CFiringModeFloat" />
-- <ApiParam name="m_flInaccuracyLadder" type="CFiringModeFloat" />
-- <ApiParam name="m_flInaccuracyFire" type="CFiringModeFloat" />
-- <ApiParam name="m_flInaccuracyMove" type="CFiringModeFloat" />
-- <ApiParam name="m_flRecoilAngle" type="CFiringModeFloat" />
-- <ApiParam name="m_flRecoilAngleVariance" type="CFiringModeFloat" />
-- <ApiParam name="m_flRecoilMagnitude" type="CFiringModeFloat" />
-- <ApiParam name="m_flRecoilMagnitudeVariance" type="CFiringModeFloat" />
-- <ApiParam name="m_nTracerFrequency" type="[CFiringModeInt](/docs/schema/entity/classes/Cfiringmodeint)" />
-- <ApiParam name="m_flInaccuracyJumpInitial" type="float" />
-- <ApiParam name="m_flInaccuracyJumpApex" type="float" />
-- <ApiParam name="m_flInaccuracyReload" type="float" />
-- <ApiParam name="m_flDeployDuration" type="float" />
-- <ApiParam name="m_flDisallowAttackAfterReloadStartDuration" type="float" />
-- <ApiParam name="m_nBurstShotCount" type="int32_t" />
-- <ApiParam name="m_bAllowBurstHolster" type="bool" />
-- <ApiParam name="m_nRecoilSeed" type="int32_t" />
-- <ApiParam name="m_nSpreadSeed" type="int32_t" />
-- <ApiParam name="m_flAttackMovespeedFactor" type="float" />
-- <ApiParam name="m_flInaccuracyPitchShift" type="float" />
-- <ApiParam name="m_flInaccuracyAltSoundThreshold" type="float" />
-- <ApiParam name="m_szUseRadioSubtitle" type="CUtlString" />
-- <ApiParam name="m_bUnzoomsAfterShot" type="bool" />
-- <ApiParam name="m_bHideViewModelWhenZoomed" type="bool" />
-- <ApiParam name="m_nZoomLevels" type="int32_t" />
-- <ApiParam name="m_nZoomFOV1" type="int32_t" />
-- <ApiParam name="m_nZoomFOV2" type="int32_t" />
-- <ApiParam name="m_flZoomTime0" type="float" />
-- <ApiParam name="m_flZoomTime1" type="float" />
-- <ApiParam name="m_flZoomTime2" type="float" />
-- <ApiParam name="m_flIronSightPullUpSpeed" type="float" />
-- <ApiParam name="m_flIronSightPutDownSpeed" type="float" />
-- <ApiParam name="m_flIronSightFOV" type="float" />
-- <ApiParam name="m_flIronSightPivotForward" type="float" />
-- <ApiParam name="m_flIronSightLooseness" type="float" />
-- <ApiParam name="m_nDamage" type="int32_t" />
-- <ApiParam name="m_flHeadshotMultiplier" type="float" />
-- <ApiParam name="m_flArmorRatio" type="float" />
-- <ApiParam name="m_flPenetration" type="float" />
-- <ApiParam name="m_flRange" type="float" />
-- <ApiParam name="m_flRangeModifier" type="float" />
-- <ApiParam name="m_flFlinchVelocityModifierLarge" type="float" />
-- <ApiParam name="m_flFlinchVelocityModifierSmall" type="float" />
-- <ApiParam name="m_flRecoveryTimeCrouch" type="float" />
-- <ApiParam name="m_flRecoveryTimeStand" type="float" />
-- <ApiParam name="m_flRecoveryTimeCrouchFinal" type="float" />
-- <ApiParam name="m_flRecoveryTimeStandFinal" type="float" />
-- <ApiParam name="m_nRecoveryTransitionStartBullet" type="int32_t" />
-- <ApiParam name="m_nRecoveryTransitionEndBullet" type="int32_t" />
-- <ApiParam name="m_flThrowVelocity" type="float" />
-- <ApiParam name="m_vSmokeColor" type="Vector" />
-- <ApiParam name="m_szAnimClass" type="CGlobalSymbol" />
+| Field | Type |
+|---|---|
+| `m_WeaponType` | [`CSWeaponType`](/docs/schema/entity/enums/CSWeaponType) |
+| `m_WeaponCategory` | [`CSWeaponCategory`](/docs/schema/entity/enums/CSWeaponCategory) |
+| `m_vecMuzzlePos0` | `Vector` |
+| `m_vecMuzzlePos1` | `Vector` |
+| `m_GearSlot` | [`gear_slot_t`](/docs/schema/entity/enums/gear_slot_t) |
+| `m_GearSlotPosition` | `int32_t` |
+| `m_DefaultLoadoutSlot` | [`loadout_slot_t`](/docs/schema/entity/enums/loadout_slot_t) |
+| `m_nPrice` | `int32_t` |
+| `m_nKillAward` | `int32_t` |
+| `m_nPrimaryReserveAmmoMax` | `int32_t` |
+| `m_nSecondaryReserveAmmoMax` | `int32_t` |
+| `m_bMeleeWeapon` | `bool` |
+| `m_bHasBurstMode` | `bool` |
+| `m_bIsRevolver` | `bool` |
+| `m_bCannotShootUnderwater` | `bool` |
+| `m_szName` | [`CGlobalSymbol`](/docs/core-api/Schema#cglobalsymbol) |
+| `m_eSilencerType` | [`CSWeaponSilencerType`](/docs/schema/entity/enums/CSWeaponSilencerType) |
+| `m_bShowCrosshair` | `bool` |
+| `m_bIsFullAuto` | `bool` |
+| `m_nNumBullets` | `int32_t` |
+| `m_bReloadsSingleShells` | `bool` |
+| `m_flCycleTime` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_flCycleTimeWhenInBurstMode` | `float` |
+| `m_flTimeBetweenBurstShots` | `float` |
+| `m_flMaxSpeed` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_flSpread` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_flInaccuracyCrouch` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_flInaccuracyStand` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_flInaccuracyJump` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_flInaccuracyLand` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_flInaccuracyLadder` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_flInaccuracyFire` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_flInaccuracyMove` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_flRecoilAngle` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_flRecoilAngleVariance` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_flRecoilMagnitude` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_flRecoilMagnitudeVariance` | [`CFiringModeFloat`](/docs/schema/entity/classes/CFiringModeFloat) |
+| `m_nTracerFrequency` | [`CFiringModeInt`](/docs/schema/entity/classes/CFiringModeInt) |
+| `m_flInaccuracyJumpInitial` | `float` |
+| `m_flInaccuracyJumpApex` | `float` |
+| `m_flInaccuracyReload` | `float` |
+| `m_flDeployDuration` | `float` |
+| `m_flDisallowAttackAfterReloadStartDuration` | `float` |
+| `m_nBurstShotCount` | `int32_t` |
+| `m_bAllowBurstHolster` | `bool` |
+| `m_nRecoilSeed` | `int32_t` |
+| `m_nSpreadSeed` | `int32_t` |
+| `m_flAttackMovespeedFactor` | `float` |
+| `m_flInaccuracyPitchShift` | `float` |
+| `m_flInaccuracyAltSoundThreshold` | `float` |
+| `m_szUseRadioSubtitle` | `CUtlString` |
+| `m_bUnzoomsAfterShot` | `bool` |
+| `m_bHideViewModelWhenZoomed` | `bool` |
+| `m_nZoomLevels` | `int32_t` |
+| `m_nZoomFOV1` | `int32_t` |
+| `m_nZoomFOV2` | `int32_t` |
+| `m_flZoomTime0` | `float` |
+| `m_flZoomTime1` | `float` |
+| `m_flZoomTime2` | `float` |
+| `m_flIronSightPullUpSpeed` | `float` |
+| `m_flIronSightPutDownSpeed` | `float` |
+| `m_flIronSightFOV` | `float` |
+| `m_flIronSightPivotForward` | `float` |
+| `m_flIronSightLooseness` | `float` |
+| `m_nDamage` | `int32_t` |
+| `m_flHeadshotMultiplier` | `float` |
+| `m_flArmorRatio` | `float` |
+| `m_flPenetration` | `float` |
+| `m_flRange` | `float` |
+| `m_flRangeModifier` | `float` |
+| `m_flFlinchVelocityModifierLarge` | `float` |
+| `m_flFlinchVelocityModifierSmall` | `float` |
+| `m_flRecoveryTimeCrouch` | `float` |
+| `m_flRecoveryTimeStand` | `float` |
+| `m_flRecoveryTimeCrouchFinal` | `float` |
+| `m_flRecoveryTimeStandFinal` | `float` |
+| `m_nRecoveryTransitionStartBullet` | `int32_t` |
+| `m_nRecoveryTransitionEndBullet` | `int32_t` |
+| `m_flThrowVelocity` | `float` |
+| `m_vSmokeColor` | `Vector` |
+| `m_szAnimClass` | [`CGlobalSymbol`](/docs/core-api/Schema#cglobalsymbol) |
+
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).
 
 ## Methods
 
-### CCSWeaponBaseVData* FromKey(pszKey, nWeaponType)
+### `FromKey`
+
+```cpp
+static CCSWeaponBaseVData* FromKey(const char* pszKey, int nWeaponType = -1);
+```
 
 Looks weapon VData up by its key, e.g. "weapon_ak47". A weapon type other than -1 also requires the data to be of that type. Null when not found.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="pszKey" type="const char*" />
-- <ApiParam name="nWeaponType" type="int" />
-
+| Parameter | Type | Default |
+|---|---|---|
+| `pszKey` | `const char*` |  |
+| `nWeaponType` | `int` | `-1` |

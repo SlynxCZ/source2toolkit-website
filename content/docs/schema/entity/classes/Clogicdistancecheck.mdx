@@ -1,40 +1,23 @@
 ---
-title: CLogicDistanceCheck
+title: "CLogicDistanceCheck"
+description: "Schema class CLogicDistanceCheck, derived from CLogicalEntity."
 ---
 
-# CLogicDistanceCheck
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicDistanceCheck.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicDistanceCheck.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszEntityA" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszEntityB" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flZone1Distance" type="float" />
-- <ApiParam name="m_flZone2Distance" type="float" />
-- <ApiParam name="m_InZone1" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_InZone2" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_InZone3" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_iszEntityA` | `CUtlSymbolLarge` |
+| `m_iszEntityB` | `CUtlSymbolLarge` |
+| `m_flZone1Distance` | `float` |
+| `m_flZone2Distance` | `float` |
+| `m_InZone1` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_InZone2` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_InZone3` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CLogicDistanceCheck* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicDistanceCheck* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicDistanceCheck* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicDistanceCheck&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

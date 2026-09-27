@@ -1,15 +1,20 @@
 ---
-title: DecalGroupOption_t
+title: "DecalGroupOption_t"
+description: "Schema class DecalGroupOption_t."
 ---
 
-# DecalGroupOption_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/DecalGroupOption_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/DecalGroupOption_t.h)
 
 ## Fields
 
-- <ApiParam name="m_hMaterial" type="CStrongHandleCopyable&lt;InfoForResourceTypeIMaterial2&gt;" />
-- <ApiParam name="m_sSequenceName" type="CGlobalSymbol" />
-- <ApiParam name="m_flProbability" type="float" />
-- <ApiParam name="m_bEnableAngleBetweenNormalAndGravityRange" type="bool" />
-- <ApiParam name="m_flMinAngleBetweenNormalAndGravity" type="float" />
-- <ApiParam name="m_flMaxAngleBetweenNormalAndGravity" type="float" />
+| Field | Type |
+|---|---|
+| `m_hMaterial` | [`CStrongHandleCopyable<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandlecopyable) |
+| `m_sSequenceName` | [`CGlobalSymbol`](/docs/core-api/Schema#cglobalsymbol) |
+| `m_flProbability` | `float` |
+| `m_bEnableAngleBetweenNormalAndGravityRange` | `bool` |
+| `m_flMinAngleBetweenNormalAndGravity` | `float` |
+| `m_flMaxAngleBetweenNormalAndGravity` | `float` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,26 +1,69 @@
 ---
-title: IToolkitCustomHud
+title: "IToolkitCustomHud"
+description: "Interface for the panorama custom HUD layouts."
 ---
 
-# IToolkitCustomHud
+
+`custom_hud_layout` entities render a panorama layout on top of the game HUD. The entity itself is driven through CCSCustomHudLayout; this interface only owns the click callbacks, because the button press arrives as a user message on the core's own hook and has to be routed back to whichever plugin created the layout.
+
+<Callout type="info">Plugins do not normally touch this interface -- CCSCustomHudLayout's HookClick() forwards here for them.</Callout>
+
+Registry of custom HUD click callbacks.
+
+Callbacks are keyed by layout entity, so several plugins may listen on their own layouts at once. Every callback a plugin registers is dropped when that plugin unloads, and the whole registry is cleared on level shutdown along with the entities it points at.
+
+**Interface id** `IToolkitCustomHud001` (`TOOLKIT_CUSTOMHUD_INTERFACE`) · **Global** `g_pToolkitCustomHud` · **Header** [`source2toolkit/IToolkitCustomHud.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitCustomHud.h)
+
+## Types
+
+### `CustomHudClickHandler`
+
+```cpp
+using CustomHudClickHandler = std::function<void(CCSPlayerController* player, CCSCustomHudLayout* pLayout, const char* pszButtonId)>;
+```
+
+Callback type for custom HUD button clicks.
 
 ## Methods
 
-### HookCustomHudClick(owner, pLayout, handler)
+### `HookCustomHudClick`
+
+```cpp
+virtual void HookCustomHudClick(PluginId owner, CCSCustomHudLayout* pLayout, CustomHudClickHandler handler) = 0;
+```
 
 Registers a click callback for one layout entity.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the callback |
+| `pLayout` | [`CCSCustomHudLayout*`](/docs/schema/entity/classes/CCSCustomHudLayout) | Layout to listen on |
+| `handler` | [`CustomHudClickHandler`](/docs/core-api/IToolkitCustomHud#customhudclickhandler) | Callback function |
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the callback
-- <ApiParam name="pLayout" type="CCSCustomHudLayout*" /> — Layout to listen on
-- <ApiParam name="handler" type="CustomHudClickHandler" /> — Callback function
+### `UnhookCustomHudClick`
 
-### UnhookCustomHudClick(pLayout)
+```cpp
+virtual void UnhookCustomHudClick(CCSCustomHudLayout* pLayout) = 0;
+```
 
 Drops every callback registered for a layout.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `pLayout` | [`CCSCustomHudLayout*`](/docs/schema/entity/classes/CCSCustomHudLayout) | Layout to stop listening on |
 
-- <ApiParam name="pLayout" type="CCSCustomHudLayout*" /> — Layout to stop listening on
+## Macros
 
+### `HOOK_CUSTOM_HUD_CLICK`
+
+```cpp
+#define HOOK_CUSTOM_HUD_CLICK(pLayout, handler) g_pToolkitCustomHud->HookCustomHudClick(g_PluginID, pLayout, handler)
+```
+
+Hook macros, matching HOOK_GAME_EVENT: the plugin ID is filled in.
+
+### Other macros
+
+| Macro | Expands to |
+|---|---|
+| `UNHOOK_CUSTOM_HUD_CLICK(pLayout)` | `g_pToolkitCustomHud->UnhookCustomHudClick(pLayout)` |

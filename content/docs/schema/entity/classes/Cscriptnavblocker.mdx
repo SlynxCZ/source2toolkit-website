@@ -1,34 +1,17 @@
 ---
-title: CScriptNavBlocker
+title: "CScriptNavBlocker"
+description: "Schema class CScriptNavBlocker, derived from CFuncNavBlocker."
 ---
 
-# CScriptNavBlocker
 
-**Inheritance**: CFuncNavBlocker
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CScriptNavBlocker.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CScriptNavBlocker.h)
+
+**Inherits** [`CFuncNavBlocker`](/docs/schema/entity/classes/CFuncNavBlocker)
 
 ## Fields
 
-- <ApiParam name="m_vExtent" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_vExtent` | `Vector` |
 
-## Methods
-
-### CScriptNavBlocker* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CScriptNavBlocker* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CScriptNavBlocker* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CScriptNavBlocker&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

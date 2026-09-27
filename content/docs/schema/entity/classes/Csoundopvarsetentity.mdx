@@ -1,41 +1,24 @@
 ---
-title: CSoundOpvarSetEntity
+title: "CSoundOpvarSetEntity"
+description: "Schema class CSoundOpvarSetEntity, derived from CBaseEntity."
 ---
 
-# CSoundOpvarSetEntity
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundOpvarSetEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundOpvarSetEntity.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszStackName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszOperatorName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszOpvarName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_nOpvarType" type="int32_t" />
-- <ApiParam name="m_nOpvarIndex" type="int32_t" />
-- <ApiParam name="m_flOpvarValue" type="float" />
-- <ApiParam name="m_OpvarValueString" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bSetOnSpawn" type="bool" />
+| Field | Type |
+|---|---|
+| `m_iszStackName` | `CUtlSymbolLarge` |
+| `m_iszOperatorName` | `CUtlSymbolLarge` |
+| `m_iszOpvarName` | `CUtlSymbolLarge` |
+| `m_nOpvarType` | `int32_t` |
+| `m_nOpvarIndex` | `int32_t` |
+| `m_flOpvarValue` | `float` |
+| `m_OpvarValueString` | `CUtlSymbolLarge` |
+| `m_bSetOnSpawn` | `bool` |
 
-## Methods
-
-### CSoundOpvarSetEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundOpvarSetEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundOpvarSetEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundOpvarSetEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

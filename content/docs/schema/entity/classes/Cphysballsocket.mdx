@@ -1,39 +1,22 @@
 ---
-title: CPhysBallSocket
+title: "CPhysBallSocket"
+description: "Schema class CPhysBallSocket, derived from CPhysConstraint."
 ---
 
-# CPhysBallSocket
 
-**Inheritance**: CPhysConstraint
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysBallSocket.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysBallSocket.h)
+
+**Inherits** [`CPhysConstraint`](/docs/schema/entity/classes/CPhysConstraint)
 
 ## Fields
 
-- <ApiParam name="m_flJointFriction" type="float" />
-- <ApiParam name="m_bEnableSwingLimit" type="bool" />
-- <ApiParam name="m_flSwingLimit" type="float" />
-- <ApiParam name="m_bEnableTwistLimit" type="bool" />
-- <ApiParam name="m_flMinTwistAngle" type="float" />
-- <ApiParam name="m_flMaxTwistAngle" type="float" />
+| Field | Type |
+|---|---|
+| `m_flJointFriction` | `float` |
+| `m_bEnableSwingLimit` | `bool` |
+| `m_flSwingLimit` | `float` |
+| `m_bEnableTwistLimit` | `bool` |
+| `m_flMinTwistAngle` | `float` |
+| `m_flMaxTwistAngle` | `float` |
 
-## Methods
-
-### CPhysBallSocket* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysBallSocket* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysBallSocket* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysBallSocket&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,14 +1,19 @@
 ---
-title: Ragdoll_t
+title: "ragdoll_t"
+description: "Schema class ragdoll_t."
 ---
 
-# ragdoll_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/ragdoll_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/ragdoll_t.h)
 
 ## Fields
 
-- <ApiParam name="list" type="CUtlVector&lt;ragdollelement_t&gt;" />
-- <ApiParam name="hierarchyJoints" type="CUtlVector&lt;ragdollhierarchyjoint_t&gt;" />
-- <ApiParam name="boneIndex" type="CUtlVector&lt;int32_t&gt;" />
-- <ApiParam name="allowStretch" type="bool" />
-- <ApiParam name="unused" type="bool" />
+| Field | Type |
+|---|---|
+| `list` | [`CUtlVector<ragdollelement_t>`](/docs/schema/entity/classes/ragdollelement_t) |
+| `hierarchyJoints` | [`CUtlVector<ragdollhierarchyjoint_t>`](/docs/schema/entity/classes/ragdollhierarchyjoint_t) |
+| `boneIndex` | `CUtlVector<int32_t>` |
+| `allowStretch` | `bool` |
+| `unused` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

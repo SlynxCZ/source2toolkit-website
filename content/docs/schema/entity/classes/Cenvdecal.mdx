@@ -1,42 +1,25 @@
 ---
-title: CEnvDecal
+title: "CEnvDecal"
+description: "Schema class CEnvDecal, derived from CBaseModelEntity."
 ---
 
-# CEnvDecal
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvDecal.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvDecal.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_hDecalMaterial" type="CStrongHandle&lt;InfoForResourceTypeIMaterial2&gt;" />
-- <ApiParam name="m_flWidth" type="float" />
-- <ApiParam name="m_flHeight" type="float" />
-- <ApiParam name="m_flDepth" type="float" />
-- <ApiParam name="m_nRenderOrder" type="uint32_t" />
-- <ApiParam name="m_bProjectOnWorld" type="bool" />
-- <ApiParam name="m_bProjectOnCharacters" type="bool" />
-- <ApiParam name="m_bProjectOnWater" type="bool" />
-- <ApiParam name="m_flDepthSortBias" type="float" />
+| Field | Type |
+|---|---|
+| `m_hDecalMaterial` | [`CStrongHandle<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandle) |
+| `m_flWidth` | `float` |
+| `m_flHeight` | `float` |
+| `m_flDepth` | `float` |
+| `m_nRenderOrder` | `uint32_t` |
+| `m_bProjectOnWorld` | `bool` |
+| `m_bProjectOnCharacters` | `bool` |
+| `m_bProjectOnWater` | `bool` |
+| `m_flDepthSortBias` | `float` |
 
-## Methods
-
-### CEnvDecal* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvDecal* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvDecal* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvDecal&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

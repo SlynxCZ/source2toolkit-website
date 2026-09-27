@@ -1,237 +1,248 @@
 ---
-title: CCSPlayerController
+title: "CCSPlayerController"
+description: "Schema class CCSPlayerController, derived from CBasePlayerController."
 ---
 
-# CCSPlayerController
 
-**Inheritance**: [CBasePlayerController](/docs/schema/entity/classes/Cbaseplayercontroller)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSPlayerController.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSPlayerController.h)
+
+**Inherits** [`CBasePlayerController`](/docs/schema/entity/classes/CBasePlayerController)
 
 ## Fields
 
-- <ApiParam name="m_pInGameMoneyServices" type="[CCSPlayerController_InGameMoneyServices*](/docs/schema/entity/classes/Ccsplayercontroller_ingamemoneyservices)" />
-- <ApiParam name="m_pInventoryServices" type="[CCSPlayerController_InventoryServices*](/docs/schema/entity/classes/Ccsplayercontroller_inventoryservices)" />
-- <ApiParam name="m_pActionTrackingServices" type="[CCSPlayerController_ActionTrackingServices*](/docs/schema/entity/classes/Ccsplayercontroller_actiontrackingservices)" />
-- <ApiParam name="m_pDamageServices" type="[CCSPlayerController_DamageServices*](/docs/schema/entity/classes/Ccsplayercontroller_damageservices)" />
-- <ApiParam name="m_iPing" type="uint32_t" />
-- <ApiParam name="m_bHasCommunicationAbuseMute" type="bool" />
-- <ApiParam name="m_uiCommunicationMuteFlags" type="uint32_t" />
-- <ApiParam name="m_szCrosshairCodes" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iPendingTeamNum" type="uint8_t" />
-- <ApiParam name="m_flForceTeamTime" type="float" />
-- <ApiParam name="m_iCompTeammateColor" type="int32_t" />
-- <ApiParam name="m_bEverPlayedOnTeam" type="bool" />
-- <ApiParam name="m_bAttemptedToGetColor" type="bool" />
-- <ApiParam name="m_iTeammatePreferredColor" type="int32_t" />
-- <ApiParam name="m_bTeamChanged" type="bool" />
-- <ApiParam name="m_bInSwitchTeam" type="bool" />
-- <ApiParam name="m_bHasSeenJoinGame" type="bool" />
-- <ApiParam name="m_bJustBecameSpectator" type="bool" />
-- <ApiParam name="m_bSwitchTeamsOnNextRoundReset" type="bool" />
-- <ApiParam name="m_bRemoveAllItemsOnNextRoundReset" type="bool" />
-- <ApiParam name="m_flLastJoinTeamTime" type="float" />
-- <ApiParam name="m_szClan" type="CUtlSymbolLarge" />
-- <ApiParam name="m_unClanId32bit" type="uint32_t" />
-- <ApiParam name="m_iCoachingTeam" type="int32_t" />
-- <ApiParam name="m_nPlayerDominated" type="uint64_t" />
-- <ApiParam name="m_nPlayerDominatingMe" type="uint64_t" />
-- <ApiParam name="m_iCompetitiveRanking" type="int32_t" />
-- <ApiParam name="m_iCompetitiveWins" type="int32_t" />
-- <ApiParam name="m_iCompetitiveRankType" type="int8_t" />
-- <ApiParam name="m_iCompetitiveRankingPredicted_Win" type="int32_t" />
-- <ApiParam name="m_iCompetitiveRankingPredicted_Loss" type="int32_t" />
-- <ApiParam name="m_iCompetitiveRankingPredicted_Tie" type="int32_t" />
-- <ApiParam name="m_nEndMatchNextMapVote" type="int32_t" />
-- <ApiParam name="m_unActiveQuestId" type="uint16_t" />
-- <ApiParam name="m_rtActiveMissionPeriod" type="uint32_t" />
-- <ApiParam name="m_nQuestProgressReason" type="QuestProgress__Reason" />
-- <ApiParam name="m_unPlayerTvControlFlags" type="uint32_t" />
-- <ApiParam name="m_iDraftIndex" type="int32_t" />
-- <ApiParam name="m_msQueuedModeDisconnectionTimestamp" type="uint32_t" />
-- <ApiParam name="m_uiAbandonRecordedReason" type="uint32_t" />
-- <ApiParam name="m_eNetworkDisconnectionReason" type="uint32_t" />
-- <ApiParam name="m_bCannotBeKicked" type="bool" />
-- <ApiParam name="m_bEverFullyConnected" type="bool" />
-- <ApiParam name="m_bAbandonAllowsSurrender" type="bool" />
-- <ApiParam name="m_bAbandonOffersInstantSurrender" type="bool" />
-- <ApiParam name="m_bDisconnection1MinWarningPrinted" type="bool" />
-- <ApiParam name="m_bScoreReported" type="bool" />
-- <ApiParam name="m_nDisconnectionTick" type="int32_t" />
-- <ApiParam name="m_bControllingBot" type="bool" />
-- <ApiParam name="m_bHasControlledBotThisRound" type="bool" />
-- <ApiParam name="m_bHasBeenControlledByPlayerThisRound" type="bool" />
-- <ApiParam name="m_nBotsControlledThisRound" type="int32_t" />
-- <ApiParam name="m_bCanControlObservedBot" type="bool" />
-- <ApiParam name="m_hPlayerPawn" type="CHandle&lt;CCSPlayerPawn&gt;" />
-- <ApiParam name="m_hObserverPawn" type="CHandle&lt;CCSObserverPawn&gt;" />
-- <ApiParam name="m_DesiredObserverMode" type="int32_t" />
-- <ApiParam name="m_hDesiredObserverTarget" type="CEntityHandle" />
-- <ApiParam name="m_bPawnIsAlive" type="bool" />
-- <ApiParam name="m_iPawnHealth" type="uint32_t" />
-- <ApiParam name="m_iPawnArmor" type="int32_t" />
-- <ApiParam name="m_bPawnHasDefuser" type="bool" />
-- <ApiParam name="m_bPawnHasHelmet" type="bool" />
-- <ApiParam name="m_nPawnCharacterDefIndex" type="uint16_t" />
-- <ApiParam name="m_iPawnLifetimeStart" type="int32_t" />
-- <ApiParam name="m_iPawnLifetimeEnd" type="int32_t" />
-- <ApiParam name="m_iPawnBotDifficulty" type="int32_t" />
-- <ApiParam name="m_hOriginalControllerOfCurrentPawn" type="CHandle&lt;CCSPlayerController&gt;" />
-- <ApiParam name="m_iScore" type="int32_t" />
-- <ApiParam name="m_iRoundScore" type="int32_t" />
-- <ApiParam name="m_iRoundsWon" type="int32_t" />
-- <ApiParam name="m_recentKillQueue" type="uint8_t" />
-- <ApiParam name="m_nFirstKill" type="uint8_t" />
-- <ApiParam name="m_nKillCount" type="uint8_t" />
-- <ApiParam name="m_bMvpNoMusic" type="bool" />
-- <ApiParam name="m_eMvpReason" type="int32_t" />
-- <ApiParam name="m_iMusicKitID" type="int32_t" />
-- <ApiParam name="m_iMusicKitMVPs" type="int32_t" />
-- <ApiParam name="m_iMVPs" type="int32_t" />
-- <ApiParam name="m_nUpdateCounter" type="int32_t" />
-- <ApiParam name="m_flSmoothedPing" type="float" />
-- <ApiParam name="m_lastHeldVoteTimer" type="[IntervalTimer](/docs/schema/entity/classes/Intervaltimer)" />
-- <ApiParam name="m_bShowHints" type="bool" />
-- <ApiParam name="m_iNextTimeCheck" type="int32_t" />
-- <ApiParam name="m_bJustDidTeamKill" type="bool" />
-- <ApiParam name="m_bPunishForTeamKill" type="bool" />
-- <ApiParam name="m_bGaveTeamDamageWarning" type="bool" />
-- <ApiParam name="m_bGaveTeamDamageWarningThisRound" type="bool" />
-- <ApiParam name="m_dblLastReceivedPacketPlatFloatTime" type="double" />
-- <ApiParam name="m_LastTeamDamageWarningTime" type="float" />
-- <ApiParam name="m_LastTimePlayerWasDisconnectedForPawnsRemove" type="float" />
-- <ApiParam name="m_nSuspiciousHitCount" type="uint32_t" />
-- <ApiParam name="m_nNonSuspiciousHitStreak" type="uint32_t" />
-- <ApiParam name="m_bFireBulletsSeedSynchronized" type="bool" />
+| Field | Type |
+|---|---|
+| `m_pInGameMoneyServices` | [`CCSPlayerController_InGameMoneyServices*`](/docs/schema/entity/classes/CCSPlayerController_InGameMoneyServices) |
+| `m_pInventoryServices` | [`CCSPlayerController_InventoryServices*`](/docs/schema/entity/classes/CCSPlayerController_InventoryServices) |
+| `m_pActionTrackingServices` | [`CCSPlayerController_ActionTrackingServices*`](/docs/schema/entity/classes/CCSPlayerController_ActionTrackingServices) |
+| `m_pDamageServices` | [`CCSPlayerController_DamageServices*`](/docs/schema/entity/classes/CCSPlayerController_DamageServices) |
+| `m_iPing` | `uint32_t` |
+| `m_bHasCommunicationAbuseMute` | `bool` |
+| `m_uiCommunicationMuteFlags` | `uint32_t` |
+| `m_szCrosshairCodes` | `CUtlSymbolLarge` |
+| `m_iPendingTeamNum` | `uint8_t` |
+| `m_flForceTeamTime` | `float` |
+| `m_iCompTeammateColor` | `int32_t` |
+| `m_bEverPlayedOnTeam` | `bool` |
+| `m_bAttemptedToGetColor` | `bool` |
+| `m_iTeammatePreferredColor` | `int32_t` |
+| `m_bTeamChanged` | `bool` |
+| `m_bInSwitchTeam` | `bool` |
+| `m_bHasSeenJoinGame` | `bool` |
+| `m_bJustBecameSpectator` | `bool` |
+| `m_bSwitchTeamsOnNextRoundReset` | `bool` |
+| `m_bRemoveAllItemsOnNextRoundReset` | `bool` |
+| `m_flLastJoinTeamTime` | `float` |
+| `m_szClan` | `CUtlSymbolLarge` |
+| `m_unClanId32bit` | `uint32_t` |
+| `m_iCoachingTeam` | `int32_t` |
+| `m_nPlayerDominated` | `uint64_t` |
+| `m_nPlayerDominatingMe` | `uint64_t` |
+| `m_iCompetitiveRanking` | `int32_t` |
+| `m_iCompetitiveWins` | `int32_t` |
+| `m_iCompetitiveRankType` | `int8_t` |
+| `m_iCompetitiveRankingPredicted_Win` | `int32_t` |
+| `m_iCompetitiveRankingPredicted_Loss` | `int32_t` |
+| `m_iCompetitiveRankingPredicted_Tie` | `int32_t` |
+| `m_nEndMatchNextMapVote` | `int32_t` |
+| `m_unActiveQuestId` | `uint16_t` |
+| `m_rtActiveMissionPeriod` | `uint32_t` |
+| `m_nQuestProgressReason` | [`QuestProgress__Reason`](/docs/schema/entity/enums/QuestProgress__Reason) |
+| `m_unPlayerTvControlFlags` | `uint32_t` |
+| `m_iDraftIndex` | `int32_t` |
+| `m_msQueuedModeDisconnectionTimestamp` | `uint32_t` |
+| `m_uiAbandonRecordedReason` | `uint32_t` |
+| `m_eNetworkDisconnectionReason` | `uint32_t` |
+| `m_bCannotBeKicked` | `bool` |
+| `m_bEverFullyConnected` | `bool` |
+| `m_bAbandonAllowsSurrender` | `bool` |
+| `m_bAbandonOffersInstantSurrender` | `bool` |
+| `m_bDisconnection1MinWarningPrinted` | `bool` |
+| `m_bScoreReported` | `bool` |
+| `m_nDisconnectionTick` | `int32_t` |
+| `m_bControllingBot` | `bool` |
+| `m_bHasControlledBotThisRound` | `bool` |
+| `m_bHasBeenControlledByPlayerThisRound` | `bool` |
+| `m_nBotsControlledThisRound` | `int32_t` |
+| `m_bCanControlObservedBot` | `bool` |
+| `m_hPlayerPawn` | [`CHandle<CCSPlayerPawn>`](/docs/schema/entity/classes/CCSPlayerPawn) |
+| `m_hObserverPawn` | [`CHandle<CCSObserverPawn>`](/docs/schema/entity/classes/CCSObserverPawn) |
+| `m_DesiredObserverMode` | `int32_t` |
+| `m_hDesiredObserverTarget` | `CEntityHandle` |
+| `m_bPawnIsAlive` | `bool` |
+| `m_iPawnHealth` | `uint32_t` |
+| `m_iPawnArmor` | `int32_t` |
+| `m_bPawnHasDefuser` | `bool` |
+| `m_bPawnHasHelmet` | `bool` |
+| `m_nPawnCharacterDefIndex` | `uint16_t` |
+| `m_iPawnLifetimeStart` | `int32_t` |
+| `m_iPawnLifetimeEnd` | `int32_t` |
+| `m_iPawnBotDifficulty` | `int32_t` |
+| `m_hOriginalControllerOfCurrentPawn` | `CHandle<CCSPlayerController>` |
+| `m_iScore` | `int32_t` |
+| `m_iRoundScore` | `int32_t` |
+| `m_iRoundsWon` | `int32_t` |
+| `m_recentKillQueue` | `uint8_t` |
+| `m_nFirstKill` | `uint8_t` |
+| `m_nKillCount` | `uint8_t` |
+| `m_bMvpNoMusic` | `bool` |
+| `m_eMvpReason` | `int32_t` |
+| `m_iMusicKitID` | `int32_t` |
+| `m_iMusicKitMVPs` | `int32_t` |
+| `m_iMVPs` | `int32_t` |
+| `m_nUpdateCounter` | `int32_t` |
+| `m_flSmoothedPing` | `float` |
+| `m_lastHeldVoteTimer` | [`IntervalTimer`](/docs/schema/entity/classes/IntervalTimer) |
+| `m_bShowHints` | `bool` |
+| `m_iNextTimeCheck` | `int32_t` |
+| `m_bJustDidTeamKill` | `bool` |
+| `m_bPunishForTeamKill` | `bool` |
+| `m_bGaveTeamDamageWarning` | `bool` |
+| `m_bGaveTeamDamageWarningThisRound` | `bool` |
+| `m_dblLastReceivedPacketPlatFloatTime` | `double` |
+| `m_LastTeamDamageWarningTime` | `float` |
+| `m_LastTimePlayerWasDisconnectedForPawnsRemove` | `float` |
+| `m_nSuspiciousHitCount` | `uint32_t` |
+| `m_nNonSuspiciousHitStreak` | `uint32_t` |
+| `m_bFireBulletsSeedSynchronized` | `bool` |
+
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).
 
 ## Methods
 
-### CCSPlayerController* FromPawn(pPawn)
+### `FromPawn`
+
+```cpp
+static CCSPlayerController* FromPawn(CCSPlayerPawn* pPawn);
+```
 
 Get controller from pawn.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pPawn` | [`CCSPlayerPawn*`](/docs/schema/entity/classes/CCSPlayerPawn) |
 
-- <ApiParam name="pPawn" type="[CCSPlayerPawn*](/docs/schema/entity/classes/Ccsplayerpawn)" />
+### `FromSlot`
 
-### CCSPlayerController* FromSlot(iSlot)
-
-Get controller from slot.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iSlot" type="int" />
-
-### CCSPlayerController* FromSlot(slot)
+```cpp
+static CCSPlayerController* FromSlot(int iSlot);
+static CCSPlayerController* FromSlot(CPlayerSlot slot);
+```
 
 Get controller from slot.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `iSlot` | `int` |
+| `slot` | `CPlayerSlot` |
 
-- <ApiParam name="slot" type="CPlayerSlot" />
+### `FromUserId`
 
-### CCSPlayerController* FromUserId(iUserId)
-
-Get controller from user id.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iUserId" type="int" />
-
-### CCSPlayerController* FromUserId(userId)
+```cpp
+static CCSPlayerController* FromUserId(int iUserId);
+static CCSPlayerController* FromUserId(CPlayerUserId userId);
+```
 
 Get controller from user id.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `iUserId` | `int` |
+| `userId` | `CPlayerUserId` |
 
-- <ApiParam name="userId" type="CPlayerUserId" />
+### `FromSteamId`
 
-### CCSPlayerController* FromSteamId(uSteamId)
-
-Get controller from steam id.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="uSteamId" type="uint64" />
-
-### CCSPlayerController* FromSteamId(steamId)
+```cpp
+static CCSPlayerController* FromSteamId(uint64 uSteamId);
+static CCSPlayerController* FromSteamId(CSteamID steamId);
+```
 
 Get controller from steam id.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `uSteamId` | `uint64` |
+| `steamId` | `CSteamID` |
 
-- <ApiParam name="steamId" type="CSteamID" />
+### `PrintToCenterHtml`
 
-### PrintToCenterHtml(pszMessage, iDuration, bMenu)
+```cpp
+void PrintToCenterHtml(const char* pszMessage, int iDuration = 5, bool bMenu = false);
+```
 
 Print to center in HTML.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `pszMessage` | `const char*` |  |
+| `iDuration` | `int` | `5` |
+| `bMenu` | `bool` | `false` |
 
-- <ApiParam name="pszMessage" type="const char*" />
-- <ApiParam name="iDuration" type="int" />
-- <ApiParam name="bMenu" type="bool" />
+### `TakeDamage`
 
-### TakeDamage(pAttacker, iDamage, bitsDamageType, eChain)
+```cpp
+void TakeDamage(CCSPlayerController* pAttacker, int iDamage, DamageTypes_t bitsDamageType, HookChain eChain = HookChain::Bypass);
+```
 
 Take damage from player
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `pAttacker` | `CCSPlayerController*` |  |
+| `iDamage` | `int` |  |
+| `bitsDamageType` | `DamageTypes_t` |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Bypass` |
 
-- <ApiParam name="pAttacker" type="[CCSPlayerController*](/docs/schema/entity/classes/Ccsplayercontroller)" />
-- <ApiParam name="iDamage" type="int" />
-- <ApiParam name="bitsDamageType" type="DamageTypes_t" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+### `Respawn`
 
-### Respawn(eChain)
+```cpp
+void Respawn(HookChain eChain = HookChain::Run);
+```
 
 Respawn player.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |
 
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+### `SwitchTeam`
 
-### SwitchTeam(nTeam, eChain)
+```cpp
+void SwitchTeam(int nTeam, HookChain eChain = HookChain::Run);
+```
 
 Switch team without killing.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `nTeam` | `int` |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |
 
-- <ApiParam name="nTeam" type="int" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+### `ChangeTeam`
 
-### ChangeTeam(nTeam, eChain)
+```cpp
+void ChangeTeam(int nTeam, HookChain eChain = HookChain::Run);
+```
 
 Change team like jointeam.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `nTeam` | `int` |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |
 
-- <ApiParam name="nTeam" type="int" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+### `GetPlayerPawn`
 
-### CCSPlayerPawn* GetPlayerPawn()
+```cpp
+CCSPlayerPawn* GetPlayerPawn();
+```
 
 Get player pawn.
 
-### CCSObserverPawn* GetObserverPawn()
+### `GetObserverPawn`
+
+```cpp
+CCSObserverPawn* GetObserverPawn();
+```
 
 Get observer pawn.
-
-### CCSPlayerController* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CCSPlayerController* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CCSPlayerController* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CCSPlayerController&gt; GetHandle()
-

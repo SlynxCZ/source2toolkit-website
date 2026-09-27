@@ -1,283 +1,438 @@
 ---
-title: IToolkitHooks
+title: "IToolkitHooks"
+description: "One-line KHook hooks: declared, resolved, attached and taken down from a single place."
 ---
 
-# IToolkitHooks
 
-## IToolkitHook
+A raw KHook hook needs four places: the type in the header, `new` in the constructor, the address lookup plus Configure/Add in Init, and Remove/delete in Unload. The wrappers here fold all of that into one member declared with a macro in the class body:
 
-### bool Init()
+```cpp
+class CHooks
+{
+public:
+    KHook::Return<void> OnPostThink(CCSPlayerPawn* pThis);
+    KHook::Return<void> OnGameFrame(ISource2Server* pThis, bool a, bool b, bool c);
+    KHook::Return<int>  OnLoadEventsFromFile(IGameEventManager2* pThis, const char* pszFile, bool bSearchAll);
+    KHook::Return<void> OnRespawn(CCSPlayerController* pThis);
+
+    KHOOK_MEMBER(m_hPostThink, "CCSPlayerPawn::PostThink", &CHooks::OnPostThink, nullptr);
+    KHOOK_VIRTUAL(m_hGameFrame, &ISource2Server::GameFrame, &g_pSource2Server, nullptr, &CHooks::OnGameFrame);
+    KHOOK_VIRTUAL(m_hLoadEventsFromFile, &IGameEventManager2::LoadEventsFromFile, KHOOK_VTABLE("server", "CGameEventManager"), &CHooks::OnLoadEventsFromFile, nullptr);
+    KHOOK_VIRTUAL(m_hRespawn, "CCSPlayerController::Respawn", KHOOK_VTABLE("server", "CCSPlayerController"), &CHooks::OnRespawn, nullptr);
+};
+```
+
+The hook's type is taken from the handler's signature (the first parameter is the hooked class, the rest are the function's own arguments), so nothing is spelled twice and MSVC needs no CTAD. The handler has to be declared above the macro that names it. The context is the enclosing object.
+
+`KHOOK_INIT()` in Load() (after TOOLKIT_SAVEVARS()) resolves and installs every hook declared this way; `KHOOK_DESTRUCT()` in Unload() takes them all down. A hook whose target is `nullptr` is left to the caller: `m_hX.Init(address)`, `m_hX.Init(pInstance)` or `m_hX.InitGlobal(vtable)`.
+
+KHOOK_INIT() only sees the hooks that exist when it runs. A hook that is a member of an object created later (`new CFeature()` after Load()) registers itself but stays uninstalled until `m_hX.Init()` -- in that object's constructor, say -- resolves the target the macro was given. `m_hX.Destruct()` takes one hook down for good; destroying the owner does the same and unregisters it, so KHOOK_DESTRUCT() never touches a hook that is already gone.
+
+Targets:
+- KHOOK_MEMBER / KHOOK_FUNCTION -- a gamedata entry name (resolved through IToolkitGameConfig::ResolveSignature), an IToolkitMemory / void* / typed function pointer (`ADDR_TAKE_DAMAGE_OLD()` -- what the toolkit already resolved, evaluated at KHOOK_INIT()), or `nullptr`.
+- KHOOK_VIRTUAL -- the function is a member function pointer (index read from the vtable), an integer index, or a gamedata offset name; the target is a pointer to the instance pointer (`&g_pSource2Server`, read at Init so it may still be null when the hook is constructed), `KHOOK_VTABLE(module, class)` for a whole vtable by RTTI name -- the module as a name or as `&pModule` (an IToolkitModule* filled in at load) -- or `nullptr`.
+
+`KHOOK_NEW` (IToolkitTypes.h) is still there for a raw KHook object with none of this on top.
+
+**Header** [`source2toolkit/IToolkitHooks.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitHooks.h)
+
+## Types
+
+### `ResolvedType`
+
+```cpp
+template <typename RESOLVER> using ResolvedType = std::decay_t<decltype(Evaluate(RESOLVER{}()))>;
+```
+
+### `VirtualHookFor`
+
+```cpp
+template <typename PRE, typename POST> using VirtualHookFor = typename MemberTraits<typename Callback<PRE, POST>::type>::Virtual;
+```
+
+### `MemberHookFor`
+
+```cpp
+template <typename PRE, typename POST> using MemberHookFor = typename MemberTraits<typename Callback<PRE, POST>::type>::Member;
+```
+
+### `FunctionHookFor`
+
+```cpp
+template <typename PRE, typename POST> using FunctionHookFor = typename FunctionTraits<typename Callback<PRE, POST>::type>::Function;
+```
+
+## `IToolkitHook`
+
+A hook the plugin declared through one of the KHOOK_* macros.
+
+Every instance registers itself on construction; KHOOK_INIT() and KHOOK_DESTRUCT() walk that list.
+
+### `Init`
+
+```cpp
+virtual bool Init() = 0;
+```
 
 Resolves the target given at construction and installs the hook.
 
-### Destruct()
+KHOOK_INIT() calls this on every hook that exists at that point; a hook constructed later is installed by calling it directly. Once installed it does nothing, and after a failure (an instance still null, say) it can simply be called again.
+
+**Returns** `bool` — false when the target could not be resolved. A hook with no target (nullptr) is left alone and counts as success.
+
+### `Destruct`
+
+```cpp
+virtual void Destruct() = 0;
+```
 
 Detaches and deletes the underlying KHook object.
 
-### bool IsInstalled()
+Deleting is what takes the detour down. Safe to call more than once, and final: the hook cannot be installed again afterwards. The wrapper's destructor calls it too, so destroying the owning object takes its hooks down.
+
+### `IsInstalled`
+
+```cpp
+virtual bool IsInstalled() const = 0;
+```
 
 Whether the hook is currently installed.
 
-### bool InitAll()
+### `InitAll`
+
+```cpp
+static bool InitAll();
+```
 
 Init() on every hook declared in this plugin.
 
-### DestructAll()
+**Returns** `bool` — false when any of them failed; the rest are installed anyway.
+
+### `DestructAll`
+
+```cpp
+static void DestructAll();
+```
 
 Destruct() on every hook declared in this plugin, last first.
 
-### std::vector&lt;IToolkitHook*&gt;& List()
+## `CToolkitVTableName`
 
-### Warn(pszFormat, pszName)
+The vtable a global virtual hook attaches to: an RTTI class name inside a module ("server", "engine2", ...).
 
-<ApiLabel>Parameters</ApiLabel>
+### Fields
 
-- <ApiParam name="pszFormat" type="const char*" />
-- <ApiParam name="pszName" type="const char*" />
+| Field | Type |
+|---|---|
+| `pszModule` | `const char*` |
+| `ppModule` | [`IToolkitModule**`](/docs/core-api/IToolkitModule) |
+| `pszClass` | `const char*` |
+| `pszBase` | `const char*` |
 
-### FreeModule(pModule)
+### Constructors
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+CToolkitVTableName() = default;
+CToolkitVTableName(const char* module, const char* name);
+CToolkitVTableName(IToolkitModule** module, const char* name);
+CToolkitVTableName(const char* module, const char* name, const char* base);
+CToolkitVTableName(IToolkitModule** module, const char* name, const char* base);
+```
 
-- <ApiParam name="pModule" type="IToolkitModule*" />
+The module by name -- loaded through IToolkitModule::New at Init.
 
-### int GetOffset(pszName)
+The module through a pointer to an IToolkitModule* the plugin fills in at load (read at Init, so it may still be null now).
 
-<ApiLabel>Parameters</ApiLabel>
+The table of a base class sub-object inside the class -- for an interface that is not its first base (IToolkitModule::GetVirtualTableByBase).
 
-- <ApiParam name="pszName" type="const char*" />
+## `CToolkitVirtualHook`
 
-### IToolkitMemory ResolveSignature(pszName)
+A KHook::Virtual plus where it goes.
 
-<ApiLabel>Parameters</ApiLabel>
+**Inherits** [`IToolkitHook`](/docs/core-api/IToolkitHooks#itoolkithook)
 
-- <ApiParam name="pszName" type="const char*" />
+### Constructors
 
-## CToolkitVirtualHook
+```cpp
+template <typename FUNCTION, typename TARGET, typename CONTEXT, typename PRE, typename POST> CToolkitVirtualHook(FUNCTION function, TARGET target, CONTEXT* pContext, PRE pre, POST post);
+```
 
-**Inheritance**: [IToolkitHook](/docs/core-api/IToolkitHooks)
+### `Init`
 
-### bool Init()
-
-### bool Init(pInstance)
+```cpp
+bool Init() override;
+bool Init(CLASS* pInstance);
+```
 
 Installs the hook on one instance.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pInstance` | `CLASS*` |
 
-- <ApiParam name="pInstance" type="CLASS*" />
+### `InitGlobal`
 
-### bool InitGlobal(vtable)
+```cpp
+bool InitGlobal(IToolkitMemory vtable);
+bool InitGlobal(IToolkitModule* pModule, const char* pszClass, const char* pszBase = nullptr);
+bool InitGlobal(const char* pszModule, const char* pszClass, const char* pszBase = nullptr);
+```
 
 Installs the hook on a whole vtable -- every object sharing it.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="vtable" type="[IToolkitMemory](/docs/core-api/IToolkitMemory)" />
-
-### bool InitGlobal(pModule, pszClass, pszBase)
-
 Installs the hook on the vtable of an RTTI class name in a module, or of its base pszBase.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="pModule" type="IToolkitModule*" />
-- <ApiParam name="pszClass" type="const char*" />
-- <ApiParam name="pszBase" type="const char*" />
-
-### bool InitGlobal(pszModule, pszClass, pszBase)
 
 Same, with the module loaded by name for the lookup.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `vtable` | [`IToolkitMemory`](/docs/core-api/IToolkitMemory) |  |
+| `pModule` | [`IToolkitModule*`](/docs/core-api/IToolkitModule) |  |
+| `pszClass` | `const char*` |  |
+| `pszBase` | `const char*` | `nullptr` |
+| `pszModule` | `const char*` |  |
 
-- <ApiParam name="pszModule" type="const char*" />
-- <ApiParam name="pszClass" type="const char*" />
-- <ApiParam name="pszBase" type="const char*" />
+### `Destruct`
 
-### Destruct()
+```cpp
+void Destruct() override;
+```
 
-### bool IsInstalled()
+### `IsInstalled`
 
-### HookType* Get()
+```cpp
+bool IsInstalled() const override;
+```
+
+### `Get`
+
+```cpp
+HookType* Get() const;
+```
 
 The KHook object itself, for anything the wrapper does not cover.
 
-### RETURN CallOriginal(pThis, args)
+### `CallOriginal`
+
+```cpp
+RETURN CallOriginal(CLASS* pThis, ARGS... args);
+```
 
 Runs the original on pThis, bypassing the hook chain.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pThis` | `CLASS*` |
+| `args` | `ARGS...` |
 
-- <ApiParam name="pThis" type="CLASS*" />
-- <ApiParam name="args" type="ARGS..." />
+### `HookType`
 
-### bool ResolveIndex()
+```cpp
+using HookType = KHook::Virtual<CLASS, RETURN, ARGS...>;
+```
 
-### Create(, pContext, pre, post)
+## `CToolkitMemberHook`
 
-<ApiLabel>Parameters</ApiLabel>
+A KHook::Member (a function with a `this`, found by address) plus where its address comes from.
 
-- <ApiParam type="RETURN (CLASS::*function)(ARGS...)" />
-- <ApiParam name="pContext" type="CONTEXT*" />
-- <ApiParam name="pre" type="PRE" />
-- <ApiParam name="post" type="POST" />
+**Inherits** [`IToolkitHook`](/docs/core-api/IToolkitHooks#itoolkithook)
 
-### Create(const, pContext, pre, post)
+### Constructors
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+template <typename TARGET, typename CONTEXT, typename PRE, typename POST> CToolkitMemberHook(TARGET target, CONTEXT* pContext, PRE pre, POST post);
+```
 
-- <ApiParam name="const" type="RETURN (CLASS::*function)(ARGS...)" />
-- <ApiParam name="pContext" type="CONTEXT*" />
-- <ApiParam name="pre" type="PRE" />
-- <ApiParam name="post" type="POST" />
+### `Init`
 
-### Create(index, pContext, pre, post)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="INDEX" />
-- <ApiParam name="pContext" type="CONTEXT*" />
-- <ApiParam name="pre" type="PRE" />
-- <ApiParam name="post" type="POST" />
-
-### Create(pszIndexName, pContext, pre, post)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="pszIndexName" type="const char*" />
-- <ApiParam name="pContext" type="CONTEXT*" />
-- <ApiParam name="pre" type="PRE" />
-- <ApiParam name="post" type="POST" />
-
-### SetTarget(ppInstance)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="ppInstance" type="T**" />
-
-### SetTarget(vtable)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="vtable" type="CToolkitVTableName" />
-
-### SetTarget(nullptr_t)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="nullptr_t" type="std::" />
-
-## CToolkitMemberHook
-
-**Inheritance**: [IToolkitHook](/docs/core-api/IToolkitHooks)
-
-### bool Init()
-
-### bool Init(address)
+```cpp
+bool Init() override;
+bool Init(IToolkitMemory address);
+template <typename R, typename... A> bool Init(R (*pfnFunction)(A...));
+```
 
 Places the detour at an address.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="address" type="[IToolkitMemory](/docs/core-api/IToolkitMemory)" />
-
-### bool Init()
-
 Same, from a typed function pointer (an ADDR_* getter, say).
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `address` | [`IToolkitMemory`](/docs/core-api/IToolkitMemory) |
+| `pfnFunction` | `R (*)(A...)` |
 
-- <ApiParam type="R (*pfnFunction)(A...)" />
+### `Destruct`
 
-### Destruct()
+```cpp
+void Destruct() override;
+```
 
-### bool IsInstalled()
+### `IsInstalled`
 
-### HookType* Get()
+```cpp
+bool IsInstalled() const override;
+```
 
-### RETURN CallOriginal(pThis, args)
+### `Get`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+HookType* Get() const;
+```
 
-- <ApiParam name="pThis" type="CLASS*" />
-- <ApiParam name="args" type="ARGS..." />
+### `CallOriginal`
 
-### SetTarget(pszName)
+```cpp
+RETURN CallOriginal(CLASS* pThis, ARGS... args);
+```
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pThis` | `CLASS*` |
+| `args` | `ARGS...` |
 
-- <ApiParam name="pszName" type="const char*" />
+### `HookType`
 
-### SetTarget(address)
+```cpp
+using HookType = KHook::Member<CLASS, RETURN, ARGS...>;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+## `CToolkitFunctionHook`
 
-- <ApiParam name="address" type="[IToolkitMemory](/docs/core-api/IToolkitMemory)" />
+A KHook::Function (a free function, found by address) plus where its address comes from.
 
-### SetTarget(ESOLVER)
+**Inherits** [`IToolkitHook`](/docs/core-api/IToolkitHooks#itoolkithook)
 
-<ApiLabel>Parameters</ApiLabel>
+### Constructors
 
-- <ApiParam name="ESOLVER" type="R" />
+```cpp
+template <typename TARGET, typename CONTEXT, typename PRE, typename POST> CToolkitFunctionHook(TARGET target, CONTEXT* pContext, PRE pre, POST post);
+```
 
-### SetTarget(nullptr_t)
+### `Init`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+bool Init() override;
+bool Init(IToolkitMemory address);
+template <typename R, typename... A> bool Init(R (*pfnFunction)(A...));
+```
 
-- <ApiParam name="nullptr_t" type="std::" />
+| Parameter | Type |
+|---|---|
+| `address` | [`IToolkitMemory`](/docs/core-api/IToolkitMemory) |
+| `pfnFunction` | `R (*)(A...)` |
 
-## CToolkitFunctionHook
+### `Destruct`
 
-**Inheritance**: [IToolkitHook](/docs/core-api/IToolkitHooks)
+```cpp
+void Destruct() override;
+```
 
-### bool Init()
+### `IsInstalled`
 
-### bool Init(address)
+```cpp
+bool IsInstalled() const override;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+### `Get`
 
-- <ApiParam name="address" type="[IToolkitMemory](/docs/core-api/IToolkitMemory)" />
+```cpp
+HookType* Get() const;
+```
 
-### bool Init()
+### `CallOriginal`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+RETURN CallOriginal(ARGS... args);
+```
 
-- <ApiParam type="R (*pfnFunction)(A...)" />
+| Parameter | Type |
+|---|---|
+| `args` | `ARGS...` |
 
-### Destruct()
+### `HookType`
 
-### bool IsInstalled()
+```cpp
+using HookType = KHook::Function<RETURN, ARGS...>;
+```
 
-### HookType* Get()
+## Functions
 
-### RETURN CallOriginal(args)
+### `ToMemory`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+inline IToolkitMemory ToMemory(IToolkitMemory address);
+template <typename R, typename... A> inline IToolkitMemory ToMemory(R (*pfnFunction)(A...));
+```
 
-- <ApiParam name="args" type="ARGS..." />
+| Parameter | Type |
+|---|---|
+| `address` | [`IToolkitMemory`](/docs/core-api/IToolkitMemory) |
+| `pfnFunction` | `R (*)(A...)` |
 
-### SetTarget(pszName)
+## Macros
 
-<ApiLabel>Parameters</ApiLabel>
+### `KHOOK_VTABLE`
 
-- <ApiParam name="pszName" type="const char*" />
+```cpp
+#define KHOOK_VTABLE(module, name) ::CToolkitVTableName{ module, name }
+```
 
-### SetTarget(address)
+A whole vtable as a virtual hook's target: an RTTI class name in a module -- the module's name ("server", "engine2", "tier0", ...) or a pointer to an IToolkitModule* the plugin fills in at load (`&modules::server`).
 
-<ApiLabel>Parameters</ApiLabel>
+### `KHOOK_VTABLE_BASE`
 
-- <ApiParam name="address" type="[IToolkitMemory](/docs/core-api/IToolkitMemory)" />
+```cpp
+#define KHOOK_VTABLE_BASE(module, name, base) ::CToolkitVTableName{ module, name, base }
+```
 
-### SetTarget(ESOLVER)
+The vtable of a base class sub-object inside an RTTI class: for an interface that is not the class's first base, whose table KHOOK_VTABLE cannot reach. The base's position comes from the RTTI. Needs a core with IToolkitModule::GetVirtualTableByBase.
 
-<ApiLabel>Parameters</ApiLabel>
+### `KHOOK_VIRTUAL`
 
-- <ApiParam name="ESOLVER" type="R" />
+```cpp
+#define KHOOK_VIRTUAL(member, function, target, pre, post) ::toolkithook::VirtualHookFor<decltype(pre), decltype(post)> member { function, target, this, pre, post }
+```
 
-### SetTarget(nullptr_t)
+Declares a virtual hook as a class member.
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+KHOOK_VIRTUAL(m_hGameFrame, &ISource2Server::GameFrame, &g_pSource2Server, nullptr, &Plugin::Hook_GameFrame);
+```
 
-- <ApiParam name="nullptr_t" type="std::" />
+### `KHOOK_MEMBER`
 
+```cpp
+#define KHOOK_MEMBER(member, target, pre, post) ::toolkithook::MemberHookFor<decltype(pre), decltype(post)> member { [] { return (target); }, this, pre, post }
+```
+
+Declares a hook on a member function found by address.
+
+The target is evaluated at KHOOK_INIT(), not here, so an expression that needs the toolkit -- ADDR_TAKE_DAMAGE_OLD(), a GAMECONFIG_RESOLVE() -- is fine even though the owner is usually a global constructed long before Load().
+
+```cpp
+KHOOK_MEMBER(m_hPostThink, "CCSPlayerPawn::PostThink", &Plugin::Hook_PostThink, nullptr);
+KHOOK_MEMBER(m_hTakeDamageOld, ADDR_TAKE_DAMAGE_OLD(), &Plugin::Hook_TakeDamageOld, nullptr);
+```
+
+### `KHOOK_FUNCTION`
+
+```cpp
+#define KHOOK_FUNCTION(member, target, pre, post) ::toolkithook::FunctionHookFor<decltype(pre), decltype(post)> member { [] { return (target); }, this, pre, post }
+```
+
+Declares a hook on a free function found by address. Same parameters as KHOOK_MEMBER; the handler takes no hooked object.
+
+### `KHOOK_INIT`
+
+```cpp
+#define KHOOK_INIT() ::IToolkitHook::InitAll()
+```
+
+Installs every hook declared with the macros above. Call in Load(), after TOOLKIT_SAVEVARS() and once the instance pointers hooks read are set.
+
+### `KHOOK_DESTRUCT`
+
+```cpp
+#define KHOOK_DESTRUCT() ::IToolkitHook::DestructAll()
+```
+
+Takes every hook down. Call in Unload().

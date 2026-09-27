@@ -1,41 +1,24 @@
 ---
-title: CTriggerPush
+title: "CTriggerPush"
+description: "Schema class CTriggerPush, derived from CBaseTrigger."
 ---
 
-# CTriggerPush
 
-**Inheritance**: CBaseTrigger
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTriggerPush.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTriggerPush.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_angPushEntitySpace" type="QAngle" />
-- <ApiParam name="m_vecPushDirEntitySpace" type="Vector" />
-- <ApiParam name="m_bTriggerOnStartTouch" type="bool" />
-- <ApiParam name="m_bUsePathSimple" type="bool" />
-- <ApiParam name="m_iszPathSimpleName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_PathSimple" type="CHandle&lt;CPathSimple&gt;" />
-- <ApiParam name="m_splinePushType" type="uint32_t" />
-- <ApiParam name="m_flSpeed" type="float" />
+| Field | Type |
+|---|---|
+| `m_angPushEntitySpace` | `QAngle` |
+| `m_vecPushDirEntitySpace` | `Vector` |
+| `m_bTriggerOnStartTouch` | `bool` |
+| `m_bUsePathSimple` | `bool` |
+| `m_iszPathSimpleName` | `CUtlSymbolLarge` |
+| `m_PathSimple` | [`CHandle<CPathSimple>`](/docs/schema/entity/classes/CPathSimple) |
+| `m_splinePushType` | `uint32_t` |
+| `m_flSpeed` | `float` |
 
-## Methods
-
-### CTriggerPush* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTriggerPush* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTriggerPush* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTriggerPush&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

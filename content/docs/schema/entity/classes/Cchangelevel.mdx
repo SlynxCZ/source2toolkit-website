@@ -1,40 +1,23 @@
 ---
-title: CChangeLevel
+title: "CChangeLevel"
+description: "Schema class CChangeLevel, derived from CBaseTrigger."
 ---
 
-# CChangeLevel
 
-**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CChangeLevel.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CChangeLevel.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_sMapName" type="CUtlString" />
-- <ApiParam name="m_sLandmarkName" type="CUtlString" />
-- <ApiParam name="m_OnChangeLevel" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bTouched" type="bool" />
-- <ApiParam name="m_bNoTouch" type="bool" />
-- <ApiParam name="m_bNewChapter" type="bool" />
-- <ApiParam name="m_bOnChangeLevelFired" type="bool" />
+| Field | Type |
+|---|---|
+| `m_sMapName` | `CUtlString` |
+| `m_sLandmarkName` | `CUtlString` |
+| `m_OnChangeLevel` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bTouched` | `bool` |
+| `m_bNoTouch` | `bool` |
+| `m_bNewChapter` | `bool` |
+| `m_bOnChangeLevelFired` | `bool` |
 
-## Methods
-
-### CChangeLevel* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CChangeLevel* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CChangeLevel* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CChangeLevel&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

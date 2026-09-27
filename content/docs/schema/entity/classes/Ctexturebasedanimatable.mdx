@@ -1,41 +1,24 @@
 ---
-title: CTextureBasedAnimatable
+title: "CTextureBasedAnimatable"
+description: "Schema class CTextureBasedAnimatable, derived from CBaseModelEntity."
 ---
 
-# CTextureBasedAnimatable
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTextureBasedAnimatable.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTextureBasedAnimatable.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_bLoop" type="bool" />
-- <ApiParam name="m_flFPS" type="float" />
-- <ApiParam name="m_hPositionKeys" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
-- <ApiParam name="m_hRotationKeys" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
-- <ApiParam name="m_vAnimationBoundsMin" type="Vector" />
-- <ApiParam name="m_vAnimationBoundsMax" type="Vector" />
-- <ApiParam name="m_flStartTime" type="float" />
-- <ApiParam name="m_flStartFrame" type="float" />
+| Field | Type |
+|---|---|
+| `m_bLoop` | `bool` |
+| `m_flFPS` | `float` |
+| `m_hPositionKeys` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
+| `m_hRotationKeys` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
+| `m_vAnimationBoundsMin` | `Vector` |
+| `m_vAnimationBoundsMax` | `Vector` |
+| `m_flStartTime` | `float` |
+| `m_flStartFrame` | `float` |
 
-## Methods
-
-### CTextureBasedAnimatable* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTextureBasedAnimatable* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTextureBasedAnimatable* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTextureBasedAnimatable&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

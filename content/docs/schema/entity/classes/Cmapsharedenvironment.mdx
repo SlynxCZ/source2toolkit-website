@@ -1,34 +1,17 @@
 ---
-title: CMapSharedEnvironment
+title: "CMapSharedEnvironment"
+description: "Schema class CMapSharedEnvironment, derived from CLogicalEntity."
 ---
 
-# CMapSharedEnvironment
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMapSharedEnvironment.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMapSharedEnvironment.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_targetMapName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_targetMapName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CMapSharedEnvironment* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMapSharedEnvironment* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMapSharedEnvironment* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMapSharedEnvironment&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

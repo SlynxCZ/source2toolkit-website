@@ -1,60 +1,43 @@
 ---
-title: CEnvCombinedLightProbeVolume
+title: "CEnvCombinedLightProbeVolume"
+description: "Schema class CEnvCombinedLightProbeVolume, derived from CBaseEntity."
 ---
 
-# CEnvCombinedLightProbeVolume
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvCombinedLightProbeVolume.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvCombinedLightProbeVolume.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_Entity_Color" type="Color" />
-- <ApiParam name="m_Entity_flBrightness" type="float" />
-- <ApiParam name="m_Entity_hCubemapTexture" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
-- <ApiParam name="m_Entity_bCustomCubemapTexture" type="bool" />
-- <ApiParam name="m_Entity_hLightProbeTexture_AmbientCube" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
-- <ApiParam name="m_Entity_hLightProbeTexture_SDF" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
-- <ApiParam name="m_Entity_hLightProbeTexture_SH2_DC" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
-- <ApiParam name="m_Entity_hLightProbeTexture_SH2_L1" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
-- <ApiParam name="m_Entity_hLightProbeDirectLightIndicesTexture" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
-- <ApiParam name="m_Entity_hLightProbeDirectLightScalarsTexture" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
-- <ApiParam name="m_Entity_hLightProbeDirectLightShadowsTexture" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
-- <ApiParam name="m_Entity_vBoxMins" type="Vector" />
-- <ApiParam name="m_Entity_vBoxMaxs" type="Vector" />
-- <ApiParam name="m_Entity_bMoveable" type="bool" />
-- <ApiParam name="m_Entity_nHandshake" type="int32_t" />
-- <ApiParam name="m_Entity_nEnvCubeMapArrayIndex" type="int32_t" />
-- <ApiParam name="m_Entity_nPriority" type="int32_t" />
-- <ApiParam name="m_Entity_bStartDisabled" type="bool" />
-- <ApiParam name="m_Entity_flEdgeFadeDist" type="float" />
-- <ApiParam name="m_Entity_vEdgeFadeDists" type="Vector" />
-- <ApiParam name="m_Entity_nLightProbeSizeX" type="int32_t" />
-- <ApiParam name="m_Entity_nLightProbeSizeY" type="int32_t" />
-- <ApiParam name="m_Entity_nLightProbeSizeZ" type="int32_t" />
-- <ApiParam name="m_Entity_nLightProbeAtlasX" type="int32_t" />
-- <ApiParam name="m_Entity_nLightProbeAtlasY" type="int32_t" />
-- <ApiParam name="m_Entity_nLightProbeAtlasZ" type="int32_t" />
-- <ApiParam name="m_Entity_bEnabled" type="bool" />
+| Field | Type |
+|---|---|
+| `m_Entity_Color` | `Color` |
+| `m_Entity_flBrightness` | `float` |
+| `m_Entity_hCubemapTexture` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
+| `m_Entity_bCustomCubemapTexture` | `bool` |
+| `m_Entity_hLightProbeTexture_AmbientCube` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
+| `m_Entity_hLightProbeTexture_SDF` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
+| `m_Entity_hLightProbeTexture_SH2_DC` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
+| `m_Entity_hLightProbeTexture_SH2_L1` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
+| `m_Entity_hLightProbeDirectLightIndicesTexture` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
+| `m_Entity_hLightProbeDirectLightScalarsTexture` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
+| `m_Entity_hLightProbeDirectLightShadowsTexture` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
+| `m_Entity_vBoxMins` | `Vector` |
+| `m_Entity_vBoxMaxs` | `Vector` |
+| `m_Entity_bMoveable` | `bool` |
+| `m_Entity_nHandshake` | `int32_t` |
+| `m_Entity_nEnvCubeMapArrayIndex` | `int32_t` |
+| `m_Entity_nPriority` | `int32_t` |
+| `m_Entity_bStartDisabled` | `bool` |
+| `m_Entity_flEdgeFadeDist` | `float` |
+| `m_Entity_vEdgeFadeDists` | `Vector` |
+| `m_Entity_nLightProbeSizeX` | `int32_t` |
+| `m_Entity_nLightProbeSizeY` | `int32_t` |
+| `m_Entity_nLightProbeSizeZ` | `int32_t` |
+| `m_Entity_nLightProbeAtlasX` | `int32_t` |
+| `m_Entity_nLightProbeAtlasY` | `int32_t` |
+| `m_Entity_nLightProbeAtlasZ` | `int32_t` |
+| `m_Entity_bEnabled` | `bool` |
 
-## Methods
-
-### CEnvCombinedLightProbeVolume* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvCombinedLightProbeVolume* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvCombinedLightProbeVolume* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvCombinedLightProbeVolume&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

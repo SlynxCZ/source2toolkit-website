@@ -1,29 +1,77 @@
 ---
-title: IToolkitEvents
+title: "IToolkitEvents"
+description: "Interface for registering and handling game events."
 ---
 
-# IToolkitEvents
+
+Provides functionality for hooking into Source2 game events, allowing plugins to inspect, modify, or block events.
+
+<Callout type="info">Events correspond to engine-defined events (e.g. "player_death").</Callout>
+
+Interface for registering game event listeners.
+
+Allows plugins to:
+- Listen to engine events
+- Modify event data
+- Block event propagation
+
+**Interface id** `IToolkitEvents001` (`TOOLKIT_EVENTS_INTERFACE`) · **Global** `g_pToolkitEvents` · **Header** [`source2toolkit/IToolkitEvents.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitEvents.h)
+
+## Types
+
+### `GameEventHandler`
+
+```cpp
+using GameEventHandler = std::function<Action(IGameEvent* event, bool post, bool& dontBroadcast)>;
+```
+
+Callback type for game events.
 
 ## Methods
 
-### HookGameEvent(owner, pchName, handler, post)
+### `HookGameEvent`
+
+```cpp
+virtual void HookGameEvent(PluginId owner, const char* pchName, GameEventHandler handler, bool post) = 0;
+```
 
 Registers a listener for a game event.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the listener |
+| `pchName` | `const char*` | Event name (e.g. "player_death") |
+| `handler` | [`GameEventHandler`](/docs/core-api/IToolkitEvents#gameeventhandler) | Callback function |
+| `post` | `bool` | false to be called before the engine processes the event, true to be called after |
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the listener
-- <ApiParam name="pchName" type="const char*" /> — Event name (e.g. "player_death")
-- <ApiParam name="handler" type="GameEventHandler" /> — Callback function
-- <ApiParam name="post" type="bool" /> — false to be called before the engine processes the event,
+### `UnhookGameEvent`
 
-### UnhookGameEvent(owner, pchName, post)
+```cpp
+virtual void UnhookGameEvent(PluginId owner, const char* pchName, bool post) = 0;
+```
 
 Drops one of this plugin's event hooks.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the listener |
+| `pchName` | `const char*` | Event name the hook was registered under |
+| `post` | `bool` | Which of the two hooks to drop |
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the listener
-- <ApiParam name="pchName" type="const char*" /> — Event name the hook was registered under
-- <ApiParam name="post" type="bool" /> — Which of the two hooks to drop
+## Macros
 
+### `HOOK_GAME_EVENT`
+
+```cpp
+#define HOOK_GAME_EVENT(passname, passfunc, post) g_pToolkitEvents->HookGameEvent(g_PluginID, passname, passfunc, post)
+```
+
+Macro for hooking a game event.
+
+### `UNHOOK_GAME_EVENT`
+
+```cpp
+#define UNHOOK_GAME_EVENT(passname, post) g_pToolkitEvents->UnhookGameEvent(g_PluginID, passname, post)
+```
+
+Macro for dropping a game event hook.

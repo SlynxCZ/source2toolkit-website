@@ -1,51 +1,34 @@
 ---
-title: CPhysBox
+title: "CPhysBox"
+description: "Schema class CPhysBox, derived from CBreakable."
 ---
 
-# CPhysBox
 
-**Inheritance**: [CBreakable](/docs/schema/entity/classes/Cbreakable)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysBox.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysBox.h)
+
+**Inherits** [`CBreakable`](/docs/schema/entity/classes/CBreakable)
 
 ## Fields
 
-- <ApiParam name="m_damageType" type="int32_t" />
-- <ApiParam name="m_damageToEnableMotion" type="int32_t" />
-- <ApiParam name="m_flForceToEnableMotion" type="float" />
-- <ApiParam name="m_vHoverPosePosition" type="Vector" />
-- <ApiParam name="m_angHoverPoseAngles" type="QAngle" />
-- <ApiParam name="m_bNotSolidToWorld" type="bool" />
-- <ApiParam name="m_bEnableUseOutput" type="bool" />
-- <ApiParam name="m_nHoverPoseFlags" type="HoverPoseFlags_t" />
-- <ApiParam name="m_flTouchOutputPerEntityDelay" type="float" />
-- <ApiParam name="m_iszCollisionGroup" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszInteractsAs" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszInteractsWith" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszInteractsExclude" type="CUtlSymbolLarge" />
-- <ApiParam name="m_OnDamaged" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnAwakened" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnMotionEnabled" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnPlayerUse" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnStartTouch" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_damageType` | `int32_t` |
+| `m_damageToEnableMotion` | `int32_t` |
+| `m_flForceToEnableMotion` | `float` |
+| `m_vHoverPosePosition` | `Vector` |
+| `m_angHoverPoseAngles` | `QAngle` |
+| `m_bNotSolidToWorld` | `bool` |
+| `m_bEnableUseOutput` | `bool` |
+| `m_nHoverPoseFlags` | [`HoverPoseFlags_t`](/docs/schema/entity/enums/HoverPoseFlags_t) |
+| `m_flTouchOutputPerEntityDelay` | `float` |
+| `m_iszCollisionGroup` | `CUtlSymbolLarge` |
+| `m_iszInteractsAs` | `CUtlSymbolLarge` |
+| `m_iszInteractsWith` | `CUtlSymbolLarge` |
+| `m_iszInteractsExclude` | `CUtlSymbolLarge` |
+| `m_OnDamaged` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnAwakened` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnMotionEnabled` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnPlayerUse` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnStartTouch` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CPhysBox* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysBox* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysBox* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysBox&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

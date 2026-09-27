@@ -1,39 +1,22 @@
 ---
-title: CLogicBranchList
+title: "CLogicBranchList"
+description: "Schema class CLogicBranchList, derived from CLogicalEntity."
 ---
 
-# CLogicBranchList
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicBranchList.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicBranchList.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_nLogicBranchNames" type="CUtlSymbolLarge" />
-- <ApiParam name="m_LogicBranchList" type="CUtlVector&lt;CHandle&lt;CBaseEntity&gt;&gt;" />
-- <ApiParam name="m_eLastState" type="CLogicBranchList__LogicBranchListenerLastState_t" />
-- <ApiParam name="m_OnAllTrue" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnAllFalse" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnMixed" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_nLogicBranchNames` | `CUtlSymbolLarge` |
+| `m_LogicBranchList` | [`CUtlVector<CHandle<CBaseEntity>>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_eLastState` | [`CLogicBranchList__LogicBranchListenerLastState_t`](/docs/schema/entity/enums/CLogicBranchList__LogicBranchListenerLastState_t) |
+| `m_OnAllTrue` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnAllFalse` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnMixed` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CLogicBranchList* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicBranchList* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicBranchList* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicBranchList&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

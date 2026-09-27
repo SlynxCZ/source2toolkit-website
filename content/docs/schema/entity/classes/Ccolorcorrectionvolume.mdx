@@ -1,41 +1,24 @@
 ---
-title: CColorCorrectionVolume
+title: "CColorCorrectionVolume"
+description: "Schema class CColorCorrectionVolume, derived from CBaseTrigger."
 ---
 
-# CColorCorrectionVolume
 
-**Inheritance**: CBaseTrigger
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CColorCorrectionVolume.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CColorCorrectionVolume.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_MaxWeight" type="float" />
-- <ApiParam name="m_FadeDuration" type="float" />
-- <ApiParam name="m_Weight" type="float" />
-- <ApiParam name="m_lookupFilename" type="char" />
-- <ApiParam name="m_LastEnterWeight" type="float" />
-- <ApiParam name="m_LastEnterTime" type="float" />
-- <ApiParam name="m_LastExitWeight" type="float" />
-- <ApiParam name="m_LastExitTime" type="float" />
+| Field | Type |
+|---|---|
+| `m_MaxWeight` | `float` |
+| `m_FadeDuration` | `float` |
+| `m_Weight` | `float` |
+| `m_lookupFilename` | `char` |
+| `m_LastEnterWeight` | `float` |
+| `m_LastEnterTime` | `float` |
+| `m_LastExitWeight` | `float` |
+| `m_LastExitTime` | `float` |
 
-## Methods
-
-### CColorCorrectionVolume* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CColorCorrectionVolume* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CColorCorrectionVolume* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CColorCorrectionVolume&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

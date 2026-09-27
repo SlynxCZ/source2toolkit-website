@@ -1,15 +1,20 @@
 ---
-title: CRetakeGameRules
+title: "CRetakeGameRules"
+description: "Schema class CRetakeGameRules."
 ---
 
-# CRetakeGameRules
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CRetakeGameRules.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CRetakeGameRules.h)
 
 ## Fields
 
-- <ApiParam name="m_nMatchSeed" type="int32_t" />
-- <ApiParam name="m_bBlockersPresent" type="bool" />
-- <ApiParam name="m_bRoundInProgress" type="bool" />
-- <ApiParam name="m_iFirstSecondHalfRound" type="int32_t" />
-- <ApiParam name="m_iBombSite" type="int32_t" />
-- <ApiParam name="m_hBombPlanter" type="CHandle&lt;CCSPlayerPawn&gt;" />
+| Field | Type |
+|---|---|
+| `m_nMatchSeed` | `int32_t` |
+| `m_bBlockersPresent` | `bool` |
+| `m_bRoundInProgress` | `bool` |
+| `m_iFirstSecondHalfRound` | `int32_t` |
+| `m_iBombSite` | `int32_t` |
+| `m_hBombPlanter` | [`CHandle<CCSPlayerPawn>`](/docs/schema/entity/classes/CCSPlayerPawn) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

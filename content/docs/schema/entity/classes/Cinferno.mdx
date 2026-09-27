@@ -1,57 +1,40 @@
 ---
-title: CInferno
+title: "CInferno"
+description: "Schema class CInferno, derived from CBaseModelEntity."
 ---
 
-# CInferno
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CInferno.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CInferno.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_firePositions" type="Vector" />
-- <ApiParam name="m_fireParentPositions" type="Vector" />
-- <ApiParam name="m_bFireIsBurning" type="bool" />
-- <ApiParam name="m_BurnNormal" type="Vector" />
-- <ApiParam name="m_fireCount" type="int32_t" />
-- <ApiParam name="m_nInfernoType" type="int32_t" />
-- <ApiParam name="m_nFireEffectTickBegin" type="int32_t" />
-- <ApiParam name="m_nFireLifetime" type="float" />
-- <ApiParam name="m_bInPostEffectTime" type="bool" />
-- <ApiParam name="m_bWasCreatedInSmoke" type="bool" />
-- <ApiParam name="m_extent" type="[Extent](/docs/schema/entity/classes/Extent)" />
-- <ApiParam name="m_damageTimer" type="[CountdownTimer](/docs/schema/entity/classes/Countdowntimer)" />
-- <ApiParam name="m_damageRampTimer" type="[CountdownTimer](/docs/schema/entity/classes/Countdowntimer)" />
-- <ApiParam name="m_splashVelocity" type="Vector" />
-- <ApiParam name="m_InitialSplashVelocity" type="Vector" />
-- <ApiParam name="m_startPos" type="Vector" />
-- <ApiParam name="m_vecOriginalSpawnLocation" type="Vector" />
-- <ApiParam name="m_activeTimer" type="[IntervalTimer](/docs/schema/entity/classes/Intervaltimer)" />
-- <ApiParam name="m_fireSpawnOffset" type="int32_t" />
-- <ApiParam name="m_nMaxFlames" type="int32_t" />
-- <ApiParam name="m_nSpreadCount" type="int32_t" />
-- <ApiParam name="m_BookkeepingTimer" type="[CountdownTimer](/docs/schema/entity/classes/Countdowntimer)" />
-- <ApiParam name="m_NextSpreadTimer" type="[CountdownTimer](/docs/schema/entity/classes/Countdowntimer)" />
-- <ApiParam name="m_nSourceItemDefIndex" type="uint16_t" />
+| Field | Type |
+|---|---|
+| `m_firePositions` | `Vector` |
+| `m_fireParentPositions` | `Vector` |
+| `m_bFireIsBurning` | `bool` |
+| `m_BurnNormal` | `Vector` |
+| `m_fireCount` | `int32_t` |
+| `m_nInfernoType` | `int32_t` |
+| `m_nFireEffectTickBegin` | `int32_t` |
+| `m_nFireLifetime` | `float` |
+| `m_bInPostEffectTime` | `bool` |
+| `m_bWasCreatedInSmoke` | `bool` |
+| `m_extent` | [`Extent`](/docs/schema/entity/classes/Extent) |
+| `m_damageTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_damageRampTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_splashVelocity` | `Vector` |
+| `m_InitialSplashVelocity` | `Vector` |
+| `m_startPos` | `Vector` |
+| `m_vecOriginalSpawnLocation` | `Vector` |
+| `m_activeTimer` | [`IntervalTimer`](/docs/schema/entity/classes/IntervalTimer) |
+| `m_fireSpawnOffset` | `int32_t` |
+| `m_nMaxFlames` | `int32_t` |
+| `m_nSpreadCount` | `int32_t` |
+| `m_BookkeepingTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_NextSpreadTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_nSourceItemDefIndex` | `uint16_t` |
 
-## Methods
-
-### CInferno* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CInferno* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CInferno* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CInferno&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

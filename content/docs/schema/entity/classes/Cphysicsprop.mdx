@@ -1,73 +1,56 @@
 ---
-title: CPhysicsProp
+title: "CPhysicsProp"
+description: "Schema class CPhysicsProp, derived from CBreakableProp."
 ---
 
-# CPhysicsProp
 
-**Inheritance**: CBreakableProp
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysicsProp.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysicsProp.h)
+
+**Inherits** [`CBreakableProp`](/docs/schema/entity/classes/CBreakableProp)
 
 ## Fields
 
-- <ApiParam name="m_MotionEnabled" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnAwakened" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnAwake" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnAsleep" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnPlayerUse" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnOutOfWorld" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnPlayerPickup" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bForceNavIgnore" type="bool" />
-- <ApiParam name="m_bNoNavmeshBlocker" type="bool" />
-- <ApiParam name="m_bForceNpcExclude" type="bool" />
-- <ApiParam name="m_massScale" type="float" />
-- <ApiParam name="m_buoyancyScale" type="float" />
-- <ApiParam name="m_damageType" type="int32_t" />
-- <ApiParam name="m_damageToEnableMotion" type="int32_t" />
-- <ApiParam name="m_flForceToEnableMotion" type="float" />
-- <ApiParam name="m_bDroppedByPlayer" type="bool" />
-- <ApiParam name="m_bTouchedByPlayer" type="bool" />
-- <ApiParam name="m_bFirstCollisionAfterLaunch" type="bool" />
-- <ApiParam name="m_bHasBeenAwakened" type="bool" />
-- <ApiParam name="m_bIsOverrideProp" type="bool" />
-- <ApiParam name="m_flLastBurn" type="float" />
-- <ApiParam name="m_nDynamicContinuousContactBehavior" type="DynamicContinuousContactBehavior_t" />
-- <ApiParam name="m_fNextCheckDisableMotionContactsTime" type="float" />
-- <ApiParam name="m_iInitialGlowState" type="int32_t" />
-- <ApiParam name="m_nGlowRange" type="int32_t" />
-- <ApiParam name="m_nGlowRangeMin" type="int32_t" />
-- <ApiParam name="m_glowColor" type="Color" />
-- <ApiParam name="m_bShouldAutoConvertBackFromDebris" type="bool" />
-- <ApiParam name="m_bMuteImpactEffects" type="bool" />
-- <ApiParam name="m_nNavObstacleType" type="INavObstacle__NavObstacleType_t" />
-- <ApiParam name="m_bUpdateNavWhenMoving" type="bool" />
-- <ApiParam name="m_bForceNavObstacleCut" type="bool" />
-- <ApiParam name="m_bAcceptDamageFromHeldObjects" type="bool" />
-- <ApiParam name="m_bEnableUseOutput" type="bool" />
-- <ApiParam name="m_CrateType" type="CPhysicsProp__CrateType_t" />
-- <ApiParam name="m_strItemClass" type="CUtlSymbolLarge" />
-- <ApiParam name="m_nItemCount" type="int32_t" />
-- <ApiParam name="m_bRemovableForAmmoBalancing" type="bool" />
-- <ApiParam name="m_bAwake" type="bool" />
-- <ApiParam name="m_bAttachedToReferenceFrame" type="bool" />
+| Field | Type |
+|---|---|
+| `m_MotionEnabled` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnAwakened` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnAwake` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnAsleep` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnPlayerUse` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnOutOfWorld` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnPlayerPickup` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bForceNavIgnore` | `bool` |
+| `m_bNoNavmeshBlocker` | `bool` |
+| `m_bForceNpcExclude` | `bool` |
+| `m_massScale` | `float` |
+| `m_buoyancyScale` | `float` |
+| `m_damageType` | `int32_t` |
+| `m_damageToEnableMotion` | `int32_t` |
+| `m_flForceToEnableMotion` | `float` |
+| `m_bDroppedByPlayer` | `bool` |
+| `m_bTouchedByPlayer` | `bool` |
+| `m_bFirstCollisionAfterLaunch` | `bool` |
+| `m_bHasBeenAwakened` | `bool` |
+| `m_bIsOverrideProp` | `bool` |
+| `m_flLastBurn` | `float` |
+| `m_nDynamicContinuousContactBehavior` | [`DynamicContinuousContactBehavior_t`](/docs/schema/entity/enums/DynamicContinuousContactBehavior_t) |
+| `m_fNextCheckDisableMotionContactsTime` | `float` |
+| `m_iInitialGlowState` | `int32_t` |
+| `m_nGlowRange` | `int32_t` |
+| `m_nGlowRangeMin` | `int32_t` |
+| `m_glowColor` | `Color` |
+| `m_bShouldAutoConvertBackFromDebris` | `bool` |
+| `m_bMuteImpactEffects` | `bool` |
+| `m_nNavObstacleType` | [`INavObstacle__NavObstacleType_t`](/docs/schema/entity/enums/INavObstacle__NavObstacleType_t) |
+| `m_bUpdateNavWhenMoving` | `bool` |
+| `m_bForceNavObstacleCut` | `bool` |
+| `m_bAcceptDamageFromHeldObjects` | `bool` |
+| `m_bEnableUseOutput` | `bool` |
+| `m_CrateType` | [`CPhysicsProp__CrateType_t`](/docs/schema/entity/enums/CPhysicsProp__CrateType_t) |
+| `m_strItemClass` | `CUtlSymbolLarge` |
+| `m_nItemCount` | `int32_t` |
+| `m_bRemovableForAmmoBalancing` | `bool` |
+| `m_bAwake` | `bool` |
+| `m_bAttachedToReferenceFrame` | `bool` |
 
-## Methods
-
-### CPhysicsProp* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysicsProp* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysicsProp* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysicsProp&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

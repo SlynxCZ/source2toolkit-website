@@ -1,36 +1,19 @@
 ---
-title: CPathSimple
+title: "CPathSimple"
+description: "Schema class CPathSimple, derived from CBaseEntity."
 ---
 
-# CPathSimple
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPathSimple.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPathSimple.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_CPathQueryComponent" type="CPathQueryComponent" />
-- <ApiParam name="m_pathString" type="CUtlString" />
-- <ApiParam name="m_bClosedLoop" type="bool" />
+| Field | Type |
+|---|---|
+| `m_CPathQueryComponent` | [`CPathQueryComponent`](/docs/schema/entity/classes/CPathQueryComponent) |
+| `m_pathString` | `CUtlString` |
+| `m_bClosedLoop` | `bool` |
 
-## Methods
-
-### CPathSimple* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPathSimple* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPathSimple* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPathSimple&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

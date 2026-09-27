@@ -1,57 +1,40 @@
 ---
-title: CParticleSystem
+title: "CParticleSystem"
+description: "Schema class CParticleSystem, derived from CBaseModelEntity."
 ---
 
-# CParticleSystem
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CParticleSystem.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CParticleSystem.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_szSnapshotFileName" type="char" />
-- <ApiParam name="m_bActive" type="bool" />
-- <ApiParam name="m_bFrozen" type="bool" />
-- <ApiParam name="m_flFreezeTransitionDuration" type="float" />
-- <ApiParam name="m_nStopType" type="int32_t" />
-- <ApiParam name="m_bAnimateDuringGameplayPause" type="bool" />
-- <ApiParam name="m_iEffectIndex" type="CStrongHandle&lt;InfoForResourceTypeIParticleSystemDefinition&gt;" />
-- <ApiParam name="m_flStartTime" type="float" />
-- <ApiParam name="m_flPreSimTime" type="float" />
-- <ApiParam name="m_vServerControlPoints" type="Vector" />
-- <ApiParam name="m_iServerControlPointAssignments" type="uint8_t" />
-- <ApiParam name="m_hControlPointEnts" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_bDataStringLocalized" type="bool" />
-- <ApiParam name="m_strDataString" type="CUtlString" />
-- <ApiParam name="m_bNoSave" type="bool" />
-- <ApiParam name="m_bNoFreeze" type="bool" />
-- <ApiParam name="m_bNoRamp" type="bool" />
-- <ApiParam name="m_bStartActive" type="bool" />
-- <ApiParam name="m_iszEffectName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszControlPointNames" type="CUtlSymbolLarge" />
-- <ApiParam name="m_nDataCP" type="int32_t" />
-- <ApiParam name="m_vecDataCPValue" type="Vector" />
-- <ApiParam name="m_nTintCP" type="int32_t" />
-- <ApiParam name="m_clrTint" type="Color" />
+| Field | Type |
+|---|---|
+| `m_szSnapshotFileName` | `char` |
+| `m_bActive` | `bool` |
+| `m_bFrozen` | `bool` |
+| `m_flFreezeTransitionDuration` | `float` |
+| `m_nStopType` | `int32_t` |
+| `m_bAnimateDuringGameplayPause` | `bool` |
+| `m_iEffectIndex` | [`CStrongHandle<InfoForResourceTypeIParticleSystemDefinition>`](/docs/core-api/Schema#cstronghandle) |
+| `m_flStartTime` | `float` |
+| `m_flPreSimTime` | `float` |
+| `m_vServerControlPoints` | `Vector` |
+| `m_iServerControlPointAssignments` | `uint8_t` |
+| `m_hControlPointEnts` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_bDataStringLocalized` | `bool` |
+| `m_strDataString` | `CUtlString` |
+| `m_bNoSave` | `bool` |
+| `m_bNoFreeze` | `bool` |
+| `m_bNoRamp` | `bool` |
+| `m_bStartActive` | `bool` |
+| `m_iszEffectName` | `CUtlSymbolLarge` |
+| `m_iszControlPointNames` | `CUtlSymbolLarge` |
+| `m_nDataCP` | `int32_t` |
+| `m_vecDataCPValue` | `Vector` |
+| `m_nTintCP` | `int32_t` |
+| `m_clrTint` | `Color` |
 
-## Methods
-
-### CParticleSystem* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CParticleSystem* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CParticleSystem* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CParticleSystem&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

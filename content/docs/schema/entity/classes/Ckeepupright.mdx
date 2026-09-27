@@ -1,41 +1,24 @@
 ---
-title: CKeepUpright
+title: "CKeepUpright"
+description: "Schema class CKeepUpright, derived from CPointEntity."
 ---
 
-# CKeepUpright
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CKeepUpright.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CKeepUpright.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_worldGoalAxis" type="Vector" />
-- <ApiParam name="m_localTestAxis" type="Vector" />
-- <ApiParam name="m_pController" type="[IPhysicsMotionController*](/docs/schema/entity/classes/Iphysicsmotioncontroller)" />
-- <ApiParam name="m_nameAttach" type="CUtlSymbolLarge" />
-- <ApiParam name="m_attachedObject" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_angularLimit" type="float" />
-- <ApiParam name="m_bActive" type="bool" />
-- <ApiParam name="m_bDampAllRotation" type="bool" />
+| Field | Type |
+|---|---|
+| `m_worldGoalAxis` | `Vector` |
+| `m_localTestAxis` | `Vector` |
+| `m_pController` | [`IPhysicsMotionController*`](/docs/schema/entity/classes/IPhysicsMotionController) |
+| `m_nameAttach` | `CUtlSymbolLarge` |
+| `m_attachedObject` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_angularLimit` | `float` |
+| `m_bActive` | `bool` |
+| `m_bDampAllRotation` | `bool` |
 
-## Methods
-
-### CKeepUpright* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CKeepUpright* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CKeepUpright* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CKeepUpright&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

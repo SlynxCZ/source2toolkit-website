@@ -1,0 +1,22 @@
+{
+  "title": "Schema",
+  "description": "Entity classes, enums and engine structures",
+  "root": true,
+  "icon": "Database",
+  "pages": [
+    "index",
+    "---Structures---",
+    "Attackerinfo",
+    "Clientframe",
+    "Entityio",
+    "Movedata",
+    "Navarea",
+    "Netmessages",
+    "Recipientfilter",
+    "Serversideclient",
+    "Takedamageinfo",
+    "Takedamageresult",
+    "---Entity system---",
+    "entity"
+  ]
+}

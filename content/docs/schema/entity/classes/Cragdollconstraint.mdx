@@ -1,42 +1,25 @@
 ---
-title: CRagdollConstraint
+title: "CRagdollConstraint"
+description: "Schema class CRagdollConstraint, derived from CPhysConstraint."
 ---
 
-# CRagdollConstraint
 
-**Inheritance**: CPhysConstraint
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CRagdollConstraint.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CRagdollConstraint.h)
+
+**Inherits** [`CPhysConstraint`](/docs/schema/entity/classes/CPhysConstraint)
 
 ## Fields
 
-- <ApiParam name="m_xmin" type="float" />
-- <ApiParam name="m_xmax" type="float" />
-- <ApiParam name="m_ymin" type="float" />
-- <ApiParam name="m_ymax" type="float" />
-- <ApiParam name="m_zmin" type="float" />
-- <ApiParam name="m_zmax" type="float" />
-- <ApiParam name="m_xfriction" type="float" />
-- <ApiParam name="m_yfriction" type="float" />
-- <ApiParam name="m_zfriction" type="float" />
+| Field | Type |
+|---|---|
+| `m_xmin` | `float` |
+| `m_xmax` | `float` |
+| `m_ymin` | `float` |
+| `m_ymax` | `float` |
+| `m_zmin` | `float` |
+| `m_zmax` | `float` |
+| `m_xfriction` | `float` |
+| `m_yfriction` | `float` |
+| `m_zfriction` | `float` |
 
-## Methods
-
-### CRagdollConstraint* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CRagdollConstraint* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CRagdollConstraint* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CRagdollConstraint&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,51 +1,34 @@
 ---
-title: CPropDoorRotating
+title: "CPropDoorRotating"
+description: "Schema class CPropDoorRotating, derived from CBasePropDoor."
 ---
 
-# CPropDoorRotating
 
-**Inheritance**: CBasePropDoor
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPropDoorRotating.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPropDoorRotating.h)
+
+**Inherits** [`CBasePropDoor`](/docs/schema/entity/classes/CBasePropDoor)
 
 ## Fields
 
-- <ApiParam name="m_vecAxis" type="Vector" />
-- <ApiParam name="m_flDistance" type="float" />
-- <ApiParam name="m_eSpawnPosition" type="PropDoorRotatingSpawnPos_t" />
-- <ApiParam name="m_eOpenDirection" type="PropDoorRotatingOpenDirection_e" />
-- <ApiParam name="m_eCurrentOpenDirection" type="PropDoorRotatingOpenDirection_e" />
-- <ApiParam name="m_eDefaultCheckDirection" type="doorCheck_e" />
-- <ApiParam name="m_flAjarAngle" type="float" />
-- <ApiParam name="m_angRotationAjarDeprecated" type="QAngle" />
-- <ApiParam name="m_angRotationClosed" type="QAngle" />
-- <ApiParam name="m_angRotationOpenForward" type="QAngle" />
-- <ApiParam name="m_angRotationOpenBack" type="QAngle" />
-- <ApiParam name="m_angGoal" type="QAngle" />
-- <ApiParam name="m_vecForwardBoundsMin" type="Vector" />
-- <ApiParam name="m_vecForwardBoundsMax" type="Vector" />
-- <ApiParam name="m_vecBackBoundsMin" type="Vector" />
-- <ApiParam name="m_vecBackBoundsMax" type="Vector" />
-- <ApiParam name="m_bAjarDoorShouldntAlwaysOpen" type="bool" />
-- <ApiParam name="m_hEntityBlocker" type="CHandle&lt;CEntityBlocker&gt;" />
+| Field | Type |
+|---|---|
+| `m_vecAxis` | `Vector` |
+| `m_flDistance` | `float` |
+| `m_eSpawnPosition` | [`PropDoorRotatingSpawnPos_t`](/docs/schema/entity/enums/PropDoorRotatingSpawnPos_t) |
+| `m_eOpenDirection` | [`PropDoorRotatingOpenDirection_e`](/docs/schema/entity/enums/PropDoorRotatingOpenDirection_e) |
+| `m_eCurrentOpenDirection` | [`PropDoorRotatingOpenDirection_e`](/docs/schema/entity/enums/PropDoorRotatingOpenDirection_e) |
+| `m_eDefaultCheckDirection` | [`doorCheck_e`](/docs/schema/entity/enums/doorCheck_e) |
+| `m_flAjarAngle` | `float` |
+| `m_angRotationAjarDeprecated` | `QAngle` |
+| `m_angRotationClosed` | `QAngle` |
+| `m_angRotationOpenForward` | `QAngle` |
+| `m_angRotationOpenBack` | `QAngle` |
+| `m_angGoal` | `QAngle` |
+| `m_vecForwardBoundsMin` | `Vector` |
+| `m_vecForwardBoundsMax` | `Vector` |
+| `m_vecBackBoundsMin` | `Vector` |
+| `m_vecBackBoundsMax` | `Vector` |
+| `m_bAjarDoorShouldntAlwaysOpen` | `bool` |
+| `m_hEntityBlocker` | [`CHandle<CEntityBlocker>`](/docs/schema/entity/classes/CEntityBlocker) |
 
-## Methods
-
-### CPropDoorRotating* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPropDoorRotating* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPropDoorRotating* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPropDoorRotating&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

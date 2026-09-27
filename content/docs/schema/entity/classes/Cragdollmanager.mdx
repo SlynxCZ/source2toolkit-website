@@ -1,37 +1,20 @@
 ---
-title: CRagdollManager
+title: "CRagdollManager"
+description: "Schema class CRagdollManager, derived from CBaseEntity."
 ---
 
-# CRagdollManager
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CRagdollManager.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CRagdollManager.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_iCurrentMaxRagdollCount" type="int8_t" />
-- <ApiParam name="m_iMaxRagdollCount" type="int32_t" />
-- <ApiParam name="m_bSaveImportant" type="bool" />
-- <ApiParam name="m_bCanTakeDamage" type="bool" />
+| Field | Type |
+|---|---|
+| `m_iCurrentMaxRagdollCount` | `int8_t` |
+| `m_iMaxRagdollCount` | `int32_t` |
+| `m_bSaveImportant` | `bool` |
+| `m_bCanTakeDamage` | `bool` |
 
-## Methods
-
-### CRagdollManager* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CRagdollManager* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CRagdollManager* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CRagdollManager&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

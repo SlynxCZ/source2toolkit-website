@@ -1,23 +1,28 @@
 ---
-title: CModelState
+title: "CModelState"
+description: "Schema class CModelState."
 ---
 
-# CModelState
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CModelState.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CModelState.h)
 
 ## Fields
 
-- <ApiParam name="m_hModel" type="CStrongHandle&lt;InfoForResourceTypeCModel&gt;" />
-- <ApiParam name="m_ModelName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_pVPhysicsAggregate" type="[IPhysAggregateInstance*](/docs/schema/entity/classes/Iphysaggregateinstance)" />
-- <ApiParam name="m_flRootBoneOffset_x" type="float" />
-- <ApiParam name="m_flRootBoneOffset_y" type="float" />
-- <ApiParam name="m_flRootBoneOffset_z" type="float" />
-- <ApiParam name="m_nRootBoneOffsetResetSerialNumber" type="uint8_t" />
-- <ApiParam name="m_bClientClothCreationSuppressed" type="bool" />
-- <ApiParam name="m_nAnimStateNoInterpSerialNumber" type="uint8_t" />
-- <ApiParam name="m_MeshGroupMask" type="uint64_t" />
-- <ApiParam name="m_nBodyGroupChoices" type="CUtlVector&lt;int32_t&gt;" />
-- <ApiParam name="m_nIdealMotionType" type="int8_t" />
-- <ApiParam name="m_nForceLOD" type="int8_t" />
-- <ApiParam name="m_nClothUpdateFlags" type="int8_t" />
+| Field | Type |
+|---|---|
+| `m_hModel` | [`CStrongHandle<InfoForResourceTypeCModel>`](/docs/core-api/Schema#cstronghandle) |
+| `m_ModelName` | `CUtlSymbolLarge` |
+| `m_pVPhysicsAggregate` | [`IPhysAggregateInstance*`](/docs/schema/entity/classes/IPhysAggregateInstance) |
+| `m_flRootBoneOffset_x` | `float` |
+| `m_flRootBoneOffset_y` | `float` |
+| `m_flRootBoneOffset_z` | `float` |
+| `m_nRootBoneOffsetResetSerialNumber` | `uint8_t` |
+| `m_bClientClothCreationSuppressed` | `bool` |
+| `m_nAnimStateNoInterpSerialNumber` | `uint8_t` |
+| `m_MeshGroupMask` | `uint64_t` |
+| `m_nBodyGroupChoices` | `CUtlVector<int32_t>` |
+| `m_nIdealMotionType` | `int8_t` |
+| `m_nForceLOD` | `int8_t` |
+| `m_nClothUpdateFlags` | `int8_t` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,35 +1,18 @@
 ---
-title: CPointClientUIDialog
+title: "CPointClientUIDialog"
+description: "Schema class CPointClientUIDialog, derived from CBaseClientUIEntity."
 ---
 
-# CPointClientUIDialog
 
-**Inheritance**: CBaseClientUIEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointClientUIDialog.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointClientUIDialog.h)
+
+**Inherits** [`CBaseClientUIEntity`](/docs/schema/entity/classes/CBaseClientUIEntity)
 
 ## Fields
 
-- <ApiParam name="m_hActivator" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_bStartEnabled" type="bool" />
+| Field | Type |
+|---|---|
+| `m_hActivator` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_bStartEnabled` | `bool` |
 
-## Methods
-
-### CPointClientUIDialog* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointClientUIDialog* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointClientUIDialog* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointClientUIDialog&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

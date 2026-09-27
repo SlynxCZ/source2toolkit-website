@@ -1,65 +1,90 @@
 ---
-title: CPlayer_WeaponServices
+title: "CPlayer_WeaponServices"
+description: "Schema class CPlayer_WeaponServices, derived from CPlayerPawnComponent."
 ---
 
-# CPlayer_WeaponServices
 
-**Inheritance**: CPlayerPawnComponent
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPlayer_WeaponServices.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPlayer_WeaponServices.h)
+
+**Inherits** [`CPlayerPawnComponent`](/docs/schema/entity/classes/CPlayerPawnComponent)
 
 ## Fields
 
-- <ApiParam name="m_hMyWeapons" type="CUtlVector&lt;CHandle&lt;CBasePlayerWeapon&gt;&gt;" />
-- <ApiParam name="m_hActiveWeapon" type="CHandle&lt;CBasePlayerWeapon&gt;" />
-- <ApiParam name="m_hLastWeapon" type="CHandle&lt;CBasePlayerWeapon&gt;" />
-- <ApiParam name="m_iAmmo" type="uint16_t" />
-- <ApiParam name="m_bPreventWeaponPickup" type="bool" />
+| Field | Type |
+|---|---|
+| `m_hMyWeapons` | [`CUtlVector<CHandle<CBasePlayerWeapon>>`](/docs/schema/entity/classes/CBasePlayerWeapon) |
+| `m_hActiveWeapon` | [`CHandle<CBasePlayerWeapon>`](/docs/schema/entity/classes/CBasePlayerWeapon) |
+| `m_hLastWeapon` | [`CHandle<CBasePlayerWeapon>`](/docs/schema/entity/classes/CBasePlayerWeapon) |
+| `m_iAmmo` | `uint16_t` |
+| `m_bPreventWeaponPickup` | `bool` |
+
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).
 
 ## Methods
 
-### bool CanUse(pWeapon)
+### `CanUse`
+
+```cpp
+bool CanUse(CBasePlayerWeapon *pWeapon);
+```
 
 Checks if player can use weapon (fire and maybe acquire).
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `pWeapon` | [`CBasePlayerWeapon *`](/docs/schema/entity/classes/CBasePlayerWeapon) |
 
-- <ApiParam name="pWeapon" type="CBasePlayerWeapon *" />
+### `DropWeapon`
 
-### DropWeapon(pWeapon, pVecTarget, pVelocity, eChain)
+```cpp
+void DropWeapon(CBasePlayerWeapon *pWeapon, Vector *pVecTarget = nullptr, Vector *pVelocity = nullptr, HookChain eChain = HookChain::Run);
+```
 
 Drop weapon.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `pWeapon` | [`CBasePlayerWeapon *`](/docs/schema/entity/classes/CBasePlayerWeapon) |  |
+| `pVecTarget` | `Vector *` | `nullptr` |
+| `pVelocity` | `Vector *` | `nullptr` |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |
 
-- <ApiParam name="pWeapon" type="CBasePlayerWeapon *" />
-- <ApiParam name="pVecTarget" type="Vector *" />
-- <ApiParam name="pVelocity" type="Vector *" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+### `BumpWeapon`
 
-### int BumpWeapon(pWeapon, eChain)
+```cpp
+int BumpWeapon(CBasePlayerWeapon *pWeapon, HookChain eChain = HookChain::Run);
+```
 
 Probably checks weapon validity after CPlayer_ItemServices::GiveNamedItem invoke, may return 2 if CSGameRules()-&gt;IsPlayingGunGameDeathmatch, meaning that pWeapon will be deleted.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `pWeapon` | [`CBasePlayerWeapon *`](/docs/schema/entity/classes/CBasePlayerWeapon) |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |
 
-- <ApiParam name="pWeapon" type="CBasePlayerWeapon *" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+### `SelectItem`
 
-### SelectItem(pWeapon, unk1, eChain)
+```cpp
+void SelectItem(CBasePlayerWeapon *pWeapon, int unk1 = 0, HookChain eChain = HookChain::Run);
+```
 
 Select weapon, If unk1 is equal to 3 some code will be executed.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `pWeapon` | [`CBasePlayerWeapon *`](/docs/schema/entity/classes/CBasePlayerWeapon) |  |
+| `unk1` | `int` | `0` |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |
 
-- <ApiParam name="pWeapon" type="CBasePlayerWeapon *" />
-- <ApiParam name="unk1" type="int" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+### `Destroy`
 
-### Destroy(pWeapon, eChain)
+```cpp
+void Destroy(CBasePlayerWeapon *pWeapon, HookChain eChain = HookChain::Run);
+```
 
 Remove and destroy weapon from player.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="pWeapon" type="CBasePlayerWeapon *" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
-
+| Parameter | Type | Default |
+|---|---|---|
+| `pWeapon` | [`CBasePlayerWeapon *`](/docs/schema/entity/classes/CBasePlayerWeapon) |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |

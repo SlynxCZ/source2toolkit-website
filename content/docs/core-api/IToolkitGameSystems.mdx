@@ -1,24 +1,91 @@
 ---
-title: IToolkitGameSystems
+title: "IToolkitGameSystems"
+description: "Interface for registering game systems with the engine."
 ---
 
-# IToolkitGameSystems
+
+A game system is how the engine lets code run at fixed points of a session -- BuildGameSessionManifest for precaching, ServerGamePostSimulate per frame, and the rest of the IGameSystem event set. Registering one means getting a factory into the engine's own linked list, whose head lives in a static the engine never exports.
+
+The toolkit finds that head once, by signature, and hands it over here. It has to be handed over rather than used directly, because CBaseGameSystemFactory::sm_pFirst is a static member: every binary that includes the hl2sdk header gets its own copy, so a plugin's copy is null until it is pointed at the engine's.
+
+Access to the engine's game system registry.
+
+Registering a game system of your own is three steps:
+
+```cpp
+// 1. Declare it, the way the hl2sdk expects.
+class MyGameSystem : public CBaseGameSystem
+{
+public:
+    DECLARE_GAME_SYSTEM();
+    GS_EVENT(BuildGameSessionManifest);
+
+    void SetGameSystemGlobalPtrs(void* pValue) override
+    {
+        if (sm_Factory) sm_Factory->SetGlobalPtr(pValue);
+    }
+    bool DoesGameSystemReallocate() override { return sm_Factory->ShouldAutoAdd(); }
+
+    // Not IGameSystemFactory*: that is abstract and has no virtual
+    // destructor, so deleting your factory through it is undefined. Hold a
+    // final type of your own instead.
+    static MyGameSystemFactory* sm_Factory;
+};
+
+class MyGameSystemFactory final : public CGameSystemStaticFactory<MyGameSystem>
+{
+public:
+    using CGameSystemStaticFactory<MyGameSystem>::CGameSystemStaticFactory;
+};
+
+MyGameSystem g_MyGameSystem;
+MyGameSystemFactory* MyGameSystem::sm_Factory = nullptr;
+CBaseGameSystemFactory** CBaseGameSystemFactory::sm_pFirst = nullptr;
+
+// 2. Point this binary's copy of sm_pFirst at the engine's list, in Load().
+CBaseGameSystemFactory::sm_pFirst = api->GameSystems()->GetFactoryListHead();
+
+// 3. Register. The factory adds itself to the list its constructor sees.
+MyGameSystem::sm_Factory =
+    new MyGameSystemFactory("MyPlugin_GameSystem", &g_MyGameSystem);
+```
+
+<Callout type="info">Registration only takes effect for sessions started afterwards; the engine walks the list when it initialises all systems.</Callout>
+
+**Interface id** `IToolkitGameSystems001` (`TOOLKIT_GAMESYSTEMS_INTERFACE`) · **Global** `g_pToolkitGameSystems` · **Header** [`source2toolkit/IToolkitGameSystems.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitGameSystems.h)
 
 ## Methods
 
-### bool IsAvailable()
+### `IsAvailable`
+
+```cpp
+virtual bool IsAvailable() const = 0;
+```
 
 Whether the factory list head was found.
 
-### CBaseGameSystemFactory** GetFactoryListHead()
+False means the signature scan failed -- usually a game update -- and registering a game system cannot work. Check before registering.
+
+### `GetFactoryListHead`
+
+```cpp
+virtual CBaseGameSystemFactory** GetFactoryListHead() = 0;
+```
 
 The engine's game system factory list head.
 
-### IGameSystem* FindByName(name)
+Assign this to your own binary's CBaseGameSystemFactory::sm_pFirst before constructing any factory. Returns nullptr when IsAvailable() is false.
 
-Finds an already-registered game system by the name it was
+### `FindByName`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+virtual IGameSystem* FindByName(const char* name) = 0;
+```
 
-- <ApiParam name="name" type="const char*" /> — Registration name, e.g. "MyPlugin_GameSystem".
+Finds an already-registered game system by the name it was registered under.
 
+| Parameter | Type | Description |
+|---|---|---|
+| `name` | `const char*` | Registration name, e.g. "MyPlugin_GameSystem". |
+
+**Returns** `IGameSystem*` — The system, or nullptr if nothing is registered under that name.

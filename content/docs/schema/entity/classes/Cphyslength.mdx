@@ -1,38 +1,21 @@
 ---
-title: CPhysLength
+title: "CPhysLength"
+description: "Schema class CPhysLength, derived from CPhysConstraint."
 ---
 
-# CPhysLength
 
-**Inheritance**: [CPhysConstraint](/docs/schema/entity/classes/Cphysconstraint)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysLength.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysLength.h)
+
+**Inherits** [`CPhysConstraint`](/docs/schema/entity/classes/CPhysConstraint)
 
 ## Fields
 
-- <ApiParam name="m_offset" type="Vector" />
-- <ApiParam name="m_vecAttach" type="Vector" />
-- <ApiParam name="m_addLength" type="float" />
-- <ApiParam name="m_minLength" type="float" />
-- <ApiParam name="m_totalLength" type="float" />
+| Field | Type |
+|---|---|
+| `m_offset` | `Vector` |
+| `m_vecAttach` | `Vector` |
+| `m_addLength` | `float` |
+| `m_minLength` | `float` |
+| `m_totalLength` | `float` |
 
-## Methods
-
-### CPhysLength* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysLength* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysLength* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysLength&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,42 +1,25 @@
 ---
-title: CEconEntity
+title: "CEconEntity"
+description: "Schema class CEconEntity, derived from CBaseAnimGraph."
 ---
 
-# CEconEntity
 
-**Inheritance**: CBaseAnimGraph
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEconEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEconEntity.h)
+
+**Inherits** [`CBaseAnimGraph`](/docs/schema/entity/classes/CBaseAnimGraph)
 
 ## Fields
 
-- <ApiParam name="m_AttributeManager" type="CAttributeContainer" />
-- <ApiParam name="m_OriginalOwnerXuidLow" type="uint32_t" />
-- <ApiParam name="m_OriginalOwnerXuidHigh" type="uint32_t" />
-- <ApiParam name="m_nFallbackPaintKit" type="int32_t" />
-- <ApiParam name="m_nFallbackSeed" type="int32_t" />
-- <ApiParam name="m_flFallbackWear" type="float" />
-- <ApiParam name="m_nFallbackStatTrak" type="int32_t" />
-- <ApiParam name="m_hOldProvidee" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_iOldOwnerClass" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_AttributeManager` | [`CAttributeContainer`](/docs/schema/entity/classes/CAttributeContainer) |
+| `m_OriginalOwnerXuidLow` | `uint32_t` |
+| `m_OriginalOwnerXuidHigh` | `uint32_t` |
+| `m_nFallbackPaintKit` | `int32_t` |
+| `m_nFallbackSeed` | `int32_t` |
+| `m_flFallbackWear` | `float` |
+| `m_nFallbackStatTrak` | `int32_t` |
+| `m_hOldProvidee` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_iOldOwnerClass` | `int32_t` |
 
-## Methods
-
-### CEconEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEconEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEconEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEconEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

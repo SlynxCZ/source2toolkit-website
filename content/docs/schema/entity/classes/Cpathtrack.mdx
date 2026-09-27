@@ -1,43 +1,26 @@
 ---
-title: CPathTrack
+title: "CPathTrack"
+description: "Schema class CPathTrack, derived from CPointEntity."
 ---
 
-# CPathTrack
 
-**Inheritance**: CPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPathTrack.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPathTrack.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_pnext" type="CHandle&lt;CPathTrack&gt;" />
-- <ApiParam name="m_pprevious" type="CHandle&lt;CPathTrack&gt;" />
-- <ApiParam name="m_paltpath" type="CHandle&lt;CPathTrack&gt;" />
-- <ApiParam name="m_flSpeed" type="float" />
-- <ApiParam name="m_flRadius" type="float" />
-- <ApiParam name="m_length" type="float" />
-- <ApiParam name="m_altName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_nIterVal" type="int32_t" />
-- <ApiParam name="m_eOrientationType" type="TrackOrientationType_t" />
-- <ApiParam name="m_OnPass" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_pnext` | `CHandle<CPathTrack>` |
+| `m_pprevious` | `CHandle<CPathTrack>` |
+| `m_paltpath` | `CHandle<CPathTrack>` |
+| `m_flSpeed` | `float` |
+| `m_flRadius` | `float` |
+| `m_length` | `float` |
+| `m_altName` | `CUtlSymbolLarge` |
+| `m_nIterVal` | `int32_t` |
+| `m_eOrientationType` | [`TrackOrientationType_t`](/docs/schema/entity/enums/TrackOrientationType_t) |
+| `m_OnPass` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CPathTrack* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPathTrack* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPathTrack* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPathTrack&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

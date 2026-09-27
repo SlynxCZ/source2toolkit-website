@@ -1,0 +1,91 @@
+---
+title: "IToolkitTypes"
+description: "Types shared by every toolkit callback."
+---
+
+
+Defines:
+- Action    -- what a callback tells the toolkit to do with the original (KHook::Action)
+- HookChain -- whether an SDK helper's call into the game runs the hooks on it
+
+**Header** [`source2toolkit/IToolkitTypes.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitTypes.h)
+
+## Types
+
+### `Action`
+
+```cpp
+using Action = KHook::Action;
+```
+
+What a toolkit callback (command listener, game event hook, net message hook, entity output listener) did about the original.
+
+KHook's own result type, so a KHook handler hands a listener's answer straight through and a listener returns what a hook would:
+
+- Ignore    -- did nothing; the original runs as it would have.
+- Override  -- changed something (the event, the return value) but the original still runs. Pre only.
+- Supersede -- block the original entirely. Pre only.
+
+## Enums
+
+### `HookChain`
+
+```cpp
+enum class HookChain : uint8_t
+```
+
+Whether an SDK helper's call into the game goes through the hooks plugins placed on the function it calls.
+
+Every schema helper that calls a hookable game function (TakeDamage, GiveNamedItem, TerminateRound, SetModel, ...) takes one as its last argument:
+
+- Run    -- through the Pre/Post chain, as if the game made the call. Right when the plugin stands in for the game -- a weapon dealing damage, a round reward handing out an item -- and other plugins' rules should apply.
+- Bypass -- straight to the original, past every hook (inline detours and vtable hooks alike). Right when the server was told to do it -- an admin command, a forced round end -- or when calling the very function you are hooking, where Run would recurse.
+
+The default of each helper is what it always did, so existing calls keep their behaviour; see the helper's declaration.
+
+```cpp
+pItemServices->GiveNamedItem("weapon_ak47");                        // hooks run
+pController->TakeDamage(pAttacker, 50, DMG_BULLET, HookChain::Run); // opt in
+```
+
+| Name |
+|---|
+| `Run` |
+| `Bypass` |
+
+## Functions
+
+### `ResolveHookChain`
+
+```cpp
+template <typename FN> inline FN ResolveHookChain(FN fn, HookChain eChain);
+```
+
+The function to call for a resolved address: the address itself, or, for HookChain::Bypass, the original behind any detour on it.
+
+Resolve at the call, not once: a hook installed later changes the answer.
+
+| Parameter | Type |
+|---|---|
+| `fn` | `FN` |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) |
+
+### `ResolveHookChainVirtual`
+
+```cpp
+inline void* ResolveHookChainVirtual(void* pThis, int nIndex, HookChain eChain);
+```
+
+The function to call for vtable slot nIndex of pThis: whatever the slot holds, or, for HookChain::Bypass, the original behind both a vtable hook on the slot and a detour on the function it points at.
+
+| Parameter | Type |
+|---|---|
+| `pThis` | `void*` |
+| `nIndex` | `int` |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) |
+
+## Macros
+
+| Macro | Expands to |
+|---|---|
+| `KHOOK_NEW(member, ...)` | `member(new std::remove_pointer_t<decltype(member)>(__VA_ARGS__))` |

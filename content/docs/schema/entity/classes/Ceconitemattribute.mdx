@@ -1,14 +1,19 @@
 ---
-title: CEconItemAttribute
+title: "CEconItemAttribute"
+description: "Schema class CEconItemAttribute."
 ---
 
-# CEconItemAttribute
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEconItemAttribute.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEconItemAttribute.h)
 
 ## Fields
 
-- <ApiParam name="m_iAttributeDefinitionIndex" type="uint16_t" />
-- <ApiParam name="m_flValue" type="float" />
-- <ApiParam name="m_flInitialValue" type="float" />
-- <ApiParam name="m_nRefundableCurrency" type="int32_t" />
-- <ApiParam name="m_bSetBonus" type="bool" />
+| Field | Type |
+|---|---|
+| `m_iAttributeDefinitionIndex` | `uint16_t` |
+| `m_flValue` | `float` |
+| `m_flInitialValue` | `float` |
+| `m_nRefundableCurrency` | `int32_t` |
+| `m_bSetBonus` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

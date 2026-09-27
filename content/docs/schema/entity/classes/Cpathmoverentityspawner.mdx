@@ -1,54 +1,37 @@
 ---
-title: CPathMoverEntitySpawner
+title: "CPathMoverEntitySpawner"
+description: "Schema class CPathMoverEntitySpawner, derived from CLogicalEntity."
 ---
 
-# CPathMoverEntitySpawner
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPathMoverEntitySpawner.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPathMoverEntitySpawner.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_eTemplateChoiceStrategy" type="CPathMoverEntitySpawner__TemplateChoiceStrategy_t" />
-- <ApiParam name="m_szSpawnTemplates" type="CUtlSymbolLarge" />
-- <ApiParam name="m_szSpawnTemplateParams" type="int32_t" />
-- <ApiParam name="m_szSpawnTemplateCount" type="int32_t" />
-- <ApiParam name="m_nSpawnIndex" type="int32_t" />
-- <ApiParam name="m_hPathMover" type="CHandle&lt;CPathMover&gt;" />
-- <ApiParam name="m_flSpawnFrequencySeconds" type="float" />
-- <ApiParam name="m_flSpawnFrequencyDistToNearestMover" type="float" />
-- <ApiParam name="m_nMaxActive" type="int32_t" />
-- <ApiParam name="m_nSpawnNum" type="int32_t" />
-- <ApiParam name="m_flLastSpawnTime" type="float" />
-- <ApiParam name="m_bEnabled" type="bool" />
-- <ApiParam name="m_bDestroyMoverOnArrivedAtEnd" type="bool" />
-- <ApiParam name="m_vecQueuedRemovals" type="CUtlVector&lt;CHandle&lt;CFuncMover&gt;&gt;" />
-- <ApiParam name="m_OnTemplateSpawned" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnTemplateGroupSpawned" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_iszPathMoverName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bPrepopulateOnSpawn" type="bool" />
-- <ApiParam name="m_iszPathNodeStartName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_vMoverSpawnPos" type="Vector" />
-- <ApiParam name="m_bRunningDebugThink" type="bool" />
+| Field | Type |
+|---|---|
+| `m_eTemplateChoiceStrategy` | [`CPathMoverEntitySpawner__TemplateChoiceStrategy_t`](/docs/schema/entity/enums/CPathMoverEntitySpawner__TemplateChoiceStrategy_t) |
+| `m_szSpawnTemplates` | `CUtlSymbolLarge` |
+| `m_szSpawnTemplateParams` | `int32_t` |
+| `m_szSpawnTemplateCount` | `int32_t` |
+| `m_nSpawnIndex` | `int32_t` |
+| `m_hPathMover` | [`CHandle<CPathMover>`](/docs/schema/entity/classes/CPathMover) |
+| `m_flSpawnFrequencySeconds` | `float` |
+| `m_flSpawnFrequencyDistToNearestMover` | `float` |
+| `m_nMaxActive` | `int32_t` |
+| `m_nSpawnNum` | `int32_t` |
+| `m_flLastSpawnTime` | `float` |
+| `m_bEnabled` | `bool` |
+| `m_bDestroyMoverOnArrivedAtEnd` | `bool` |
+| `m_vecQueuedRemovals` | [`CUtlVector<CHandle<CFuncMover>>`](/docs/schema/entity/classes/CFuncMover) |
+| `m_OnTemplateSpawned` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnTemplateGroupSpawned` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_iszPathMoverName` | `CUtlSymbolLarge` |
+| `m_bPrepopulateOnSpawn` | `bool` |
+| `m_iszPathNodeStartName` | `CUtlSymbolLarge` |
+| `m_vMoverSpawnPos` | `Vector` |
+| `m_bRunningDebugThink` | `bool` |
 
-## Methods
-
-### CPathMoverEntitySpawner* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPathMoverEntitySpawner* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPathMoverEntitySpawner* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPathMoverEntitySpawner&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

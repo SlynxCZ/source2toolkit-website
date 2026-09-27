@@ -1,39 +1,22 @@
 ---
-title: CPathNode
+title: "CPathNode"
+description: "Schema class CPathNode, derived from CPointEntity."
 ---
 
-# CPathNode
 
-**Inheritance**: CPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPathNode.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPathNode.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_vInTangentLocal" type="Vector" />
-- <ApiParam name="m_vOutTangentLocal" type="Vector" />
-- <ApiParam name="m_strParentPathUniqueID" type="CUtlString" />
-- <ApiParam name="m_strPathNodeParameter" type="CUtlString" />
-- <ApiParam name="m_xWSPrevParent" type="CTransform" />
-- <ApiParam name="m_hPath" type="CHandle&lt;CPathWithDynamicNodes&gt;" />
+| Field | Type |
+|---|---|
+| `m_vInTangentLocal` | `Vector` |
+| `m_vOutTangentLocal` | `Vector` |
+| `m_strParentPathUniqueID` | `CUtlString` |
+| `m_strPathNodeParameter` | `CUtlString` |
+| `m_xWSPrevParent` | `CTransform` |
+| `m_hPath` | [`CHandle<CPathWithDynamicNodes>`](/docs/schema/entity/classes/CPathWithDynamicNodes) |
 
-## Methods
-
-### CPathNode* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPathNode* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPathNode* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPathNode&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

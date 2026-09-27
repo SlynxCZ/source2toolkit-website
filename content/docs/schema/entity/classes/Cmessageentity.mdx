@@ -1,38 +1,21 @@
 ---
-title: CMessageEntity
+title: "CMessageEntity"
+description: "Schema class CMessageEntity, derived from CPointEntity."
 ---
 
-# CMessageEntity
 
-**Inheritance**: CPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMessageEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMessageEntity.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_radius" type="int32_t" />
-- <ApiParam name="m_messageText" type="CUtlSymbolLarge" />
-- <ApiParam name="m_drawText" type="bool" />
-- <ApiParam name="m_bDeveloperOnly" type="bool" />
-- <ApiParam name="m_bEnabled" type="bool" />
+| Field | Type |
+|---|---|
+| `m_radius` | `int32_t` |
+| `m_messageText` | `CUtlSymbolLarge` |
+| `m_drawText` | `bool` |
+| `m_bDeveloperOnly` | `bool` |
+| `m_bEnabled` | `bool` |
 
-## Methods
-
-### CMessageEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMessageEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMessageEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMessageEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

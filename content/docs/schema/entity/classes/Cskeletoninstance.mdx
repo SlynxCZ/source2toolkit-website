@@ -1,19 +1,24 @@
 ---
-title: CSkeletonInstance
+title: "CSkeletonInstance"
+description: "Schema class CSkeletonInstance, derived from CGameSceneNode."
 ---
 
-# CSkeletonInstance
 
-**Inheritance**: CGameSceneNode
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSkeletonInstance.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSkeletonInstance.h)
+
+**Inherits** [`CGameSceneNode`](/docs/schema/entity/classes/CGameSceneNode)
 
 ## Fields
 
-- <ApiParam name="m_modelState" type="[CModelState](/docs/schema/entity/classes/Cmodelstate)" />
-- <ApiParam name="m_bUseParentRenderBounds" type="bool" />
-- <ApiParam name="m_bDisableSolidCollisionsForHierarchy" type="bool" />
-- <ApiParam name="m_bDirtyMotionType" type="bool" />
-- <ApiParam name="m_bIsGeneratingLatchedParentSpaceState" type="bool" />
-- <ApiParam name="m_materialGroup" type="CUtlStringToken" />
-- <ApiParam name="m_nHitboxSet" type="uint8_t" />
-- <ApiParam name="m_bForceServerConstraintsEnabled" type="bool" />
+| Field | Type |
+|---|---|
+| `m_modelState` | [`CModelState`](/docs/schema/entity/classes/CModelState) |
+| `m_bUseParentRenderBounds` | `bool` |
+| `m_bDisableSolidCollisionsForHierarchy` | `bool` |
+| `m_bDirtyMotionType` | `bool` |
+| `m_bIsGeneratingLatchedParentSpaceState` | `bool` |
+| `m_materialGroup` | `CUtlStringToken` |
+| `m_nHitboxSet` | `uint8_t` |
+| `m_bForceServerConstraintsEnabled` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

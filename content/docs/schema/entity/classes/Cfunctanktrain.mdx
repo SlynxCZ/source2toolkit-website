@@ -1,34 +1,17 @@
 ---
-title: CFuncTankTrain
+title: "CFuncTankTrain"
+description: "Schema class CFuncTankTrain, derived from CFuncTrackTrain."
 ---
 
-# CFuncTankTrain
 
-**Inheritance**: CFuncTrackTrain
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncTankTrain.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncTankTrain.h)
+
+**Inherits** [`CFuncTrackTrain`](/docs/schema/entity/classes/CFuncTrackTrain)
 
 ## Fields
 
-- <ApiParam name="m_OnDeath" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_OnDeath` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CFuncTankTrain* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncTankTrain* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncTankTrain* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncTankTrain&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

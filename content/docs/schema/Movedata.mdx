@@ -1,28 +1,110 @@
 ---
-title: Movedata
+title: "CMoveData"
+description: "Engine structures the SDK declares by hand: SubtickMove, TouchList_t, CMoveDataBase, CMoveData."
 ---
 
-# movedata
 
-## CMoveDataBase
+**Header** [`source2toolkit/schema/movedata.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/movedata.h)
 
-### bool HasZeroFrametime()
+**Inherits** [`CMoveDataBase`](/docs/schema/Movedata#cmovedatabase)
 
-### bool IsLateCommand()
+## Fields
 
-### SetHasZeroFrametime(bValue)
+| Field | Type |
+|---|---|
+| `m_vecOutWishVel` | `Vector` |
+| `m_vecOldAngles` | `QAngle` |
+| `m_vecWalkWishedVelocity` | `Vector2D` |
+| `m_vecAcceleration` | `Vector` |
+| `m_vecContinuousAcceleration` | `Vector` |
+| `m_flMaxSpeed` | `float` |
+| `m_flClientMaxSpeed` | `float` |
+| `m_flFrictionDecel` | `float` |
+| `m_bInAir` | `bool` |
+| `m_bGameCodeMovedPlayer` | `bool` |
 
-<ApiLabel>Parameters</ApiLabel>
+## `SubtickMove`
 
-- <ApiParam name="bValue" type="bool" />
+### Fields
 
-### SetIsLateCommand(bValue)
+| Field | Type |
+|---|---|
+| `m_flWhen` | `float` |
+| `m_nButton` | `uint64_t` |
 
-<ApiLabel>Parameters</ApiLabel>
+### `IsAnalogInput`
 
-- <ApiParam name="bValue" type="bool" />
+```cpp
+bool IsAnalogInput() const;
+```
 
-## CMoveData
+## `TouchList_t`
 
-**Inheritance**: [CMoveDataBase](/docs/schema/Movedata)
+### Fields
 
+| Field | Type |
+|---|---|
+| `m_vecDeltaVelocity` | `Vector` |
+| `m_Trace` | `CGameTrace` |
+
+## `CMoveDataBase`
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `m_nBitfield` | `uint8_t` |
+| `m_nPlayerHandle` | [`CHandle<CCSPlayerPawn>`](/docs/schema/entity/classes/CCSPlayerPawn) |
+| `m_vecAbsViewAngles` | `QAngle` |
+| `m_vecViewAngles` | `QAngle` |
+| `m_vecLastMovementImpulses` | `Vector` |
+| `m_flForwardMove` | `float` |
+| `m_flSideMove` | `float` |
+| `m_flUpMove` | `float` |
+| `m_vecVelocity` | `Vector` |
+| `m_vecAngles` | `QAngle` |
+| `m_vecUnknown` | `Vector` |
+| `m_SubtickMoves` | [`CUtlVector<SubtickMove>`](/docs/schema/Movedata#subtickmove) |
+| `m_AttackSubtickMoves` | [`CUtlVector<SubtickMove>`](/docs/schema/Movedata#subtickmove) |
+| `m_bHasSubtickInputs` | `bool` |
+| `m_flUnknown` | `float` |
+| `m_TouchList` | [`CUtlVector<TouchList_t>`](/docs/schema/Movedata#touchlist_t) |
+| `m_vecCollisionNormal` | `Vector` |
+| `m_vecGroundNormal` | `Vector` |
+| `m_vecAbsOrigin` | `Vector` |
+| `m_nTickCount` | `int32_t` |
+| `m_nTargetTick` | `int32_t` |
+| `m_flSubtickStartFraction` | `float` |
+| `m_flSubtickEndFraction` | `float` |
+
+### `HasZeroFrametime`
+
+```cpp
+bool HasZeroFrametime() const;
+```
+
+### `IsLateCommand`
+
+```cpp
+bool IsLateCommand() const;
+```
+
+### `SetHasZeroFrametime`
+
+```cpp
+void SetHasZeroFrametime(bool bValue);
+```
+
+| Parameter | Type |
+|---|---|
+| `bValue` | `bool` |
+
+### `SetIsLateCommand`
+
+```cpp
+void SetIsLateCommand(bool bValue);
+```
+
+| Parameter | Type |
+|---|---|
+| `bValue` | `bool` |

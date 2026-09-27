@@ -1,47 +1,30 @@
 ---
-title: CFuncMoveLinear
+title: "CFuncMoveLinear"
+description: "Schema class CFuncMoveLinear, derived from CBaseToggle."
 ---
 
-# CFuncMoveLinear
 
-**Inheritance**: [CBaseToggle](/docs/schema/entity/classes/Cbasetoggle)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncMoveLinear.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncMoveLinear.h)
+
+**Inherits** [`CBaseToggle`](/docs/schema/entity/classes/CBaseToggle)
 
 ## Fields
 
-- <ApiParam name="m_authoredPosition" type="MoveLinearAuthoredPos_t" />
-- <ApiParam name="m_angMoveEntitySpace" type="QAngle" />
-- <ApiParam name="m_vecMoveDirParentSpace" type="Vector" />
-- <ApiParam name="m_soundStart" type="CGameSoundEventName" />
-- <ApiParam name="m_soundStop" type="CGameSoundEventName" />
-- <ApiParam name="m_currentSound" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flBlockDamage" type="float" />
-- <ApiParam name="m_flStartPosition" type="float" />
-- <ApiParam name="m_OnFullyOpen" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnFullyClosed" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_flSpeed" type="float" />
-- <ApiParam name="m_bCreateMovableNavMesh" type="bool" />
-- <ApiParam name="m_bAllowMovableNavMeshDockingOnEntireEntity" type="bool" />
-- <ApiParam name="m_bCreateNavObstacle" type="bool" />
+| Field | Type |
+|---|---|
+| `m_authoredPosition` | [`MoveLinearAuthoredPos_t`](/docs/schema/entity/enums/MoveLinearAuthoredPos_t) |
+| `m_angMoveEntitySpace` | `QAngle` |
+| `m_vecMoveDirParentSpace` | `Vector` |
+| `m_soundStart` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_soundStop` | [`CGameSoundEventName`](/docs/core-api/Schema#cgamesoundeventname) |
+| `m_currentSound` | `CUtlSymbolLarge` |
+| `m_flBlockDamage` | `float` |
+| `m_flStartPosition` | `float` |
+| `m_OnFullyOpen` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnFullyClosed` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_flSpeed` | `float` |
+| `m_bCreateMovableNavMesh` | `bool` |
+| `m_bAllowMovableNavMeshDockingOnEntireEntity` | `bool` |
+| `m_bCreateNavObstacle` | `bool` |
 
-## Methods
-
-### CFuncMoveLinear* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncMoveLinear* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncMoveLinear* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncMoveLinear&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

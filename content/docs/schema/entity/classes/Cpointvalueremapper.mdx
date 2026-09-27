@@ -1,75 +1,58 @@
 ---
-title: CPointValueRemapper
+title: "CPointValueRemapper"
+description: "Schema class CPointValueRemapper, derived from CBaseEntity."
 ---
 
-# CPointValueRemapper
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointValueRemapper.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointValueRemapper.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_bUpdateOnClient" type="bool" />
-- <ApiParam name="m_nInputType" type="ValueRemapperInputType_t" />
-- <ApiParam name="m_iszRemapLineStartName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszRemapLineEndName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hRemapLineStart" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_hRemapLineEnd" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_flMaximumChangePerSecond" type="float" />
-- <ApiParam name="m_flDisengageDistance" type="float" />
-- <ApiParam name="m_flEngageDistance" type="float" />
-- <ApiParam name="m_bRequiresUseKey" type="bool" />
-- <ApiParam name="m_nOutputType" type="ValueRemapperOutputType_t" />
-- <ApiParam name="m_iszOutputEntityName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszOutputEntity2Name" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszOutputEntity3Name" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszOutputEntity4Name" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hOutputEntities" type="CUtlVector&lt;CHandle&lt;CBaseEntity&gt;&gt;" />
-- <ApiParam name="m_nHapticsType" type="ValueRemapperHapticsType_t" />
-- <ApiParam name="m_nMomentumType" type="ValueRemapperMomentumType_t" />
-- <ApiParam name="m_flMomentumModifier" type="float" />
-- <ApiParam name="m_flSnapValue" type="float" />
-- <ApiParam name="m_flCurrentMomentum" type="float" />
-- <ApiParam name="m_nRatchetType" type="ValueRemapperRatchetType_t" />
-- <ApiParam name="m_flRatchetOffset" type="float" />
-- <ApiParam name="m_flInputOffset" type="float" />
-- <ApiParam name="m_bEngaged" type="bool" />
-- <ApiParam name="m_bFirstUpdate" type="bool" />
-- <ApiParam name="m_flPreviousValue" type="float" />
-- <ApiParam name="m_flPreviousUpdateTickTime" type="float" />
-- <ApiParam name="m_vecPreviousTestPoint" type="Vector" />
-- <ApiParam name="m_hUsingPlayer" type="CHandle&lt;CBasePlayerPawn&gt;" />
-- <ApiParam name="m_flCustomOutputValue" type="float" />
-- <ApiParam name="m_iszSoundEngage" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszSoundDisengage" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszSoundReachedValueZero" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszSoundReachedValueOne" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszSoundMovingLoop" type="CUtlSymbolLarge" />
-- <ApiParam name="m_OnReachedValueZero" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnReachedValueOne" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnReachedValueCustom" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnEngage" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnDisengage" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_bDisabled` | `bool` |
+| `m_bUpdateOnClient` | `bool` |
+| `m_nInputType` | [`ValueRemapperInputType_t`](/docs/schema/entity/enums/ValueRemapperInputType_t) |
+| `m_iszRemapLineStartName` | `CUtlSymbolLarge` |
+| `m_iszRemapLineEndName` | `CUtlSymbolLarge` |
+| `m_hRemapLineStart` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hRemapLineEnd` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_flMaximumChangePerSecond` | `float` |
+| `m_flDisengageDistance` | `float` |
+| `m_flEngageDistance` | `float` |
+| `m_bRequiresUseKey` | `bool` |
+| `m_nOutputType` | [`ValueRemapperOutputType_t`](/docs/schema/entity/enums/ValueRemapperOutputType_t) |
+| `m_iszOutputEntityName` | `CUtlSymbolLarge` |
+| `m_iszOutputEntity2Name` | `CUtlSymbolLarge` |
+| `m_iszOutputEntity3Name` | `CUtlSymbolLarge` |
+| `m_iszOutputEntity4Name` | `CUtlSymbolLarge` |
+| `m_hOutputEntities` | [`CUtlVector<CHandle<CBaseEntity>>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_nHapticsType` | [`ValueRemapperHapticsType_t`](/docs/schema/entity/enums/ValueRemapperHapticsType_t) |
+| `m_nMomentumType` | [`ValueRemapperMomentumType_t`](/docs/schema/entity/enums/ValueRemapperMomentumType_t) |
+| `m_flMomentumModifier` | `float` |
+| `m_flSnapValue` | `float` |
+| `m_flCurrentMomentum` | `float` |
+| `m_nRatchetType` | [`ValueRemapperRatchetType_t`](/docs/schema/entity/enums/ValueRemapperRatchetType_t) |
+| `m_flRatchetOffset` | `float` |
+| `m_flInputOffset` | `float` |
+| `m_bEngaged` | `bool` |
+| `m_bFirstUpdate` | `bool` |
+| `m_flPreviousValue` | `float` |
+| `m_flPreviousUpdateTickTime` | `float` |
+| `m_vecPreviousTestPoint` | `Vector` |
+| `m_hUsingPlayer` | [`CHandle<CBasePlayerPawn>`](/docs/schema/entity/classes/CBasePlayerPawn) |
+| `m_flCustomOutputValue` | `float` |
+| `m_iszSoundEngage` | `CUtlSymbolLarge` |
+| `m_iszSoundDisengage` | `CUtlSymbolLarge` |
+| `m_iszSoundReachedValueZero` | `CUtlSymbolLarge` |
+| `m_iszSoundReachedValueOne` | `CUtlSymbolLarge` |
+| `m_iszSoundMovingLoop` | `CUtlSymbolLarge` |
+| `m_OnReachedValueZero` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnReachedValueOne` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnReachedValueCustom` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnEngage` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnDisengage` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CPointValueRemapper* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointValueRemapper* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointValueRemapper* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointValueRemapper&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

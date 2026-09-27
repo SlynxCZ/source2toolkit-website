@@ -1,35 +1,18 @@
 ---
-title: CEnvBeverage
+title: "CEnvBeverage"
+description: "Schema class CEnvBeverage, derived from CBaseEntity."
 ---
 
-# CEnvBeverage
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvBeverage.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvBeverage.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_CanInDispenser" type="bool" />
-- <ApiParam name="m_nBeverageType" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_CanInDispenser` | `bool` |
+| `m_nBeverageType` | `int32_t` |
 
-## Methods
-
-### CEnvBeverage* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvBeverage* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvBeverage* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvBeverage&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

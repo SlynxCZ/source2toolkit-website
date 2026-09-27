@@ -1,34 +1,17 @@
 ---
-title: CBuyZone
+title: "CBuyZone"
+description: "Schema class CBuyZone, derived from CBaseTrigger."
 ---
 
-# CBuyZone
 
-**Inheritance**: CBaseTrigger
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBuyZone.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBuyZone.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_LegacyTeamNum" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_LegacyTeamNum` | `int32_t` |
 
-## Methods
-
-### CBuyZone* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBuyZone* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBuyZone* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBuyZone&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,11 +1,16 @@
 ---
-title: Relationship_t
+title: "Relationship_t"
+description: "Schema class Relationship_t."
 ---
 
-# Relationship_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/Relationship_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/Relationship_t.h)
 
 ## Fields
 
-- <ApiParam name="disposition" type="Disposition_t" />
-- <ApiParam name="priority" type="int32_t" />
+| Field | Type |
+|---|---|
+| `disposition` | [`Disposition_t`](/docs/schema/entity/enums/Disposition_t) |
+| `priority` | `int32_t` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

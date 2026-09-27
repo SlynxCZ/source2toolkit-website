@@ -1,57 +1,40 @@
 ---
-title: CFish
+title: "CFish"
+description: "Schema class CFish, derived from CBaseAnimGraph."
 ---
 
-# CFish
 
-**Inheritance**: CBaseAnimGraph
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFish.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFish.h)
+
+**Inherits** [`CBaseAnimGraph`](/docs/schema/entity/classes/CBaseAnimGraph)
 
 ## Fields
 
-- <ApiParam name="m_pool" type="CHandle&lt;CFishPool&gt;" />
-- <ApiParam name="m_id" type="uint32_t" />
-- <ApiParam name="m_x" type="float" />
-- <ApiParam name="m_y" type="float" />
-- <ApiParam name="m_z" type="float" />
-- <ApiParam name="m_angle" type="float" />
-- <ApiParam name="m_angleChange" type="float" />
-- <ApiParam name="m_forward" type="Vector" />
-- <ApiParam name="m_perp" type="Vector" />
-- <ApiParam name="m_poolOrigin" type="Vector" />
-- <ApiParam name="m_waterLevel" type="float" />
-- <ApiParam name="m_speed" type="float" />
-- <ApiParam name="m_desiredSpeed" type="float" />
-- <ApiParam name="m_calmSpeed" type="float" />
-- <ApiParam name="m_panicSpeed" type="float" />
-- <ApiParam name="m_avoidRange" type="float" />
-- <ApiParam name="m_turnTimer" type="[CountdownTimer](/docs/schema/entity/classes/Countdowntimer)" />
-- <ApiParam name="m_turnClockwise" type="bool" />
-- <ApiParam name="m_goTimer" type="[CountdownTimer](/docs/schema/entity/classes/Countdowntimer)" />
-- <ApiParam name="m_moveTimer" type="[CountdownTimer](/docs/schema/entity/classes/Countdowntimer)" />
-- <ApiParam name="m_panicTimer" type="[CountdownTimer](/docs/schema/entity/classes/Countdowntimer)" />
-- <ApiParam name="m_disperseTimer" type="[CountdownTimer](/docs/schema/entity/classes/Countdowntimer)" />
-- <ApiParam name="m_proximityTimer" type="[CountdownTimer](/docs/schema/entity/classes/Countdowntimer)" />
-- <ApiParam name="m_visible" type="CUtlVector&lt;CFish*&gt;" />
+| Field | Type |
+|---|---|
+| `m_pool` | [`CHandle<CFishPool>`](/docs/schema/entity/classes/CFishPool) |
+| `m_id` | `uint32_t` |
+| `m_x` | `float` |
+| `m_y` | `float` |
+| `m_z` | `float` |
+| `m_angle` | `float` |
+| `m_angleChange` | `float` |
+| `m_forward` | `Vector` |
+| `m_perp` | `Vector` |
+| `m_poolOrigin` | `Vector` |
+| `m_waterLevel` | `float` |
+| `m_speed` | `float` |
+| `m_desiredSpeed` | `float` |
+| `m_calmSpeed` | `float` |
+| `m_panicSpeed` | `float` |
+| `m_avoidRange` | `float` |
+| `m_turnTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_turnClockwise` | `bool` |
+| `m_goTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_moveTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_panicTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_disperseTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_proximityTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_visible` | `CUtlVector<CFish*>` |
 
-## Methods
-
-### CFish* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFish* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFish* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFish&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

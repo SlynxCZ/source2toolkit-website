@@ -1,38 +1,21 @@
 ---
-title: CLogicGameEventListener
+title: "CLogicGameEventListener"
+description: "Schema class CLogicGameEventListener, derived from CLogicalEntity."
 ---
 
-# CLogicGameEventListener
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicGameEventListener.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicGameEventListener.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_OnEventFired" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_iszGameEventName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszGameEventItem" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bEnabled" type="bool" />
-- <ApiParam name="m_bStartDisabled" type="bool" />
+| Field | Type |
+|---|---|
+| `m_OnEventFired` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_iszGameEventName` | `CUtlSymbolLarge` |
+| `m_iszGameEventItem` | `CUtlSymbolLarge` |
+| `m_bEnabled` | `bool` |
+| `m_bStartDisabled` | `bool` |
 
-## Methods
-
-### CLogicGameEventListener* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicGameEventListener* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicGameEventListener* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicGameEventListener&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

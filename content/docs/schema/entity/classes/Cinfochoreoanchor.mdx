@@ -1,35 +1,18 @@
 ---
-title: CInfoChoreoAnchor
+title: "CInfoChoreoAnchor"
+description: "Schema class CInfoChoreoAnchor, derived from CPointEntity."
 ---
 
-# CInfoChoreoAnchor
 
-**Inheritance**: CPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CInfoChoreoAnchor.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CInfoChoreoAnchor.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_vecTargetEntries" type="CUtlVector&lt;CInfoChoreoAnchorPosition&gt;" />
-- <ApiParam name="m_vecTargetWarps" type="CUtlVector&lt;CInfoChoreoAnchorPosition&gt;" />
+| Field | Type |
+|---|---|
+| `m_vecTargetEntries` | [`CUtlVector<CInfoChoreoAnchorPosition>`](/docs/schema/entity/classes/CInfoChoreoAnchorPosition) |
+| `m_vecTargetWarps` | [`CUtlVector<CInfoChoreoAnchorPosition>`](/docs/schema/entity/classes/CInfoChoreoAnchorPosition) |
 
-## Methods
-
-### CInfoChoreoAnchor* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CInfoChoreoAnchor* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CInfoChoreoAnchor* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CInfoChoreoAnchor&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

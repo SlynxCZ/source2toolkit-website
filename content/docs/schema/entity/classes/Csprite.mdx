@@ -1,56 +1,39 @@
 ---
-title: CSprite
+title: "CSprite"
+description: "Schema class CSprite, derived from CBaseModelEntity."
 ---
 
-# CSprite
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSprite.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSprite.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_hSpriteMaterial" type="CStrongHandle&lt;InfoForResourceTypeIMaterial2&gt;" />
-- <ApiParam name="m_hAttachedToEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_flSpriteFramerate" type="float" />
-- <ApiParam name="m_flFrame" type="float" />
-- <ApiParam name="m_flDieTime" type="float" />
-- <ApiParam name="m_nBrightness" type="uint32_t" />
-- <ApiParam name="m_flBrightnessDuration" type="float" />
-- <ApiParam name="m_flSpriteScale" type="float" />
-- <ApiParam name="m_flScaleDuration" type="float" />
-- <ApiParam name="m_bWorldSpaceScale" type="bool" />
-- <ApiParam name="m_flGlowProxySize" type="float" />
-- <ApiParam name="m_flHDRColorScale" type="float" />
-- <ApiParam name="m_flLastTime" type="float" />
-- <ApiParam name="m_flMaxFrame" type="float" />
-- <ApiParam name="m_flStartScale" type="float" />
-- <ApiParam name="m_flDestScale" type="float" />
-- <ApiParam name="m_flScaleTimeStart" type="float" />
-- <ApiParam name="m_nStartBrightness" type="int32_t" />
-- <ApiParam name="m_nDestBrightness" type="int32_t" />
-- <ApiParam name="m_flBrightnessTimeStart" type="float" />
-- <ApiParam name="m_nSpriteWidth" type="int32_t" />
-- <ApiParam name="m_nSpriteHeight" type="int32_t" />
-- <ApiParam name="m_flSpeed" type="float" />
+| Field | Type |
+|---|---|
+| `m_hSpriteMaterial` | [`CStrongHandle<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandle) |
+| `m_hAttachedToEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_flSpriteFramerate` | `float` |
+| `m_flFrame` | `float` |
+| `m_flDieTime` | `float` |
+| `m_nBrightness` | `uint32_t` |
+| `m_flBrightnessDuration` | `float` |
+| `m_flSpriteScale` | `float` |
+| `m_flScaleDuration` | `float` |
+| `m_bWorldSpaceScale` | `bool` |
+| `m_flGlowProxySize` | `float` |
+| `m_flHDRColorScale` | `float` |
+| `m_flLastTime` | `float` |
+| `m_flMaxFrame` | `float` |
+| `m_flStartScale` | `float` |
+| `m_flDestScale` | `float` |
+| `m_flScaleTimeStart` | `float` |
+| `m_nStartBrightness` | `int32_t` |
+| `m_nDestBrightness` | `int32_t` |
+| `m_flBrightnessTimeStart` | `float` |
+| `m_nSpriteWidth` | `int32_t` |
+| `m_nSpriteHeight` | `int32_t` |
+| `m_flSpeed` | `float` |
 
-## Methods
-
-### CSprite* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSprite* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSprite* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSprite&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

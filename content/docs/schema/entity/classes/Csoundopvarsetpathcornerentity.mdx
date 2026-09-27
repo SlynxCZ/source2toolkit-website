@@ -1,37 +1,20 @@
 ---
-title: CSoundOpvarSetPathCornerEntity
+title: "CSoundOpvarSetPathCornerEntity"
+description: "Schema class CSoundOpvarSetPathCornerEntity, derived from CSoundOpvarSetPointEntity."
 ---
 
-# CSoundOpvarSetPathCornerEntity
 
-**Inheritance**: [CSoundOpvarSetPointEntity](/docs/schema/entity/classes/Csoundopvarsetpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundOpvarSetPathCornerEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundOpvarSetPathCornerEntity.h)
+
+**Inherits** [`CSoundOpvarSetPointEntity`](/docs/schema/entity/classes/CSoundOpvarSetPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_bUseParentedPath" type="bool" />
-- <ApiParam name="m_flDistMinSqr" type="float" />
-- <ApiParam name="m_flDistMaxSqr" type="float" />
-- <ApiParam name="m_iszPathCornerEntityName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_bUseParentedPath` | `bool` |
+| `m_flDistMinSqr` | `float` |
+| `m_flDistMaxSqr` | `float` |
+| `m_iszPathCornerEntityName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CSoundOpvarSetPathCornerEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundOpvarSetPathCornerEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundOpvarSetPathCornerEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundOpvarSetPathCornerEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

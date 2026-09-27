@@ -1,15 +1,20 @@
 ---
-title: Lerpdata_t
+title: "lerpdata_t"
+description: "Schema class lerpdata_t."
 ---
 
-# lerpdata_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/lerpdata_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/lerpdata_t.h)
 
 ## Fields
 
-- <ApiParam name="m_hEnt" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_MoveType" type="MoveType_t" />
-- <ApiParam name="m_flStartTime" type="float" />
-- <ApiParam name="m_vecStartOrigin" type="Vector" />
-- <ApiParam name="m_qStartRot" type="Quaternion" />
-- <ApiParam name="m_nFXIndex" type="ParticleIndex_t" />
+| Field | Type |
+|---|---|
+| `m_hEnt` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_MoveType` | `MoveType_t` |
+| `m_flStartTime` | `float` |
+| `m_vecStartOrigin` | `Vector` |
+| `m_qStartRot` | `Quaternion` |
+| `m_nFXIndex` | [`ParticleIndex_t`](/docs/schema/entity/classes/ParticleIndex_t) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

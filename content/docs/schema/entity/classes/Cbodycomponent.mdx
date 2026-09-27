@@ -1,13 +1,18 @@
 ---
-title: CBodyComponent
+title: "CBodyComponent"
+description: "Schema class CBodyComponent, derived from CEntityComponent."
 ---
 
-# CBodyComponent
 
-**Inheritance**: CEntityComponent
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBodyComponent.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBodyComponent.h)
+
+**Inherits** `CEntityComponent`
 
 ## Fields
 
-- <ApiParam name="m_pSceneNode" type="CGameSceneNode*" />
-- <ApiParam name="__m_pChainEntity" type="CEntityInstance*" />
+| Field | Type |
+|---|---|
+| `m_pSceneNode` | [`CGameSceneNode*`](/docs/schema/entity/classes/CGameSceneNode) |
+| `__m_pChainEntity` | `CEntityInstance*` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

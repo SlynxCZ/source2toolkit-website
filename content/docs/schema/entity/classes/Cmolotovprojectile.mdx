@@ -1,49 +1,38 @@
 ---
-title: CMolotovProjectile
+title: "CMolotovProjectile"
+description: "Schema class CMolotovProjectile, derived from CBaseCSGrenadeProjectile."
 ---
 
-# CMolotovProjectile
 
-**Inheritance**: CBaseCSGrenadeProjectile
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMolotovProjectile.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMolotovProjectile.h)
+
+**Inherits** [`CBaseCSGrenadeProjectile`](/docs/schema/entity/classes/CBaseCSGrenadeProjectile)
 
 ## Fields
 
-- <ApiParam name="m_bIsIncGrenade" type="bool" />
-- <ApiParam name="m_bDetonated" type="bool" />
-- <ApiParam name="m_stillTimer" type="IntervalTimer" />
+| Field | Type |
+|---|---|
+| `m_bIsIncGrenade` | `bool` |
+| `m_bDetonated` | `bool` |
+| `m_stillTimer` | [`IntervalTimer`](/docs/schema/entity/classes/IntervalTimer) |
+
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).
 
 ## Methods
 
-### CMolotovProjectile* EmitGrenade(vecPosition, angAngle, vecVelocity, pOwner, nItemDefIndex, eChain)
+### `EmitGrenade`
+
+```cpp
+static CMolotovProjectile* EmitGrenade(const Vector& vecPosition, const QAngle& angAngle, const Vector& vecVelocity, CBaseEntity* pOwner, uint32_t nItemDefIndex, HookChain eChain = HookChain::Run);
+```
 
 Spawns a live grenade of this type. Ported from SwiftlyS2.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="vecPosition" type="const Vector&" />
-- <ApiParam name="angAngle" type="const QAngle&" />
-- <ApiParam name="vecVelocity" type="const Vector&" />
-- <ApiParam name="pOwner" type="CBaseEntity*" />
-- <ApiParam name="nItemDefIndex" type="uint32_t" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
-
-### CMolotovProjectile* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMolotovProjectile* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMolotovProjectile* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMolotovProjectile&gt; GetHandle()
-
+| Parameter | Type | Default |
+|---|---|---|
+| `vecPosition` | `const Vector&` |  |
+| `angAngle` | `const QAngle&` |  |
+| `vecVelocity` | `const Vector&` |  |
+| `pOwner` | [`CBaseEntity*`](/docs/schema/entity/classes/CBaseEntity) |  |
+| `nItemDefIndex` | `uint32_t` |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |

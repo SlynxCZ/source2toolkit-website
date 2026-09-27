@@ -1,38 +1,21 @@
 ---
-title: CInfoDynamicShadowHint
+title: "CInfoDynamicShadowHint"
+description: "Schema class CInfoDynamicShadowHint, derived from CPointEntity."
 ---
 
-# CInfoDynamicShadowHint
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CInfoDynamicShadowHint.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CInfoDynamicShadowHint.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_flRange" type="float" />
-- <ApiParam name="m_nImportance" type="int32_t" />
-- <ApiParam name="m_nLightChoice" type="int32_t" />
-- <ApiParam name="m_hLight" type="CHandle&lt;CBaseEntity&gt;" />
+| Field | Type |
+|---|---|
+| `m_bDisabled` | `bool` |
+| `m_flRange` | `float` |
+| `m_nImportance` | `int32_t` |
+| `m_nLightChoice` | `int32_t` |
+| `m_hLight` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
 
-## Methods
-
-### CInfoDynamicShadowHint* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CInfoDynamicShadowHint* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CInfoDynamicShadowHint* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CInfoDynamicShadowHint&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,45 +1,28 @@
 ---
-title: CPhysExplosion
+title: "CPhysExplosion"
+description: "Schema class CPhysExplosion, derived from CPointEntity."
 ---
 
-# CPhysExplosion
 
-**Inheritance**: CPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPhysExplosion.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPhysExplosion.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_bExplodeOnSpawn" type="bool" />
-- <ApiParam name="m_flMagnitude" type="float" />
-- <ApiParam name="m_flDamage" type="float" />
-- <ApiParam name="m_radius" type="float" />
-- <ApiParam name="m_targetEntityName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_ignoreEntityName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flInnerRadius" type="float" />
-- <ApiParam name="m_flPushScale" type="float" />
-- <ApiParam name="m_bConvertToDebrisWhenPossible" type="bool" />
-- <ApiParam name="m_bAffectInvulnerableEnts" type="bool" />
-- <ApiParam name="m_bDisablePushClamp" type="bool" />
-- <ApiParam name="m_OnPushedPlayer" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_bExplodeOnSpawn` | `bool` |
+| `m_flMagnitude` | `float` |
+| `m_flDamage` | `float` |
+| `m_radius` | `float` |
+| `m_targetEntityName` | `CUtlSymbolLarge` |
+| `m_ignoreEntityName` | `CUtlSymbolLarge` |
+| `m_flInnerRadius` | `float` |
+| `m_flPushScale` | `float` |
+| `m_bConvertToDebrisWhenPossible` | `bool` |
+| `m_bAffectInvulnerableEnts` | `bool` |
+| `m_bDisablePushClamp` | `bool` |
+| `m_OnPushedPlayer` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CPhysExplosion* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPhysExplosion* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPhysExplosion* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPhysExplosion&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

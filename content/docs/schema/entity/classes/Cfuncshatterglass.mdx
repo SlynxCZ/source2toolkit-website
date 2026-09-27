@@ -1,59 +1,42 @@
 ---
-title: CFuncShatterglass
+title: "CFuncShatterglass"
+description: "Schema class CFuncShatterglass, derived from CBaseModelEntity."
 ---
 
-# CFuncShatterglass
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncShatterglass.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncShatterglass.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_matPanelTransform" type="matrix3x4_t" />
-- <ApiParam name="m_matPanelTransformWsTemp" type="matrix3x4_t" />
-- <ApiParam name="m_vecShatterGlassShards" type="CUtlVector&lt;uint32_t&gt;" />
-- <ApiParam name="m_PanelSize" type="Vector2D" />
-- <ApiParam name="m_flLastShatterSoundEmitTime" type="float" />
-- <ApiParam name="m_flLastCleanupTime" type="float" />
-- <ApiParam name="m_flInitAtTime" type="float" />
-- <ApiParam name="m_flGlassThickness" type="float" />
-- <ApiParam name="m_flSpawnInvulnerability" type="float" />
-- <ApiParam name="m_bBreakSilent" type="bool" />
-- <ApiParam name="m_bBreakShardless" type="bool" />
-- <ApiParam name="m_bBroken" type="bool" />
-- <ApiParam name="m_bGlassNavIgnore" type="bool" />
-- <ApiParam name="m_bGlassInFrame" type="bool" />
-- <ApiParam name="m_bStartBroken" type="bool" />
-- <ApiParam name="m_iInitialDamageType" type="uint8_t" />
-- <ApiParam name="m_szDamagePositioningEntityName01" type="CUtlSymbolLarge" />
-- <ApiParam name="m_szDamagePositioningEntityName02" type="CUtlSymbolLarge" />
-- <ApiParam name="m_szDamagePositioningEntityName03" type="CUtlSymbolLarge" />
-- <ApiParam name="m_szDamagePositioningEntityName04" type="CUtlSymbolLarge" />
-- <ApiParam name="m_vInitialDamagePositions" type="CUtlVector&lt;Vector&gt;" />
-- <ApiParam name="m_vExtraDamagePositions" type="CUtlVector&lt;Vector&gt;" />
-- <ApiParam name="m_vInitialPanelVertices" type="CUtlVector&lt;Vector4D&gt;" />
-- <ApiParam name="m_OnBroken" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_iSurfaceType" type="uint8_t" />
-- <ApiParam name="m_hMaterialDamageBase" type="CStrongHandle&lt;InfoForResourceTypeIMaterial2&gt;" />
+| Field | Type |
+|---|---|
+| `m_matPanelTransform` | `matrix3x4_t` |
+| `m_matPanelTransformWsTemp` | `matrix3x4_t` |
+| `m_vecShatterGlassShards` | `CUtlVector<uint32_t>` |
+| `m_PanelSize` | `Vector2D` |
+| `m_flLastShatterSoundEmitTime` | `float` |
+| `m_flLastCleanupTime` | `float` |
+| `m_flInitAtTime` | `float` |
+| `m_flGlassThickness` | `float` |
+| `m_flSpawnInvulnerability` | `float` |
+| `m_bBreakSilent` | `bool` |
+| `m_bBreakShardless` | `bool` |
+| `m_bBroken` | `bool` |
+| `m_bGlassNavIgnore` | `bool` |
+| `m_bGlassInFrame` | `bool` |
+| `m_bStartBroken` | `bool` |
+| `m_iInitialDamageType` | `uint8_t` |
+| `m_szDamagePositioningEntityName01` | `CUtlSymbolLarge` |
+| `m_szDamagePositioningEntityName02` | `CUtlSymbolLarge` |
+| `m_szDamagePositioningEntityName03` | `CUtlSymbolLarge` |
+| `m_szDamagePositioningEntityName04` | `CUtlSymbolLarge` |
+| `m_vInitialDamagePositions` | `CUtlVector<Vector>` |
+| `m_vExtraDamagePositions` | `CUtlVector<Vector>` |
+| `m_vInitialPanelVertices` | `CUtlVector<Vector4D>` |
+| `m_OnBroken` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_iSurfaceType` | `uint8_t` |
+| `m_hMaterialDamageBase` | [`CStrongHandle<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandle) |
 
-## Methods
-
-### CFuncShatterglass* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncShatterglass* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncShatterglass* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncShatterglass&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

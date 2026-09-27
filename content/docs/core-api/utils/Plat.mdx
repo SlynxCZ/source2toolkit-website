@@ -1,0 +1,140 @@
+---
+title: "utils/plat.h"
+description: "Platform abstraction utilities and module helpers."
+---
+
+
+Provides:
+- Cross-platform calling conventions
+- Module representation (base, size)
+- Memory patching utilities
+
+<Callout type="info">Used internally by address/pattern systems.</Callout>
+
+**Header** [`source2toolkit/utils/plat.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/utils/plat.h)
+
+## `Section`
+
+Represents a section of a loaded module.
+
+Used for:
+- Pattern scanning in specific sections
+- Memory analysis
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `m_szName` | `std::string` | Section name (e.g. ".text", ".data") |
+| `m_pBase` | `void*` | Pointer to section base |
+| `m_iSize` | `size_t` | Section size in bytes |
+
+## `Module`
+
+Represents a loaded module (library).
+
+Used for:
+- Pattern scanning
+- Address resolution
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `pHandle` | `void*` | Handle to loaded module (Linux) |
+| `pBase` | `uint8_t*` | Base address of module |
+| `nSize` | `unsigned int` | Module size in bytes |
+
+## Functions
+
+### `Plat_WriteMemory`
+
+```cpp
+void Plat_WriteMemory(void* pPatchAddress, uint8_t* pPatch, int iPatchSize);
+```
+
+Writes raw memory to a given address.
+
+<Callout type="info">Typically used for: * Patching instructions * Hooking functions</Callout>
+
+<Callout type="warn">This modifies process memory directly. Use with caution.</Callout>
+
+| Parameter | Type | Description |
+|---|---|---|
+| `pPatchAddress` | `void*` | Destination address |
+| `pPatch` | `uint8_t*` | Pointer to data |
+| `iPatchSize` | `int` | Size in bytes |
+
+## Macros
+
+### `FASTCALL`
+
+```cpp
+#define FASTCALL __fastcall
+```
+
+Fastcall convention (Windows)
+
+### `THISCALL`
+
+```cpp
+#define THISCALL __thiscall
+```
+
+Thiscall convention (Windows)
+
+### `FASTCALL`
+
+```cpp
+#define FASTCALL
+```
+
+Fastcall not used on Linux
+
+### `THISCALL`
+
+```cpp
+#define THISCALL
+```
+
+Thiscall not used on Linux
+
+### `strtok_s`
+
+```cpp
+#define strtok_s strtok_r
+```
+
+Secure strtok alternative
+
+### `MODULE_PREFIX`
+
+```cpp
+#define MODULE_PREFIX ""
+```
+
+Windows module prefix
+
+### `MODULE_EXT`
+
+```cpp
+#define MODULE_EXT ".dll"
+```
+
+Windows module extension
+
+### `MODULE_PREFIX`
+
+```cpp
+#define MODULE_PREFIX "lib"
+```
+
+Linux module prefix
+
+### `MODULE_EXT`
+
+```cpp
+#define MODULE_EXT ".so"
+```
+
+Linux module extension

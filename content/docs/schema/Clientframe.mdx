@@ -1,6 +1,33 @@
 ---
-title: Clientframe
+title: "Client frames"
+description: "Engine structures the SDK declares by hand: CClientFrame, CClientFrameManager."
 ---
 
-# clientframe
 
+**Header** [`source2toolkit/schema/clientframe.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/clientframe.h)
+
+## `CClientFrame`
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `tick_count` | `int` | server tick of this snapshot |
+| `last_entity` | `int` | highest entity index |
+| `m_pNext` | [`CClientFrame*`](/docs/schema/Clientframe#cclientframe) |  |
+| `m_pSnapshot` | `CFrameSnapshot*` |  |
+| `transmit_entity` | `CBitVec<MAX_EDICTS>` | if bit n is set, entity n will be send to client |
+| `unkBitVec2080` | `CBitVec<MAX_EDICTS>` |  |
+| `unkBitVec4128` | `CBitVec<MAX_EDICTS>` |  |
+| `unkBitVec6176` | `CBitVec<MAX_EDICTS>` |  |
+| `transmit_always` | `CBitVec<MAX_EDICTS>*` | if bit is set, don't do PVS checks before sending (HLTV only) |
+
+## `CClientFrameManager`
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `pad120` | `char[120]` |  |
+| `m_ClientFramePool` | [`CUtlMemoryPool<CClientFrame>`](/docs/schema/Clientframe#cclientframe) |  |
+| `m_Frames` | [`CClientFrame*`](/docs/schema/Clientframe#cclientframe) | updates can be delta'ed from here |

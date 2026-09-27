@@ -1,58 +1,41 @@
 ---
-title: CChicken
+title: "CChicken"
+description: "Schema class CChicken, derived from CDynamicProp."
 ---
 
-# CChicken
 
-**Inheritance**: [CDynamicProp](/docs/schema/entity/classes/Cdynamicprop)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CChicken.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CChicken.h)
+
+**Inherits** [`CDynamicProp`](/docs/schema/entity/classes/CDynamicProp)
 
 ## Fields
 
-- <ApiParam name="m_AttributeManager" type="[CAttributeContainer](/docs/schema/entity/classes/Cattributecontainer)" />
-- <ApiParam name="m_updateTimer" type="CountdownTimer" />
-- <ApiParam name="m_stuckAnchor" type="Vector" />
-- <ApiParam name="m_collisionStuckTimer" type="CountdownTimer" />
-- <ApiParam name="m_isOnGround" type="bool" />
-- <ApiParam name="m_vFallVelocity" type="Vector" />
-- <ApiParam name="m_desiredActivity" type="EChickenActivity" />
-- <ApiParam name="m_currentActivity" type="EChickenActivity" />
-- <ApiParam name="m_activityTimer" type="CountdownTimer" />
-- <ApiParam name="m_turnRate" type="float" />
-- <ApiParam name="m_fleeFrom" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_moveRateThrottleTimer" type="CountdownTimer" />
-- <ApiParam name="m_startleTimer" type="CountdownTimer" />
-- <ApiParam name="m_vocalizeTimer" type="CountdownTimer" />
-- <ApiParam name="m_leader" type="CHandle&lt;CCSPlayerPawn&gt;" />
-- <ApiParam name="m_owner" type="CHandle&lt;CCSPlayerController&gt;" />
-- <ApiParam name="m_reuseTimer" type="CountdownTimer" />
-- <ApiParam name="m_jumpTimer" type="CountdownTimer" />
-- <ApiParam name="m_flLastJumpTime" type="float" />
-- <ApiParam name="m_repathTimer" type="CountdownTimer" />
-- <ApiParam name="m_vecPathGoal" type="Vector" />
-- <ApiParam name="m_flActiveFollowStartTime" type="float" />
-- <ApiParam name="m_followMinuteTimer" type="CountdownTimer" />
-- <ApiParam name="m_BlockDirectionTimer" type="CountdownTimer" />
-- <ApiParam name="m_bSpawnDyingParticles" type="bool" />
+| Field | Type |
+|---|---|
+| `m_AttributeManager` | [`CAttributeContainer`](/docs/schema/entity/classes/CAttributeContainer) |
+| `m_updateTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_stuckAnchor` | `Vector` |
+| `m_collisionStuckTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_isOnGround` | `bool` |
+| `m_vFallVelocity` | `Vector` |
+| `m_desiredActivity` | [`EChickenActivity`](/docs/schema/entity/enums/EChickenActivity) |
+| `m_currentActivity` | [`EChickenActivity`](/docs/schema/entity/enums/EChickenActivity) |
+| `m_activityTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_turnRate` | `float` |
+| `m_fleeFrom` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_moveRateThrottleTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_startleTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_vocalizeTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_leader` | [`CHandle<CCSPlayerPawn>`](/docs/schema/entity/classes/CCSPlayerPawn) |
+| `m_owner` | [`CHandle<CCSPlayerController>`](/docs/schema/entity/classes/CCSPlayerController) |
+| `m_reuseTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_jumpTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_flLastJumpTime` | `float` |
+| `m_repathTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_vecPathGoal` | `Vector` |
+| `m_flActiveFollowStartTime` | `float` |
+| `m_followMinuteTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_BlockDirectionTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_bSpawnDyingParticles` | `bool` |
 
-## Methods
-
-### CChicken* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CChicken* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CChicken* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CChicken&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

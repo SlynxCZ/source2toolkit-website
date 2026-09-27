@@ -1,19 +1,24 @@
 ---
-title: CPrecipitationVData
+title: "CPrecipitationVData"
+description: "Schema class CPrecipitationVData, derived from CEntitySubclassVDataBase."
 ---
 
-# CPrecipitationVData
 
-**Inheritance**: [CEntitySubclassVDataBase](/docs/schema/entity/classes/Centitysubclassvdatabase)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPrecipitationVData.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPrecipitationVData.h)
+
+**Inherits** [`CEntitySubclassVDataBase`](/docs/schema/entity/classes/CEntitySubclassVDataBase)
 
 ## Fields
 
-- <ApiParam name="m_flInnerDistance" type="float" />
-- <ApiParam name="m_nAttachType" type="ParticleAttachment_t" />
-- <ApiParam name="m_bBatchSameVolumeType" type="bool" />
-- <ApiParam name="m_nRTEnvCP" type="int32_t" />
-- <ApiParam name="m_nRTEnvCPComponent" type="int32_t" />
-- <ApiParam name="m_szModifier" type="CUtlString" />
-- <ApiParam name="m_nUseSnapshotFromSurfaceGraph" type="int32_t" />
-- <ApiParam name="m_snapshotFilter" type="[PrecipitationFilter_t](/docs/schema/entity/classes/PrecipitationFilter_t)" />
+| Field | Type |
+|---|---|
+| `m_flInnerDistance` | `float` |
+| `m_nAttachType` | [`ParticleAttachment_t`](/docs/schema/entity/enums/ParticleAttachment_t) |
+| `m_bBatchSameVolumeType` | `bool` |
+| `m_nRTEnvCP` | `int32_t` |
+| `m_nRTEnvCPComponent` | `int32_t` |
+| `m_szModifier` | `CUtlString` |
+| `m_nUseSnapshotFromSurfaceGraph` | `int32_t` |
+| `m_snapshotFilter` | [`PrecipitationFilter_t`](/docs/schema/entity/classes/PrecipitationFilter_t) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

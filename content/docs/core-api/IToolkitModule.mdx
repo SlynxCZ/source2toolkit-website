@@ -1,118 +1,212 @@
 ---
-title: IToolkitModule
+title: "IToolkitModule"
+description: "Toolkit-facing module interface (mirrors DynLibUtils::CModule)."
 ---
 
-# IToolkitModule
+
+Plugins obtain an IToolkitModule via IToolkitAPI::LoadModule() and release it with IToolkitAPI::FreeModule().  The implementation inside the toolkit core delegates every call 1:1 to DynLibUtils::CModule so plugins are fully decoupled from the DynLibUtils headers.
+
+**Header** [`source2toolkit/IToolkitModule.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitModule.h)
 
 ## Methods
 
-### bool InitFromName(name, extension)
+### `InitFromName`
+
+```cpp
+virtual bool InitFromName(const char* name, bool extension = false) = 0;
+```
 
 Initialises the module from its name (without extension).
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `const char*` |  | Module name, e.g. "server" or "engine2". |
+| `extension` | `bool` | `false` | When true the platform extension is appended automatically. |
 
-- <ApiParam name="name" type="const char*" /> — Module name, e.g. "server" or "engine2".
-- <ApiParam name="extension" type="bool" /> — When true the platform extension is appended automatically.
+**Returns** `bool` — True on success.
 
-### bool InitFromMemory(ptr)
+### `InitFromMemory`
+
+```cpp
+virtual bool InitFromMemory(uintptr_t ptr) = 0;
+```
 
 Initialises the module from an address inside it.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `ptr` | `uintptr_t` | Any address that belongs to the target module. |
 
-- <ApiParam name="ptr" type="uintptr_t" /> — Any address that belongs to the target module.
+**Returns** `bool` — True on success.
 
-### IToolkitMemory GetVirtualTableByName(name, decorated)
+### `FindPattern`
+
+```cpp
+virtual IToolkitMemory FindPattern(const char* pattern, IToolkitMemory startAddress = IToolkitMemory()) const = 0;
+```
+
+Scans the executable section for a byte-string pattern.
+
+Pattern format: "AB CD ?? EF" (space-separated hex bytes, ?? = wildcard).
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pattern` | `const char*` |  | IDA-style pattern string. |
+| `startAddress` | [`IToolkitMemory`](/docs/core-api/IToolkitMemory) | `IToolkitMemory()` | Optional address to start scanning from. |
+
+**Returns** [`IToolkitMemory`](/docs/core-api/IToolkitMemory) — Address of the first match, or an invalid (null) IToolkitMemory.
+
+### `FindPatternInSection`
+
+```cpp
+virtual IToolkitMemory FindPatternInSection(const char* pattern, const char* section, IToolkitMemory startAddress = IToolkitMemory()) const = 0;
+```
+
+Scans a named section for a byte-string pattern.
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `pattern` | `const char*` |  | IDA-style pattern string. |
+| `section` | `const char*` |  | Section name, e.g. ".text" or ".rdata". |
+| `startAddress` | [`IToolkitMemory`](/docs/core-api/IToolkitMemory) | `IToolkitMemory()` | Optional address to start scanning from. |
+
+**Returns** [`IToolkitMemory`](/docs/core-api/IToolkitMemory) — Address of the first match, or an invalid (null) IToolkitMemory.
+
+### `GetVirtualTableByName`
+
+```cpp
+virtual IToolkitMemory GetVirtualTableByName(const char* name, bool decorated = false) const = 0;
+```
 
 Returns the address of a virtual table by mangled class name.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `const char*` |  | Class name (undecorated unless decorated is true). |
+| `decorated` | `bool` | `false` | Pass true when name is already a decorated symbol. |
 
-- <ApiParam name="name" type="const char*" /> — Class name (undecorated unless decorated is true).
-- <ApiParam name="decorated" type="bool" /> — Pass true when name is already a decorated symbol.
+### `GetFunctionByName`
 
-### IToolkitMemory GetFunctionByName(name)
+```cpp
+virtual IToolkitMemory GetFunctionByName(const char* name) const = 0;
+```
 
 Returns the address of an exported symbol by name.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `name` | `const char*` |
 
-- <ApiParam name="name" type="const char*" />
+### `GetSectionByName`
 
-### SectionInfo GetSectionByName(name)
+```cpp
+virtual SectionInfo GetSectionByName(const char* name) const = 0;
+```
 
 Returns information about a named section.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `name` | `const char*` |
 
-- <ApiParam name="name" type="const char*" />
+### `GetModuleHandle`
 
-### void* GetModuleHandle()
+```cpp
+virtual void* GetModuleHandle() const = 0;
+```
 
 Returns the OS-native module handle (HMODULE / void*).
 
-### IToolkitMemory GetModuleBase()
+### `GetModuleBase`
+
+```cpp
+virtual IToolkitMemory GetModuleBase() const = 0;
+```
 
 Returns the base load address of the module.
 
-### const char* GetModulePath()
+### `GetModulePath`
+
+```cpp
+virtual const char* GetModulePath() const = 0;
+```
 
 Returns the absolute filesystem path of the module.
 
-### const char* GetModuleName()
+The pointer is valid for the lifetime of this IToolkitModule.
+
+### `GetModuleName`
+
+```cpp
+virtual const char* GetModuleName() const = 0;
+```
 
 Returns the filename component of the module path.
 
-### IToolkitMemory GetVirtualTableByOffset(name, offset, decorated)
+The pointer is valid for the lifetime of this IToolkitModule.
+
+### `GetVirtualTableByOffset`
+
+```cpp
+virtual IToolkitMemory GetVirtualTableByOffset(const char* name, std::ptrdiff_t offset, bool decorated = false) const = 0;
+```
 
 Returns the virtual table of the sub-object at an offset inside a class.
 
-<ApiLabel>Parameters</ApiLabel>
+A class with several bases has one table per base that is not at offset 0; offset 0 is the primary table, the one GetVirtualTableByName returns. The offset moves whenever the class is laid out anew -- prefer GetVirtualTableByBase.
 
-- <ApiParam name="name" type="const char*" /> — Class name (undecorated unless decorated is true).
-- <ApiParam name="offset" type="std::ptrdiff_t" /> — Offset of the sub-object in bytes.
-- <ApiParam name="decorated" type="bool" /> — Pass true when name is already a decorated symbol.
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `const char*` |  | Class name (undecorated unless decorated is true). |
+| `offset` | `std::ptrdiff_t` |  | Offset of the sub-object in bytes. |
+| `decorated` | `bool` | `false` | Pass true when name is already a decorated symbol. |
 
-### IToolkitMemory GetVirtualTableByBase(name, baseName, decorated)
+### `GetVirtualTableByBase`
+
+```cpp
+virtual IToolkitMemory GetVirtualTableByBase(const char* name, const char* baseName, bool decorated = false) const = 0;
+```
 
 Returns the virtual table of a base class sub-object, located through the RTTI.
 
-<ApiLabel>Parameters</ApiLabel>
+For an interface that is not a class's first base, whose table GetVirtualTableByName cannot reach. Non-virtual bases only.
 
-- <ApiParam name="name" type="const char*" /> — Class name (undecorated unless decorated is true).
-- <ApiParam name="baseName" type="const char*" /> — Base class name.
-- <ApiParam name="decorated" type="bool" /> — Pass true when both names are already decorated symbols.
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `name` | `const char*` |  | Class name (undecorated unless decorated is true). |
+| `baseName` | `const char*` |  | Base class name. |
+| `decorated` | `bool` | `false` | Pass true when both names are already decorated symbols. |
 
-### IToolkitModule* New(name)
+### `New`
+
+```cpp
+static IToolkitModule* New(const char* name);
+static IToolkitModule* New(uintptr_t ptr);
+static IToolkitModule* New(void* ptr);
+static IToolkitModule* New(IToolkitMemory mem);
+```
 
 Creates a module wrapper by name (without extension).
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="name" type="const char*" /> — Module name, e.g. "server" or "tier0".
-
-### IToolkitModule* New(ptr)
+Equivalent to `g_ToolkitAPI->LoadModule(name)`. Release with `delete` or `g_ToolkitAPI->FreeModule()`.
 
 Creates a module wrapper from an address that belongs to the module.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="ptr" type="uintptr_t" /> — Any address inside the target module.
-
-### IToolkitModule* New(ptr)
-
 Creates a module wrapper from a void pointer inside the module.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="ptr" type="void*" />
-
-### IToolkitModule* New(mem)
 
 Creates a module wrapper from an IToolkitMemory address inside the module.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `name` | `const char*` | Module name, e.g. "server" or "tier0". |
+| `ptr` | `uintptr_t` | Any address inside the target module. |
+| `ptr` | `void*` | Any address inside the target module. |
+| `mem` | [`IToolkitMemory`](/docs/core-api/IToolkitMemory) |  |
 
-- <ApiParam name="mem" type="[IToolkitMemory](/docs/core-api/IToolkitMemory)" />
+## Macros
 
+| Macro | Expands to |
+|---|---|
+| `LOAD_MODULE(name)` | `g_ToolkitAPI->LoadModule(name)` |
+| `LOAD_MODULE_MEM(ptr)` | `g_ToolkitAPI->LoadModuleFromMemory(ptr)` |
+| `FREE_MODULE(mod)` | `g_ToolkitAPI->FreeModule(mod)` |

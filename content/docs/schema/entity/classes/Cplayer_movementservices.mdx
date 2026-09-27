@@ -1,29 +1,34 @@
 ---
-title: CPlayer_MovementServices
+title: "CPlayer_MovementServices"
+description: "Schema class CPlayer_MovementServices, derived from CPlayerPawnComponent."
 ---
 
-# CPlayer_MovementServices
 
-**Inheritance**: [CPlayerPawnComponent](/docs/schema/entity/classes/Cplayerpawncomponent)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPlayer_MovementServices.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPlayer_MovementServices.h)
+
+**Inherits** [`CPlayerPawnComponent`](/docs/schema/entity/classes/CPlayerPawnComponent)
 
 ## Fields
 
-- <ApiParam name="m_nImpulse" type="int32_t" />
-- <ApiParam name="m_nButtons" type="[CInButtonState](/docs/schema/entity/classes/Cinbuttonstate)" />
-- <ApiParam name="m_nQueuedButtonDownMask" type="uint64_t" />
-- <ApiParam name="m_nQueuedButtonChangeMask" type="uint64_t" />
-- <ApiParam name="m_nButtonDoublePressed" type="uint64_t" />
-- <ApiParam name="m_pButtonPressedCmdNumber" type="uint32_t" />
-- <ApiParam name="m_nLastCommandNumberProcessed" type="uint32_t" />
-- <ApiParam name="m_nToggleButtonDownMask" type="uint64_t" />
-- <ApiParam name="m_flCmdForwardMove" type="float" />
-- <ApiParam name="m_flCmdLeftMove" type="float" />
-- <ApiParam name="m_flCmdUpMove" type="float" />
-- <ApiParam name="m_flMaxspeed" type="float" />
-- <ApiParam name="m_arrForceSubtickMoveWhen" type="float" />
-- <ApiParam name="m_flForwardMove" type="float" />
-- <ApiParam name="m_flLeftMove" type="float" />
-- <ApiParam name="m_flUpMove" type="float" />
-- <ApiParam name="m_vecLastMovementImpulses" type="Vector" />
-- <ApiParam name="m_vecOldViewAngles" type="QAngle" />
+| Field | Type |
+|---|---|
+| `m_nImpulse` | `int32_t` |
+| `m_nButtons` | [`CInButtonState`](/docs/schema/entity/classes/CInButtonState) |
+| `m_nQueuedButtonDownMask` | `uint64_t` |
+| `m_nQueuedButtonChangeMask` | `uint64_t` |
+| `m_nButtonDoublePressed` | `uint64_t` |
+| `m_pButtonPressedCmdNumber` | `uint32_t` |
+| `m_nLastCommandNumberProcessed` | `uint32_t` |
+| `m_nToggleButtonDownMask` | `uint64_t` |
+| `m_flCmdForwardMove` | `float` |
+| `m_flCmdLeftMove` | `float` |
+| `m_flCmdUpMove` | `float` |
+| `m_flMaxspeed` | `float` |
+| `m_arrForceSubtickMoveWhen` | `float` |
+| `m_flForwardMove` | `float` |
+| `m_flLeftMove` | `float` |
+| `m_flUpMove` | `float` |
+| `m_vecLastMovementImpulses` | `Vector` |
+| `m_vecOldViewAngles` | `QAngle` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

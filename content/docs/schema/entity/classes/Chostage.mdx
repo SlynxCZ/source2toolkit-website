@@ -1,72 +1,55 @@
 ---
-title: CHostage
+title: "CHostage"
+description: "Schema class CHostage, derived from CHostageExpresserShim."
 ---
 
-# CHostage
 
-**Inheritance**: CHostageExpresserShim
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CHostage.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CHostage.h)
+
+**Inherits** [`CHostageExpresserShim`](/docs/schema/entity/classes/CHostageExpresserShim)
 
 ## Fields
 
-- <ApiParam name="m_OnHostageBeginGrab" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnFirstPickedUp" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnDroppedNotRescued" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnRescued" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_entitySpottedState" type="EntitySpottedState_t" />
-- <ApiParam name="m_nSpotRules" type="int32_t" />
-- <ApiParam name="m_uiHostageSpawnExclusionGroupMask" type="uint32_t" />
-- <ApiParam name="m_nHostageSpawnRandomFactor" type="uint32_t" />
-- <ApiParam name="m_bRemove" type="bool" />
-- <ApiParam name="m_vel" type="Vector" />
-- <ApiParam name="m_isRescued" type="bool" />
-- <ApiParam name="m_jumpedThisFrame" type="bool" />
-- <ApiParam name="m_nHostageState" type="int32_t" />
-- <ApiParam name="m_leader" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_lastLeader" type="CHandle&lt;CCSPlayerPawnBase&gt;" />
-- <ApiParam name="m_reuseTimer" type="CountdownTimer" />
-- <ApiParam name="m_hasBeenUsed" type="bool" />
-- <ApiParam name="m_accel" type="Vector" />
-- <ApiParam name="m_isRunning" type="bool" />
-- <ApiParam name="m_isCrouching" type="bool" />
-- <ApiParam name="m_jumpTimer" type="CountdownTimer" />
-- <ApiParam name="m_isWaitingForLeader" type="bool" />
-- <ApiParam name="m_repathTimer" type="CountdownTimer" />
-- <ApiParam name="m_inhibitDoorTimer" type="CountdownTimer" />
-- <ApiParam name="m_inhibitObstacleAvoidanceTimer" type="CountdownTimer" />
-- <ApiParam name="m_wiggleTimer" type="CountdownTimer" />
-- <ApiParam name="m_isAdjusted" type="bool" />
-- <ApiParam name="m_bHandsHaveBeenCut" type="bool" />
-- <ApiParam name="m_hHostageGrabber" type="CHandle&lt;CCSPlayerPawn&gt;" />
-- <ApiParam name="m_fLastGrabTime" type="float" />
-- <ApiParam name="m_vecPositionWhenStartedDroppingToGround" type="Vector" />
-- <ApiParam name="m_vecGrabbedPos" type="Vector" />
-- <ApiParam name="m_flRescueStartTime" type="float" />
-- <ApiParam name="m_flGrabSuccessTime" type="float" />
-- <ApiParam name="m_flDropStartTime" type="float" />
-- <ApiParam name="m_nApproachRewardPayouts" type="int32_t" />
-- <ApiParam name="m_nPickupEventCount" type="int32_t" />
-- <ApiParam name="m_vecSpawnGroundPos" type="Vector" />
-- <ApiParam name="m_vecHostageResetPosition" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_OnHostageBeginGrab` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnFirstPickedUp` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnDroppedNotRescued` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnRescued` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_entitySpottedState` | [`EntitySpottedState_t`](/docs/schema/entity/classes/EntitySpottedState_t) |
+| `m_nSpotRules` | `int32_t` |
+| `m_uiHostageSpawnExclusionGroupMask` | `uint32_t` |
+| `m_nHostageSpawnRandomFactor` | `uint32_t` |
+| `m_bRemove` | `bool` |
+| `m_vel` | `Vector` |
+| `m_isRescued` | `bool` |
+| `m_jumpedThisFrame` | `bool` |
+| `m_nHostageState` | `int32_t` |
+| `m_leader` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_lastLeader` | [`CHandle<CCSPlayerPawnBase>`](/docs/schema/entity/classes/CCSPlayerPawnBase) |
+| `m_reuseTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_hasBeenUsed` | `bool` |
+| `m_accel` | `Vector` |
+| `m_isRunning` | `bool` |
+| `m_isCrouching` | `bool` |
+| `m_jumpTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_isWaitingForLeader` | `bool` |
+| `m_repathTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_inhibitDoorTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_inhibitObstacleAvoidanceTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_wiggleTimer` | [`CountdownTimer`](/docs/schema/entity/classes/CountdownTimer) |
+| `m_isAdjusted` | `bool` |
+| `m_bHandsHaveBeenCut` | `bool` |
+| `m_hHostageGrabber` | [`CHandle<CCSPlayerPawn>`](/docs/schema/entity/classes/CCSPlayerPawn) |
+| `m_fLastGrabTime` | `float` |
+| `m_vecPositionWhenStartedDroppingToGround` | `Vector` |
+| `m_vecGrabbedPos` | `Vector` |
+| `m_flRescueStartTime` | `float` |
+| `m_flGrabSuccessTime` | `float` |
+| `m_flDropStartTime` | `float` |
+| `m_nApproachRewardPayouts` | `int32_t` |
+| `m_nPickupEventCount` | `int32_t` |
+| `m_vecSpawnGroundPos` | `Vector` |
+| `m_vecHostageResetPosition` | `Vector` |
 
-## Methods
-
-### CHostage* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CHostage* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CHostage* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CHostage&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

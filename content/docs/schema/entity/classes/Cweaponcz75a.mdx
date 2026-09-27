@@ -1,34 +1,17 @@
 ---
-title: CWeaponCZ75a
+title: "CWeaponCZ75a"
+description: "Schema class CWeaponCZ75a, derived from CCSWeaponBaseGun."
 ---
 
-# CWeaponCZ75a
 
-**Inheritance**: CCSWeaponBaseGun
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CWeaponCZ75a.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CWeaponCZ75a.h)
+
+**Inherits** [`CCSWeaponBaseGun`](/docs/schema/entity/classes/CCSWeaponBaseGun)
 
 ## Fields
 
-- <ApiParam name="m_bMagazineRemoved" type="bool" />
+| Field | Type |
+|---|---|
+| `m_bMagazineRemoved` | `bool` |
 
-## Methods
-
-### CWeaponCZ75a* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CWeaponCZ75a* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CWeaponCZ75a* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CWeaponCZ75a&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

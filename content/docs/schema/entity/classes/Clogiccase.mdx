@@ -1,38 +1,21 @@
 ---
-title: CLogicCase
+title: "CLogicCase"
+description: "Schema class CLogicCase, derived from CLogicalEntity."
 ---
 
-# CLogicCase
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicCase.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicCase.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_nCase" type="CUtlSymbolLarge" />
-- <ApiParam name="m_nShuffleCases" type="int32_t" />
-- <ApiParam name="m_nLastShuffleCase" type="int32_t" />
-- <ApiParam name="m_uchShuffleCaseMap" type="uint8_t" />
-- <ApiParam name="m_OnCase" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_nCase` | `CUtlSymbolLarge` |
+| `m_nShuffleCases` | `int32_t` |
+| `m_nLastShuffleCase` | `int32_t` |
+| `m_uchShuffleCaseMap` | `uint8_t` |
+| `m_OnCase` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CLogicCase* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicCase* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicCase* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicCase&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

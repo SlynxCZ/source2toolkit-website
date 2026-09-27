@@ -1,48 +1,31 @@
 ---
-title: CTriggerLerpObject
+title: "CTriggerLerpObject"
+description: "Schema class CTriggerLerpObject, derived from CBaseTrigger."
 ---
 
-# CTriggerLerpObject
 
-**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTriggerLerpObject.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTriggerLerpObject.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_iszLerpTarget" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hLerpTarget" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_iszLerpTargetAttachment" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flLerpDuration" type="float" />
-- <ApiParam name="m_bAttachedEntityWasParented" type="bool" />
-- <ApiParam name="m_bLerpRestoreMoveType" type="bool" />
-- <ApiParam name="m_bSingleLerpObject" type="bool" />
-- <ApiParam name="m_vecLerpingObjects" type="CUtlVector&lt;lerpdata_t&gt;" />
-- <ApiParam name="m_iszLerpEffect" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszLerpSound" type="CUtlSymbolLarge" />
-- <ApiParam name="m_bAttachTouchingObject" type="bool" />
-- <ApiParam name="m_hEntityToWaitForDisconnect" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_OnLerpStarted" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnLerpFinished" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnDetached" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_iszLerpTarget` | `CUtlSymbolLarge` |
+| `m_hLerpTarget` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_iszLerpTargetAttachment` | `CUtlSymbolLarge` |
+| `m_flLerpDuration` | `float` |
+| `m_bAttachedEntityWasParented` | `bool` |
+| `m_bLerpRestoreMoveType` | `bool` |
+| `m_bSingleLerpObject` | `bool` |
+| `m_vecLerpingObjects` | [`CUtlVector<lerpdata_t>`](/docs/schema/entity/classes/lerpdata_t) |
+| `m_iszLerpEffect` | `CUtlSymbolLarge` |
+| `m_iszLerpSound` | `CUtlSymbolLarge` |
+| `m_bAttachTouchingObject` | `bool` |
+| `m_hEntityToWaitForDisconnect` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_OnLerpStarted` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnLerpFinished` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnDetached` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CTriggerLerpObject* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTriggerLerpObject* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTriggerLerpObject* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTriggerLerpObject&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

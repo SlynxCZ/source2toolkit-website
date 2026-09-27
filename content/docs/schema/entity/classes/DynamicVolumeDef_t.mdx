@@ -1,17 +1,22 @@
 ---
-title: DynamicVolumeDef_t
+title: "DynamicVolumeDef_t"
+description: "Schema class DynamicVolumeDef_t."
 ---
 
-# DynamicVolumeDef_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/DynamicVolumeDef_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/DynamicVolumeDef_t.h)
 
 ## Fields
 
-- <ApiParam name="m_source" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_target" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_nHullIdx" type="int32_t" />
-- <ApiParam name="m_vSourceAnchorPos" type="Vector" />
-- <ApiParam name="m_vTargetAnchorPos" type="Vector" />
-- <ApiParam name="m_nAreaSrc" type="uint32_t" />
-- <ApiParam name="m_nAreaDst" type="uint32_t" />
-- <ApiParam name="m_bAttached" type="bool" />
+| Field | Type |
+|---|---|
+| `m_source` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_target` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_nHullIdx` | `int32_t` |
+| `m_vSourceAnchorPos` | `Vector` |
+| `m_vTargetAnchorPos` | `Vector` |
+| `m_nAreaSrc` | `uint32_t` |
+| `m_nAreaDst` | `uint32_t` |
+| `m_bAttached` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

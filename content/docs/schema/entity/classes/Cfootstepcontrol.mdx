@@ -1,35 +1,18 @@
 ---
-title: CFootstepControl
+title: "CFootstepControl"
+description: "Schema class CFootstepControl, derived from CBaseTrigger."
 ---
 
-# CFootstepControl
 
-**Inheritance**: CBaseTrigger
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFootstepControl.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFootstepControl.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_source" type="CUtlSymbolLarge" />
-- <ApiParam name="m_destination" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_source` | `CUtlSymbolLarge` |
+| `m_destination` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CFootstepControl* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFootstepControl* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFootstepControl* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFootstepControl&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

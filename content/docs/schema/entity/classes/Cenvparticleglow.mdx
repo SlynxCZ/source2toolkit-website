@@ -1,38 +1,21 @@
 ---
-title: CEnvParticleGlow
+title: "CEnvParticleGlow"
+description: "Schema class CEnvParticleGlow, derived from CParticleSystem."
 ---
 
-# CEnvParticleGlow
 
-**Inheritance**: [CParticleSystem](/docs/schema/entity/classes/Cparticlesystem)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvParticleGlow.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvParticleGlow.h)
+
+**Inherits** [`CParticleSystem`](/docs/schema/entity/classes/CParticleSystem)
 
 ## Fields
 
-- <ApiParam name="m_flAlphaScale" type="float" />
-- <ApiParam name="m_flRadiusScale" type="float" />
-- <ApiParam name="m_flSelfIllumScale" type="float" />
-- <ApiParam name="m_ColorTint" type="Color" />
-- <ApiParam name="m_hTextureOverride" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
+| Field | Type |
+|---|---|
+| `m_flAlphaScale` | `float` |
+| `m_flRadiusScale` | `float` |
+| `m_flSelfIllumScale` | `float` |
+| `m_ColorTint` | `Color` |
+| `m_hTextureOverride` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
 
-## Methods
-
-### CEnvParticleGlow* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvParticleGlow* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvParticleGlow* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvParticleGlow&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

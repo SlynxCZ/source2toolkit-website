@@ -1,40 +1,23 @@
 ---
-title: CPointPrefab
+title: "CPointPrefab"
+description: "Schema class CPointPrefab, derived from CServerOnlyPointEntity."
 ---
 
-# CPointPrefab
 
-**Inheritance**: CServerOnlyPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointPrefab.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointPrefab.h)
+
+**Inherits** [`CServerOnlyPointEntity`](/docs/schema/entity/classes/CServerOnlyPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_targetMapName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_forceWorldGroupID" type="CUtlSymbolLarge" />
-- <ApiParam name="m_associatedRelayTargetName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_fixupNames" type="bool" />
-- <ApiParam name="m_bLoadDynamic" type="bool" />
-- <ApiParam name="m_associatedRelayEntity" type="CHandle&lt;CPointPrefab&gt;" />
-- <ApiParam name="m_ProceduralRelaySources" type="CUtlVector&lt;CHandle&lt;CBaseEntity&gt;&gt;" />
+| Field | Type |
+|---|---|
+| `m_targetMapName` | `CUtlSymbolLarge` |
+| `m_forceWorldGroupID` | `CUtlSymbolLarge` |
+| `m_associatedRelayTargetName` | `CUtlSymbolLarge` |
+| `m_fixupNames` | `bool` |
+| `m_bLoadDynamic` | `bool` |
+| `m_associatedRelayEntity` | `CHandle<CPointPrefab>` |
+| `m_ProceduralRelaySources` | [`CUtlVector<CHandle<CBaseEntity>>`](/docs/schema/entity/classes/CBaseEntity) |
 
-## Methods
-
-### CPointPrefab* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointPrefab* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointPrefab* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointPrefab&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

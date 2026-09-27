@@ -1,110 +1,93 @@
 ---
-title: CBarnLight
+title: "CBarnLight"
+description: "Schema class CBarnLight, derived from CBaseModelEntity."
 ---
 
-# CBarnLight
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBarnLight.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBarnLight.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_bEnabled" type="bool" />
-- <ApiParam name="m_nColorMode" type="int32_t" />
-- <ApiParam name="m_Color" type="Color" />
-- <ApiParam name="m_flColorTemperature" type="float" />
-- <ApiParam name="m_flBrightness" type="float" />
-- <ApiParam name="m_flBrightnessScale" type="float" />
-- <ApiParam name="m_nDirectLight" type="int32_t" />
-- <ApiParam name="m_nBakedShadowIndex" type="int32_t" />
-- <ApiParam name="m_nLightPathUniqueId" type="int32_t" />
-- <ApiParam name="m_nLightMapUniqueId" type="int32_t" />
-- <ApiParam name="m_nLuminaireShape" type="int32_t" />
-- <ApiParam name="m_flLuminaireSize" type="float" />
-- <ApiParam name="m_flLuminaireAnisotropy" type="float" />
-- <ApiParam name="m_LightStyleString" type="CUtlString" />
-- <ApiParam name="m_flLightStyleStartTime" type="float" />
-- <ApiParam name="m_QueuedLightStyleStrings" type="CUtlVector&lt;CUtlString&gt;" />
-- <ApiParam name="m_LightStyleEvents" type="CUtlVector&lt;CUtlString&gt;" />
-- <ApiParam name="m_LightStyleTargets" type="CUtlVector&lt;CHandle&lt;CBaseModelEntity&gt;&gt;" />
-- <ApiParam name="m_StyleEvent" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_hLightCookie" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
-- <ApiParam name="m_flShape" type="float" />
-- <ApiParam name="m_flSoftX" type="float" />
-- <ApiParam name="m_flSoftY" type="float" />
-- <ApiParam name="m_flSkirt" type="float" />
-- <ApiParam name="m_flSkirtNear" type="float" />
-- <ApiParam name="m_vSizeParams" type="Vector" />
-- <ApiParam name="m_flRange" type="float" />
-- <ApiParam name="m_vShear" type="Vector" />
-- <ApiParam name="m_nBakeSpecularToCubemaps" type="int32_t" />
-- <ApiParam name="m_vBakeSpecularToCubemapsSize" type="Vector" />
-- <ApiParam name="m_flBakeSpecularToCubemapsScale" type="float" />
-- <ApiParam name="m_nCastShadows" type="int32_t" />
-- <ApiParam name="m_nShadowMapSize" type="int32_t" />
-- <ApiParam name="m_nShadowPriority" type="int32_t" />
-- <ApiParam name="m_bContactShadow" type="bool" />
-- <ApiParam name="m_bForceShadowsEnabled" type="bool" />
-- <ApiParam name="m_nBounceLight" type="int32_t" />
-- <ApiParam name="m_flBounceScale" type="float" />
-- <ApiParam name="m_flMinRoughness" type="float" />
-- <ApiParam name="m_vAlternateColor" type="Vector" />
-- <ApiParam name="m_fAlternateColorBrightness" type="float" />
-- <ApiParam name="m_nFog" type="int32_t" />
-- <ApiParam name="m_flFogStrength" type="float" />
-- <ApiParam name="m_nFogShadows" type="int32_t" />
-- <ApiParam name="m_flFogScale" type="float" />
-- <ApiParam name="m_flFadeSizeStart" type="float" />
-- <ApiParam name="m_flFadeSizeEnd" type="float" />
-- <ApiParam name="m_flShadowFadeSizeStart" type="float" />
-- <ApiParam name="m_flShadowFadeSizeEnd" type="float" />
-- <ApiParam name="m_bPrecomputedFieldsValid" type="bool" />
-- <ApiParam name="m_vPrecomputedBoundsMins" type="Vector" />
-- <ApiParam name="m_vPrecomputedBoundsMaxs" type="Vector" />
-- <ApiParam name="m_vPrecomputedOBBOrigin" type="Vector" />
-- <ApiParam name="m_vPrecomputedOBBAngles" type="QAngle" />
-- <ApiParam name="m_vPrecomputedOBBExtent" type="Vector" />
-- <ApiParam name="m_nPrecomputedSubFrusta" type="int32_t" />
-- <ApiParam name="m_vPrecomputedOBBOrigin0" type="Vector" />
-- <ApiParam name="m_vPrecomputedOBBAngles0" type="QAngle" />
-- <ApiParam name="m_vPrecomputedOBBExtent0" type="Vector" />
-- <ApiParam name="m_vPrecomputedOBBOrigin1" type="Vector" />
-- <ApiParam name="m_vPrecomputedOBBAngles1" type="QAngle" />
-- <ApiParam name="m_vPrecomputedOBBExtent1" type="Vector" />
-- <ApiParam name="m_vPrecomputedOBBOrigin2" type="Vector" />
-- <ApiParam name="m_vPrecomputedOBBAngles2" type="QAngle" />
-- <ApiParam name="m_vPrecomputedOBBExtent2" type="Vector" />
-- <ApiParam name="m_vPrecomputedOBBOrigin3" type="Vector" />
-- <ApiParam name="m_vPrecomputedOBBAngles3" type="QAngle" />
-- <ApiParam name="m_vPrecomputedOBBExtent3" type="Vector" />
-- <ApiParam name="m_vPrecomputedOBBOrigin4" type="Vector" />
-- <ApiParam name="m_vPrecomputedOBBAngles4" type="QAngle" />
-- <ApiParam name="m_vPrecomputedOBBExtent4" type="Vector" />
-- <ApiParam name="m_vPrecomputedOBBOrigin5" type="Vector" />
-- <ApiParam name="m_vPrecomputedOBBAngles5" type="QAngle" />
-- <ApiParam name="m_vPrecomputedOBBExtent5" type="Vector" />
-- <ApiParam name="m_bPvsModifyEntity" type="bool" />
-- <ApiParam name="m_bTransmitAlways" type="bool" />
-- <ApiParam name="m_VisClusters" type="CUtlVector&lt;uint16_t&gt;" />
+| Field | Type |
+|---|---|
+| `m_bEnabled` | `bool` |
+| `m_nColorMode` | `int32_t` |
+| `m_Color` | `Color` |
+| `m_flColorTemperature` | `float` |
+| `m_flBrightness` | `float` |
+| `m_flBrightnessScale` | `float` |
+| `m_nDirectLight` | `int32_t` |
+| `m_nBakedShadowIndex` | `int32_t` |
+| `m_nLightPathUniqueId` | `int32_t` |
+| `m_nLightMapUniqueId` | `int32_t` |
+| `m_nLuminaireShape` | `int32_t` |
+| `m_flLuminaireSize` | `float` |
+| `m_flLuminaireAnisotropy` | `float` |
+| `m_LightStyleString` | `CUtlString` |
+| `m_flLightStyleStartTime` | `float` |
+| `m_QueuedLightStyleStrings` | `CUtlVector<CUtlString>` |
+| `m_LightStyleEvents` | `CUtlVector<CUtlString>` |
+| `m_LightStyleTargets` | [`CUtlVector<CHandle<CBaseModelEntity>>`](/docs/schema/entity/classes/CBaseModelEntity) |
+| `m_StyleEvent` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_hLightCookie` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
+| `m_flShape` | `float` |
+| `m_flSoftX` | `float` |
+| `m_flSoftY` | `float` |
+| `m_flSkirt` | `float` |
+| `m_flSkirtNear` | `float` |
+| `m_vSizeParams` | `Vector` |
+| `m_flRange` | `float` |
+| `m_vShear` | `Vector` |
+| `m_nBakeSpecularToCubemaps` | `int32_t` |
+| `m_vBakeSpecularToCubemapsSize` | `Vector` |
+| `m_flBakeSpecularToCubemapsScale` | `float` |
+| `m_nCastShadows` | `int32_t` |
+| `m_nShadowMapSize` | `int32_t` |
+| `m_nShadowPriority` | `int32_t` |
+| `m_bContactShadow` | `bool` |
+| `m_bForceShadowsEnabled` | `bool` |
+| `m_nBounceLight` | `int32_t` |
+| `m_flBounceScale` | `float` |
+| `m_flMinRoughness` | `float` |
+| `m_vAlternateColor` | `Vector` |
+| `m_fAlternateColorBrightness` | `float` |
+| `m_nFog` | `int32_t` |
+| `m_flFogStrength` | `float` |
+| `m_nFogShadows` | `int32_t` |
+| `m_flFogScale` | `float` |
+| `m_flFadeSizeStart` | `float` |
+| `m_flFadeSizeEnd` | `float` |
+| `m_flShadowFadeSizeStart` | `float` |
+| `m_flShadowFadeSizeEnd` | `float` |
+| `m_bPrecomputedFieldsValid` | `bool` |
+| `m_vPrecomputedBoundsMins` | `Vector` |
+| `m_vPrecomputedBoundsMaxs` | `Vector` |
+| `m_vPrecomputedOBBOrigin` | `Vector` |
+| `m_vPrecomputedOBBAngles` | `QAngle` |
+| `m_vPrecomputedOBBExtent` | `Vector` |
+| `m_nPrecomputedSubFrusta` | `int32_t` |
+| `m_vPrecomputedOBBOrigin0` | `Vector` |
+| `m_vPrecomputedOBBAngles0` | `QAngle` |
+| `m_vPrecomputedOBBExtent0` | `Vector` |
+| `m_vPrecomputedOBBOrigin1` | `Vector` |
+| `m_vPrecomputedOBBAngles1` | `QAngle` |
+| `m_vPrecomputedOBBExtent1` | `Vector` |
+| `m_vPrecomputedOBBOrigin2` | `Vector` |
+| `m_vPrecomputedOBBAngles2` | `QAngle` |
+| `m_vPrecomputedOBBExtent2` | `Vector` |
+| `m_vPrecomputedOBBOrigin3` | `Vector` |
+| `m_vPrecomputedOBBAngles3` | `QAngle` |
+| `m_vPrecomputedOBBExtent3` | `Vector` |
+| `m_vPrecomputedOBBOrigin4` | `Vector` |
+| `m_vPrecomputedOBBAngles4` | `QAngle` |
+| `m_vPrecomputedOBBExtent4` | `Vector` |
+| `m_vPrecomputedOBBOrigin5` | `Vector` |
+| `m_vPrecomputedOBBAngles5` | `QAngle` |
+| `m_vPrecomputedOBBExtent5` | `Vector` |
+| `m_bPvsModifyEntity` | `bool` |
+| `m_bTransmitAlways` | `bool` |
+| `m_VisClusters` | `CUtlVector<uint16_t>` |
 
-## Methods
-
-### CBarnLight* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBarnLight* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBarnLight* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBarnLight&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

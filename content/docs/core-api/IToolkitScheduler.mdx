@@ -1,36 +1,123 @@
 ---
-title: IToolkitScheduler
+title: "IToolkitScheduler"
+description: "Interface for scheduling tasks and managing timers."
 ---
 
-# IToolkitScheduler
 
-## IToolkitScheduler
+Provides functionality for:
+- Scheduling callbacks for next frame
+- Creating repeating or delayed timers
+- Managing timer lifecycle
 
-### NextFrame(owner, task)
+Interface for scheduling tasks and timers.
+
+**Interface id** `IToolkitScheduler002` (`TOOLKIT_SCHEDULER_INTERFACE`) · **Global** `g_pToolkitScheduler` · **Header** [`source2toolkit/IToolkitScheduler.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitScheduler.h)
+
+## Types
+
+### `TimerCallback`
+
+```cpp
+using TimerCallback = std::function<void()>;
+```
+
+Callback executed by timers
+
+## Methods
+
+### `NextFrame`
+
+```cpp
+virtual void NextFrame(PluginId owner, std::function<void()>&& task) = 0;
+```
 
 Executes a task on the next frame.
 
-<ApiLabel>Parameters</ApiLabel>
+<Callout type="info">Runs once on the next game frame</Callout>
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin the task belongs to
-- <ApiParam name="task" type="std::function&lt;void()&gt;&&" /> — Callback function
+<Callout type="info">Dropped if the owning plugin unloads before the frame arrives</Callout>
 
-### Timer* AddTimer(owner, interval, callback, flags)
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin the task belongs to |
+| `task` | `std::function<void()>&&` | Callback function |
+
+### `AddTimer`
+
+```cpp
+virtual Timer* AddTimer(PluginId owner, float interval, TimerCallback callback, int flags = 0) = 0;
+```
 
 Adds a timer.
 
-<ApiLabel>Parameters</ApiLabel>
+<Callout type="info">Killed automatically when the owning plugin unloads</Callout>
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin the timer belongs to
-- <ApiParam name="interval" type="float" /> — Time in seconds between executions
-- <ApiParam name="callback" type="TimerCallback" /> — Function to execute
-- <ApiParam name="flags" type="int" /> — Timer behavior flags
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  | Plugin the timer belongs to |
+| `interval` | `float` |  | Time in seconds between executions |
+| `callback` | [`TimerCallback`](/docs/core-api/IToolkitScheduler#timercallback) |  | Function to execute |
+| `flags` | `int` | `0` | Timer behavior flags |
 
-### KillTimer(timer)
+**Returns** [`Timer*`](/docs/core-api/IToolkitScheduler#timer) — Pointer to created Timer
+
+### `KillTimer`
+
+```cpp
+virtual void KillTimer(Timer* timer) = 0;
+```
 
 Removes a timer.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `timer` | [`Timer*`](/docs/core-api/IToolkitScheduler#timer) | Timer instance |
 
-- <ApiParam name="timer" type="[Timer*](/docs/core-api/IToolkitScheduler)" /> — Timer instance
+## `Timer`
 
+Represents a scheduled timer.
+
+Contains execution data and state for scheduled callbacks.
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `Owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin that created the timer, 0 for the toolkit itself. The callback holds code inside that plugin's library, so the scheduler has to drop the timer before the library is closed -- destroying the std::function afterwards calls into unmapped memory. |
+| `Interval` | `float` | Interval between executions (seconds) |
+| `ExecTime` | `double` | Next execution time (engine time) |
+| `Callback` | [`TimerCallback`](/docs/core-api/IToolkitScheduler#timercallback) | Callback function |
+| `Flags` | `int` | Timer flags (TimerFlags) |
+| `InExec` | `bool` | True while callback is executing |
+| `KillMe` | `bool` | Marks timer for deletion |
+
+### Constructors
+
+```cpp
+Timer(PluginId owner, float interval, double execTime, TimerCallback callback, int flags);
+```
+
+Constructs a timer.
+
+## Enums
+
+### `TimerFlags`
+
+```cpp
+enum TimerFlags
+```
+
+Timer behavior flags.
+
+| Name | Value | Description |
+|---|---|---|
+| `TIMER_FLAG_REPEAT` | `1 << 0` | Repeats timer indefinitely |
+| `TIMER_FLAG_NO_MAPCHANGE` | `1 << 1` | Automatically stops timer on map change |
+
+## Macros
+
+| Macro | Expands to |
+|---|---|
+| `NEXT_FRAME(task)` | `g_pToolkitScheduler->NextFrame(g_PluginID, task)` |
+| `ADD_TIMER(interval, cb, ...)` | `g_pToolkitScheduler->AddTimer(g_PluginID, interval, cb, ##__VA_ARGS__)` |
+| `KILL_TIMER(timer)` | `g_pToolkitScheduler->KillTimer(timer)` |

@@ -1,20 +1,25 @@
 ---
-title: VPhysicsCollisionAttribute_t
+title: "VPhysicsCollisionAttribute_t"
+description: "Schema class VPhysicsCollisionAttribute_t."
 ---
 
-# VPhysicsCollisionAttribute_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/VPhysicsCollisionAttribute_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/VPhysicsCollisionAttribute_t.h)
 
 ## Fields
 
-- <ApiParam name="m_nInteractsAs" type="uint64_t" />
-- <ApiParam name="m_nInteractsWith" type="uint64_t" />
-- <ApiParam name="m_nInteractsExclude" type="uint64_t" />
-- <ApiParam name="m_nEntityId" type="uint32_t" />
-- <ApiParam name="m_nOwnerId" type="uint32_t" />
-- <ApiParam name="m_nHierarchyId" type="uint16_t" />
-- <ApiParam name="m_nDetailLayerMask" type="uint16_t" />
-- <ApiParam name="m_nDetailLayerMaskType" type="uint8_t" />
-- <ApiParam name="m_nTargetDetailLayer" type="uint8_t" />
-- <ApiParam name="m_nCollisionGroup" type="uint8_t" />
-- <ApiParam name="m_nCollisionFunctionMask" type="uint8_t" />
+| Field | Type |
+|---|---|
+| `m_nInteractsAs` | `uint64_t` |
+| `m_nInteractsWith` | `uint64_t` |
+| `m_nInteractsExclude` | `uint64_t` |
+| `m_nEntityId` | `uint32_t` |
+| `m_nOwnerId` | `uint32_t` |
+| `m_nHierarchyId` | `uint16_t` |
+| `m_nDetailLayerMask` | `uint16_t` |
+| `m_nDetailLayerMaskType` | `uint8_t` |
+| `m_nTargetDetailLayer` | `uint8_t` |
+| `m_nCollisionGroup` | `uint8_t` |
+| `m_nCollisionFunctionMask` | `uint8_t` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

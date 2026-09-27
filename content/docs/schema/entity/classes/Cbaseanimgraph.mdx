@@ -1,48 +1,31 @@
 ---
-title: CBaseAnimGraph
+title: "CBaseAnimGraph"
+description: "Schema class CBaseAnimGraph, derived from CBaseModelEntity."
 ---
 
-# CBaseAnimGraph
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseAnimGraph.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseAnimGraph.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_graphControllerManager" type="[CAnimGraphControllerManager](/docs/schema/entity/classes/Canimgraphcontrollermanager)" />
-- <ApiParam name="m_pMainGraphController" type="[CAnimGraphControllerPtr](/docs/schema/entity/classes/Canimgraphcontrollerptr)" />
-- <ApiParam name="m_bInitiallyPopulateInterpHistory" type="bool" />
-- <ApiParam name="m_OnExternalChoreoGraphChanged" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_pChoreoServices" type="[IChoreoServices*](/docs/schema/entity/classes/Ichoreoservices)" />
-- <ApiParam name="m_bAnimGraphUpdateEnabled" type="bool" />
-- <ApiParam name="m_bAnimationUpdateScheduled" type="bool" />
-- <ApiParam name="m_vecForce" type="Vector" />
-- <ApiParam name="m_nForceBone" type="int32_t" />
-- <ApiParam name="m_pRagdollControl" type="[IPhysicsRagdollControl*](/docs/schema/entity/classes/Iphysicsragdollcontrol)" />
-- <ApiParam name="m_RagdollPose" type="[PhysicsRagdollPose_t](/docs/schema/entity/classes/PhysicsRagdollPose_t)" />
-- <ApiParam name="m_bRagdollEnabled" type="bool" />
-- <ApiParam name="m_bRagdollClientSide" type="bool" />
-- <ApiParam name="m_bShouldUpdateTransformations" type="bool" />
-- <ApiParam name="m_xParentedRagdollRootInEntitySpace" type="CTransform" />
+| Field | Type |
+|---|---|
+| `m_graphControllerManager` | [`CAnimGraphControllerManager`](/docs/schema/entity/classes/CAnimGraphControllerManager) |
+| `m_pMainGraphController` | [`CAnimGraphControllerPtr`](/docs/schema/entity/classes/CAnimGraphControllerPtr) |
+| `m_bInitiallyPopulateInterpHistory` | `bool` |
+| `m_OnExternalChoreoGraphChanged` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_pChoreoServices` | [`IChoreoServices*`](/docs/schema/entity/classes/IChoreoServices) |
+| `m_bAnimGraphUpdateEnabled` | `bool` |
+| `m_bAnimationUpdateScheduled` | `bool` |
+| `m_vecForce` | `Vector` |
+| `m_nForceBone` | `int32_t` |
+| `m_pRagdollControl` | [`IPhysicsRagdollControl*`](/docs/schema/entity/classes/IPhysicsRagdollControl) |
+| `m_RagdollPose` | [`PhysicsRagdollPose_t`](/docs/schema/entity/classes/PhysicsRagdollPose_t) |
+| `m_bRagdollEnabled` | `bool` |
+| `m_bRagdollClientSide` | `bool` |
+| `m_bShouldUpdateTransformations` | `bool` |
+| `m_xParentedRagdollRootInEntitySpace` | `CTransform` |
 
-## Methods
-
-### CBaseAnimGraph* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBaseAnimGraph* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBaseAnimGraph* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBaseAnimGraph&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

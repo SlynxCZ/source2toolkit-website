@@ -1,15 +1,20 @@
 ---
-title: Sky3dparams_t
+title: "sky3dparams_t"
+description: "Schema class sky3dparams_t."
 ---
 
-# sky3dparams_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/sky3dparams_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/sky3dparams_t.h)
 
 ## Fields
 
-- <ApiParam name="scale" type="int16_t" />
-- <ApiParam name="origin" type="Vector" />
-- <ApiParam name="bClip3DSkyBoxNearToWorldFar" type="bool" />
-- <ApiParam name="flClip3DSkyBoxNearToWorldFarOffset" type="float" />
-- <ApiParam name="fog" type="fogparams_t" />
-- <ApiParam name="m_nWorldGroupID" type="WorldGroupId_t" />
+| Field | Type |
+|---|---|
+| `scale` | `int16_t` |
+| `origin` | `Vector` |
+| `bClip3DSkyBoxNearToWorldFar` | `bool` |
+| `flClip3DSkyBoxNearToWorldFarOffset` | `float` |
+| `fog` | [`fogparams_t`](/docs/schema/entity/classes/fogparams_t) |
+| `m_nWorldGroupID` | `WorldGroupId_t` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

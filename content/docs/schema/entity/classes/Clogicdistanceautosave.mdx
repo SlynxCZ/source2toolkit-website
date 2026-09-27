@@ -1,39 +1,22 @@
 ---
-title: CLogicDistanceAutosave
+title: "CLogicDistanceAutosave"
+description: "Schema class CLogicDistanceAutosave, derived from CLogicalEntity."
 ---
 
-# CLogicDistanceAutosave
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicDistanceAutosave.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicDistanceAutosave.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszTargetEntity" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flDistanceToPlayer" type="float" />
-- <ApiParam name="m_bForceNewLevelUnit" type="bool" />
-- <ApiParam name="m_bCheckCough" type="bool" />
-- <ApiParam name="m_bThinkDangerous" type="bool" />
-- <ApiParam name="m_flDangerousTime" type="float" />
+| Field | Type |
+|---|---|
+| `m_iszTargetEntity` | `CUtlSymbolLarge` |
+| `m_flDistanceToPlayer` | `float` |
+| `m_bForceNewLevelUnit` | `bool` |
+| `m_bCheckCough` | `bool` |
+| `m_bThinkDangerous` | `bool` |
+| `m_flDangerousTime` | `float` |
 
-## Methods
-
-### CLogicDistanceAutosave* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicDistanceAutosave* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicDistanceAutosave* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicDistanceAutosave&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

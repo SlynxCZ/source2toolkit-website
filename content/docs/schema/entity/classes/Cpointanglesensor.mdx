@@ -1,43 +1,26 @@
 ---
-title: CPointAngleSensor
+title: "CPointAngleSensor"
+description: "Schema class CPointAngleSensor, derived from CPointEntity."
 ---
 
-# CPointAngleSensor
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointAngleSensor.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointAngleSensor.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_nLookAtName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hTargetEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_hLookAtEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_flDuration" type="float" />
-- <ApiParam name="m_flDotTolerance" type="float" />
-- <ApiParam name="m_flFacingTime" type="float" />
-- <ApiParam name="m_bFired" type="bool" />
-- <ApiParam name="m_OnFacingLookat" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnNotFacingLookat" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_bDisabled` | `bool` |
+| `m_nLookAtName` | `CUtlSymbolLarge` |
+| `m_hTargetEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hLookAtEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_flDuration` | `float` |
+| `m_flDotTolerance` | `float` |
+| `m_flFacingTime` | `float` |
+| `m_bFired` | `bool` |
+| `m_OnFacingLookat` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnNotFacingLookat` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CPointAngleSensor* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointAngleSensor* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointAngleSensor* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointAngleSensor&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

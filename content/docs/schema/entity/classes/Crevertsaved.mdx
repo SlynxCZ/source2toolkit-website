@@ -1,36 +1,19 @@
 ---
-title: CRevertSaved
+title: "CRevertSaved"
+description: "Schema class CRevertSaved, derived from CModelPointEntity."
 ---
 
-# CRevertSaved
 
-**Inheritance**: CModelPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CRevertSaved.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CRevertSaved.h)
+
+**Inherits** [`CModelPointEntity`](/docs/schema/entity/classes/CModelPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_loadTime" type="float" />
-- <ApiParam name="m_Duration" type="float" />
-- <ApiParam name="m_HoldTime" type="float" />
+| Field | Type |
+|---|---|
+| `m_loadTime` | `float` |
+| `m_Duration` | `float` |
+| `m_HoldTime` | `float` |
 
-## Methods
-
-### CRevertSaved* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CRevertSaved* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CRevertSaved* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CRevertSaved&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

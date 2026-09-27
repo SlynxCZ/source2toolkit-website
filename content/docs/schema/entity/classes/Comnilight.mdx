@@ -1,36 +1,19 @@
 ---
-title: COmniLight
+title: "COmniLight"
+description: "Schema class COmniLight, derived from CBarnLight."
 ---
 
-# COmniLight
 
-**Inheritance**: [CBarnLight](/docs/schema/entity/classes/Cbarnlight)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/COmniLight.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/COmniLight.h)
+
+**Inherits** [`CBarnLight`](/docs/schema/entity/classes/CBarnLight)
 
 ## Fields
 
-- <ApiParam name="m_flInnerAngle" type="float" />
-- <ApiParam name="m_flOuterAngle" type="float" />
-- <ApiParam name="m_bShowLight" type="bool" />
+| Field | Type |
+|---|---|
+| `m_flInnerAngle` | `float` |
+| `m_flOuterAngle` | `float` |
+| `m_bShowLight` | `bool` |
 
-## Methods
-
-### COmniLight* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### COmniLight* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### COmniLight* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;COmniLight&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

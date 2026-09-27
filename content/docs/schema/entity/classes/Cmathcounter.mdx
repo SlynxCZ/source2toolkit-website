@@ -1,42 +1,25 @@
 ---
-title: CMathCounter
+title: "CMathCounter"
+description: "Schema class CMathCounter, derived from CLogicalEntity."
 ---
 
-# CMathCounter
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMathCounter.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMathCounter.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_flMin" type="float" />
-- <ApiParam name="m_flMax" type="float" />
-- <ApiParam name="m_bHitMin" type="bool" />
-- <ApiParam name="m_bHitMax" type="bool" />
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_OnHitMin" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnHitMax" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnChangedFromMin" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnChangedFromMax" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_flMin` | `float` |
+| `m_flMax` | `float` |
+| `m_bHitMin` | `bool` |
+| `m_bHitMax` | `bool` |
+| `m_bDisabled` | `bool` |
+| `m_OnHitMin` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnHitMax` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnChangedFromMin` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnChangedFromMax` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CMathCounter* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMathCounter* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMathCounter* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMathCounter&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

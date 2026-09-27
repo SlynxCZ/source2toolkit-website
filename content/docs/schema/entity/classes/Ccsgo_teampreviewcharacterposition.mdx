@@ -1,42 +1,25 @@
 ---
-title: CCSGO_TeamPreviewCharacterPosition
+title: "CCSGO_TeamPreviewCharacterPosition"
+description: "Schema class CCSGO_TeamPreviewCharacterPosition, derived from CBaseEntity."
 ---
 
-# CCSGO_TeamPreviewCharacterPosition
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSGO_TeamPreviewCharacterPosition.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSGO_TeamPreviewCharacterPosition.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_nVariant" type="int32_t" />
-- <ApiParam name="m_nRandom" type="int32_t" />
-- <ApiParam name="m_nOrdinal" type="int32_t" />
-- <ApiParam name="m_sWeaponName" type="CUtlString" />
-- <ApiParam name="m_xuid" type="uint64_t" />
-- <ApiParam name="m_agentItem" type="CEconItemView" />
-- <ApiParam name="m_glovesItem" type="CEconItemView" />
-- <ApiParam name="m_weaponItem" type="CEconItemView" />
-- <ApiParam name="m_petItem" type="CEconItemView" />
+| Field | Type |
+|---|---|
+| `m_nVariant` | `int32_t` |
+| `m_nRandom` | `int32_t` |
+| `m_nOrdinal` | `int32_t` |
+| `m_sWeaponName` | `CUtlString` |
+| `m_xuid` | `uint64_t` |
+| `m_agentItem` | [`CEconItemView`](/docs/schema/entity/classes/CEconItemView) |
+| `m_glovesItem` | [`CEconItemView`](/docs/schema/entity/classes/CEconItemView) |
+| `m_weaponItem` | [`CEconItemView`](/docs/schema/entity/classes/CEconItemView) |
+| `m_petItem` | [`CEconItemView`](/docs/schema/entity/classes/CEconItemView) |
 
-## Methods
-
-### CCSGO_TeamPreviewCharacterPosition* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CCSGO_TeamPreviewCharacterPosition* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CCSGO_TeamPreviewCharacterPosition* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CCSGO_TeamPreviewCharacterPosition&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

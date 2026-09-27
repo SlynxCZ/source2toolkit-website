@@ -1,41 +1,24 @@
 ---
-title: CItem
+title: "CItem"
+description: "Schema class CItem, derived from CBaseAnimGraph."
 ---
 
-# CItem
 
-**Inheritance**: CBaseAnimGraph
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CItem.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CItem.h)
+
+**Inherits** [`CBaseAnimGraph`](/docs/schema/entity/classes/CBaseAnimGraph)
 
 ## Fields
 
-- <ApiParam name="m_OnPlayerTouch" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnPlayerPickup" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bActivateWhenAtRest" type="bool" />
-- <ApiParam name="m_OnCacheInteraction" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnGlovePulled" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_vOriginalSpawnOrigin" type="Vector" />
-- <ApiParam name="m_vOriginalSpawnAngles" type="QAngle" />
-- <ApiParam name="m_bPhysStartAsleep" type="bool" />
+| Field | Type |
+|---|---|
+| `m_OnPlayerTouch` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnPlayerPickup` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bActivateWhenAtRest` | `bool` |
+| `m_OnCacheInteraction` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnGlovePulled` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_vOriginalSpawnOrigin` | `Vector` |
+| `m_vOriginalSpawnAngles` | `QAngle` |
+| `m_bPhysStartAsleep` | `bool` |
 
-## Methods
-
-### CItem* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CItem* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CItem* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CItem&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

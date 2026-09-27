@@ -1,49 +1,32 @@
 ---
-title: CPathParticleRope
+title: "CPathParticleRope"
+description: "Schema class CPathParticleRope, derived from CBaseEntity."
 ---
 
-# CPathParticleRope
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPathParticleRope.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPathParticleRope.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_bStartActive" type="bool" />
-- <ApiParam name="m_flMaxSimulationTime" type="float" />
-- <ApiParam name="m_iszEffectName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_PathNodes_Name" type="CUtlVector&lt;CUtlSymbolLarge&gt;" />
-- <ApiParam name="m_flParticleSpacing" type="float" />
-- <ApiParam name="m_flSlack" type="float" />
-- <ApiParam name="m_flRadius" type="float" />
-- <ApiParam name="m_ColorTint" type="Color" />
-- <ApiParam name="m_nEffectState" type="int32_t" />
-- <ApiParam name="m_iEffectIndex" type="CStrongHandle&lt;InfoForResourceTypeIParticleSystemDefinition&gt;" />
-- <ApiParam name="m_PathNodes_Position" type="CUtlVector&lt;Vector&gt;" />
-- <ApiParam name="m_PathNodes_TangentIn" type="CUtlVector&lt;Vector&gt;" />
-- <ApiParam name="m_PathNodes_TangentOut" type="CUtlVector&lt;Vector&gt;" />
-- <ApiParam name="m_PathNodes_Color" type="CUtlVector&lt;Vector&gt;" />
-- <ApiParam name="m_PathNodes_PinEnabled" type="CUtlVector&lt;bool&gt;" />
-- <ApiParam name="m_PathNodes_RadiusScale" type="CUtlVector&lt;float&gt;" />
+| Field | Type |
+|---|---|
+| `m_bStartActive` | `bool` |
+| `m_flMaxSimulationTime` | `float` |
+| `m_iszEffectName` | `CUtlSymbolLarge` |
+| `m_PathNodes_Name` | `CUtlVector<CUtlSymbolLarge>` |
+| `m_flParticleSpacing` | `float` |
+| `m_flSlack` | `float` |
+| `m_flRadius` | `float` |
+| `m_ColorTint` | `Color` |
+| `m_nEffectState` | `int32_t` |
+| `m_iEffectIndex` | [`CStrongHandle<InfoForResourceTypeIParticleSystemDefinition>`](/docs/core-api/Schema#cstronghandle) |
+| `m_PathNodes_Position` | `CUtlVector<Vector>` |
+| `m_PathNodes_TangentIn` | `CUtlVector<Vector>` |
+| `m_PathNodes_TangentOut` | `CUtlVector<Vector>` |
+| `m_PathNodes_Color` | `CUtlVector<Vector>` |
+| `m_PathNodes_PinEnabled` | `CUtlVector<bool>` |
+| `m_PathNodes_RadiusScale` | `CUtlVector<float>` |
 
-## Methods
-
-### CPathParticleRope* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPathParticleRope* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPathParticleRope* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPathParticleRope&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

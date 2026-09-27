@@ -1,64 +1,130 @@
 ---
-title: IToolkitGameConfig
+title: "IToolkitGameConfig"
+description: "Interface for accessing game configuration (gamedata)."
 ---
 
-# IToolkitGameConfig
+
+Provides access to external configuration data used for:
+- Signature scanning
+- Symbol resolution
+- Memory patching
+- Offset lookup
+
+<Callout type="info">Typically backed by external config files (JSON, KV, etc.).</Callout>
+
+Interface for accessing game configuration entries.
+
+**Interface id** `IToolkitGameConfig002` (`TOOLKIT_GAMECONFIG_INTERFACE`) · **Global** `g_pToolkitGameConfig` · **Header** [`source2toolkit/IToolkitGameConfig.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitGameConfig.h)
 
 ## Methods
 
-### const char* GetLibrary(pchName)
+### `GetLibrary`
+
+```cpp
+virtual const char* GetLibrary(const char* pchName) = 0;
+```
 
 Gets library/module name.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `pchName` | `const char*` | Config entry name |
 
-- <ApiParam name="pchName" type="const char*" /> — Config entry name
+**Returns** `const char*` — Library name
 
-### const char* GetSignature(pchName)
+### `GetSignature`
+
+```cpp
+virtual const char* GetSignature(const char* pchName) = 0;
+```
 
 Gets signature (pattern).
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `pchName` | `const char*` | Config entry name |
 
-- <ApiParam name="pchName" type="const char*" /> — Config entry name
+**Returns** `const char*` — Pattern string
 
-### const char* GetSymbol(pchName)
+### `GetSymbol`
+
+```cpp
+virtual const char* GetSymbol(const char* pchName) = 0;
+```
 
 Gets symbol name.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `pchName` | `const char*` | Config entry name |
 
-- <ApiParam name="pchName" type="const char*" /> — Config entry name
+**Returns** `const char*` — Symbol string
 
-### const char* GetPatch(pchName)
+### `GetPatch`
+
+```cpp
+virtual const char* GetPatch(const char* pchName) = 0;
+```
 
 Gets patch definition.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `pchName` | `const char*` | Config entry name |
 
-- <ApiParam name="pchName" type="const char*" /> — Config entry name
+**Returns** `const char*` — Patch data
 
-### int GetOffset(pchName)
+### `GetOffset`
+
+```cpp
+virtual int GetOffset(const char* pchName) = 0;
+```
 
 Gets integer offset.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `pchName` | `const char*` | Config entry name |
 
-- <ApiParam name="pchName" type="const char*" /> — Config entry name
+**Returns** `int` — Offset value
 
-### bool IsSymbol(pchName)
+### `IsSymbol`
+
+```cpp
+virtual bool IsSymbol(const char* pchName) = 0;
+```
 
 Whether the entry is a symbol name rather than a byte pattern.
 
-<ApiLabel>Parameters</ApiLabel>
+Symbol entries are written into the signature field with a leading "@".
 
-- <ApiParam name="pchName" type="const char*" />
+| Parameter | Type |
+|---|---|
+| `pchName` | `const char*` |
 
-### IToolkitMemory ResolveSignature(pchName)
+### `ResolveSignature`
+
+```cpp
+virtual IToolkitMemory ResolveSignature(const char* pchName) = 0;
+```
 
 Resolves a gamedata entry to an address.
 
-<ApiLabel>Parameters</ApiLabel>
+Looks the entry's "library" up among the loaded modules -- engine2, server, vscript, tier0 -- then finds it by exported symbol when the entry is "@"-prefixed, or by pattern scan otherwise. Saves a plugin repeating the module lookup and the symbol/pattern branch for every signature.
 
-- <ApiParam name="pchName" type="const char*" /> — Gamedata entry name.
+| Parameter | Type | Description |
+|---|---|---|
+| `pchName` | `const char*` | Gamedata entry name. |
 
+**Returns** [`IToolkitMemory`](/docs/core-api/IToolkitMemory) — The address, or a null IToolkitMemory when the module, symbol or pattern is missing. Converts to void* on its own; use RCast&lt;T&gt;() for a typed function pointer.
+
+## Macros
+
+| Macro | Expands to |
+|---|---|
+| `GAMECONFIG_LIBRARY(name)` | `g_pToolkitGameConfig->GetLibrary(name)` |
+| `GAMECONFIG_SIGNATURE(name)` | `g_pToolkitGameConfig->GetSignature(name)` |
+| `GAMECONFIG_SYMBOL(name)` | `g_pToolkitGameConfig->GetSymbol(name)` |
+| `GAMECONFIG_PATCH(name)` | `g_pToolkitGameConfig->GetPatch(name)` |
+| `GAMECONFIG_OFFSET(name)` | `g_pToolkitGameConfig->GetOffset(name)` |
+| `GAMECONFIG_RESOLVE(name)` | `g_pToolkitGameConfig->ResolveSignature(name)` |

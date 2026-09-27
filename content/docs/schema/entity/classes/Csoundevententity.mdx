@@ -1,46 +1,29 @@
 ---
-title: CSoundEventEntity
+title: "CSoundEventEntity"
+description: "Schema class CSoundEventEntity, derived from CBaseEntity."
 ---
 
-# CSoundEventEntity
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundEventEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundEventEntity.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_bStartOnSpawn" type="bool" />
-- <ApiParam name="m_bToLocalPlayer" type="bool" />
-- <ApiParam name="m_bStopOnNew" type="bool" />
-- <ApiParam name="m_bSaveRestore" type="bool" />
-- <ApiParam name="m_bSavedIsPlaying" type="bool" />
-- <ApiParam name="m_flSavedElapsedTime" type="float" />
-- <ApiParam name="m_iszSourceEntityName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszAttachmentName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_onSoundFinished" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_flClientCullRadius" type="float" />
-- <ApiParam name="m_iszSoundName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hSource" type="CEntityHandle" />
-- <ApiParam name="m_nEntityIndexSelection" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_bStartOnSpawn` | `bool` |
+| `m_bToLocalPlayer` | `bool` |
+| `m_bStopOnNew` | `bool` |
+| `m_bSaveRestore` | `bool` |
+| `m_bSavedIsPlaying` | `bool` |
+| `m_flSavedElapsedTime` | `float` |
+| `m_iszSourceEntityName` | `CUtlSymbolLarge` |
+| `m_iszAttachmentName` | `CUtlSymbolLarge` |
+| `m_onSoundFinished` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_flClientCullRadius` | `float` |
+| `m_iszSoundName` | `CUtlSymbolLarge` |
+| `m_hSource` | `CEntityHandle` |
+| `m_nEntityIndexSelection` | `int32_t` |
 
-## Methods
-
-### CSoundEventEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundEventEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundEventEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundEventEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,37 +1,20 @@
 ---
-title: CTeam
+title: "CTeam"
+description: "Schema class CTeam, derived from CBaseEntity."
 ---
 
-# CTeam
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTeam.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTeam.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_aPlayerControllers" type="CUtlVector&lt;CHandle&lt;CBasePlayerController&gt;&gt;" />
-- <ApiParam name="m_aPlayers" type="CUtlVector&lt;CHandle&lt;CBasePlayerPawn&gt;&gt;" />
-- <ApiParam name="m_iScore" type="int32_t" />
-- <ApiParam name="m_szTeamname" type="char" />
+| Field | Type |
+|---|---|
+| `m_aPlayerControllers` | [`CUtlVector<CHandle<CBasePlayerController>>`](/docs/schema/entity/classes/CBasePlayerController) |
+| `m_aPlayers` | [`CUtlVector<CHandle<CBasePlayerPawn>>`](/docs/schema/entity/classes/CBasePlayerPawn) |
+| `m_iScore` | `int32_t` |
+| `m_szTeamname` | `char` |
 
-## Methods
-
-### CTeam* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTeam* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTeam* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTeam&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

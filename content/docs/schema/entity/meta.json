@@ -1,0 +1,8 @@
+{
+  "title": "Entity system",
+  "defaultOpen": true,
+  "pages": [
+    "classes",
+    "enums"
+  ]
+}

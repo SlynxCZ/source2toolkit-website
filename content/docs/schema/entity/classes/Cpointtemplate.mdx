@@ -1,42 +1,25 @@
 ---
-title: CPointTemplate
+title: "CPointTemplate"
+description: "Schema class CPointTemplate, derived from CLogicalEntity."
 ---
 
-# CPointTemplate
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointTemplate.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointTemplate.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszWorldName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszSource2EntityLumpName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszEntityFilterName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flTimeoutInterval" type="float" />
-- <ApiParam name="m_bAsynchronouslySpawnEntities" type="bool" />
-- <ApiParam name="m_clientOnlyEntityBehavior" type="PointTemplateClientOnlyEntityBehavior_t" />
-- <ApiParam name="m_ownerSpawnGroupType" type="PointTemplateOwnerSpawnGroupType_t" />
-- <ApiParam name="m_createdSpawnGroupHandles" type="CUtlVector&lt;uint32_t&gt;" />
-- <ApiParam name="m_SpawnedEntityHandles" type="CUtlVector&lt;CEntityHandle&gt;" />
+| Field | Type |
+|---|---|
+| `m_iszWorldName` | `CUtlSymbolLarge` |
+| `m_iszSource2EntityLumpName` | `CUtlSymbolLarge` |
+| `m_iszEntityFilterName` | `CUtlSymbolLarge` |
+| `m_flTimeoutInterval` | `float` |
+| `m_bAsynchronouslySpawnEntities` | `bool` |
+| `m_clientOnlyEntityBehavior` | [`PointTemplateClientOnlyEntityBehavior_t`](/docs/schema/entity/enums/PointTemplateClientOnlyEntityBehavior_t) |
+| `m_ownerSpawnGroupType` | [`PointTemplateOwnerSpawnGroupType_t`](/docs/schema/entity/enums/PointTemplateOwnerSpawnGroupType_t) |
+| `m_createdSpawnGroupHandles` | `CUtlVector<uint32_t>` |
+| `m_SpawnedEntityHandles` | `CUtlVector<CEntityHandle>` |
 
-## Methods
-
-### CPointTemplate* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointTemplate* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointTemplate* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointTemplate&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

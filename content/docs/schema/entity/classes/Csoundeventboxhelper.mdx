@@ -1,35 +1,18 @@
 ---
-title: CSoundEventBoxHelper
+title: "CSoundEventBoxHelper"
+description: "Schema class CSoundEventBoxHelper, derived from CBaseEntity."
 ---
 
-# CSoundEventBoxHelper
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundEventBoxHelper.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundEventBoxHelper.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_vMins" type="Vector" />
-- <ApiParam name="m_vMaxs" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_vMins` | `Vector` |
+| `m_vMaxs` | `Vector` |
 
-## Methods
-
-### CSoundEventBoxHelper* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundEventBoxHelper* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundEventBoxHelper* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundEventBoxHelper&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

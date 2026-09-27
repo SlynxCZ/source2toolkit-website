@@ -1,44 +1,27 @@
 ---
-title: CFuncConveyor
+title: "CFuncConveyor"
+description: "Schema class CFuncConveyor, derived from CBaseModelEntity."
 ---
 
-# CFuncConveyor
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncConveyor.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncConveyor.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_szConveyorModels" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flTransitionDurationSeconds" type="float" />
-- <ApiParam name="m_flSpeed" type="float" />
-- <ApiParam name="m_angMoveEntitySpace" type="QAngle" />
-- <ApiParam name="m_vecMoveDirEntitySpace" type="Vector" />
-- <ApiParam name="m_flTargetSpeed" type="float" />
-- <ApiParam name="m_nTransitionStartTick" type="int32_t" />
-- <ApiParam name="m_nTransitionDurationTicks" type="int32_t" />
-- <ApiParam name="m_flTransitionStartSpeed" type="float" />
-- <ApiParam name="m_flFrictionScale" type="float" />
-- <ApiParam name="m_hConveyorModels" type="CUtlVector&lt;CHandle&lt;CBaseEntity&gt;&gt;" />
+| Field | Type |
+|---|---|
+| `m_szConveyorModels` | `CUtlSymbolLarge` |
+| `m_flTransitionDurationSeconds` | `float` |
+| `m_flSpeed` | `float` |
+| `m_angMoveEntitySpace` | `QAngle` |
+| `m_vecMoveDirEntitySpace` | `Vector` |
+| `m_flTargetSpeed` | `float` |
+| `m_nTransitionStartTick` | `int32_t` |
+| `m_nTransitionDurationTicks` | `int32_t` |
+| `m_flTransitionStartSpeed` | `float` |
+| `m_flFrictionScale` | `float` |
+| `m_hConveyorModels` | [`CUtlVector<CHandle<CBaseEntity>>`](/docs/schema/entity/classes/CBaseEntity) |
 
-## Methods
-
-### CFuncConveyor* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncConveyor* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncConveyor* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncConveyor&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

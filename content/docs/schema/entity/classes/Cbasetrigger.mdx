@@ -1,46 +1,29 @@
 ---
-title: CBaseTrigger
+title: "CBaseTrigger"
+description: "Schema class CBaseTrigger, derived from CBaseToggle."
 ---
 
-# CBaseTrigger
 
-**Inheritance**: [CBaseToggle](/docs/schema/entity/classes/Cbasetoggle)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBaseTrigger.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBaseTrigger.h)
+
+**Inherits** [`CBaseToggle`](/docs/schema/entity/classes/CBaseToggle)
 
 ## Fields
 
-- <ApiParam name="m_OnStartTouch" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnStartTouchAll" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnEndTouch" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnEndTouchAll" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnTouching" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnTouchingEachEntity" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnNotTouching" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnTouchingChanged" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_hTouchingEntities" type="CUtlVector&lt;CHandle&lt;CBaseEntity&gt;&gt;" />
-- <ApiParam name="m_iFilterName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hFilter" type="CHandle&lt;CBaseFilter&gt;" />
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_bUseAsyncQueries" type="bool" />
+| Field | Type |
+|---|---|
+| `m_OnStartTouch` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnStartTouchAll` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnEndTouch` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnEndTouchAll` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnTouching` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnTouchingEachEntity` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnNotTouching` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnTouchingChanged` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_hTouchingEntities` | [`CUtlVector<CHandle<CBaseEntity>>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_iFilterName` | `CUtlSymbolLarge` |
+| `m_hFilter` | [`CHandle<CBaseFilter>`](/docs/schema/entity/classes/CBaseFilter) |
+| `m_bDisabled` | `bool` |
+| `m_bUseAsyncQueries` | `bool` |
 
-## Methods
-
-### CBaseTrigger* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBaseTrigger* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBaseTrigger* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBaseTrigger&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

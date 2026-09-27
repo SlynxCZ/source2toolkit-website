@@ -1,38 +1,21 @@
 ---
-title: CEnvLaser
+title: "CEnvLaser"
+description: "Schema class CEnvLaser, derived from CBeam."
 ---
 
-# CEnvLaser
 
-**Inheritance**: CBeam
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvLaser.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvLaser.h)
+
+**Inherits** [`CBeam`](/docs/schema/entity/classes/CBeam)
 
 ## Fields
 
-- <ApiParam name="m_iszLaserTarget" type="CUtlSymbolLarge" />
-- <ApiParam name="m_pSprite" type="CHandle&lt;CSprite&gt;" />
-- <ApiParam name="m_iszSpriteName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_firePosition" type="Vector" />
-- <ApiParam name="m_flStartFrame" type="float" />
+| Field | Type |
+|---|---|
+| `m_iszLaserTarget` | `CUtlSymbolLarge` |
+| `m_pSprite` | [`CHandle<CSprite>`](/docs/schema/entity/classes/CSprite) |
+| `m_iszSpriteName` | `CUtlSymbolLarge` |
+| `m_firePosition` | `Vector` |
+| `m_flStartFrame` | `float` |
 
-## Methods
-
-### CEnvLaser* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvLaser* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvLaser* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvLaser&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

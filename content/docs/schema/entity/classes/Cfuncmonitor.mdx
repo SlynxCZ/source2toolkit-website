@@ -1,42 +1,25 @@
 ---
-title: CFuncMonitor
+title: "CFuncMonitor"
+description: "Schema class CFuncMonitor, derived from CFuncBrush."
 ---
 
-# CFuncMonitor
 
-**Inheritance**: CFuncBrush
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncMonitor.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncMonitor.h)
+
+**Inherits** [`CFuncBrush`](/docs/schema/entity/classes/CFuncBrush)
 
 ## Fields
 
-- <ApiParam name="m_targetCamera" type="CUtlString" />
-- <ApiParam name="m_nResolutionEnum" type="int32_t" />
-- <ApiParam name="m_bRenderShadows" type="bool" />
-- <ApiParam name="m_bUseUniqueColorTarget" type="bool" />
-- <ApiParam name="m_brushModelName" type="CUtlString" />
-- <ApiParam name="m_hTargetCamera" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_bEnabled" type="bool" />
-- <ApiParam name="m_bDraw3DSkybox" type="bool" />
-- <ApiParam name="m_bStartEnabled" type="bool" />
+| Field | Type |
+|---|---|
+| `m_targetCamera` | `CUtlString` |
+| `m_nResolutionEnum` | `int32_t` |
+| `m_bRenderShadows` | `bool` |
+| `m_bUseUniqueColorTarget` | `bool` |
+| `m_brushModelName` | `CUtlString` |
+| `m_hTargetCamera` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_bEnabled` | `bool` |
+| `m_bDraw3DSkybox` | `bool` |
+| `m_bStartEnabled` | `bool` |
 
-## Methods
-
-### CFuncMonitor* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncMonitor* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncMonitor* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncMonitor&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

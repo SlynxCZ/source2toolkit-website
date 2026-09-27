@@ -1,36 +1,1059 @@
 ---
-title: Serversideclient
+title: "Server-side clients"
+description: "Engine structures the SDK declares by hand: INetworkMessageProcessingPreFilterCustom, HltvReplayStats_t, Spike_t, CNetworkStatTrace."
 ---
 
-# serversideclient
 
-## INetworkMessageProcessingPreFilterCustom
+**Header** [`source2toolkit/schema/serversideclient.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/serversideclient.h)
 
-### FilterMessage()
+## `INetworkMessageProcessingPreFilterCustom`
 
-### INetChannel* GetNetChannel()
+### `FilterMessage`
 
-### CPlayerSlot GetPlayerSlot()
+```cpp
+virtual void FilterMessage() = 0;
+```
 
-### CPlayerUserId GetUserID()
+### `GetNetChannel`
 
-### int GetSignonState()
+```cpp
+INetChannel* GetNetChannel() const;
+```
 
-### CSteamID* GetClientSteamID()
+### `GetPlayerSlot`
 
-### const char* GetClientName()
+```cpp
+CPlayerSlot GetPlayerSlot() const;
+```
 
-### netadr_t* GetRemoteAddress()
+### `GetUserID`
 
-## CCopyableLock
+```cpp
+CPlayerUserId GetUserID() const;
+```
 
-**Inheritance**: MUTEX
+### `GetSignonState`
 
-## CServerSideClient
+```cpp
+int GetSignonState() const;
+```
 
-**Inheritance**: CServerSideClientBase
+### `GetClientSteamID`
 
-## CHLTVClient
+```cpp
+CSteamID* GetClientSteamID() const;
+```
 
-**Inheritance**: CServerSideClientBase
+### `GetClientName`
 
+```cpp
+const char* GetClientName() const;
+```
+
+### `GetRemoteAddress`
+
+```cpp
+netadr_t* GetRemoteAddress() const;
+```
+
+## `HltvReplayStats_t`
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `m_nClients` | `uint32` |
+| `m_nStartRequests` | `uint32` |
+| `m_nSuccessfulStarts` | `uint32` |
+| `m_nStopRequests` | `uint32` |
+| `m_nAbortStopRequests` | `uint32` |
+| `m_nUserCancels` | `uint32` |
+| `m_nFullReplays` | `uint32` |
+| `m_nNetAbortReplays` | `uint32` |
+| `m_nFailedReplays` | `uint32[NUM_FAILURES]` |
+
+### `FailEnum_t`
+
+```cpp
+enum FailEnum_t
+```
+
+| Name | Value |
+|---|---|
+| `FAILURE_ALREADY_IN_REPLAY` | `0` |
+| `FAILURE_TOO_FREQUENT` |  |
+| `FAILURE_NO_FRAME` |  |
+| `FAILURE_NO_FRAME2` |  |
+| `FAILURE_CANNOT_MATCH_DELAY` |  |
+| `FAILURE_FRAME_NOT_READY` |  |
+| `NUM_FAILURES` |  |
+
+## `Spike_t`
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `m_szDesc` | `CUtlString` |
+| `m_nBits` | `int` |
+
+## `CNetworkStatTrace`
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `m_Records` | [`CUtlVector<Spike_t>`](/docs/schema/Serversideclient#spike_t) |
+| `m_nMinWarningBytes` | `int` |
+| `m_nStartBit` | `int` |
+| `m_nCurBit` | `int` |
+
+## `CUtlSignaller_Base`
+
+### Constructors
+
+```cpp
+CUtlSignaller_Base(const Delegate_t& other);
+CUtlSignaller_Base(Delegate_t&& other);
+```
+
+### `Delegate_t`
+
+```cpp
+using Delegate_t = CUtlDelegate<void(CUtlSlot*)>;
+```
+
+## `CUtlSlot`
+
+### Constructors
+
+```cpp
+CUtlSlot();
+```
+
+### `MTElement_t`
+
+```cpp
+using MTElement_t = CUtlSignaller_Base*;
+```
+
+## `CServerSideClientBase`
+
+**Inherits** [`CUtlSlot`](/docs/schema/Serversideclient#cutlslot), `INetworkChannelNotify`, `INetworkMessageProcessingPreFilter`
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `m_UserIDString` | `CUtlString` |  |
+| `m_Name` | `CUtlString` |  |
+| `m_nClientSlot` | `CPlayerSlot` |  |
+| `m_nEntityIndex` | `CEntityIndex` |  |
+| `m_pGameServer` | `CNetworkGameServerBase *` |  |
+| `m_pNetChannel` | `INetChannel *` |  |
+| `m_nConnectionTypeFlags` | `uint8` |  |
+| `m_nAsyncDisconnectFlags` | `uint8` | check in Disconnect function, 1 add to queue, 2 disconnect now |
+| `m_bMarkedToKick` | `bool` |  |
+| `m_nSignonState` | [`SignonState_t`](/docs/schema/entity/enums/SignonState_t) |  |
+| `m_bSplitScreenUser` | `bool` |  |
+| `m_bSplitAllowFastDisconnect` | `bool` |  |
+| `m_nSplitScreenPlayerSlot` | `int` |  |
+| `m_SplitScreenUsers` | [`CServerSideClientBase *[4]`](/docs/schema/Serversideclient#cserversideclientbase) |  |
+| `m_pAttachedTo` | [`CServerSideClientBase *`](/docs/schema/Serversideclient#cserversideclientbase) |  |
+| `m_bSplitPlayerDisconnecting` | `bool` |  |
+| `m_eSlotState` | `ESlotState` |  |
+| `m_bFakePlayer` | `bool` |  |
+| `m_bInitialSpawnSent` | `bool` | init TRUE; controls whether initial spawn data was sent |
+| `m_nDisconnectSequence` | `int` | set from server counter in Disconnect(), zeroed in Clear() |
+| `m_UserID` | `CPlayerUserId` |  |
+| `m_bReceivedPacket` | `bool` | true, if client received a packet after the last send packet |
+| `m_SteamID` | `CSteamID` |  |
+| `m_DisconnectedSteamID` | `CSteamID` |  |
+| `m_AuthTicketSteamID` | `CSteamID` |  |
+| `m_nFriendsID` | `CSteamID` |  |
+| `m_Addr` | `ns_address` |  |
+| `m_DisconnectedAddr` | `ns_address` |  |
+| `m_pConVars` | `KeyValues *` |  |
+| `m_UnrecognizedConVarDict` | `CUtlDict< empty_t, int, k_eDictCompareTypeCaseInsensitiveFast >` |  |
+| `m_bConVarsChanged` | `bool` |  |
+| `m_bConVarsInitialized` | `bool` |  |
+| `m_bIsHLTV` | `bool` |  |
+| `m_bClientInfoReceived` | `bool` |  |
+| `m_nPendingSpawnGroupMask` | `uint64` | bitmask of pending spawn group operations, cleared in Clear() |
+| `m_nSendtableCRC` | `uint32` |  |
+| `m_uChallengeNumber` | `uint32` |  |
+| `m_nSignonTick` | `int` |  |
+| `m_nDeltaTick` | `int` |  |
+| `m_nHltvReplayDeltaTick` | `int` | init -1; delta tick used during HLTV replay mode |
+| `m_nStringTableAckTick` | `int` |  |
+| `m_nBaselineSequence` | `int` | baseline sequence number for baseline ack processing |
+| `m_pLastSnapshot` | `CFrameSnapshot *` | last send snapshot |
+| `m_vecLoadedSpawnGroups` | `CUtlVector< SpawnGroupHandle_t >` |  |
+| `m_playerInfo` | `CMsgPlayerInfo` |  |
+| `m_pBaseline` | `CFrameSnapshot *` |  |
+| `m_nBaselineUpdateTick` | `int` |  |
+| `m_BaselinesSent` | `CBitVec< MAX_EDICTS >` |  |
+| `m_nBaselineUsed` | `int` |  |
+| `m_nLoadingProgress` | `int` |  |
+| `m_nForceWaitForTick` | `int` |  |
+| `m_bLowViolence` | `bool` | true if client is in low-violence mode (L4D server needs to know) |
+| `m_bUsesSteamRelay` | `bool` | init TRUE; whether Steam Datagram Relay is used for this client |
+| `m_bFullyAuthenticated` | `bool` |  |
+| `m_bUnk1` | `bool` |  |
+| `m_fNextMessageTime` | `float` |  |
+| `m_fSnapshotInterval` | `float` |  |
+| `m_fAuthenticatedTime` | `float` |  |
+| `m_fUnkTime` | `float` |  |
+| `m_PacketEntities` | [`CSVCMsg_PacketEntities_t`](/docs/schema/Netmessages#csvcmsg_packetentities_t) |  |
+| `m_DelayedCallQueue` | `CTSQueue< void * >` |  |
+| `m_PendingReliableMessages` | `CUtlVector< void * >` |  |
+| `m_PendingUnreliableMessages` | `CUtlVector< void * >` |  |
+| `m_nMaxTicksWindow` | `int` |  |
+| `m_nMaxCommandsPerWindow` | `int` |  |
+| `m_nMaxBytesPerWindow` | `uint64` |  |
+| `m_nLastResetTick` | `int` |  |
+| `m_nCommandCount` | `int` |  |
+| `m_nByteCount` | `uint64` |  |
+| `m_Trace` | [`CNetworkStatTrace`](/docs/schema/Serversideclient#cnetworkstattrace) |  |
+| `m_spamCommandsCount` | `int` | if the value is greater than 16, the player will be kicked with reason 39 |
+| `m_nLastSpamCheckTick` | `int` | last tick at which the spam counter was evaluated/reset |
+| `m_lastExecutedCommand` | `double` | if command executed more than once per second, ++m_spamCommandCount |
+| `m_bPendingSignonStateMsg` | `bool` | set when signon -&gt; CONNECTED, consumed in ProcessSignonStateMsg |
+| `m_pLastCommand` | `CCommand *` |  |
+
+### `GetPlayerSlot`
+
+```cpp
+CPlayerSlot GetPlayerSlot() const;
+```
+
+### `GetUserID`
+
+```cpp
+CPlayerUserId GetUserID() const;
+```
+
+### `GetEntityIndex`
+
+```cpp
+CEntityIndex GetEntityIndex() const;
+```
+
+### `GetClientSteamID`
+
+```cpp
+CSteamID GetClientSteamID() const;
+```
+
+### `GetClientName`
+
+```cpp
+const char *GetClientName() const;
+```
+
+### `GetNetChannel`
+
+```cpp
+INetChannel *GetNetChannel() const;
+```
+
+### `GetSlotState`
+
+```cpp
+ESlotState GetSlotState() const;
+```
+
+### `GetRemoteAddress`
+
+```cpp
+const netadr_t *GetRemoteAddress() const;
+```
+
+### `GetServer`
+
+```cpp
+CNetworkGameServerBase *GetServer() const;
+```
+
+### `Connect`
+
+```cpp
+virtual void Connect(int socket, const char* pszName, int nUserID, INetChannel* pNetChannel, uint8 nConnectionTypeFlags, uint32 uChallengeNumber) = 0;
+```
+
+bool bFakePlayer = !nConnectionTypeFlags || (nConnectionTypeFlags &amp; 8) != 0;
+
+| Parameter | Type |
+|---|---|
+| `socket` | `int` |
+| `pszName` | `const char*` |
+| `nUserID` | `int` |
+| `pNetChannel` | `INetChannel*` |
+| `nConnectionTypeFlags` | `uint8` |
+| `uChallengeNumber` | `uint32` |
+
+### `Inactivate`
+
+```cpp
+virtual void Inactivate(const char *pszAddons) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `pszAddons` | `const char *` |
+
+### `Reactivate`
+
+```cpp
+virtual void Reactivate(CPlayerSlot nSlot) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `nSlot` | `CPlayerSlot` |
+
+### `SetServer`
+
+```cpp
+virtual void SetServer(CNetworkGameServer *pNetServer) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `pNetServer` | `CNetworkGameServer *` |
+
+### `Reconnect`
+
+```cpp
+virtual void Reconnect() = 0;
+```
+
+### `Disconnect`
+
+```cpp
+virtual void Disconnect(ENetworkDisconnectionReason reason, const char *pszInternalReason) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `reason` | `ENetworkDisconnectionReason` |
+| `pszInternalReason` | `const char *` |
+
+### `CheckConnect`
+
+```cpp
+virtual bool CheckConnect() = 0;
+```
+
+### `Create`
+
+```cpp
+virtual void Create(CPlayerSlot &nSlot, CSteamID nSteamID, const char *pszName) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `nSlot` | `CPlayerSlot &` |
+| `nSteamID` | `CSteamID` |
+| `pszName` | `const char *` |
+
+### `SetRate`
+
+```cpp
+virtual void SetRate(int nRate) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `nRate` | `int` |
+
+### `SetUpdateRate`
+
+```cpp
+virtual void SetUpdateRate(float fUpdateRate) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `fUpdateRate` | `float` |
+
+### `GetRate`
+
+```cpp
+virtual int GetRate() = 0;
+```
+
+### `Clear`
+
+```cpp
+virtual void Clear() = 0;
+```
+
+### `ExecuteStringCommand`
+
+```cpp
+virtual bool ExecuteStringCommand(const CNETMsg_StringCmd_t &msg) = 0;
+```
+
+"false" trigger an anti spam counter to kick a client.
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const CNETMsg_StringCmd_t &`](/docs/schema/Netmessages#cnetmsg_stringcmd_t) |
+
+### `SendNetMessage`
+
+```cpp
+virtual bool SendNetMessage(const CNetMessage *pData, NetChannelBufType_t bufType = BUF_DEFAULT) = 0;
+```
+
+| Parameter | Type | Default |
+|---|---|---|
+| `pData` | `const CNetMessage *` |  |
+| `bufType` | `NetChannelBufType_t` | `BUF_DEFAULT` |
+
+### `FilterMessage`
+
+```cpp
+virtual bool FilterMessage(const CNetMessage *pData, INetChannel *pChannel) = 0;
+```
+
+On Windows, this function is in a separate virtual table
+
+| Parameter | Type |
+|---|---|
+| `pData` | `const CNetMessage *` |
+| `pChannel` | `INetChannel *` |
+
+### `ClientPrintf`
+
+```cpp
+virtual void ClientPrintf(PRINTF_FORMAT_STRING const char*, ...) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `—` | `PRINTF_FORMAT_STRING const char*` |
+| `—` | `...` |
+
+### `IsConnected`
+
+```cpp
+bool IsConnected() const;
+```
+
+### `IsInGame`
+
+```cpp
+bool IsInGame() const;
+```
+
+### `IsSpawned`
+
+```cpp
+bool IsSpawned() const;
+```
+
+### `IsActive`
+
+```cpp
+bool IsActive() const;
+```
+
+### `IsFakeClient`
+
+```cpp
+virtual bool IsFakeClient() const;
+```
+
+### `IsHLTV`
+
+```cpp
+bool IsHLTV() const;
+```
+
+### `IsHumanPlayer`
+
+```cpp
+virtual bool IsHumanPlayer() const;
+```
+
+### `IsHearingClient`
+
+```cpp
+virtual bool IsHearingClient(CPlayerSlot nSlot) const;
+```
+
+| Parameter | Type |
+|---|---|
+| `nSlot` | `CPlayerSlot` |
+
+### `IsProximityHearingClient`
+
+```cpp
+virtual bool IsProximityHearingClient() const = 0;
+```
+
+### `IsLowViolenceClient`
+
+```cpp
+virtual bool IsLowViolenceClient() const;
+```
+
+### `IsSplitScreenUser`
+
+```cpp
+virtual bool IsSplitScreenUser() const;
+```
+
+### `ProcessTick`
+
+```cpp
+virtual bool ProcessTick(const CNETMsg_Tick_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const CNETMsg_Tick_t &`](/docs/schema/Netmessages#cnetmsg_tick_t) |
+
+### `ProcessStringCmd`
+
+```cpp
+virtual bool ProcessStringCmd(const CNETMsg_StringCmd_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const CNETMsg_StringCmd_t &`](/docs/schema/Netmessages#cnetmsg_stringcmd_t) |
+
+### `ApplyConVars`
+
+```cpp
+virtual bool ApplyConVars(const CMsg_CVars &list) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `list` | `const CMsg_CVars &` |
+
+### `ProcessSetConVar`
+
+```cpp
+virtual bool ProcessSetConVar(const CMsg_CVars &list) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `list` | `const CMsg_CVars &` |
+
+### `ProcessSpawnGroup_LoadCompleted`
+
+```cpp
+virtual bool ProcessSpawnGroup_LoadCompleted(const CNETMsg_SpawnGroup_LoadCompleted_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const CNETMsg_SpawnGroup_LoadCompleted_t &`](/docs/schema/Netmessages#cnetmsg_spawngroup_loadcompleted_t) |
+
+### `ProcessClientInfo`
+
+```cpp
+virtual bool ProcessClientInfo(const CCLCMsg_ClientInfo_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const CCLCMsg_ClientInfo_t &`](/docs/schema/Netmessages#cclcmsg_clientinfo_t) |
+
+### `ProcessBaselineAck`
+
+```cpp
+virtual bool ProcessBaselineAck(const CCLCMsg_BaselineAck_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const CCLCMsg_BaselineAck_t &`](/docs/schema/Netmessages#cclcmsg_baselineack_t) |
+
+### `ProcessLoadingProgress`
+
+```cpp
+virtual bool ProcessLoadingProgress(const CCLCMsg_LoadingProgress_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const CCLCMsg_LoadingProgress_t &`](/docs/schema/Netmessages#cclcmsg_loadingprogress_t) |
+
+### `ProcessSplitPlayerConnect`
+
+```cpp
+virtual bool ProcessSplitPlayerConnect(const CCLCMsg_SplitPlayerConnect_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const CCLCMsg_SplitPlayerConnect_t &`](/docs/schema/Netmessages#cclcmsg_splitplayerconnect_t) |
+
+### `ProcessSplitPlayerDisconnect`
+
+```cpp
+virtual bool ProcessSplitPlayerDisconnect(const CCLCMsg_SplitPlayerDisconnect_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const CCLCMsg_SplitPlayerDisconnect_t &`](/docs/schema/Netmessages#cclcmsg_splitplayerdisconnect_t) |
+
+### `ProcessCmdKeyValues`
+
+```cpp
+virtual bool ProcessCmdKeyValues(const CCLCMsg_CmdKeyValues_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const CCLCMsg_CmdKeyValues_t &`](/docs/schema/Netmessages#cclcmsg_cmdkeyvalues_t) |
+
+### `SendRconServerDetails`
+
+```cpp
+virtual bool SendRconServerDetails() = 0;
+```
+
+### `OnSignonStateChanged`
+
+```cpp
+virtual bool OnSignonStateChanged();
+```
+
+### `ProcessMove`
+
+```cpp
+virtual bool ProcessMove(const CCLCMsg_Move_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const CCLCMsg_Move_t &`](/docs/schema/Netmessages#cclcmsg_move_t) |
+
+### `ProcessVoiceData`
+
+```cpp
+virtual bool ProcessVoiceData(const CCLCMsg_VoiceData_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const CCLCMsg_VoiceData_t &`](/docs/schema/Netmessages#cclcmsg_voicedata_t) |
+
+### `ProcessRespondCvarValue`
+
+```cpp
+virtual bool ProcessRespondCvarValue(const CCLCMsg_RespondCvarValue_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const CCLCMsg_RespondCvarValue_t &`](/docs/schema/Netmessages#cclcmsg_respondcvarvalue_t) |
+
+### `ProcessPacketStart`
+
+```cpp
+virtual bool ProcessPacketStart(const NetMessagePacketStart_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const NetMessagePacketStart_t &`](/docs/schema/Netmessages#netmessagepacketstart_t) |
+
+### `ProcessPacketEnd`
+
+```cpp
+virtual bool ProcessPacketEnd(const NetMessagePacketEnd_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const NetMessagePacketEnd_t &`](/docs/schema/Netmessages#netmessagepacketend_t) |
+
+### `ProcessConnectionClosed`
+
+```cpp
+virtual bool ProcessConnectionClosed(const NetMessageConnectionClosed_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const NetMessageConnectionClosed_t &`](/docs/schema/Netmessages#netmessageconnectionclosed_t) |
+
+### `ProcessConnectionCrashed`
+
+```cpp
+virtual bool ProcessConnectionCrashed(const NetMessageConnectionCrashed_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const NetMessageConnectionCrashed_t &`](/docs/schema/Netmessages#netmessageconnectioncrashed_t) |
+
+### `ProcessChangeSplitscreenUser`
+
+```cpp
+virtual bool ProcessChangeSplitscreenUser(const NetMessageSplitscreenUserChanged_t &msg) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `msg` | [`const NetMessageSplitscreenUserChanged_t &`](/docs/schema/Netmessages#netmessagesplitscreenuserchanged_t) |
+
+### `UnusedVirtual45`
+
+```cpp
+virtual bool UnusedVirtual45();
+```
+
+### `UnusedVirtual46`
+
+```cpp
+virtual bool UnusedVirtual46();
+```
+
+### `OnDisconnectForwarding`
+
+```cpp
+virtual bool OnDisconnectForwarding();
+```
+
+### `ConnectionStart`
+
+```cpp
+virtual void ConnectionStart(INetChannel *pNetChannel) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `pNetChannel` | `INetChannel *` |
+
+### `BuildServerInfoMessage`
+
+```cpp
+virtual void BuildServerInfoMessage() = 0;
+```
+
+### `PerformPrespawn`
+
+```cpp
+virtual void PerformPrespawn() = 0;
+```
+
+### `ExecuteDelayedCall`
+
+```cpp
+virtual void ExecuteDelayedCall(empty_t &) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `—` | `empty_t &` |
+
+### `UpdateAcknowledgedFramecount`
+
+```cpp
+virtual bool UpdateAcknowledgedFramecount(int tick) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `tick` | `int` |
+
+### `ForceFullUpdate`
+
+```cpp
+void ForceFullUpdate();
+```
+
+### `ShouldSendMessages`
+
+```cpp
+virtual bool ShouldSendMessages() = 0;
+```
+
+### `UpdateSendState`
+
+```cpp
+virtual void UpdateSendState() = 0;
+```
+
+### `GetPlayerInfo`
+
+```cpp
+virtual const CMsgPlayerInfo &GetPlayerInfo() const;
+```
+
+### `UpdateUserSettings`
+
+```cpp
+virtual void UpdateUserSettings() = 0;
+```
+
+### `ResetUserSettings`
+
+```cpp
+virtual void ResetUserSettings() = 0;
+```
+
+### `SendSnapshot`
+
+```cpp
+virtual void SendSnapshot() = 0;
+```
+
+### `SendSignonData`
+
+```cpp
+virtual void SendSignonData() = 0;
+```
+
+### `SpawnPlayer`
+
+```cpp
+virtual void SpawnPlayer() = 0;
+```
+
+### `ActivatePlayer`
+
+```cpp
+virtual void ActivatePlayer() = 0;
+```
+
+### `SetName`
+
+```cpp
+virtual void SetName(const char *name) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `name` | `const char *` |
+
+### `SetUserCVar`
+
+```cpp
+virtual void SetUserCVar(const char *cvar, const char *value) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `cvar` | `const char *` |
+| `value` | `const char *` |
+
+### `GetSignonState`
+
+```cpp
+SignonState_t GetSignonState() const;
+```
+
+### `FreeBaselines`
+
+```cpp
+virtual void FreeBaselines() = 0;
+```
+
+### `IsFullyAuthenticated`
+
+```cpp
+bool IsFullyAuthenticated(void);
+```
+
+### `SetFullyAuthenticated`
+
+```cpp
+void SetFullyAuthenticated(void);
+```
+
+### `GetSplitScreenOwner`
+
+```cpp
+virtual CServerSideClientBase *GetSplitScreenOwner();
+```
+
+### `GetNumPlayers`
+
+```cpp
+virtual int GetNumPlayers() = 0;
+```
+
+### `ShouldReceiveStringTableUserData`
+
+```cpp
+virtual void ShouldReceiveStringTableUserData() = 0;
+```
+
+### `FillServerInfo`
+
+```cpp
+virtual void FillServerInfo(void *pInfo) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `pInfo` | `void *` |
+
+### `StartHltvReplay`
+
+```cpp
+virtual bool StartHltvReplay();
+```
+
+### `StopHltvReplay`
+
+```cpp
+virtual void StopHltvReplay();
+```
+
+### `GetHltvLastSendTick`
+
+```cpp
+virtual int GetHltvLastSendTick() = 0;
+```
+
+### `CanStartHltvReplay`
+
+```cpp
+virtual bool CanStartHltvReplay();
+```
+
+### `ResetHltvReplayRequestTime`
+
+```cpp
+virtual void ResetHltvReplayRequestTime();
+```
+
+### `GetHltvReplayStats`
+
+```cpp
+virtual const char *GetHltvReplayStats();
+```
+
+### `Await`
+
+```cpp
+virtual void Await() = 0;
+```
+
+### `MarkToKick`
+
+```cpp
+virtual void MarkToKick() = 0;
+```
+
+### `UnmarkToKick`
+
+```cpp
+virtual void UnmarkToKick() = 0;
+```
+
+### `ProcessSignonStateMsg`
+
+```cpp
+virtual bool ProcessSignonStateMsg(int state) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `state` | `int` |
+
+### `PerformDisconnection`
+
+```cpp
+virtual void PerformDisconnection(ENetworkDisconnectionReason reason) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `reason` | `ENetworkDisconnectionReason` |
+
+### `ESlotState`
+
+```cpp
+enum ESlotState
+```
+
+| Name | Value | Description |
+|---|---|---|
+| `SLOT_NONE` | `0` | Slot is not held for reconnect: either an active connected client or a free slot |
+| `SLOT_HELD_FOR_RECONNECT` | `1` | Disconnected client slot held for reconnect. This is transient and engine-managed |
+| `SLOT_RESERVED` | `2` | Reserved placeholder that has not connected yet. This state is sticky |
+
+## `CServerSideClient`
+
+**Inherits** [`CServerSideClientBase`](/docs/schema/Serversideclient#cserversideclientbase)
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `m_VoiceStreams` | `CPlayerBitVec` |
+| `m_VoiceProximity` | `CPlayerBitVec` |
+| `m_PackInfo` | `CCheckTransmitInfo` |
+| `m_FrameManager` | [`CClientFrameManager`](/docs/schema/Clientframe#cclientframemanager) |
+| `m_pUnk0EC8` | `void *` |
+| `m_pCurrentFrame` | [`CClientFrame *`](/docs/schema/Clientframe#cclientframe) |
+| `m_flLastClientCommandQuotaStart` | `float` |
+| `m_flTimeClientBecameFullyConnected` | `float` |
+| `m_bVoiceLoopback` | `bool` |
+| `m_bHltvReplayFromStash` | `bool` |
+| `m_bUnk0EE2` | `bool` |
+| `m_Pad0EE3` | `char` |
+| `m_nHltvReplayDelay` | `int` |
+| `m_pHltvReplayServer` | `CHLTVServer *` |
+| `m_nHltvReplayStopAt` | `int` |
+| `m_nHltvReplayStartAt` | `int` |
+| `m_nHltvReplaySlowdownBeginAt` | `int` |
+| `m_nHltvReplaySlowdownEndAt` | `int` |
+| `m_flHltvReplaySlowdownRate` | `float` |
+| `m_nHltvLastSendTick` | `int` |
+| `m_flHltvLastReplayRequestTime` | `double` |
+| `m_HltvQueuedMessages` | `CUtlVector< INetMessage * >` |
+| `m_HltvReplayStats` | [`HltvReplayStats_t`](/docs/schema/Serversideclient#hltvreplaystats_t) |
+| `m_pSendJob` | `void *` |
+
+## `CHLTVClient`
+
+**Inherits** [`CServerSideClientBase`](/docs/schema/Serversideclient#cserversideclientbase)
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `m_pHLTV` | `CNetworkGameServerBase *` |
+| `m_szPassword` | `CUtlString` |
+| `m_szChatGroup` | `CUtlString` |
+| `m_fLastSendTime` | `double` |
+| `m_flLastChatTime` | `double` |
+| `m_nLastSendTick` | `int` |
+| `m_nSpawnGroupsSent` | `int` |
+| `m_bNeedsFullFrame` | `int` |
+| `m_nFullFrameTick` | `int` |
+| `m_nUnk0C00` | `int` |
+| `m_bNoChat` | `bool` |
+| `m_bUnk0C05` | `bool` |
+| `m_bUnk0C06` | `bool` |
+| `m_pJob` | `void *` |
+| `m_QueuedMessages` | `CUtlVector< INetMessage * >` |
+
+## Enums
+
+### `CopiedLockState_t`
+
+```cpp
+enum CopiedLockState_t : int32
+```
+
+| Name | Value |
+|---|---|
+| `CLS_NOCOPY` | `0` |
+| `CLS_UNLOCKED` | `1` |
+| `CLS_LOCKED_BY_COPYING_THREAD` | `2` |

@@ -1,19 +1,24 @@
 ---
-title: DestructiblePartDamageRequest_t
+title: "DestructiblePartDamageRequest_t"
+description: "Schema class DestructiblePartDamageRequest_t."
 ---
 
-# DestructiblePartDamageRequest_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/DestructiblePartDamageRequest_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/DestructiblePartDamageRequest_t.h)
 
 ## Fields
 
-- <ApiParam name="m_nHitGroup" type="HitGroup_t" />
-- <ApiParam name="m_nDamageLevel" type="int32_t" />
-- <ApiParam name="m_nDesiredHealth" type="uint16_t" />
-- <ApiParam name="m_nDestroyFlags" type="EDestructibleParts_DestroyParameterFlags" />
-- <ApiParam name="m_nDamageType" type="DamageTypes_t" />
-- <ApiParam name="m_flBreakDamage" type="float" />
-- <ApiParam name="m_flBreakDamageRadius" type="float" />
-- <ApiParam name="m_hAttacker" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_vWsBreakDamageOrigin" type="Vector" />
-- <ApiParam name="m_vWsBreakDamageForce" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_nHitGroup` | `HitGroup_t` |
+| `m_nDamageLevel` | `int32_t` |
+| `m_nDesiredHealth` | `uint16_t` |
+| `m_nDestroyFlags` | [`EDestructibleParts_DestroyParameterFlags`](/docs/schema/entity/enums/EDestructibleParts_DestroyParameterFlags) |
+| `m_nDamageType` | `DamageTypes_t` |
+| `m_flBreakDamage` | `float` |
+| `m_flBreakDamageRadius` | `float` |
+| `m_hAttacker` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_vWsBreakDamageOrigin` | `Vector` |
+| `m_vWsBreakDamageForce` | `Vector` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

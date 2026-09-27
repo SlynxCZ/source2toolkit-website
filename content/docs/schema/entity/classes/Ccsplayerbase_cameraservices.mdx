@@ -1,18 +1,23 @@
 ---
-title: CCSPlayerBase_CameraServices
+title: "CCSPlayerBase_CameraServices"
+description: "Schema class CCSPlayerBase_CameraServices, derived from CPlayer_CameraServices."
 ---
 
-# CCSPlayerBase_CameraServices
 
-**Inheritance**: CPlayer_CameraServices
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSPlayerBase_CameraServices.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSPlayerBase_CameraServices.h)
+
+**Inherits** [`CPlayer_CameraServices`](/docs/schema/entity/classes/CPlayer_CameraServices)
 
 ## Fields
 
-- <ApiParam name="m_iFOV" type="uint32_t" />
-- <ApiParam name="m_iFOVStart" type="uint32_t" />
-- <ApiParam name="m_flFOVTime" type="float" />
-- <ApiParam name="m_flFOVRate" type="float" />
-- <ApiParam name="m_hZoomOwner" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_hTriggerFogList" type="CUtlVector&lt;CHandle&lt;CBaseEntity&gt;&gt;" />
-- <ApiParam name="m_hLastFogTrigger" type="CHandle&lt;CBaseEntity&gt;" />
+| Field | Type |
+|---|---|
+| `m_iFOV` | `uint32_t` |
+| `m_iFOVStart` | `uint32_t` |
+| `m_flFOVTime` | `float` |
+| `m_flFOVRate` | `float` |
+| `m_hZoomOwner` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hTriggerFogList` | [`CUtlVector<CHandle<CBaseEntity>>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hLastFogTrigger` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

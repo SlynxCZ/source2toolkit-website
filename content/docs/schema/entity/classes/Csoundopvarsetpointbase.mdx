@@ -1,44 +1,27 @@
 ---
-title: CSoundOpvarSetPointBase
+title: "CSoundOpvarSetPointBase"
+description: "Schema class CSoundOpvarSetPointBase, derived from CBaseEntity."
 ---
 
-# CSoundOpvarSetPointBase
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundOpvarSetPointBase.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundOpvarSetPointBase.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_hSource" type="CEntityHandle" />
-- <ApiParam name="m_iszSourceEntityName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_vLastPosition" type="Vector" />
-- <ApiParam name="m_flRefreshTime" type="float" />
-- <ApiParam name="m_iszStackName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszOperatorName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszOpvarName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iOpvarIndex" type="int32_t" />
-- <ApiParam name="m_bUseAutoCompare" type="bool" />
-- <ApiParam name="m_bFastRefresh" type="bool" />
+| Field | Type |
+|---|---|
+| `m_bDisabled` | `bool` |
+| `m_hSource` | `CEntityHandle` |
+| `m_iszSourceEntityName` | `CUtlSymbolLarge` |
+| `m_vLastPosition` | `Vector` |
+| `m_flRefreshTime` | `float` |
+| `m_iszStackName` | `CUtlSymbolLarge` |
+| `m_iszOperatorName` | `CUtlSymbolLarge` |
+| `m_iszOpvarName` | `CUtlSymbolLarge` |
+| `m_iOpvarIndex` | `int32_t` |
+| `m_bUseAutoCompare` | `bool` |
+| `m_bFastRefresh` | `bool` |
 
-## Methods
-
-### CSoundOpvarSetPointBase* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundOpvarSetPointBase* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundOpvarSetPointBase* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundOpvarSetPointBase&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

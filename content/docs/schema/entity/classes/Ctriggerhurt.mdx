@@ -1,47 +1,30 @@
 ---
-title: CTriggerHurt
+title: "CTriggerHurt"
+description: "Schema class CTriggerHurt, derived from CBaseTrigger."
 ---
 
-# CTriggerHurt
 
-**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTriggerHurt.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTriggerHurt.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_flOriginalDamage" type="float" />
-- <ApiParam name="m_flDamage" type="float" />
-- <ApiParam name="m_flDamageCap" type="float" />
-- <ApiParam name="m_flLastDmgTime" type="float" />
-- <ApiParam name="m_flForgivenessDelay" type="float" />
-- <ApiParam name="m_bitsDamageInflict" type="DamageTypes_t" />
-- <ApiParam name="m_damageModel" type="int32_t" />
-- <ApiParam name="m_bNoDmgForce" type="bool" />
-- <ApiParam name="m_vDamageForce" type="Vector" />
-- <ApiParam name="m_thinkAlways" type="bool" />
-- <ApiParam name="m_hurtThinkPeriod" type="float" />
-- <ApiParam name="m_OnHurt" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnHurtPlayer" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_hurtEntities" type="CUtlVector&lt;CHandle&lt;CBaseEntity&gt;&gt;" />
+| Field | Type |
+|---|---|
+| `m_flOriginalDamage` | `float` |
+| `m_flDamage` | `float` |
+| `m_flDamageCap` | `float` |
+| `m_flLastDmgTime` | `float` |
+| `m_flForgivenessDelay` | `float` |
+| `m_bitsDamageInflict` | `DamageTypes_t` |
+| `m_damageModel` | `int32_t` |
+| `m_bNoDmgForce` | `bool` |
+| `m_vDamageForce` | `Vector` |
+| `m_thinkAlways` | `bool` |
+| `m_hurtThinkPeriod` | `float` |
+| `m_OnHurt` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnHurtPlayer` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_hurtEntities` | [`CUtlVector<CHandle<CBaseEntity>>`](/docs/schema/entity/classes/CBaseEntity) |
 
-## Methods
-
-### CTriggerHurt* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTriggerHurt* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTriggerHurt* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTriggerHurt&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

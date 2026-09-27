@@ -1,21 +1,26 @@
 ---
-title: CCSPlayerController_InventoryServices
+title: "CCSPlayerController_InventoryServices"
+description: "Schema class CCSPlayerController_InventoryServices, derived from CPlayerControllerComponent."
 ---
 
-# CCSPlayerController_InventoryServices
 
-**Inheritance**: CPlayerControllerComponent
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSPlayerController_InventoryServices.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSPlayerController_InventoryServices.h)
+
+**Inherits** [`CPlayerControllerComponent`](/docs/schema/entity/classes/CPlayerControllerComponent)
 
 ## Fields
 
-- <ApiParam name="m_unMusicID" type="uint16_t" />
-- <ApiParam name="m_rank" type="MedalRank_t" />
-- <ApiParam name="m_nPersonaDataPublicLevel" type="int32_t" />
-- <ApiParam name="m_nPersonaDataPublicCommendsLeader" type="int32_t" />
-- <ApiParam name="m_nPersonaDataPublicCommendsTeacher" type="int32_t" />
-- <ApiParam name="m_nPersonaDataPublicCommendsFriendly" type="int32_t" />
-- <ApiParam name="m_nPersonaDataXpTrailLevel" type="int32_t" />
-- <ApiParam name="m_unEquippedPlayerSprayIDs" type="uint32_t" />
-- <ApiParam name="m_unCurrentLoadoutHash" type="uint64_t" />
-- <ApiParam name="m_vecServerAuthoritativeWeaponSlots" type="CUtlVector&lt;ServerAuthoritativeWeaponSlot_t&gt;" />
+| Field | Type |
+|---|---|
+| `m_unMusicID` | `uint16_t` |
+| `m_rank` | [`MedalRank_t`](/docs/schema/entity/enums/MedalRank_t) |
+| `m_nPersonaDataPublicLevel` | `int32_t` |
+| `m_nPersonaDataPublicCommendsLeader` | `int32_t` |
+| `m_nPersonaDataPublicCommendsTeacher` | `int32_t` |
+| `m_nPersonaDataPublicCommendsFriendly` | `int32_t` |
+| `m_nPersonaDataXpTrailLevel` | `int32_t` |
+| `m_unEquippedPlayerSprayIDs` | `uint32_t` |
+| `m_unCurrentLoadoutHash` | `uint64_t` |
+| `m_vecServerAuthoritativeWeaponSlots` | [`CUtlVector<ServerAuthoritativeWeaponSlot_t>`](/docs/schema/entity/classes/ServerAuthoritativeWeaponSlot_t) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

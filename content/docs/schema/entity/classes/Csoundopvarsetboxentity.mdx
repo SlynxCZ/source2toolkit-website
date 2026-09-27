@@ -1,42 +1,25 @@
 ---
-title: CSoundOpvarSetBoxEntity
+title: "CSoundOpvarSetBoxEntity"
+description: "Schema class CSoundOpvarSetBoxEntity, derived from CSoundOpvarSetPointEntity."
 ---
 
-# CSoundOpvarSetBoxEntity
 
-**Inheritance**: [CSoundOpvarSetPointEntity](/docs/schema/entity/classes/Csoundopvarsetpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSoundOpvarSetBoxEntity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSoundOpvarSetBoxEntity.h)
+
+**Inherits** [`CSoundOpvarSetPointEntity`](/docs/schema/entity/classes/CSoundOpvarSetPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_vDistanceInnerMins" type="Vector" />
-- <ApiParam name="m_vDistanceInnerMaxs" type="Vector" />
-- <ApiParam name="m_vDistanceOuterMins" type="Vector" />
-- <ApiParam name="m_vDistanceOuterMaxs" type="Vector" />
-- <ApiParam name="m_nBoxDirection" type="int32_t" />
-- <ApiParam name="m_vInnerMins" type="Vector" />
-- <ApiParam name="m_vInnerMaxs" type="Vector" />
-- <ApiParam name="m_vOuterMins" type="Vector" />
-- <ApiParam name="m_vOuterMaxs" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_vDistanceInnerMins` | `Vector` |
+| `m_vDistanceInnerMaxs` | `Vector` |
+| `m_vDistanceOuterMins` | `Vector` |
+| `m_vDistanceOuterMaxs` | `Vector` |
+| `m_nBoxDirection` | `int32_t` |
+| `m_vInnerMins` | `Vector` |
+| `m_vInnerMaxs` | `Vector` |
+| `m_vOuterMins` | `Vector` |
+| `m_vOuterMaxs` | `Vector` |
 
-## Methods
-
-### CSoundOpvarSetBoxEntity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSoundOpvarSetBoxEntity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSoundOpvarSetBoxEntity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSoundOpvarSetBoxEntity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

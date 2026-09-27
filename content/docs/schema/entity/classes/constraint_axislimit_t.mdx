@@ -1,13 +1,18 @@
 ---
-title: Constraint_axislimit_t
+title: "constraint_axislimit_t"
+description: "Schema class constraint_axislimit_t."
 ---
 
-# constraint_axislimit_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/constraint_axislimit_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/constraint_axislimit_t.h)
 
 ## Fields
 
-- <ApiParam name="flMinRotation" type="float" />
-- <ApiParam name="flMaxRotation" type="float" />
-- <ApiParam name="flMotorTargetAngSpeed" type="float" />
-- <ApiParam name="flMotorMaxTorque" type="float" />
+| Field | Type |
+|---|---|
+| `flMinRotation` | `float` |
+| `flMaxRotation` | `float` |
+| `flMotorTargetAngSpeed` | `float` |
+| `flMotorMaxTorque` | `float` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

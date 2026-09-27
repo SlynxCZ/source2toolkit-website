@@ -1,18 +1,23 @@
 ---
-title: CPlayer_MovementServices_Humanoid
+title: "CPlayer_MovementServices_Humanoid"
+description: "Schema class CPlayer_MovementServices_Humanoid, derived from CPlayer_MovementServices."
 ---
 
-# CPlayer_MovementServices_Humanoid
 
-**Inheritance**: CPlayer_MovementServices
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPlayer_MovementServices_Humanoid.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPlayer_MovementServices_Humanoid.h)
+
+**Inherits** [`CPlayer_MovementServices`](/docs/schema/entity/classes/CPlayer_MovementServices)
 
 ## Fields
 
-- <ApiParam name="m_flStepSoundTime" type="float" />
-- <ApiParam name="m_flFallVelocity" type="float" />
-- <ApiParam name="m_groundNormal" type="Vector" />
-- <ApiParam name="m_flSurfaceFriction" type="float" />
-- <ApiParam name="m_surfaceProps" type="CUtlStringToken" />
-- <ApiParam name="m_nStepside" type="int32_t" />
-- <ApiParam name="m_vecSmoothedVelocity" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_flStepSoundTime` | `float` |
+| `m_flFallVelocity` | `float` |
+| `m_groundNormal` | `Vector` |
+| `m_flSurfaceFriction` | `float` |
+| `m_surfaceProps` | `CUtlStringToken` |
+| `m_nStepside` | `int32_t` |
+| `m_vecSmoothedVelocity` | `Vector` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

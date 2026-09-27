@@ -1,50 +1,33 @@
 ---
-title: CColorCorrection
+title: "CColorCorrection"
+description: "Schema class CColorCorrection, derived from CBaseEntity."
 ---
 
-# CColorCorrection
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CColorCorrection.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CColorCorrection.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_flFadeInDuration" type="float" />
-- <ApiParam name="m_flFadeOutDuration" type="float" />
-- <ApiParam name="m_flStartFadeInWeight" type="float" />
-- <ApiParam name="m_flStartFadeOutWeight" type="float" />
-- <ApiParam name="m_flTimeStartFadeIn" type="float" />
-- <ApiParam name="m_flTimeStartFadeOut" type="float" />
-- <ApiParam name="m_flMaxWeight" type="float" />
-- <ApiParam name="m_bStartDisabled" type="bool" />
-- <ApiParam name="m_bEnabled" type="bool" />
-- <ApiParam name="m_bMaster" type="bool" />
-- <ApiParam name="m_bClientSide" type="bool" />
-- <ApiParam name="m_bExclusive" type="bool" />
-- <ApiParam name="m_MinFalloff" type="float" />
-- <ApiParam name="m_MaxFalloff" type="float" />
-- <ApiParam name="m_flCurWeight" type="float" />
-- <ApiParam name="m_netlookupFilename" type="char" />
-- <ApiParam name="m_lookupFilename" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_flFadeInDuration` | `float` |
+| `m_flFadeOutDuration` | `float` |
+| `m_flStartFadeInWeight` | `float` |
+| `m_flStartFadeOutWeight` | `float` |
+| `m_flTimeStartFadeIn` | `float` |
+| `m_flTimeStartFadeOut` | `float` |
+| `m_flMaxWeight` | `float` |
+| `m_bStartDisabled` | `bool` |
+| `m_bEnabled` | `bool` |
+| `m_bMaster` | `bool` |
+| `m_bClientSide` | `bool` |
+| `m_bExclusive` | `bool` |
+| `m_MinFalloff` | `float` |
+| `m_MaxFalloff` | `float` |
+| `m_flCurWeight` | `float` |
+| `m_netlookupFilename` | `char` |
+| `m_lookupFilename` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CColorCorrection* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CColorCorrection* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CColorCorrection* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CColorCorrection&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

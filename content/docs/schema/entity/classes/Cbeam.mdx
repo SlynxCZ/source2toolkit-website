@@ -1,55 +1,38 @@
 ---
-title: CBeam
+title: "CBeam"
+description: "Schema class CBeam, derived from CBaseModelEntity."
 ---
 
-# CBeam
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBeam.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBeam.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_flFrameRate" type="float" />
-- <ApiParam name="m_flHDRColorScale" type="float" />
-- <ApiParam name="m_flFireTime" type="float" />
-- <ApiParam name="m_flDamage" type="float" />
-- <ApiParam name="m_nNumBeamEnts" type="uint8_t" />
-- <ApiParam name="m_hBaseMaterial" type="CStrongHandle&lt;InfoForResourceTypeIMaterial2&gt;" />
-- <ApiParam name="m_nHaloIndex" type="CStrongHandle&lt;InfoForResourceTypeIMaterial2&gt;" />
-- <ApiParam name="m_nBeamType" type="BeamType_t" />
-- <ApiParam name="m_nBeamFlags" type="uint32_t" />
-- <ApiParam name="m_hAttachEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_fWidth" type="float" />
-- <ApiParam name="m_fEndWidth" type="float" />
-- <ApiParam name="m_fFadeLength" type="float" />
-- <ApiParam name="m_fHaloScale" type="float" />
-- <ApiParam name="m_fAmplitude" type="float" />
-- <ApiParam name="m_fStartFrame" type="float" />
-- <ApiParam name="m_fSpeed" type="float" />
-- <ApiParam name="m_flFrame" type="float" />
-- <ApiParam name="m_bTurnedOff" type="bool" />
-- <ApiParam name="m_vecEndPos" type="Vector" />
-- <ApiParam name="m_hEndEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_nDissolveType" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_flFrameRate` | `float` |
+| `m_flHDRColorScale` | `float` |
+| `m_flFireTime` | `float` |
+| `m_flDamage` | `float` |
+| `m_nNumBeamEnts` | `uint8_t` |
+| `m_hBaseMaterial` | [`CStrongHandle<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandle) |
+| `m_nHaloIndex` | [`CStrongHandle<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandle) |
+| `m_nBeamType` | [`BeamType_t`](/docs/schema/entity/enums/BeamType_t) |
+| `m_nBeamFlags` | `uint32_t` |
+| `m_hAttachEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_fWidth` | `float` |
+| `m_fEndWidth` | `float` |
+| `m_fFadeLength` | `float` |
+| `m_fHaloScale` | `float` |
+| `m_fAmplitude` | `float` |
+| `m_fStartFrame` | `float` |
+| `m_fSpeed` | `float` |
+| `m_flFrame` | `float` |
+| `m_bTurnedOff` | `bool` |
+| `m_vecEndPos` | `Vector` |
+| `m_hEndEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_nDissolveType` | `int32_t` |
 
-## Methods
-
-### CBeam* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CBeam* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CBeam* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CBeam&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

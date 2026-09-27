@@ -1,38 +1,21 @@
 ---
-title: CMultiSource
+title: "CMultiSource"
+description: "Schema class CMultiSource, derived from CLogicalEntity."
 ---
 
-# CMultiSource
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CMultiSource.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CMultiSource.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_rgEntities" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_rgTriggered" type="int32_t" />
-- <ApiParam name="m_OnTrigger" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_iTotal" type="int32_t" />
-- <ApiParam name="m_globalstate" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_rgEntities` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_rgTriggered` | `int32_t` |
+| `m_OnTrigger` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_iTotal` | `int32_t` |
+| `m_globalstate` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CMultiSource* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CMultiSource* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CMultiSource* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CMultiSource&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,36 +1,19 @@
 ---
-title: CFilterMultiple
+title: "CFilterMultiple"
+description: "Schema class CFilterMultiple, derived from CBaseFilter."
 ---
 
-# CFilterMultiple
 
-**Inheritance**: CBaseFilter
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFilterMultiple.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFilterMultiple.h)
+
+**Inherits** [`CBaseFilter`](/docs/schema/entity/classes/CBaseFilter)
 
 ## Fields
 
-- <ApiParam name="m_nFilterType" type="filter_t" />
-- <ApiParam name="m_iFilterName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hFilter" type="CHandle&lt;CBaseEntity&gt;" />
+| Field | Type |
+|---|---|
+| `m_nFilterType` | [`filter_t`](/docs/schema/entity/enums/filter_t) |
+| `m_iFilterName` | `CUtlSymbolLarge` |
+| `m_hFilter` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
 
-## Methods
-
-### CFilterMultiple* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFilterMultiple* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFilterMultiple* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFilterMultiple&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

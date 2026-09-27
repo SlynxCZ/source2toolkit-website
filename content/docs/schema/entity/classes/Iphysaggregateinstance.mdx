@@ -1,13 +1,18 @@
 ---
-title: IPhysAggregateInstance
+title: "IPhysAggregateInstance"
+description: "Schema class IPhysAggregateInstance, derived from IPhysicsBodyList."
 ---
 
-# IPhysAggregateInstance
 
-**Inheritance**: IPhysicsBodyList
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/IPhysAggregateInstance.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/IPhysAggregateInstance.h)
+
+**Inherits** [`IPhysicsBodyList`](/docs/schema/entity/classes/IPhysicsBodyList)
 
 ## Fields
 
-- <ApiParam name="m_pSkeleton" type="void*" />
-- <ApiParam name="m_bIsAxisAligned" type="bool" />
+| Field | Type |
+|---|---|
+| `m_pSkeleton` | `void*` |
+| `m_bIsAxisAligned` | `bool` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,12 +1,17 @@
 ---
-title: ViewAngleServerChange_t
+title: "ViewAngleServerChange_t"
+description: "Schema class ViewAngleServerChange_t."
 ---
 
-# ViewAngleServerChange_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/ViewAngleServerChange_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/ViewAngleServerChange_t.h)
 
 ## Fields
 
-- <ApiParam name="nType" type="FixAngleSet_t" />
-- <ApiParam name="qAngle" type="QAngle" />
-- <ApiParam name="nIndex" type="uint32_t" />
+| Field | Type |
+|---|---|
+| `nType` | [`FixAngleSet_t`](/docs/schema/entity/enums/FixAngleSet_t) |
+| `qAngle` | `QAngle` |
+| `nIndex` | `uint32_t` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

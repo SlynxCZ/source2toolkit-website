@@ -1,37 +1,20 @@
 ---
-title: CEnvTilt
+title: "CEnvTilt"
+description: "Schema class CEnvTilt, derived from CPointEntity."
 ---
 
-# CEnvTilt
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvTilt.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvTilt.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_Duration" type="float" />
-- <ApiParam name="m_Radius" type="float" />
-- <ApiParam name="m_TiltTime" type="float" />
-- <ApiParam name="m_stopTime" type="float" />
+| Field | Type |
+|---|---|
+| `m_Duration` | `float` |
+| `m_Radius` | `float` |
+| `m_TiltTime` | `float` |
+| `m_stopTime` | `float` |
 
-## Methods
-
-### CEnvTilt* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvTilt* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvTilt* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvTilt&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

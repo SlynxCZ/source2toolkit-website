@@ -1,18 +1,23 @@
 ---
-title: CCSPlayerModernJump
+title: "CCSPlayerModernJump"
+description: "Schema class CCSPlayerModernJump."
 ---
 
-# CCSPlayerModernJump
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSPlayerModernJump.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSPlayerModernJump.h)
 
 ## Fields
 
-- <ApiParam name="m_nLastActualJumpPressTick" type="int32_t" />
-- <ApiParam name="m_flLastActualJumpPressFrac" type="float" />
-- <ApiParam name="m_nLastUsableJumpPressTick" type="int32_t" />
-- <ApiParam name="m_flLastUsableJumpPressFrac" type="float" />
-- <ApiParam name="m_nLastLandedTick" type="int32_t" />
-- <ApiParam name="m_flLastLandedFrac" type="float" />
-- <ApiParam name="m_flLastLandedVelocityX" type="float" />
-- <ApiParam name="m_flLastLandedVelocityY" type="float" />
-- <ApiParam name="m_flLastLandedVelocityZ" type="float" />
+| Field | Type |
+|---|---|
+| `m_nLastActualJumpPressTick` | `int32_t` |
+| `m_flLastActualJumpPressFrac` | `float` |
+| `m_nLastUsableJumpPressTick` | `int32_t` |
+| `m_flLastUsableJumpPressFrac` | `float` |
+| `m_nLastLandedTick` | `int32_t` |
+| `m_flLastLandedFrac` | `float` |
+| `m_flLastLandedVelocityX` | `float` |
+| `m_flLastLandedVelocityY` | `float` |
+| `m_flLastLandedVelocityZ` | `float` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

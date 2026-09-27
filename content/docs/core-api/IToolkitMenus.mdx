@@ -1,208 +1,414 @@
 ---
-title: IToolkitMenus
+title: "IToolkitMenus"
+description: "Interface and base implementation for menu system."
 ---
 
-# IToolkitMenus
 
-## IMenu
+Provides functionality for:
+- Defining menus and menu options
+- Handling per-player menu instances
+- Processing menu navigation and input
 
-### const std::string& Title()
+Interface for menu system management.
 
-Gets menu title.
+**Interface id** `IToolkitMenus002` (`TOOLKIT_MENUS_INTERFACE`) · **Global** `g_pToolkitMenus` · **Header** [`source2toolkit/IToolkitMenus.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitMenus.h)
 
-### SetTitle(t)
+## Methods
 
-Sets the menu title.
+### `OpenCenterHtmlMenu`
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="t" type="std::string" /> — New title
-
-### std::vector&lt;ChatMenuOption&gt;& Options()
-
-Gets menu options.
-
-### const std::vector&lt;ChatMenuOption&gt;& Options()
-
-Gets menu options (const).
-
-### PostSelectAction GetPostSelectAction()
-
-Gets post-select behavior.
-
-### SetPostSelectAction(a)
-
-Sets post-select behavior.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="a" type="[PostSelectAction](/docs/enums/PostSelectAction)" /> — Behavior to apply after selection
-
-### bool GetExitButton()
-
-Gets exit button state.
-
-### SetExitButton(v)
-
-Sets exit button state.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="v" type="bool" /> — True to enable exit button
-
-## IBaseMenu
-
-**Inheritance**: [IMenu](/docs/core-api/IToolkitMenus)
-
-### explicit IBaseMenu(title)
-
-Constructs a menu.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="title" type="std::string" /> — Menu title
-
-### const std::string& Title()
-
-### SetTitle(t)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="t" type="std::string" />
-
-### std::vector&lt;ChatMenuOption&gt;& Options()
-
-### const std::vector&lt;ChatMenuOption&gt;& Options()
-
-### ClearOptions()
-
-Drops every option, for a menu that is rebuilt in place.
-
-### PostSelectAction GetPostSelectAction()
-
-### SetPostSelectAction(a)
-
-Sets post-select behavior.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="a" type="[PostSelectAction](/docs/enums/PostSelectAction)" /> — Behavior to apply
-
-### bool GetExitButton()
-
-### SetExitButton(v)
-
-Sets exit button state.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="v" type="bool" /> — True to enable exit button
-
-## IMenuInstance
-
-### Display()
-
-Displays the menu.
-
-### OnKeyPress(player, key)
-
-Handles key press input.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="player" type="CCSPlayerController*" /> — Player who triggered input
-- <ApiParam name="key" type="int" /> — Pressed key (1-9)
-
-### Reset()
-
-Resets menu state.
-
-### Close()
-
-Closes the menu.
-
-### IMenu* Menu()
-
-Gets underlying menu.
-
-### CCSPlayerController* Player()
-
-Gets owning player.
-
-### int NumPerPage()
-
-Number of items per page.
-
-### int MenuItemsPerPage()
-
-Menu items per page.
-
-### bool HasPrevButton()
-
-Checks if previous page exists.
-
-### bool HasNextButton()
-
-Checks if next page exists.
-
-### bool HasExitButton()
-
-Checks if exit button is enabled.
-
-### NextPage()
-
-Advances to next page.
-
-### PrevPage()
-
-Goes back to previous page.
-
-## CenterHtmlMenu
-
-**Inheritance**: [IBaseMenu](/docs/core-api/IToolkitMenus)
-
-### explicit CenterHtmlMenu(title)
-
-Constructs center HTML menu.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="title" type="std::string" /> — Menu title
-
-## IToolkitMenus
-
-### OpenCenterHtmlMenu(owner, player, menu)
+```cpp
+virtual void OpenCenterHtmlMenu(PluginId owner, CCSPlayerController* player, CenterHtmlMenu* menu) = 0;
+```
 
 Opens a CenterHtmlMenu for a player.
 
-<ApiLabel>Parameters</ApiLabel>
+<Callout type="info">Closed for you if the owning plugin unloads while it is open. The menu object and its option handlers live inside that plugin's library, and the next key press would go looking for them there.</Callout>
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin the menu belongs to
-- <ApiParam name="player" type="CCSPlayerController*" /> — Target player
-- <ApiParam name="menu" type="[CenterHtmlMenu*](/docs/core-api/IToolkitMenus)" /> — Menu to open
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin the menu belongs to |
+| `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) | Target player |
+| `menu` | [`CenterHtmlMenu*`](/docs/core-api/IToolkitMenus#centerhtmlmenu) | Menu to open |
 
-### IMenuInstance* GetActiveMenu(player)
+### `GetActiveMenu`
+
+```cpp
+virtual IMenuInstance* GetActiveMenu(CCSPlayerController* player) = 0;
+```
 
 Gets active menu instance for player.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) | Target player |
 
-- <ApiParam name="player" type="CCSPlayerController*" /> — Target player
+**Returns** [`IMenuInstance*`](/docs/core-api/IToolkitMenus#imenuinstance) — Pointer to active menu instance or nullptr
 
-### CloseActiveMenu(player)
+### `CloseActiveMenu`
+
+```cpp
+virtual void CloseActiveMenu(CCSPlayerController* player) = 0;
+```
 
 Closes active menu for player.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) | Target player |
 
-- <ApiParam name="player" type="CCSPlayerController*" /> — Target player
+### `OnKeyPress`
 
-### OnKeyPress(player, key)
+```cpp
+virtual void OnKeyPress(CCSPlayerController* player, int key) = 0;
+```
 
 Handles key press input.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) | Player who pressed key |
+| `key` | `int` | Pressed key (1-9) |
 
-- <ApiParam name="player" type="CCSPlayerController*" /> — Player who pressed key
-- <ApiParam name="key" type="int" /> — Pressed key (1-9)
+## `ChatMenuOption`
 
+Represents a single menu option.
+
+Contains display text, state and callback logic.
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `Text` | `std::string` | Display text |
+| `OnSelect` | [`std::function<void(CCSPlayerController*, ChatMenuOption&)>`](/docs/schema/entity/classes/CCSPlayerController) | Callback executed on select |
+| `DisabledEvaluator` | `std::function<bool()>` | Optional dynamic disabled evaluator |
+
+## `IMenu`
+
+Base interface for menu definitions.
+
+### `Title`
+
+```cpp
+virtual const std::string& Title() const = 0;
+```
+
+Gets menu title.
+
+**Returns** `const std::string&` — Reference to menu title string
+
+### `SetTitle`
+
+```cpp
+virtual void SetTitle(std::string t) = 0;
+```
+
+Sets the menu title.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `t` | `std::string` | New title |
+
+### `Options`
+
+```cpp
+virtual std::vector<ChatMenuOption>& Options() = 0;
+virtual const std::vector<ChatMenuOption>& Options() const = 0;
+```
+
+Gets menu options.
+
+Gets menu options (const).
+
+**Returns** [`std::vector<ChatMenuOption>&`](/docs/core-api/IToolkitMenus#chatmenuoption) — Reference to options vector
+
+### `GetPostSelectAction`
+
+```cpp
+virtual PostSelectAction GetPostSelectAction() const = 0;
+```
+
+Gets post-select behavior.
+
+**Returns** [`PostSelectAction`](/docs/core-api/IToolkitMenus#postselectaction) — PostSelectAction value
+
+### `SetPostSelectAction`
+
+```cpp
+virtual void SetPostSelectAction(PostSelectAction a) = 0;
+```
+
+Sets post-select behavior.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `a` | [`PostSelectAction`](/docs/core-api/IToolkitMenus#postselectaction) | Behavior to apply after selection |
+
+### `GetExitButton`
+
+```cpp
+virtual bool GetExitButton() const = 0;
+```
+
+Gets exit button state.
+
+**Returns** `bool` — True if exit button is enabled
+
+### `SetExitButton`
+
+```cpp
+virtual void SetExitButton(bool v) = 0;
+```
+
+Sets exit button state.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `v` | `bool` | True to enable exit button |
+
+## `IBaseMenu`
+
+Base implementation of IMenu.
+
+**Inherits** [`IMenu`](/docs/core-api/IToolkitMenus#imenu)
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `s_canSelect` | [`std::function<bool(CCSPlayerController*)>`](/docs/schema/entity/classes/CCSPlayerController) |
+| `s_onSelect` | [`std::function<void(CCSPlayerController*)>`](/docs/schema/entity/classes/CCSPlayerController) |
+
+### Constructors
+
+```cpp
+explicit IBaseMenu(std::string title);
+```
+
+Constructs a menu.
+
+### `Title`
+
+```cpp
+const std::string& Title() const override;
+```
+
+### `SetTitle`
+
+```cpp
+void SetTitle(std::string t) override;
+```
+
+| Parameter | Type |
+|---|---|
+| `t` | `std::string` |
+
+### `Options`
+
+```cpp
+std::vector<ChatMenuOption>& Options() override;
+const std::vector<ChatMenuOption>& Options() const override;
+```
+
+### `ClearOptions`
+
+```cpp
+void ClearOptions();
+```
+
+Drops every option, for a menu that is rebuilt in place.
+
+### `GetPostSelectAction`
+
+```cpp
+PostSelectAction GetPostSelectAction() const override;
+```
+
+### `SetPostSelectAction`
+
+```cpp
+void SetPostSelectAction(PostSelectAction a) override;
+```
+
+Sets post-select behavior.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `a` | [`PostSelectAction`](/docs/core-api/IToolkitMenus#postselectaction) | Behavior to apply |
+
+### `GetExitButton`
+
+```cpp
+bool GetExitButton() const override;
+```
+
+### `SetExitButton`
+
+```cpp
+void SetExitButton(bool v) override;
+```
+
+Sets exit button state.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `v` | `bool` | True to enable exit button |
+
+### `AddMenuOption`
+
+```cpp
+ChatMenuOption& AddMenuOption(std::string display, std::function<void(CCSPlayerController*, ChatMenuOption&)> onSelect, bool disabled = false);
+```
+
+Adds a menu option.
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `display` | `std::string` |  | Display text |
+| `onSelect` | [`std::function<void(CCSPlayerController*, ChatMenuOption&)>`](/docs/schema/entity/classes/CCSPlayerController) |  | Callback executed on selection |
+| `disabled` | `bool` | `false` | Whether option is disabled |
+
+**Returns** [`ChatMenuOption&`](/docs/core-api/IToolkitMenus#chatmenuoption) — Reference to created option
+
+### `AddMenuOptionWithCooldown`
+
+```cpp
+ChatMenuOption& AddMenuOptionWithCooldown(std::string optionText, std::function<void(CCSPlayerController*, ChatMenuOption&)> action, bool disabled = false, bool close = true, std::function<bool()> disabledEvaluator = nullptr);
+```
+
+Adds a menu option with cooldown support.
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `optionText` | `std::string` |  | Display text |
+| `action` | [`std::function<void(CCSPlayerController*, ChatMenuOption&)>`](/docs/schema/entity/classes/CCSPlayerController) |  | Callback executed on selection |
+| `disabled` | `bool` | `false` | Whether option is disabled |
+| `close` | `bool` | `true` | Whether menu closes after select |
+| `disabledEvaluator` | `std::function<bool()>` | `nullptr` | Optional dynamic disabled evaluator |
+
+**Returns** [`ChatMenuOption&`](/docs/core-api/IToolkitMenus#chatmenuoption) — Reference to created option
+
+### `SetCooldownHandlers`
+
+```cpp
+static void SetCooldownHandlers(std::function<bool(CCSPlayerController*)> canSelect, std::function<void(CCSPlayerController*)> onSelect);
+```
+
+Sets global cooldown handlers.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `canSelect` | [`std::function<bool(CCSPlayerController*)>`](/docs/schema/entity/classes/CCSPlayerController) | Function that checks if player can select |
+| `onSelect` | [`std::function<void(CCSPlayerController*)>`](/docs/schema/entity/classes/CCSPlayerController) | Function called after selection |
+
+## `IMenuInstance`
+
+Runtime instance of a menu bound to a player.
+
+### `Display`
+
+```cpp
+virtual void Display() = 0;
+```
+
+Displays the menu.
+
+### `OnKeyPress`
+
+```cpp
+virtual void OnKeyPress(CCSPlayerController* player, int key) = 0;
+```
+
+Handles key press input.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) | Player who triggered input |
+| `key` | `int` | Pressed key (1-9) |
+
+### `Reset`
+
+```cpp
+void Reset();
+```
+
+Resets menu state.
+
+### `Close`
+
+```cpp
+virtual void Close() = 0;
+```
+
+Closes the menu.
+
+### `Menu`
+
+```cpp
+IMenu* Menu() const;
+```
+
+Gets underlying menu.
+
+**Returns** [`IMenu*`](/docs/core-api/IToolkitMenus#imenu) — Pointer to menu
+
+### `Player`
+
+```cpp
+CCSPlayerController* Player();
+```
+
+Gets owning player.
+
+**Returns** [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) — Pointer to player
+
+## `CenterHtmlMenu`
+
+Styled center HTML menu.
+
+**Inherits** [`IBaseMenu`](/docs/core-api/IToolkitMenus#ibasemenu)
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `TitleColor` | `std::string` |
+| `EnabledColor` | `std::string` |
+| `DisabledColor` | `std::string` |
+| `PrevPageColor` | `std::string` |
+| `NextPageColor` | `std::string` |
+| `CloseColor` | `std::string` |
+
+### Constructors
+
+```cpp
+explicit CenterHtmlMenu(std::string title);
+```
+
+Constructs center HTML menu.
+
+## Enums
+
+### `PostSelectAction`
+
+```cpp
+enum class PostSelectAction
+```
+
+Action executed after selecting a menu option.
+
+| Name | Description |
+|---|---|
+| `Close` | Close menu after selection |
+| `Reset` | Reset menu to first page |
+| `Nothing` | Do nothing |
+
+## Macros
+
+| Macro | Expands to |
+|---|---|
+| `OPEN_CENTER_HTML_MENU(player, menu)` | `g_pToolkitMenus->OpenCenterHtmlMenu(g_PluginID, player, menu)` |
+| `GET_ACTIVE_MENU(player)` | `g_pToolkitMenus->GetActiveMenu(player)` |
+| `CLOSE_ACTIVE_MENU(player)` | `g_pToolkitMenus->CloseActiveMenu(player)` |
+| `MENU_ON_KEY_PRESS(player, key)` | `g_pToolkitMenus->OnKeyPress(player, key)` |

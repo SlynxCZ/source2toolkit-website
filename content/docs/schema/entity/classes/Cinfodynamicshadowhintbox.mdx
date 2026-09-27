@@ -1,35 +1,18 @@
 ---
-title: CInfoDynamicShadowHintBox
+title: "CInfoDynamicShadowHintBox"
+description: "Schema class CInfoDynamicShadowHintBox, derived from CInfoDynamicShadowHint."
 ---
 
-# CInfoDynamicShadowHintBox
 
-**Inheritance**: CInfoDynamicShadowHint
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CInfoDynamicShadowHintBox.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CInfoDynamicShadowHintBox.h)
+
+**Inherits** [`CInfoDynamicShadowHint`](/docs/schema/entity/classes/CInfoDynamicShadowHint)
 
 ## Fields
 
-- <ApiParam name="m_vBoxMins" type="Vector" />
-- <ApiParam name="m_vBoxMaxs" type="Vector" />
+| Field | Type |
+|---|---|
+| `m_vBoxMins` | `Vector` |
+| `m_vBoxMaxs` | `Vector` |
 
-## Methods
-
-### CInfoDynamicShadowHintBox* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CInfoDynamicShadowHintBox* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CInfoDynamicShadowHintBox* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CInfoDynamicShadowHintBox&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

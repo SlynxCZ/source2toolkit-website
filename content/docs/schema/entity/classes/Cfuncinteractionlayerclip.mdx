@@ -1,36 +1,19 @@
 ---
-title: CFuncInteractionLayerClip
+title: "CFuncInteractionLayerClip"
+description: "Schema class CFuncInteractionLayerClip, derived from CBaseModelEntity."
 ---
 
-# CFuncInteractionLayerClip
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CFuncInteractionLayerClip.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CFuncInteractionLayerClip.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_iszInteractsAs" type="CUtlSymbolLarge" />
-- <ApiParam name="m_iszInteractsWith" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_bDisabled` | `bool` |
+| `m_iszInteractsAs` | `CUtlSymbolLarge` |
+| `m_iszInteractsWith` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CFuncInteractionLayerClip* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CFuncInteractionLayerClip* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CFuncInteractionLayerClip* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CFuncInteractionLayerClip&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

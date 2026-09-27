@@ -1,38 +1,21 @@
 ---
-title: CTriggerBrush
+title: "CTriggerBrush"
+description: "Schema class CTriggerBrush, derived from CBaseModelEntity."
 ---
 
-# CTriggerBrush
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTriggerBrush.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTriggerBrush.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_OnStartTouch" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnEndTouch" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnUse" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_iInputFilter" type="int32_t" />
-- <ApiParam name="m_iDontMessageParent" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_OnStartTouch` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnEndTouch` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnUse` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_iInputFilter` | `int32_t` |
+| `m_iDontMessageParent` | `int32_t` |
 
-## Methods
-
-### CTriggerBrush* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTriggerBrush* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTriggerBrush* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTriggerBrush&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

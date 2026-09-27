@@ -1,40 +1,23 @@
 ---
-title: CLogicRelay
+title: "CLogicRelay"
+description: "Schema class CLogicRelay, derived from CLogicalEntity."
 ---
 
-# CLogicRelay
 
-**Inheritance**: [CLogicalEntity](/docs/schema/entity/classes/Clogicalentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CLogicRelay.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CLogicRelay.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_OnSpawn" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_OnTrigger" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_bDisabled" type="bool" />
-- <ApiParam name="m_bWaitForRefire" type="bool" />
-- <ApiParam name="m_bTriggerOnce" type="bool" />
-- <ApiParam name="m_bFastRetrigger" type="bool" />
-- <ApiParam name="m_bPassthoughCaller" type="bool" />
+| Field | Type |
+|---|---|
+| `m_OnSpawn` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_OnTrigger` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_bDisabled` | `bool` |
+| `m_bWaitForRefire` | `bool` |
+| `m_bTriggerOnce` | `bool` |
+| `m_bFastRetrigger` | `bool` |
+| `m_bPassthoughCaller` | `bool` |
 
-## Methods
-
-### CLogicRelay* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CLogicRelay* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CLogicRelay* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CLogicRelay&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

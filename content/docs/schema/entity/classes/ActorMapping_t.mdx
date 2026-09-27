@@ -1,11 +1,16 @@
 ---
-title: ActorMapping_t
+title: "ActorMapping_t"
+description: "Schema class ActorMapping_t."
 ---
 
-# ActorMapping_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/ActorMapping_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/ActorMapping_t.h)
 
 ## Fields
 
-- <ApiParam name="m_sActorName" type="CUtlString" />
-- <ApiParam name="m_hEntity" type="CHandle&lt;CBaseEntity&gt;" />
+| Field | Type |
+|---|---|
+| `m_sActorName` | `CUtlString` |
+| `m_hEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

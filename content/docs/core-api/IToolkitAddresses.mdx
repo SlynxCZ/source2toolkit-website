@@ -1,174 +1,982 @@
 ---
-title: IToolkitAddresses
+title: "IToolkitAddresses"
+description: "Resolved engine-function accessors for Source2Toolkit."
 ---
 
-# IToolkitAddresses
 
-## Methods
+Exposes pre-resolved function pointers for common engine operations. Module inspection, pattern scanning, symbol lookup, and pointer arithmetic are available via IToolkitModule and IToolkitMemory.
 
-### CBaseEntity_CreateEntityByName_t CBaseEntity_CreateEntityByName()
+Provides access to pre-resolved engine function pointers.
+
+For module inspection, pattern scanning, and pointer arithmetic use IToolkitModule and IToolkitMemory instead.
+
+**Interface id** `IToolkitAddresses001` (`TOOLKIT_ADDRESSES_INTERFACE`) · **Global** `g_pToolkitAddresses` · **Header** [`source2toolkit/IToolkitAddresses.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitAddresses.h)
+
+## Types
+
+### `CBaseEntity_CreateEntityByName_t`
+
+```cpp
+using CBaseEntity_CreateEntityByName_t = CBaseEntity* (FASTCALL*)(const char*, int);
+```
 
 Creates an entity by classname.
 
-### CBaseEntity_DispatchSpawn_t CBaseEntity_DispatchSpawn()
+### `CBaseEntity_DispatchSpawn_t`
+
+```cpp
+using CBaseEntity_DispatchSpawn_t = void (FASTCALL*)(CBaseEntity*, CEntityKeyValues*);
+```
 
 Dispatches spawn on an entity.
 
-### CBaseEntity_TakeDamageOld_t CBaseEntity_TakeDamageOld()
+### `CBaseEntity_TakeDamageOld_t`
+
+```cpp
+using CBaseEntity_TakeDamageOld_t = int64_t (FASTCALL*)(CBaseEntity* pThis, CTakeDamageInfo* pInfo, CTakeDamageResult* pResult);
+```
 
 CBaseEntity::TakeDamageOld -- the game's own asserts name it so.
 
-### CBaseModelEntity_SetModel_t CBaseModelEntity_SetModel()
+### `CBaseModelEntity_SetModel_t`
+
+```cpp
+using CBaseModelEntity_SetModel_t = void (FASTCALL*)(CBaseModelEntity*, const char*);
+```
 
 Sets model on entity.
 
-### CBasePlayerController_SetPawn_t CBasePlayerController_SetPawn()
+### `CBasePlayerController_SetPawn_t`
+
+```cpp
+using CBasePlayerController_SetPawn_t = void (FASTCALL*)(CBasePlayerController*, CBasePlayerPawn*, bool, bool, bool, bool);
+```
 
 Assigns pawn to player controller.
 
-### CBasePlayerPawn_SnapViewAngles_t CBasePlayerPawn_SnapViewAngles()
+### `CBasePlayerPawn_SnapViewAngles_t`
+
+```cpp
+using CBasePlayerPawn_SnapViewAngles_t = void (FASTCALL*)(CBasePlayerPawn*, QAngle*);
+```
 
 Snaps a pawn's view angles, as the engine does on teleport.
 
-### CCSGameRules_TerminateRound_t CCSGameRules_TerminateRound()
+### `CCSGameRules_TerminateRound_t`
 
-### CPlayer_WeaponServices_Destroy_t CPlayer_WeaponServices_Destroy()
+```cpp
+using CCSGameRules_TerminateRound_t = void (FASTCALL*)(CCSGameRules* pThis, float flDelay, uint32 nReason, uint32* pnTeamId);
+using CCSGameRules_TerminateRound_t = void (FASTCALL*)(CCSGameRules* pThis, uint32 nReason, uint32* pnTeamId, float flDelay);
+```
+
+CCSGameRules::TerminateRound
+
+The delay and the reason swap places between platforms, and the winning team goes in as a pointer -- null when there is none, which is the ordinary case. SwiftlyS2 splits it the same way; getting this wrong on Linux means the game reads the reason as the delay.
+
+<Callout type="info">Declared differently per platform (`#ifdef _WIN32`); the first line is the Windows form, the second the Linux one.</Callout>
+
+### `CPlayer_WeaponServices_Destroy_t`
+
+```cpp
+using CPlayer_WeaponServices_Destroy_t = void (FASTCALL*)(CPlayer_WeaponServices*, CBasePlayerWeapon*);
+```
 
 Destroys weapon from player pawn.
 
-### LegacyGameEventListener_t LegacyGameEventListener()
+### `LegacyGameEventListener_t`
+
+```cpp
+using LegacyGameEventListener_t = IGameEventListener2* (FASTCALL*)(CPlayerSlot);
+```
 
 Retrieves legacy game event listener.
 
-### CCSPlayerController_SwitchTeam_t CCSPlayerController_SwitchTeam()
+### `CCSPlayerController_SwitchTeam_t`
+
+```cpp
+using CCSPlayerController_SwitchTeam_t = void (FASTCALL*)(CCSPlayerController*, int nTeam);
+```
 
 Switches player team. The team is read as a full int.
 
-### CEntityInstance_AcceptInput_t CEntityInstance_AcceptInput()
+### `CEntityInstance_AcceptInput_t`
 
-Accepts entity input. Interns the name and forwards to
+```cpp
+using CEntityInstance_AcceptInput_t = bool (FASTCALL*)(CEntityInstance*, const char*, CEntityInstance*, CEntityInstance*, const variant_t&);
+```
 
-### CEntityIOOutput_FireOutputInternal_t CEntityIOOutput_FireOutputInternal()
+Accepts entity input. Interns the name and forwards to CEntityIdentity::AcceptInput, returning its result.
+
+### `CEntityIOOutput_FireOutputInternal_t`
+
+```cpp
+using CEntityIOOutput_FireOutputInternal_t = void (FASTCALL*)(CEntityIOOutput*, CEntityInstance*, CEntityInstance*, void*, float, void*, void*);
+```
 
 Fires entity output internally.
 
-### CEntitySystem_AddEntityIOEvent_t CEntitySystem_AddEntityIOEvent()
+### `CEntitySystem_AddEntityIOEvent_t`
+
+```cpp
+using CEntitySystem_AddEntityIOEvent_t = void (FASTCALL*)(CEntitySystem*, CEntityInstance*, const char*, CEntityInstance*, CEntityInstance*, const variant_t&, float, void*, void*);
+```
 
 Adds entity IO event.
 
-### CGameEntitySystem_FindEntityByClassName_t CGameEntitySystem_FindEntityByClassName()
+### `CGameEntitySystem_FindEntityByClassName_t`
+
+```cpp
+using CGameEntitySystem_FindEntityByClassName_t = CBaseEntity* (FASTCALL*)(CEntitySystem*, CEntityInstance*, const char*);
+```
 
 Finds entity by classname.
 
-### CGameEntitySystem_FindEntityByName_t CGameEntitySystem_FindEntityByName()
+### `CGameEntitySystem_FindEntityByName_t`
+
+```cpp
+using CGameEntitySystem_FindEntityByName_t = CBaseEntity* (FASTCALL*)(CEntitySystem*, CEntityInstance*, const char*, CEntityInstance*, CEntityInstance*, CEntityInstance*, IEntityFindFilter*);
+```
 
 Finds entity by name.
 
-### CTakeDamageInfo_CTakeDamageInfo_t CTakeDamageInfo_CTakeDamageInfo()
+### `CTakeDamageInfo_CTakeDamageInfo_t`
+
+```cpp
+using CTakeDamageInfo_CTakeDamageInfo_t = void (FASTCALL*)(CTakeDamageInfo* pThis, CBaseEntity* pInflictor, CBaseEntity* pAttacker, CBaseEntity* pAbility, const Vector* vecDamageForce, const Vector* vecDamagePosition, float flDamage, int bitsDamageType, int iCustomDamage, void* a10);
+```
 
 Constructs CTakeDamageInfo with valid members.
 
-### INetworkMessageProcessingPreFilter_FilterMessage_t INetworkMessageProcessingPreFilter_FilterMessage()
+### `INetworkMessageProcessingPreFilter_FilterMessage_t`
 
-### CEntityIdentity_AcceptInput_t CEntityIdentity_AcceptInput()
+```cpp
+using INetworkMessageProcessingPreFilter_FilterMessage_t = bool (THISCALL*)(INetworkMessageProcessingPreFilter* pThis, const CNetMessage* pData, INetChannel* pChannel);
+```
+
+### `CEntityIdentity_AcceptInput_t`
+
+```cpp
+using CEntityIdentity_AcceptInput_t = bool (FASTCALL*)(CEntityIdentity* pThis, CUtlSymbolLarge* pInputName, CEntityInstance* pActivator, CEntityInstance* pCaller, variant_t* pValue, void* a6, void* a7);
+```
 
 CEntityIdentity::AcceptInput -- the identity-side entry point.
 
-### CCSPlayer_ItemServices_CanAcquire_t CCSPlayer_ItemServices_CanAcquire()
+Takes the input name already interned: CEntityInstance::AcceptInput looks it up and passes a pointer to the symbol, not the string. a6/a7 point at objects the caller builds on its stack.
 
-### CCSPlayerPawnBase_CanMove_t CCSPlayerPawnBase_CanMove()
+### `CCSPlayer_ItemServices_CanAcquire_t`
 
-### CCSPlayerController_ProcessUserCmd_t CCSPlayerController_ProcessUserCmd()
+```cpp
+using CCSPlayer_ItemServices_CanAcquire_t = int64_t (FASTCALL*)(CCSPlayer_ItemServices* pThis, CEconItemView* pItem, int nAcquireMethod, void* a4);
+```
 
-### CBasePlayerController_OnSimulateUserCommands_t CBasePlayerController_OnSimulateUserCommands()
+CCSPlayer_ItemServices::CanAcquire -- returns an AcquireResult.
 
-### CCSPlayer_MovementServices_AirAccelerate_t CCSPlayer_MovementServices_AirAccelerate()
+### `CCSPlayerPawnBase_CanMove_t`
 
-### CCSPlayer_MovementServices_AirMove_t CCSPlayer_MovementServices_AirMove()
+```cpp
+using CCSPlayerPawnBase_CanMove_t = bool (FASTCALL*)(CCSPlayerPawnBase* pThis);
+```
 
-### CCSPlayer_MovementServices_CanUnduck_t CCSPlayer_MovementServices_CanUnduck()
+CCSPlayerPawnBase::CanMove -- a CCSPlayerPawnBase virtual; false while frozen, defusing, etc.
 
-### CCSPlayer_MovementServices_CategorizePosition_t CCSPlayer_MovementServices_CategorizePosition()
+### `CCSPlayerController_ProcessUserCmd_t`
 
-### CCSPlayer_MovementServices_CheckFalling_t CCSPlayer_MovementServices_CheckFalling()
+```cpp
+using CCSPlayerController_ProcessUserCmd_t = void* (FASTCALL*)(CCSPlayerController* pThis, void* pUserCmds, int nNumCmds, bool bPaused, float flMargin);
+```
 
-### CCSPlayer_MovementServices_CheckParameters_t CCSPlayer_MovementServices_CheckParameters()
+CCSPlayerController::ProcessUserCmd
 
-### CCSPlayer_MovementServices_CheckVelocity_t CCSPlayer_MovementServices_CheckVelocity()
+### `CBasePlayerController_OnSimulateUserCommands_t`
 
-### CCSPlayer_MovementServices_CheckWater_t CCSPlayer_MovementServices_CheckWater()
+```cpp
+using CBasePlayerController_OnSimulateUserCommands_t = void (FASTCALL*)(CBasePlayerController* pThis);
+```
 
-### CCSPlayer_MovementServices_Duck_t CCSPlayer_MovementServices_Duck()
+CBasePlayerController::OnSimulateUserCommands
 
-### CCSPlayer_MovementServices_Friction_t CCSPlayer_MovementServices_Friction()
+### `CCSPlayer_MovementServices_AirAccelerate_t`
 
-### CCSPlayer_MovementServices_FullWalkMove_t CCSPlayer_MovementServices_FullWalkMove()
+```cpp
+using CCSPlayer_MovementServices_AirAccelerate_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove, Vector* pWishDirection, float flWishSpeed, float flAcceleration);
+```
 
-### CCSPlayer_MovementServices_GroundAccelerate_t CCSPlayer_MovementServices_GroundAccelerate()
+### `CCSPlayer_MovementServices_AirMove_t`
 
-### CCSPlayer_MovementServices_LadderMove_t CCSPlayer_MovementServices_LadderMove()
+```cpp
+using CCSPlayer_MovementServices_AirMove_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove);
+```
 
-### CCSPlayer_MovementServices_MoveInit_t CCSPlayer_MovementServices_MoveInit()
+### `CCSPlayer_MovementServices_CanUnduck_t`
 
-### CCSPlayer_MovementServices_PlayerMove_t CCSPlayer_MovementServices_PlayerMove()
+```cpp
+using CCSPlayer_MovementServices_CanUnduck_t = bool (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove);
+```
 
-### CCSPlayer_MovementServices_ProcessMovement_t CCSPlayer_MovementServices_ProcessMovement()
+### `CCSPlayer_MovementServices_CategorizePosition_t`
 
-### CCSPlayer_MovementServices_SetupMove_t CCSPlayer_MovementServices_SetupMove()
+```cpp
+using CCSPlayer_MovementServices_CategorizePosition_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove, bool bStayOnGround);
+```
 
-### CCSPlayer_MovementServices_TryPlayerMove_t CCSPlayer_MovementServices_TryPlayerMove()
+### `CCSPlayer_MovementServices_CheckFalling_t`
 
-### CCSPlayer_MovementServices_WalkMove_t CCSPlayer_MovementServices_WalkMove()
+```cpp
+using CCSPlayer_MovementServices_CheckFalling_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove);
+```
 
-### CCSPlayer_MovementServices_WaterMove_t CCSPlayer_MovementServices_WaterMove()
+### `CCSPlayer_MovementServices_CheckParameters_t`
 
-### CCSPlayerLegacyJump_OnJump_t CCSPlayerLegacyJump_OnJump()
+```cpp
+using CCSPlayer_MovementServices_CheckParameters_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove);
+```
 
-Members of the jump components, not of the movement services: the
+### `CCSPlayer_MovementServices_CheckVelocity_t`
 
-### CCSPlayerModernJump_OnJump_t CCSPlayerModernJump_OnJump()
+```cpp
+using CCSPlayer_MovementServices_CheckVelocity_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove, void* a3);
+```
 
-### CCSPlayerLegacyJump_CheckJumpButton_t CCSPlayerLegacyJump_CheckJumpButton()
+### `CCSPlayer_MovementServices_CheckWater_t`
 
-### CCSPlayerModernJump_CheckJumpButton_t CCSPlayerModernJump_CheckJumpButton()
+```cpp
+using CCSPlayer_MovementServices_CheckWater_t = bool (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove);
+```
 
-### CAttributeList_SetOrAddAttributeValueByName_t CAttributeList_SetOrAddAttributeValueByName()
+### `CCSPlayer_MovementServices_Duck_t`
 
-### CDecoyProjectile_EmitGrenade_t CDecoyProjectile_EmitGrenade()
+```cpp
+using CCSPlayer_MovementServices_Duck_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove);
+```
+
+### `CCSPlayer_MovementServices_Friction_t`
+
+```cpp
+using CCSPlayer_MovementServices_Friction_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove);
+```
+
+### `CCSPlayer_MovementServices_FullWalkMove_t`
+
+```cpp
+using CCSPlayer_MovementServices_FullWalkMove_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove, bool bGround);
+```
+
+### `CCSPlayer_MovementServices_LadderMove_t`
+
+```cpp
+using CCSPlayer_MovementServices_LadderMove_t = bool (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove);
+```
+
+### `CCSPlayer_MovementServices_MoveInit_t`
+
+```cpp
+using CCSPlayer_MovementServices_MoveInit_t = bool (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove);
+```
+
+### `CCSPlayer_MovementServices_PlayerMove_t`
+
+```cpp
+using CCSPlayer_MovementServices_PlayerMove_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove);
+```
+
+### `CCSPlayer_MovementServices_ProcessMovement_t`
+
+```cpp
+using CCSPlayer_MovementServices_ProcessMovement_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove);
+```
+
+### `CCSPlayer_MovementServices_SetupMove_t`
+
+```cpp
+using CCSPlayer_MovementServices_SetupMove_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CUserCmd* pCmd, CMoveData* pMove);
+```
+
+### `CCSPlayer_MovementServices_TryPlayerMove_t`
+
+```cpp
+using CCSPlayer_MovementServices_TryPlayerMove_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove, Vector* pFirstDest, CGameTrace* pFirstTrace, bool* pbIsSurfing);
+```
+
+### `CCSPlayer_MovementServices_WalkMove_t`
+
+```cpp
+using CCSPlayer_MovementServices_WalkMove_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove);
+```
+
+### `CCSPlayer_MovementServices_WaterMove_t`
+
+```cpp
+using CCSPlayer_MovementServices_WaterMove_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove);
+```
+
+### `CCSPlayer_MovementServices_GroundAccelerate_t`
+
+```cpp
+using CCSPlayer_MovementServices_GroundAccelerate_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove, float flFrameTime, Vector* pWishDirection, float flWishSpeed, float flAcceleration);
+using CCSPlayer_MovementServices_GroundAccelerate_t = void (FASTCALL*)(CCSPlayer_MovementServices* pThis, CMoveData* pMove, Vector* pWishDirection, float flFrameTime, float flWishSpeed, float flAcceleration);
+```
+
+CCSPlayer_MovementServices::GroundAccelerate
+
+The wish direction and the frame time swap places between platforms.
+
+<Callout type="info">Declared differently per platform (`#ifdef _WIN32`); the first line is the Windows form, the second the Linux one.</Callout>
+
+### `CCSPlayerLegacyJump_OnJump_t`
+
+```cpp
+using CCSPlayerLegacyJump_OnJump_t = void (FASTCALL*)(CCSPlayerLegacyJump* pThis, CMoveData* pMove);
+```
+
+Members of the jump components, not of the movement services: the movement services call them on m_LegacyJump / m_ModernJump.
+
+Which pair is live depends on the sv_jump_impulse-era cvars; the modern and legacy paths are separate functions in the binary.
+
+### `CCSPlayerModernJump_OnJump_t`
+
+```cpp
+using CCSPlayerModernJump_OnJump_t = void (FASTCALL*)(CCSPlayerModernJump* pThis, CMoveData* pMove);
+```
+
+### `CCSPlayerLegacyJump_CheckJumpButton_t`
+
+```cpp
+using CCSPlayerLegacyJump_CheckJumpButton_t = void (FASTCALL*)(CCSPlayerLegacyJump* pThis, CMoveData* pMove);
+```
+
+### `CCSPlayerModernJump_CheckJumpButton_t`
+
+```cpp
+using CCSPlayerModernJump_CheckJumpButton_t = void (FASTCALL*)(CCSPlayerModernJump* pThis, CMoveData* pMove);
+```
+
+### `CAttributeList_SetOrAddAttributeValueByName_t`
+
+```cpp
+using CAttributeList_SetOrAddAttributeValueByName_t = void (FASTCALL*)(CAttributeList* pThis, const char* pszAttributeName, float flValue);
+```
+
+CAttributeList::SetOrAddAttributeValueByName
+
+### `CDecoyProjectile_EmitGrenade_t`
+
+```cpp
+using CDecoyProjectile_EmitGrenade_t = CDecoyProjectile* (FASTCALL*)(Vector* pPosition, QAngle* pAngle, Vector* pVelocity, Vector* pAngVelocity, CBaseEntity* pOwner, uint32_t nItemDefIndex);
+```
 
 C&lt;Type&gt;Projectile::EmitGrenade -- spawns a live grenade.
 
-### CFlashbangProjectile_EmitGrenade_t CFlashbangProjectile_EmitGrenade()
+The fourth argument (pAngVelocity) is never read on either platform -- every variant overwrites that register before touching it -- but it keeps its slot, so pass anything (the helpers pass the velocity again). Smoke takes one extra int the others do not have.
 
-### CHEGrenadeProjectile_EmitGrenade_t CHEGrenadeProjectile_EmitGrenade()
+### `CFlashbangProjectile_EmitGrenade_t`
 
-### CMolotovProjectile_EmitGrenade_t CMolotovProjectile_EmitGrenade()
+```cpp
+using CFlashbangProjectile_EmitGrenade_t = CFlashbangProjectile* (FASTCALL*)(Vector* pPosition, QAngle* pAngle, Vector* pVelocity, Vector* pAngVelocity, CBaseEntity* pOwner, uint32_t nItemDefIndex);
+```
 
-### CSmokeGrenadeProjectile_EmitGrenade_t CSmokeGrenadeProjectile_EmitGrenade()
+### `CHEGrenadeProjectile_EmitGrenade_t`
 
-### CCSPlayerPawn_PostThink_t CCSPlayerPawn_PostThink()
+```cpp
+using CHEGrenadeProjectile_EmitGrenade_t = CHEGrenadeProjectile* (FASTCALL*)(Vector* pPosition, QAngle* pAngle, Vector* pVelocity, Vector* pAngVelocity, CBaseEntity* pOwner, uint32_t nItemDefIndex);
+```
 
-### UTIL_Remove_t UTIL_Remove()
+### `CMolotovProjectile_EmitGrenade_t`
 
-### DispatchParticleEffect_t DispatchParticleEffect()
+```cpp
+using CMolotovProjectile_EmitGrenade_t = CMolotovProjectile* (FASTCALL*)(Vector* pPosition, QAngle* pAngle, Vector* pVelocity, Vector* pAngVelocity, CBaseEntity* pOwner, uint32_t nItemDefIndex);
+```
 
-DispatchParticleEffect
+### `CSmokeGrenadeProjectile_EmitGrenade_t`
 
-### GetWeaponCSDataFromKey_t GetWeaponCSDataFromKey()
+```cpp
+using CSmokeGrenadeProjectile_EmitGrenade_t = CSmokeGrenadeProjectile* (FASTCALL*)(Vector* pPosition, QAngle* pAngle, Vector* pVelocity, Vector* pAngVelocity, CBaseEntity* pOwner, uint32_t nItemDefIndex, int a7);
+```
 
-GetWeaponCSDataFromKey -- looks a weapon's VData up by its key
+### `CCSPlayer_ItemServices_GiveNamedItem_t`
 
-### CSource2Server_GetNavMeshData_t CSource2Server_GetNavMeshData()
-
-CSource2Server::GetNavMeshData -- ISource2Server vtable slot 32.
-
-### CLoggingSystem_LogDirect_t CLoggingSystem_LogDirect()
-
-### Cmd_ExecuteCommand_t Cmd_ExecuteCommand()
-
-Cmd_ExecuteCommand (engine2) -- runs one parsed command.
-
-### CCSPlayer_ItemServices_GiveNamedItem_t CCSPlayer_ItemServices_GiveNamedItem()
+```cpp
+using CCSPlayer_ItemServices_GiveNamedItem_t = CBasePlayerWeapon* (FASTCALL*)(CCSPlayer_ItemServices* pThis, const char* pszItem, int nSubType, CEconItemView* pScriptItem, bool bForce, void* a6);
+```
 
 CCSPlayer_ItemServices::GiveNamedItem -- the full implementation.
 
+The GiveNamedItem vtable slots are thunks into this one: the plain one passes (name, 0, nullptr, false, nullptr), the bool-returning one forwards its own bool as bForce and tests the result. Hooking this catches every give, virtual or not.
+
+### `CCSPlayerPawn_PostThink_t`
+
+```cpp
+using CCSPlayerPawn_PostThink_t = void (FASTCALL*)(CCSPlayerPawn* pThis);
+```
+
+CCSPlayerPawn::PostThink -- virtual, takes nothing but the pawn.
+
+### `UTIL_Remove_t`
+
+```cpp
+using UTIL_Remove_t = void (FASTCALL*)(CEntityInstance* pEntity);
+```
+
+UTIL_Remove -- queues the entity for deletion; null is ignored.
+
+### `DispatchParticleEffect_t`
+
+```cpp
+using DispatchParticleEffect_t = void (FASTCALL*)(const char* pszParticleName, int nAttachType, CBaseEntity* pEntity, uint8 nAttachmentPoint, uint32 nAttachmentNameToken, bool bResetAllParticlesOnEntity, int nSplitScreenPlayerSlot, IRecipientFilter* pFilter, uint8 nFlags);
+```
+
+DispatchParticleEffect
+
+The attachment name is a 32-bit string token (it arrives in r8d), not the CUtlSymbolLarge older ports declare. A null filter sends to everyone. The last byte seeds the effect's flag byte; pass 0.
+
+### `GetWeaponCSDataFromKey_t`
+
+```cpp
+using GetWeaponCSDataFromKey_t = CCSWeaponBaseVData* (FASTCALL*)(int nWeaponType, const char* pszKey);
+```
+
+GetWeaponCSDataFromKey -- looks a weapon's VData up by its key ("weapon_ak47"). nWeaponType -1 accepts any type; any other value returns null when the found data is of a different type.
+
+### `CSource2Server_GetNavMeshData_t`
+
+```cpp
+using CSource2Server_GetNavMeshData_t = bool (FASTCALL*)(ISource2Server* pThis, CNavData* pNavMeshData);
+```
+
+CSource2Server::GetNavMeshData -- ISource2Server vtable slot 32.
+
+The game's implementation ignores the out argument and only reports whether a nav mesh is loaded (g_pNavMesh != null); CCSNavArea reads that global out of its body.
+
+### `CLoggingSystem_LogDirect_t`
+
+```cpp
+using CLoggingSystem_LogDirect_t = LoggingResponse_t (FASTCALL*)(CLoggingSystem* pThis, LoggingChannelID_t nChannelID, LoggingSeverity_t nSeverity, const LeafCodeInfo_t* pCodeInfo, const LoggingMetaData_t* pMetaData, Color color, const char* pszMessage);
+```
+
+CLoggingSystem::LogDirect (tier0) -- the member behind LoggingSystem_LogDirect.
+
+### `Cmd_ExecuteCommand_t`
+
+```cpp
+using Cmd_ExecuteCommand_t = void (FASTCALL*)(void* pThis, int nTarget, CPlayerSlot nSlot, ConCommandRef hCommand, const CCommand* pArgs);
+```
+
+Cmd_ExecuteCommand (engine2) -- runs one parsed command.
+
+The first argument is the engine's command-buffer owner, not a CCommand: the deferred-command loop passes itself there. The target is a CommandTarget_t and the command goes in by value, as ICvar::DispatchConCommand takes it.
+
+## Methods
+
+### `CBaseEntity_CreateEntityByName`
+
+```cpp
+virtual CBaseEntity_CreateEntityByName_t CBaseEntity_CreateEntityByName() = 0;
+```
+
+Creates an entity by classname.
+
+### `CBaseEntity_DispatchSpawn`
+
+```cpp
+virtual CBaseEntity_DispatchSpawn_t CBaseEntity_DispatchSpawn() = 0;
+```
+
+Dispatches spawn on an entity.
+
+### `CBaseEntity_TakeDamageOld`
+
+```cpp
+virtual CBaseEntity_TakeDamageOld_t CBaseEntity_TakeDamageOld() = 0;
+```
+
+CBaseEntity::TakeDamageOld -- the game's own asserts name it so.
+
+### `CBaseModelEntity_SetModel`
+
+```cpp
+virtual CBaseModelEntity_SetModel_t CBaseModelEntity_SetModel() = 0;
+```
+
+Sets model on entity.
+
+### `CBasePlayerController_SetPawn`
+
+```cpp
+virtual CBasePlayerController_SetPawn_t CBasePlayerController_SetPawn() = 0;
+```
+
+Assigns pawn to player controller.
+
+### `CBasePlayerPawn_SnapViewAngles`
+
+```cpp
+virtual CBasePlayerPawn_SnapViewAngles_t CBasePlayerPawn_SnapViewAngles() = 0;
+```
+
+Snaps a pawn's view angles, as the engine does on teleport.
+
+### `CCSGameRules_TerminateRound`
+
+```cpp
+virtual CCSGameRules_TerminateRound_t CCSGameRules_TerminateRound() = 0;
+```
+
+CCSGameRules::TerminateRound
+
+### `CPlayer_WeaponServices_Destroy`
+
+```cpp
+virtual CPlayer_WeaponServices_Destroy_t CPlayer_WeaponServices_Destroy() = 0;
+```
+
+Destroys weapon from player pawn.
+
+### `LegacyGameEventListener`
+
+```cpp
+virtual LegacyGameEventListener_t LegacyGameEventListener() = 0;
+```
+
+Retrieves legacy game event listener.
+
+### `CCSPlayerController_SwitchTeam`
+
+```cpp
+virtual CCSPlayerController_SwitchTeam_t CCSPlayerController_SwitchTeam() = 0;
+```
+
+Switches player team. The team is read as a full int.
+
+### `CEntityInstance_AcceptInput`
+
+```cpp
+virtual CEntityInstance_AcceptInput_t CEntityInstance_AcceptInput() = 0;
+```
+
+Accepts entity input. Interns the name and forwards to CEntityIdentity::AcceptInput, returning its result.
+
+### `CEntityIOOutput_FireOutputInternal`
+
+```cpp
+virtual CEntityIOOutput_FireOutputInternal_t CEntityIOOutput_FireOutputInternal() = 0;
+```
+
+Fires entity output internally.
+
+### `CEntitySystem_AddEntityIOEvent`
+
+```cpp
+virtual CEntitySystem_AddEntityIOEvent_t CEntitySystem_AddEntityIOEvent() = 0;
+```
+
+Adds entity IO event.
+
+### `CGameEntitySystem_FindEntityByClassName`
+
+```cpp
+virtual CGameEntitySystem_FindEntityByClassName_t CGameEntitySystem_FindEntityByClassName() = 0;
+```
+
+Finds entity by classname.
+
+### `CGameEntitySystem_FindEntityByName`
+
+```cpp
+virtual CGameEntitySystem_FindEntityByName_t CGameEntitySystem_FindEntityByName() = 0;
+```
+
+Finds entity by name.
+
+### `CTakeDamageInfo_CTakeDamageInfo`
+
+```cpp
+virtual CTakeDamageInfo_CTakeDamageInfo_t CTakeDamageInfo_CTakeDamageInfo() = 0;
+```
+
+Constructs CTakeDamageInfo with valid members.
+
+### `INetworkMessageProcessingPreFilter_FilterMessage`
+
+```cpp
+virtual INetworkMessageProcessingPreFilter_FilterMessage_t INetworkMessageProcessingPreFilter_FilterMessage() = 0;
+```
+
+### `CEntityIdentity_AcceptInput`
+
+```cpp
+virtual CEntityIdentity_AcceptInput_t CEntityIdentity_AcceptInput() = 0;
+```
+
+CEntityIdentity::AcceptInput -- the identity-side entry point.
+
+### `CCSPlayer_ItemServices_CanAcquire`
+
+```cpp
+virtual CCSPlayer_ItemServices_CanAcquire_t CCSPlayer_ItemServices_CanAcquire() = 0;
+```
+
+CCSPlayer_ItemServices::CanAcquire -- returns an AcquireResult.
+
+### `CCSPlayerPawnBase_CanMove`
+
+```cpp
+virtual CCSPlayerPawnBase_CanMove_t CCSPlayerPawnBase_CanMove() = 0;
+```
+
+CCSPlayerPawnBase::CanMove -- a CCSPlayerPawnBase virtual; false while frozen, defusing, etc.
+
+### `CCSPlayerController_ProcessUserCmd`
+
+```cpp
+virtual CCSPlayerController_ProcessUserCmd_t CCSPlayerController_ProcessUserCmd() = 0;
+```
+
+CCSPlayerController::ProcessUserCmd
+
+### `CBasePlayerController_OnSimulateUserCommands`
+
+```cpp
+virtual CBasePlayerController_OnSimulateUserCommands_t CBasePlayerController_OnSimulateUserCommands() = 0;
+```
+
+CBasePlayerController::OnSimulateUserCommands
+
+### `CCSPlayer_MovementServices_AirAccelerate`
+
+```cpp
+virtual CCSPlayer_MovementServices_AirAccelerate_t CCSPlayer_MovementServices_AirAccelerate() = 0;
+```
+
+### `CCSPlayer_MovementServices_AirMove`
+
+```cpp
+virtual CCSPlayer_MovementServices_AirMove_t CCSPlayer_MovementServices_AirMove() = 0;
+```
+
+### `CCSPlayer_MovementServices_CanUnduck`
+
+```cpp
+virtual CCSPlayer_MovementServices_CanUnduck_t CCSPlayer_MovementServices_CanUnduck() = 0;
+```
+
+### `CCSPlayer_MovementServices_CategorizePosition`
+
+```cpp
+virtual CCSPlayer_MovementServices_CategorizePosition_t CCSPlayer_MovementServices_CategorizePosition() = 0;
+```
+
+### `CCSPlayer_MovementServices_CheckFalling`
+
+```cpp
+virtual CCSPlayer_MovementServices_CheckFalling_t CCSPlayer_MovementServices_CheckFalling() = 0;
+```
+
+### `CCSPlayer_MovementServices_CheckParameters`
+
+```cpp
+virtual CCSPlayer_MovementServices_CheckParameters_t CCSPlayer_MovementServices_CheckParameters() = 0;
+```
+
+### `CCSPlayer_MovementServices_CheckVelocity`
+
+```cpp
+virtual CCSPlayer_MovementServices_CheckVelocity_t CCSPlayer_MovementServices_CheckVelocity() = 0;
+```
+
+### `CCSPlayer_MovementServices_CheckWater`
+
+```cpp
+virtual CCSPlayer_MovementServices_CheckWater_t CCSPlayer_MovementServices_CheckWater() = 0;
+```
+
+### `CCSPlayer_MovementServices_Duck`
+
+```cpp
+virtual CCSPlayer_MovementServices_Duck_t CCSPlayer_MovementServices_Duck() = 0;
+```
+
+### `CCSPlayer_MovementServices_Friction`
+
+```cpp
+virtual CCSPlayer_MovementServices_Friction_t CCSPlayer_MovementServices_Friction() = 0;
+```
+
+### `CCSPlayer_MovementServices_FullWalkMove`
+
+```cpp
+virtual CCSPlayer_MovementServices_FullWalkMove_t CCSPlayer_MovementServices_FullWalkMove() = 0;
+```
+
+### `CCSPlayer_MovementServices_GroundAccelerate`
+
+```cpp
+virtual CCSPlayer_MovementServices_GroundAccelerate_t CCSPlayer_MovementServices_GroundAccelerate() = 0;
+```
+
+CCSPlayer_MovementServices::GroundAccelerate
+
+### `CCSPlayer_MovementServices_LadderMove`
+
+```cpp
+virtual CCSPlayer_MovementServices_LadderMove_t CCSPlayer_MovementServices_LadderMove() = 0;
+```
+
+### `CCSPlayer_MovementServices_MoveInit`
+
+```cpp
+virtual CCSPlayer_MovementServices_MoveInit_t CCSPlayer_MovementServices_MoveInit() = 0;
+```
+
+### `CCSPlayer_MovementServices_PlayerMove`
+
+```cpp
+virtual CCSPlayer_MovementServices_PlayerMove_t CCSPlayer_MovementServices_PlayerMove() = 0;
+```
+
+### `CCSPlayer_MovementServices_ProcessMovement`
+
+```cpp
+virtual CCSPlayer_MovementServices_ProcessMovement_t CCSPlayer_MovementServices_ProcessMovement() = 0;
+```
+
+### `CCSPlayer_MovementServices_SetupMove`
+
+```cpp
+virtual CCSPlayer_MovementServices_SetupMove_t CCSPlayer_MovementServices_SetupMove() = 0;
+```
+
+### `CCSPlayer_MovementServices_TryPlayerMove`
+
+```cpp
+virtual CCSPlayer_MovementServices_TryPlayerMove_t CCSPlayer_MovementServices_TryPlayerMove() = 0;
+```
+
+### `CCSPlayer_MovementServices_WalkMove`
+
+```cpp
+virtual CCSPlayer_MovementServices_WalkMove_t CCSPlayer_MovementServices_WalkMove() = 0;
+```
+
+### `CCSPlayer_MovementServices_WaterMove`
+
+```cpp
+virtual CCSPlayer_MovementServices_WaterMove_t CCSPlayer_MovementServices_WaterMove() = 0;
+```
+
+### `CCSPlayerLegacyJump_OnJump`
+
+```cpp
+virtual CCSPlayerLegacyJump_OnJump_t CCSPlayerLegacyJump_OnJump() = 0;
+```
+
+Members of the jump components, not of the movement services: the movement services call them on m_LegacyJump / m_ModernJump.
+
+### `CCSPlayerModernJump_OnJump`
+
+```cpp
+virtual CCSPlayerModernJump_OnJump_t CCSPlayerModernJump_OnJump() = 0;
+```
+
+### `CCSPlayerLegacyJump_CheckJumpButton`
+
+```cpp
+virtual CCSPlayerLegacyJump_CheckJumpButton_t CCSPlayerLegacyJump_CheckJumpButton() = 0;
+```
+
+### `CCSPlayerModernJump_CheckJumpButton`
+
+```cpp
+virtual CCSPlayerModernJump_CheckJumpButton_t CCSPlayerModernJump_CheckJumpButton() = 0;
+```
+
+### `CAttributeList_SetOrAddAttributeValueByName`
+
+```cpp
+virtual CAttributeList_SetOrAddAttributeValueByName_t CAttributeList_SetOrAddAttributeValueByName() = 0;
+```
+
+CAttributeList::SetOrAddAttributeValueByName
+
+### `CDecoyProjectile_EmitGrenade`
+
+```cpp
+virtual CDecoyProjectile_EmitGrenade_t CDecoyProjectile_EmitGrenade() = 0;
+```
+
+C&lt;Type&gt;Projectile::EmitGrenade -- spawns a live grenade.
+
+### `CFlashbangProjectile_EmitGrenade`
+
+```cpp
+virtual CFlashbangProjectile_EmitGrenade_t CFlashbangProjectile_EmitGrenade() = 0;
+```
+
+### `CHEGrenadeProjectile_EmitGrenade`
+
+```cpp
+virtual CHEGrenadeProjectile_EmitGrenade_t CHEGrenadeProjectile_EmitGrenade() = 0;
+```
+
+### `CMolotovProjectile_EmitGrenade`
+
+```cpp
+virtual CMolotovProjectile_EmitGrenade_t CMolotovProjectile_EmitGrenade() = 0;
+```
+
+### `CSmokeGrenadeProjectile_EmitGrenade`
+
+```cpp
+virtual CSmokeGrenadeProjectile_EmitGrenade_t CSmokeGrenadeProjectile_EmitGrenade() = 0;
+```
+
+### `CCSPlayerPawn_PostThink`
+
+```cpp
+virtual CCSPlayerPawn_PostThink_t CCSPlayerPawn_PostThink() = 0;
+```
+
+CCSPlayerPawn::PostThink -- virtual, takes nothing but the pawn.
+
+### `UTIL_Remove`
+
+```cpp
+virtual UTIL_Remove_t UTIL_Remove() = 0;
+```
+
+UTIL_Remove -- queues the entity for deletion; null is ignored.
+
+### `DispatchParticleEffect`
+
+```cpp
+virtual DispatchParticleEffect_t DispatchParticleEffect() = 0;
+```
+
+DispatchParticleEffect
+
+### `GetWeaponCSDataFromKey`
+
+```cpp
+virtual GetWeaponCSDataFromKey_t GetWeaponCSDataFromKey() = 0;
+```
+
+GetWeaponCSDataFromKey -- looks a weapon's VData up by its key ("weapon_ak47"). nWeaponType -1 accepts any type; any other value returns null when the found data is of a different type.
+
+### `CSource2Server_GetNavMeshData`
+
+```cpp
+virtual CSource2Server_GetNavMeshData_t CSource2Server_GetNavMeshData() = 0;
+```
+
+CSource2Server::GetNavMeshData -- ISource2Server vtable slot 32.
+
+### `CLoggingSystem_LogDirect`
+
+```cpp
+virtual CLoggingSystem_LogDirect_t CLoggingSystem_LogDirect() = 0;
+```
+
+CLoggingSystem::LogDirect (tier0) -- the member behind LoggingSystem_LogDirect.
+
+### `Cmd_ExecuteCommand`
+
+```cpp
+virtual Cmd_ExecuteCommand_t Cmd_ExecuteCommand() = 0;
+```
+
+Cmd_ExecuteCommand (engine2) -- runs one parsed command.
+
+### `CCSPlayer_ItemServices_GiveNamedItem`
+
+```cpp
+virtual CCSPlayer_ItemServices_GiveNamedItem_t CCSPlayer_ItemServices_GiveNamedItem() = 0;
+```
+
+CCSPlayer_ItemServices::GiveNamedItem -- the full implementation.
+
+## Macros
+
+### `TOOLKIT_ORIGINAL`
+
+```cpp
+#define TOOLKIT_ORIGINAL(fn) reinterpret_cast<decltype(fn)>(KHook::FindOriginal(reinterpret_cast<void*>(fn)))
+```
+
+Calls a function from this interface, bypassing any inline hooks on it.
+
+The SDK's schema helpers do the same through their HookChain argument (IToolkitTypes.h); this is for calling an ADDR_* function directly.
+
+The ADDR_* macros below hand back the address the signature scan found, which is what you want to hook. It is not always what you want to *call*: once any plugin inline-hooks one of these functions, its first bytes are a jump into the detour, so calling it runs the whole Pre/Post chain. That is right when you are standing in for the game -- a plugin dealing damage as if a weapon fired wants the chain -- and wrong when you are asking for the function itself, e.g. an admin command, where another plugin's rules have no business vetoing what the server was told to do.
+
+Wrap the call in this when you mean the latter:
+
+```cpp
+TOOLKIT_ORIGINAL(ADDR_TAKE_DAMAGE_OLD())(pPawn, &info, &result);
+```
+
+Signature-blind, so it works whatever prototype you hold and however the plugin that hooked it declared its hook -- the two routinely disagree, and TerminateRound is the standing example: the hook declares (CCSGameRules, RoundEndReason, float, void*, uint8_t) where this interface's typedef says (CCSGameRules*, uint32, uint32*, float). Unhooked functions come back unchanged (KHook::FindOriginal hands the address back as is), so this is always safe to apply.
+
+<Callout type="info">Resolve it at the call, do not cache it in a global. The address is only the original from the moment the hook exists, and hooks are installed long after these addresses are scanned.</Callout>
+
+### Other macros
+
+| Macro | Expands to |
+|---|---|
+| `ADDR_CREATE_ENTITY_BY_NAME()` | `g_pToolkitAddresses->CBaseEntity_CreateEntityByName()` |
+| `ADDR_DISPATCH_SPAWN()` | `g_pToolkitAddresses->CBaseEntity_DispatchSpawn()` |
+| `ADDR_TAKE_DAMAGE_OLD()` | `g_pToolkitAddresses->CBaseEntity_TakeDamageOld()` |
+| `ADDR_SET_MODEL()` | `g_pToolkitAddresses->CBaseModelEntity_SetModel()` |
+| `ADDR_SET_PAWN()` | `g_pToolkitAddresses->CBasePlayerController_SetPawn()` |
+| `ADDR_SNAP_VIEW_ANGLES()` | `g_pToolkitAddresses->CBasePlayerPawn_SnapViewAngles()` |
+| `ADDR_TERMINATE_ROUND()` | `g_pToolkitAddresses->CCSGameRules_TerminateRound()` |
+| `ADDR_WEAPON_SERVICES_DESTROY()` | `g_pToolkitAddresses->CPlayer_WeaponServices_Destroy()` |
+| `ADDR_LEGACY_GAME_EVENT_LISTENER()` | `g_pToolkitAddresses->LegacyGameEventListener()` |
+| `ADDR_SWITCH_TEAM()` | `g_pToolkitAddresses->CCSPlayerController_SwitchTeam()` |
+| `ADDR_ACCEPT_INPUT()` | `g_pToolkitAddresses->CEntityInstance_AcceptInput()` |
+| `ADDR_FIRE_OUTPUT_INTERNAL()` | `g_pToolkitAddresses->CEntityIOOutput_FireOutputInternal()` |
+| `ADDR_ADD_ENTITY_IO_EVENT()` | `g_pToolkitAddresses->CEntitySystem_AddEntityIOEvent()` |
+| `ADDR_FIND_ENTITY_BY_CLASSNAME()` | `g_pToolkitAddresses->CGameEntitySystem_FindEntityByClassName()` |
+| `ADDR_FIND_ENTITY_BY_NAME()` | `g_pToolkitAddresses->CGameEntitySystem_FindEntityByName()` |
+| `ADDR_TAKE_DAMAGE_INFO()` | `g_pToolkitAddresses->CTakeDamageInfo_CTakeDamageInfo()` |
+| `ADDR_FILTER_MESSAGE()` | `g_pToolkitAddresses->INetworkMessageProcessingPreFilter_FilterMessage()` |
+| `ADDR_IDENTITY_ACCEPT_INPUT()` | `g_pToolkitAddresses->CEntityIdentity_AcceptInput()` |
+| `ADDR_CAN_ACQUIRE()` | `g_pToolkitAddresses->CCSPlayer_ItemServices_CanAcquire()` |
+| `ADDR_CAN_MOVE()` | `g_pToolkitAddresses->CCSPlayerPawnBase_CanMove()` |
+| `ADDR_PROCESS_USER_CMD()` | `g_pToolkitAddresses->CCSPlayerController_ProcessUserCmd()` |
+| `ADDR_ON_SIMULATE_USER_COMMANDS()` | `g_pToolkitAddresses->CBasePlayerController_OnSimulateUserCommands()` |
+| `ADDR_AIR_ACCELERATE()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_AirAccelerate()` |
+| `ADDR_AIR_MOVE()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_AirMove()` |
+| `ADDR_CAN_UNDUCK()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_CanUnduck()` |
+| `ADDR_CATEGORIZE_POSITION()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_CategorizePosition()` |
+| `ADDR_CHECK_FALLING()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_CheckFalling()` |
+| `ADDR_CHECK_PARAMETERS()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_CheckParameters()` |
+| `ADDR_CHECK_VELOCITY()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_CheckVelocity()` |
+| `ADDR_CHECK_WATER()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_CheckWater()` |
+| `ADDR_DUCK()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_Duck()` |
+| `ADDR_FRICTION()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_Friction()` |
+| `ADDR_FULL_WALK_MOVE()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_FullWalkMove()` |
+| `ADDR_GROUND_ACCELERATE()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_GroundAccelerate()` |
+| `ADDR_LADDER_MOVE()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_LadderMove()` |
+| `ADDR_MOVE_INIT()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_MoveInit()` |
+| `ADDR_PLAYER_MOVE()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_PlayerMove()` |
+| `ADDR_PROCESS_MOVEMENT()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_ProcessMovement()` |
+| `ADDR_SETUP_MOVE()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_SetupMove()` |
+| `ADDR_TRY_PLAYER_MOVE()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_TryPlayerMove()` |
+| `ADDR_WALK_MOVE()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_WalkMove()` |
+| `ADDR_WATER_MOVE()` | `g_pToolkitAddresses->CCSPlayer_MovementServices_WaterMove()` |
+| `ADDR_ON_JUMP_LEGACY()` | `g_pToolkitAddresses->CCSPlayerLegacyJump_OnJump()` |
+| `ADDR_ON_JUMP_MODERN()` | `g_pToolkitAddresses->CCSPlayerModernJump_OnJump()` |
+| `ADDR_CHECK_JUMP_BUTTON_LEGACY()` | `g_pToolkitAddresses->CCSPlayerLegacyJump_CheckJumpButton()` |
+| `ADDR_CHECK_JUMP_BUTTON_MODERN()` | `g_pToolkitAddresses->CCSPlayerModernJump_CheckJumpButton()` |
+| `ADDR_SET_OR_ADD_ATTRIBUTE()` | `g_pToolkitAddresses->CAttributeList_SetOrAddAttributeValueByName()` |
+| `ADDR_EMIT_DECOY()` | `g_pToolkitAddresses->CDecoyProjectile_EmitGrenade()` |
+| `ADDR_EMIT_FLASHBANG()` | `g_pToolkitAddresses->CFlashbangProjectile_EmitGrenade()` |
+| `ADDR_EMIT_HEGRENADE()` | `g_pToolkitAddresses->CHEGrenadeProjectile_EmitGrenade()` |
+| `ADDR_EMIT_MOLOTOV()` | `g_pToolkitAddresses->CMolotovProjectile_EmitGrenade()` |
+| `ADDR_EMIT_SMOKE()` | `g_pToolkitAddresses->CSmokeGrenadeProjectile_EmitGrenade()` |
+| `ADDR_POST_THINK()` | `g_pToolkitAddresses->CCSPlayerPawn_PostThink()` |
+| `ADDR_UTIL_REMOVE()` | `g_pToolkitAddresses->UTIL_Remove()` |
+| `ADDR_DISPATCH_PARTICLE_EFFECT()` | `g_pToolkitAddresses->DispatchParticleEffect()` |
+| `ADDR_GET_WEAPON_CS_DATA_FROM_KEY()` | `g_pToolkitAddresses->GetWeaponCSDataFromKey()` |
+| `ADDR_GET_NAV_MESH_DATA()` | `g_pToolkitAddresses->CSource2Server_GetNavMeshData()` |
+| `ADDR_LOG_DIRECT()` | `g_pToolkitAddresses->CLoggingSystem_LogDirect()` |
+| `ADDR_CMD_EXECUTE_COMMAND()` | `g_pToolkitAddresses->Cmd_ExecuteCommand()` |
+| `ADDR_GIVE_NAMED_ITEM()` | `g_pToolkitAddresses->CCSPlayer_ItemServices_GiveNamedItem()` |

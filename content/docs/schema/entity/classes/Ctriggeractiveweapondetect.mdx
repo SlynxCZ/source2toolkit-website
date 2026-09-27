@@ -1,35 +1,18 @@
 ---
-title: CTriggerActiveWeaponDetect
+title: "CTriggerActiveWeaponDetect"
+description: "Schema class CTriggerActiveWeaponDetect, derived from CBaseTrigger."
 ---
 
-# CTriggerActiveWeaponDetect
 
-**Inheritance**: CBaseTrigger
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTriggerActiveWeaponDetect.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTriggerActiveWeaponDetect.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_OnTouchedActiveWeapon" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_iszWeaponClassName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_OnTouchedActiveWeapon` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_iszWeaponClassName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CTriggerActiveWeaponDetect* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTriggerActiveWeaponDetect* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTriggerActiveWeaponDetect* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTriggerActiveWeaponDetect&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

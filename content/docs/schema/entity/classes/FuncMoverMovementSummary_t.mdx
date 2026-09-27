@@ -1,17 +1,22 @@
 ---
-title: FuncMoverMovementSummary_t
+title: "FuncMoverMovementSummary_t"
+description: "Schema class FuncMoverMovementSummary_t."
 ---
 
-# FuncMoverMovementSummary_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/FuncMoverMovementSummary_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/FuncMoverMovementSummary_t.h)
 
 ## Fields
 
-- <ApiParam name="flStartT" type="float" />
-- <ApiParam name="flEndT" type="float" />
-- <ApiParam name="nStartNodeIndex" type="int32_t" />
-- <ApiParam name="nStopNodeIndex" type="int32_t" />
-- <ApiParam name="nMovementMode" type="int32_t" />
-- <ApiParam name="nFlags" type="FuncMoverMovementSummaryFlags_t" />
-- <ApiParam name="nTick" type="int32_t" />
-- <ApiParam name="hPathMover" type="CHandle&lt;CPathMover&gt;" />
+| Field | Type |
+|---|---|
+| `flStartT` | `float` |
+| `flEndT` | `float` |
+| `nStartNodeIndex` | `int32_t` |
+| `nStopNodeIndex` | `int32_t` |
+| `nMovementMode` | `int32_t` |
+| `nFlags` | [`FuncMoverMovementSummaryFlags_t`](/docs/schema/entity/enums/FuncMoverMovementSummaryFlags_t) |
+| `nTick` | `int32_t` |
+| `hPathMover` | [`CHandle<CPathMover>`](/docs/schema/entity/classes/CPathMover) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

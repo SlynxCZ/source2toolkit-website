@@ -1,35 +1,18 @@
 ---
-title: CInfoGameEventProxy
+title: "CInfoGameEventProxy"
+description: "Schema class CInfoGameEventProxy, derived from CPointEntity."
 ---
 
-# CInfoGameEventProxy
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CInfoGameEventProxy.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CInfoGameEventProxy.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_iszEventName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_flRange" type="float" />
+| Field | Type |
+|---|---|
+| `m_iszEventName` | `CUtlSymbolLarge` |
+| `m_flRange` | `float` |
 
-## Methods
-
-### CInfoGameEventProxy* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CInfoGameEventProxy* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CInfoGameEventProxy* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CInfoGameEventProxy&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

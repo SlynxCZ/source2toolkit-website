@@ -1,37 +1,20 @@
 ---
-title: CGameGibManager
+title: "CGameGibManager"
+description: "Schema class CGameGibManager, derived from CBaseEntity."
 ---
 
-# CGameGibManager
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CGameGibManager.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CGameGibManager.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_bAllowNewGibs" type="bool" />
-- <ApiParam name="m_iCurrentMaxPieces" type="int32_t" />
-- <ApiParam name="m_iMaxPieces" type="int32_t" />
-- <ApiParam name="m_iLastFrame" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_bAllowNewGibs` | `bool` |
+| `m_iCurrentMaxPieces` | `int32_t` |
+| `m_iMaxPieces` | `int32_t` |
+| `m_iLastFrame` | `int32_t` |
 
-## Methods
-
-### CGameGibManager* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CGameGibManager* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CGameGibManager* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CGameGibManager&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

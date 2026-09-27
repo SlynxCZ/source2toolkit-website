@@ -1,40 +1,23 @@
 ---
-title: CTankTrainAI
+title: "CTankTrainAI"
+description: "Schema class CTankTrainAI, derived from CPointEntity."
 ---
 
-# CTankTrainAI
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTankTrainAI.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTankTrainAI.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_hTrain" type="CHandle&lt;CFuncTrackTrain&gt;" />
-- <ApiParam name="m_hTargetEntity" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_soundPlaying" type="int32_t" />
-- <ApiParam name="m_startSoundName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_engineSoundName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_movementSoundName" type="CUtlSymbolLarge" />
-- <ApiParam name="m_targetEntityName" type="CUtlSymbolLarge" />
+| Field | Type |
+|---|---|
+| `m_hTrain` | [`CHandle<CFuncTrackTrain>`](/docs/schema/entity/classes/CFuncTrackTrain) |
+| `m_hTargetEntity` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_soundPlaying` | `int32_t` |
+| `m_startSoundName` | `CUtlSymbolLarge` |
+| `m_engineSoundName` | `CUtlSymbolLarge` |
+| `m_movementSoundName` | `CUtlSymbolLarge` |
+| `m_targetEntityName` | `CUtlSymbolLarge` |
 
-## Methods
-
-### CTankTrainAI* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTankTrainAI* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTankTrainAI* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTankTrainAI&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

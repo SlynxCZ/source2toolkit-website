@@ -1,36 +1,19 @@
 ---
-title: SpawnPoint
+title: "SpawnPoint"
+description: "Schema class SpawnPoint, derived from CServerOnlyPointEntity."
 ---
 
-# SpawnPoint
 
-**Inheritance**: CServerOnlyPointEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/SpawnPoint.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/SpawnPoint.h)
+
+**Inherits** [`CServerOnlyPointEntity`](/docs/schema/entity/classes/CServerOnlyPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_iPriority" type="int32_t" />
-- <ApiParam name="m_bEnabled" type="bool" />
-- <ApiParam name="m_nType" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_iPriority` | `int32_t` |
+| `m_bEnabled` | `bool` |
+| `m_nType` | `int32_t` |
 
-## Methods
-
-### SpawnPoint* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### SpawnPoint* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### SpawnPoint* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;SpawnPoint&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

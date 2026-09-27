@@ -1,16 +1,204 @@
 ---
-title: IToolkitHTTP
+title: "IToolkitHTTP"
+description: "Interface for HTTP requests."
 ---
 
-# IToolkitHTTP
+
+Requests go out through Steam's own HTTP client, which the game server already has, so there is no curl to link and nothing to pump. Steam only hands that client over once the API has activated, which happens after level startup -- requests made before then are queued and sent when it does, so a plugin does not have to care whether it is early.
+
+Responses come back on the main thread.
+
+Issues HTTP requests through Steam's HTTP client.
+
+```cpp
+HTTP_GET("https://example.com/api", [](const ToolkitHTTPResponse& r)
+{
+    if (!r.m_bSuccess || r.m_nStatusCode != 200)
+        return;
+
+    // r.m_sBody -- parse with whatever your plugin already uses.
+});
+```
+
+**Interface id** `IToolkitHTTP002` (`TOOLKIT_HTTP_INTERFACE`) · **Global** `g_pToolkitHTTP` · **Header** [`source2toolkit/IToolkitHTTP.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitHTTP.h)
+
+## Types
+
+### `ToolkitHTTPCallback`
+
+```cpp
+using ToolkitHTTPCallback = std::function<void(const ToolkitHTTPResponse& response)>;
+```
+
+Callback for a completed request.
 
 ## Methods
 
-### bool IsAvailable()
+### `IsAvailable`
+
+```cpp
+virtual bool IsAvailable() const = 0;
+```
 
 Whether Steam's HTTP client is available yet.
 
-### int PendingCount()
+Requests made while this is false are queued, not dropped, so checking is only worth it to avoid building a body you cannot send.
+
+### `PendingCount`
+
+```cpp
+virtual int PendingCount() const = 0;
+```
 
 Number of requests waiting for Steam's HTTP client.
 
+### `Request`
+
+```cpp
+virtual void Request(PluginId owner, EToolkitHTTPMethod method, const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+```
+
+Issues a request.
+
+<Callout type="info">Cancelled, callback and all, if the owning plugin unloads first -- the callback holds code inside that plugin's library.</Callout>
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  | Plugin the request belongs to |
+| `method` | [`EToolkitHTTPMethod`](/docs/core-api/IToolkitHTTP#etoolkithttpmethod) |  | HTTP method |
+| `pszUrl` | `const char*` |  | Absolute URL |
+| `pszBody` | `const char*` |  | Request body, or nullptr for methods that take none |
+| `callback` | [`ToolkitHTTPCallback`](/docs/core-api/IToolkitHTTP#toolkithttpcallback) |  | Called once the request completes; may be null |
+| `pHeaders` | [`const std::vector<ToolkitHTTPHeader>*`](/docs/core-api/IToolkitHTTP#toolkithttpheader) | `nullptr` | Extra request headers, or nullptr |
+
+### `Get`
+
+```cpp
+virtual void Get(PluginId owner, const char* pszUrl, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+```
+
+| Parameter | Type | Default |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  |
+| `pszUrl` | `const char*` |  |
+| `callback` | [`ToolkitHTTPCallback`](/docs/core-api/IToolkitHTTP#toolkithttpcallback) |  |
+| `pHeaders` | [`const std::vector<ToolkitHTTPHeader>*`](/docs/core-api/IToolkitHTTP#toolkithttpheader) | `nullptr` |
+
+### `Post`
+
+```cpp
+virtual void Post(PluginId owner, const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+```
+
+| Parameter | Type | Default |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  |
+| `pszUrl` | `const char*` |  |
+| `pszBody` | `const char*` |  |
+| `callback` | [`ToolkitHTTPCallback`](/docs/core-api/IToolkitHTTP#toolkithttpcallback) |  |
+| `pHeaders` | [`const std::vector<ToolkitHTTPHeader>*`](/docs/core-api/IToolkitHTTP#toolkithttpheader) | `nullptr` |
+
+### `Put`
+
+```cpp
+virtual void Put(PluginId owner, const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+```
+
+| Parameter | Type | Default |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  |
+| `pszUrl` | `const char*` |  |
+| `pszBody` | `const char*` |  |
+| `callback` | [`ToolkitHTTPCallback`](/docs/core-api/IToolkitHTTP#toolkithttpcallback) |  |
+| `pHeaders` | [`const std::vector<ToolkitHTTPHeader>*`](/docs/core-api/IToolkitHTTP#toolkithttpheader) | `nullptr` |
+
+### `Patch`
+
+```cpp
+virtual void Patch(PluginId owner, const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+```
+
+| Parameter | Type | Default |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  |
+| `pszUrl` | `const char*` |  |
+| `pszBody` | `const char*` |  |
+| `callback` | [`ToolkitHTTPCallback`](/docs/core-api/IToolkitHTTP#toolkithttpcallback) |  |
+| `pHeaders` | [`const std::vector<ToolkitHTTPHeader>*`](/docs/core-api/IToolkitHTTP#toolkithttpheader) | `nullptr` |
+
+### `Delete`
+
+```cpp
+virtual void Delete(PluginId owner, const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+```
+
+| Parameter | Type | Default |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  |
+| `pszUrl` | `const char*` |  |
+| `pszBody` | `const char*` |  |
+| `callback` | [`ToolkitHTTPCallback`](/docs/core-api/IToolkitHTTP#toolkithttpcallback) |  |
+| `pHeaders` | [`const std::vector<ToolkitHTTPHeader>*`](/docs/core-api/IToolkitHTTP#toolkithttpheader) | `nullptr` |
+
+## `ToolkitHTTPHeader`
+
+One request or response header.
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `m_sName` | `std::string` |
+| `m_sValue` | `std::string` |
+
+### Constructors
+
+```cpp
+ToolkitHTTPHeader() = default;
+ToolkitHTTPHeader(std::string name, std::string value);
+```
+
+## `ToolkitHTTPResponse`
+
+What a completed request came back with.
+
+<Callout type="info">m_bSuccess is about the transport, not the status code -- a 404 that arrived is a success with m_nStatusCode == 404. A request that never completed has m_bSuccess false and m_nStatusCode 0.</Callout>
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `m_bSuccess` | `bool` |  |
+| `m_nStatusCode` | `int` |  |
+| `m_sBody` | `std::string` |  |
+| `m_pJson` | [`const IToolkitJSONValue*`](/docs/core-api/IToolkitJSON#itoolkitjsonvalue) | The body parsed as JSON, when it was JSON. Owned by the toolkit and valid only for the duration of the callback -- copy anything you keep. Null when the body was empty or did not parse. |
+
+## Enums
+
+### `EToolkitHTTPMethod`
+
+```cpp
+enum class EToolkitHTTPMethod : int
+```
+
+HTTP method of a request.
+
+| Name | Value |
+|---|---|
+| `Get` | `0` |
+| `Post` |  |
+| `Put` |  |
+| `Patch` |  |
+| `Delete` |  |
+| `Head` |  |
+
+## Macros
+
+| Macro | Expands to |
+|---|---|
+| `HTTP_REQUEST(method, pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Request(g_PluginID, method, pszUrl, pszBody, cb, ##__VA_ARGS__)` |
+| `HTTP_GET(pszUrl, cb, ...)` | `g_pToolkitHTTP->Get(g_PluginID, pszUrl, cb, ##__VA_ARGS__)` |
+| `HTTP_POST(pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Post(g_PluginID, pszUrl, pszBody, cb, ##__VA_ARGS__)` |
+| `HTTP_PUT(pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Put(g_PluginID, pszUrl, pszBody, cb, ##__VA_ARGS__)` |
+| `HTTP_PATCH(pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Patch(g_PluginID, pszUrl, pszBody, cb, ##__VA_ARGS__)` |
+| `HTTP_DELETE(pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Delete(g_PluginID, pszUrl, pszBody, cb, ##__VA_ARGS__)` |

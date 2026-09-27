@@ -1,42 +1,25 @@
 ---
-title: CDynamicLight
+title: "CDynamicLight"
+description: "Schema class CDynamicLight, derived from CBaseModelEntity."
 ---
 
-# CDynamicLight
 
-**Inheritance**: CBaseModelEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CDynamicLight.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CDynamicLight.h)
+
+**Inherits** [`CBaseModelEntity`](/docs/schema/entity/classes/CBaseModelEntity)
 
 ## Fields
 
-- <ApiParam name="m_ActualFlags" type="uint8_t" />
-- <ApiParam name="m_Flags" type="uint8_t" />
-- <ApiParam name="m_LightStyle" type="uint8_t" />
-- <ApiParam name="m_On" type="bool" />
-- <ApiParam name="m_Radius" type="float" />
-- <ApiParam name="m_Exponent" type="int32_t" />
-- <ApiParam name="m_InnerAngle" type="float" />
-- <ApiParam name="m_OuterAngle" type="float" />
-- <ApiParam name="m_SpotRadius" type="float" />
+| Field | Type |
+|---|---|
+| `m_ActualFlags` | `uint8_t` |
+| `m_Flags` | `uint8_t` |
+| `m_LightStyle` | `uint8_t` |
+| `m_On` | `bool` |
+| `m_Radius` | `float` |
+| `m_Exponent` | `int32_t` |
+| `m_InnerAngle` | `float` |
+| `m_OuterAngle` | `float` |
+| `m_SpotRadius` | `float` |
 
-## Methods
-
-### CDynamicLight* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CDynamicLight* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CDynamicLight* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CDynamicLight&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

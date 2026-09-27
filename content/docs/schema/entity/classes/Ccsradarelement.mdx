@@ -1,36 +1,19 @@
 ---
-title: CCSRadarElement
+title: "CCSRadarElement"
+description: "Schema class CCSRadarElement, derived from CBaseEntity."
 ---
 
-# CCSRadarElement
 
-**Inheritance**: CBaseEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CCSRadarElement.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CCSRadarElement.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_nElementType" type="uint32_t" />
-- <ApiParam name="m_nElementColor" type="uint32_t" />
-- <ApiParam name="m_nTeamFilter" type="uint32_t" />
+| Field | Type |
+|---|---|
+| `m_nElementType` | `uint32_t` |
+| `m_nElementColor` | `uint32_t` |
+| `m_nTeamFilter` | `uint32_t` |
 
-## Methods
-
-### CCSRadarElement* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CCSRadarElement* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CCSRadarElement* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CCSRadarElement&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

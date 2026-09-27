@@ -1,57 +1,40 @@
 ---
-title: CEnvCubemapFog
+title: "CEnvCubemapFog"
+description: "Schema class CEnvCubemapFog, derived from CBaseEntity."
 ---
 
-# CEnvCubemapFog
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvCubemapFog.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvCubemapFog.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_flEndDistance" type="float" />
-- <ApiParam name="m_flStartDistance" type="float" />
-- <ApiParam name="m_flFogFalloffExponent" type="float" />
-- <ApiParam name="m_bHeightFogEnabled" type="bool" />
-- <ApiParam name="m_flFogHeightWidth" type="float" />
-- <ApiParam name="m_flFogHeightEnd" type="float" />
-- <ApiParam name="m_flFogHeightStart" type="float" />
-- <ApiParam name="m_flFogHeightExponent" type="float" />
-- <ApiParam name="m_flLODBias" type="float" />
-- <ApiParam name="m_bActive" type="bool" />
-- <ApiParam name="m_bStartDisabled" type="bool" />
-- <ApiParam name="m_flFogMaxOpacity" type="float" />
-- <ApiParam name="m_nCubemapSourceType" type="int32_t" />
-- <ApiParam name="m_hSkyMaterial" type="CStrongHandle&lt;InfoForResourceTypeIMaterial2&gt;" />
-- <ApiParam name="m_iszSkyEntity" type="CUtlSymbolLarge" />
-- <ApiParam name="m_nHeightFogType" type="int32_t" />
-- <ApiParam name="m_nFogHeightBlendMode" type="int32_t" />
-- <ApiParam name="m_nFogHeightCoordinateSpace" type="int32_t" />
-- <ApiParam name="m_nDistanceFogType" type="int32_t" />
-- <ApiParam name="m_DistanceFogCurveString" type="CUtlSymbolLarge" />
-- <ApiParam name="m_HeightFogCurveString" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hFogCubemapTexture" type="CStrongHandle&lt;InfoForResourceTypeCTextureBase&gt;" />
-- <ApiParam name="m_bHasHeightFogEnd" type="bool" />
-- <ApiParam name="m_bFirstTime" type="bool" />
+| Field | Type |
+|---|---|
+| `m_flEndDistance` | `float` |
+| `m_flStartDistance` | `float` |
+| `m_flFogFalloffExponent` | `float` |
+| `m_bHeightFogEnabled` | `bool` |
+| `m_flFogHeightWidth` | `float` |
+| `m_flFogHeightEnd` | `float` |
+| `m_flFogHeightStart` | `float` |
+| `m_flFogHeightExponent` | `float` |
+| `m_flLODBias` | `float` |
+| `m_bActive` | `bool` |
+| `m_bStartDisabled` | `bool` |
+| `m_flFogMaxOpacity` | `float` |
+| `m_nCubemapSourceType` | `int32_t` |
+| `m_hSkyMaterial` | [`CStrongHandle<InfoForResourceTypeIMaterial2>`](/docs/core-api/Schema#cstronghandle) |
+| `m_iszSkyEntity` | `CUtlSymbolLarge` |
+| `m_nHeightFogType` | `int32_t` |
+| `m_nFogHeightBlendMode` | `int32_t` |
+| `m_nFogHeightCoordinateSpace` | `int32_t` |
+| `m_nDistanceFogType` | `int32_t` |
+| `m_DistanceFogCurveString` | `CUtlSymbolLarge` |
+| `m_HeightFogCurveString` | `CUtlSymbolLarge` |
+| `m_hFogCubemapTexture` | [`CStrongHandle<InfoForResourceTypeCTextureBase>`](/docs/core-api/Schema#cstronghandle) |
+| `m_bHasHeightFogEnd` | `bool` |
+| `m_bFirstTime` | `bool` |
 
-## Methods
-
-### CEnvCubemapFog* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvCubemapFog* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvCubemapFog* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvCubemapFog&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

@@ -1,44 +1,27 @@
 ---
-title: CC4
+title: "CC4"
+description: "Schema class CC4, derived from CCSWeaponBase."
 ---
 
-# CC4
 
-**Inheritance**: [CCSWeaponBase](/docs/schema/entity/classes/Ccsweaponbase)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CC4.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CC4.h)
+
+**Inherits** [`CCSWeaponBase`](/docs/schema/entity/classes/CCSWeaponBase)
 
 ## Fields
 
-- <ApiParam name="m_vecLastValidPlayerHeldPosition" type="Vector" />
-- <ApiParam name="m_vecLastValidDroppedPosition" type="Vector" />
-- <ApiParam name="m_bDoValidDroppedPositionCheck" type="bool" />
-- <ApiParam name="m_bStartedArming" type="bool" />
-- <ApiParam name="m_fArmedTime" type="float" />
-- <ApiParam name="m_bBombPlacedAnimation" type="bool" />
-- <ApiParam name="m_bIsPlantingViaUse" type="bool" />
-- <ApiParam name="m_entitySpottedState" type="[EntitySpottedState_t](/docs/schema/entity/classes/EntitySpottedState_t)" />
-- <ApiParam name="m_nSpotRules" type="int32_t" />
-- <ApiParam name="m_bPlayedArmingBeeps" type="bool" />
-- <ApiParam name="m_bBombPlanted" type="bool" />
+| Field | Type |
+|---|---|
+| `m_vecLastValidPlayerHeldPosition` | `Vector` |
+| `m_vecLastValidDroppedPosition` | `Vector` |
+| `m_bDoValidDroppedPositionCheck` | `bool` |
+| `m_bStartedArming` | `bool` |
+| `m_fArmedTime` | `float` |
+| `m_bBombPlacedAnimation` | `bool` |
+| `m_bIsPlantingViaUse` | `bool` |
+| `m_entitySpottedState` | [`EntitySpottedState_t`](/docs/schema/entity/classes/EntitySpottedState_t) |
+| `m_nSpotRules` | `int32_t` |
+| `m_bPlayedArmingBeeps` | `bool` |
+| `m_bBombPlanted` | `bool` |
 
-## Methods
-
-### CC4* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CC4* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CC4* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CC4&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

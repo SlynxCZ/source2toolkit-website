@@ -1,82 +1,65 @@
 ---
-title: CGenericConstraint
+title: "CGenericConstraint"
+description: "Schema class CGenericConstraint, derived from CPhysConstraint."
 ---
 
-# CGenericConstraint
 
-**Inheritance**: CPhysConstraint
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CGenericConstraint.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CGenericConstraint.h)
+
+**Inherits** [`CPhysConstraint`](/docs/schema/entity/classes/CPhysConstraint)
 
 ## Fields
 
-- <ApiParam name="m_bPlaceAnchorsAtConstraintTransform" type="bool" />
-- <ApiParam name="m_nLinearMotionX" type="JointMotion_t" />
-- <ApiParam name="m_nLinearMotionY" type="JointMotion_t" />
-- <ApiParam name="m_nLinearMotionZ" type="JointMotion_t" />
-- <ApiParam name="m_flLinearFrequencyX" type="float" />
-- <ApiParam name="m_flLinearFrequencyY" type="float" />
-- <ApiParam name="m_flLinearFrequencyZ" type="float" />
-- <ApiParam name="m_flLinearDampingRatioX" type="float" />
-- <ApiParam name="m_flLinearDampingRatioY" type="float" />
-- <ApiParam name="m_flLinearDampingRatioZ" type="float" />
-- <ApiParam name="m_flMaxLinearImpulseX" type="float" />
-- <ApiParam name="m_flMaxLinearImpulseY" type="float" />
-- <ApiParam name="m_flMaxLinearImpulseZ" type="float" />
-- <ApiParam name="m_flBreakAfterTimeX" type="float" />
-- <ApiParam name="m_flBreakAfterTimeY" type="float" />
-- <ApiParam name="m_flBreakAfterTimeZ" type="float" />
-- <ApiParam name="m_flBreakAfterTimeStartTimeX" type="float" />
-- <ApiParam name="m_flBreakAfterTimeStartTimeY" type="float" />
-- <ApiParam name="m_flBreakAfterTimeStartTimeZ" type="float" />
-- <ApiParam name="m_flBreakAfterTimeThresholdX" type="float" />
-- <ApiParam name="m_flBreakAfterTimeThresholdY" type="float" />
-- <ApiParam name="m_flBreakAfterTimeThresholdZ" type="float" />
-- <ApiParam name="m_flNotifyForceX" type="float" />
-- <ApiParam name="m_flNotifyForceY" type="float" />
-- <ApiParam name="m_flNotifyForceZ" type="float" />
-- <ApiParam name="m_flNotifyForceMinTimeX" type="float" />
-- <ApiParam name="m_flNotifyForceMinTimeY" type="float" />
-- <ApiParam name="m_flNotifyForceMinTimeZ" type="float" />
-- <ApiParam name="m_flNotifyForceLastTimeX" type="float" />
-- <ApiParam name="m_flNotifyForceLastTimeY" type="float" />
-- <ApiParam name="m_flNotifyForceLastTimeZ" type="float" />
-- <ApiParam name="m_bAxisNotifiedX" type="bool" />
-- <ApiParam name="m_bAxisNotifiedY" type="bool" />
-- <ApiParam name="m_bAxisNotifiedZ" type="bool" />
-- <ApiParam name="m_nAngularMotionX" type="JointMotion_t" />
-- <ApiParam name="m_nAngularMotionY" type="JointMotion_t" />
-- <ApiParam name="m_nAngularMotionZ" type="JointMotion_t" />
-- <ApiParam name="m_flAngularFrequencyX" type="float" />
-- <ApiParam name="m_flAngularFrequencyY" type="float" />
-- <ApiParam name="m_flAngularFrequencyZ" type="float" />
-- <ApiParam name="m_flAngularDampingRatioX" type="float" />
-- <ApiParam name="m_flAngularDampingRatioY" type="float" />
-- <ApiParam name="m_flAngularDampingRatioZ" type="float" />
-- <ApiParam name="m_flMaxAngularImpulseX" type="float" />
-- <ApiParam name="m_flMaxAngularImpulseY" type="float" />
-- <ApiParam name="m_flMaxAngularImpulseZ" type="float" />
-- <ApiParam name="m_NotifyForceReachedX" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_NotifyForceReachedY" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_NotifyForceReachedZ" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_bPlaceAnchorsAtConstraintTransform` | `bool` |
+| `m_nLinearMotionX` | [`JointMotion_t`](/docs/schema/entity/enums/JointMotion_t) |
+| `m_nLinearMotionY` | [`JointMotion_t`](/docs/schema/entity/enums/JointMotion_t) |
+| `m_nLinearMotionZ` | [`JointMotion_t`](/docs/schema/entity/enums/JointMotion_t) |
+| `m_flLinearFrequencyX` | `float` |
+| `m_flLinearFrequencyY` | `float` |
+| `m_flLinearFrequencyZ` | `float` |
+| `m_flLinearDampingRatioX` | `float` |
+| `m_flLinearDampingRatioY` | `float` |
+| `m_flLinearDampingRatioZ` | `float` |
+| `m_flMaxLinearImpulseX` | `float` |
+| `m_flMaxLinearImpulseY` | `float` |
+| `m_flMaxLinearImpulseZ` | `float` |
+| `m_flBreakAfterTimeX` | `float` |
+| `m_flBreakAfterTimeY` | `float` |
+| `m_flBreakAfterTimeZ` | `float` |
+| `m_flBreakAfterTimeStartTimeX` | `float` |
+| `m_flBreakAfterTimeStartTimeY` | `float` |
+| `m_flBreakAfterTimeStartTimeZ` | `float` |
+| `m_flBreakAfterTimeThresholdX` | `float` |
+| `m_flBreakAfterTimeThresholdY` | `float` |
+| `m_flBreakAfterTimeThresholdZ` | `float` |
+| `m_flNotifyForceX` | `float` |
+| `m_flNotifyForceY` | `float` |
+| `m_flNotifyForceZ` | `float` |
+| `m_flNotifyForceMinTimeX` | `float` |
+| `m_flNotifyForceMinTimeY` | `float` |
+| `m_flNotifyForceMinTimeZ` | `float` |
+| `m_flNotifyForceLastTimeX` | `float` |
+| `m_flNotifyForceLastTimeY` | `float` |
+| `m_flNotifyForceLastTimeZ` | `float` |
+| `m_bAxisNotifiedX` | `bool` |
+| `m_bAxisNotifiedY` | `bool` |
+| `m_bAxisNotifiedZ` | `bool` |
+| `m_nAngularMotionX` | [`JointMotion_t`](/docs/schema/entity/enums/JointMotion_t) |
+| `m_nAngularMotionY` | [`JointMotion_t`](/docs/schema/entity/enums/JointMotion_t) |
+| `m_nAngularMotionZ` | [`JointMotion_t`](/docs/schema/entity/enums/JointMotion_t) |
+| `m_flAngularFrequencyX` | `float` |
+| `m_flAngularFrequencyY` | `float` |
+| `m_flAngularFrequencyZ` | `float` |
+| `m_flAngularDampingRatioX` | `float` |
+| `m_flAngularDampingRatioY` | `float` |
+| `m_flAngularDampingRatioZ` | `float` |
+| `m_flMaxAngularImpulseX` | `float` |
+| `m_flMaxAngularImpulseY` | `float` |
+| `m_flMaxAngularImpulseZ` | `float` |
+| `m_NotifyForceReachedX` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_NotifyForceReachedY` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_NotifyForceReachedZ` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CGenericConstraint* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CGenericConstraint* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CGenericConstraint* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CGenericConstraint&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

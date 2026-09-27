@@ -1,37 +1,20 @@
 ---
-title: CTriggerSave
+title: "CTriggerSave"
+description: "Schema class CTriggerSave, derived from CBaseTrigger."
 ---
 
-# CTriggerSave
 
-**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTriggerSave.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTriggerSave.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_bForceNewLevelUnit" type="bool" />
-- <ApiParam name="m_fDangerousTimer" type="float" />
-- <ApiParam name="m_minHitPoints" type="int32_t" />
-- <ApiParam name="m_flRetriggerDelay" type="float" />
+| Field | Type |
+|---|---|
+| `m_bForceNewLevelUnit` | `bool` |
+| `m_fDangerousTimer` | `float` |
+| `m_minHitPoints` | `int32_t` |
+| `m_flRetriggerDelay` | `float` |
 
-## Methods
-
-### CTriggerSave* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTriggerSave* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTriggerSave* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTriggerSave&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

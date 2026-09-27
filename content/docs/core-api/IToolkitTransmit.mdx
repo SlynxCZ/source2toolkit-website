@@ -1,183 +1,332 @@
 ---
-title: IToolkitTransmit
+title: "IToolkitTransmit"
+description: "Interface for deciding which entities each player receives."
 ---
 
-# IToolkitTransmit
 
-## IToolkitTransmitInfo
+Every tick the server works out, per player, the set of entities to send (CheckTransmit). This interface sits after that decision and takes entities back out of it:
 
-### CPlayerSlot GetPlayerSlot()
+- an entity is hooked once, and from then on has a visibility per viewer -- hidden from some players, shown to others, with up to eight independent "channels" so two features (a !hide command, a spectator mode, a team-only marker) can each hide the same entity without stepping on each other's toes: the entity shows only when no channel hides it;
+- a player is hidden through their controller: hiding a controller from a viewer hides the pawn that controller is driving, the observer pawn and a dead player pawn, while the controller itself stays -- the scoreboard keeps working;
+- an entity can be tied to an owner entity, and then disappears wherever its owner is hidden (a player's weapons, a beam attached to them);
+- BlockAll takes an entity away from everybody, the one-line "server-side only" switch;
+- and for anything that does not fit the model, HookCheckTransmit() hands over each viewer's transmit set, wrapped, so a plugin never has to lay out CCheckTransmitInfo itself.
 
-The player this transmit set belongs to.
+Hiding is done the way the client expects: the entity leaves the transmit set and is put on the "non-transmitted" list at the same time, so the client keeps a record of it while it is hidden and takes it back without the "missing client entity" crash when it comes back. Both of those bits are what IToolkitTransmitInfo::BlockTransmit() does.
 
-### bool IsFullUpdate()
+<Callout type="info">Everything here belongs on the main thread.</Callout>
 
-True when the player is being sent everything from scratch
+**Interface id** `IToolkitTransmit001` (`TOOLKIT_TRANSMIT_INTERFACE`) · **Global** `g_pToolkitTransmit` · **Header** [`source2toolkit/IToolkitTransmit.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitTransmit.h)
 
-### bool IsTransmitting(entityIndex)
+## Types
 
-Whether the entity is currently in the set.
+### `CheckTransmitHook`
 
-<ApiLabel>Parameters</ApiLabel>
+```cpp
+using CheckTransmitHook = std::function<void(IToolkitTransmitInfo* const* infos, int infoCount, const uint16_t* entityIndices, int entityCount)>;
+```
 
-- <ApiParam name="entityIndex" type="int" />
+Hook called once per CheckTransmit, after the toolkit has applied the hooked entities' visibility.
 
-### BlockTransmit(entityIndex)
+Runs every tick for every viewer, so do the expensive part (who owns what, who is on which team) once at the top and only the bit work per viewer.
 
-Takes an entity out of the set, and lets the client keep track
+## Methods
 
-<ApiLabel>Parameters</ApiLabel>
+### `HookEntity`
 
-- <ApiParam name="entityIndex" type="int" />
-
-### BlockTransmit(entity)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="entity" type="CEntityInstance*" />
-
-### AllowTransmit(entityIndex)
-
-Puts an entity (back) into the set.
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="entityIndex" type="int" />
-
-### AllowTransmit(entity)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="entity" type="CEntityInstance*" />
-
-### CBitVec&lt;MAX_EDICTS&gt;* GetTransmitEntity()
-
-The four bit sets of CCheckTransmitInfo, for whatever the
-
-### CBitVec&lt;MAX_EDICTS&gt;* GetTransmitNonPlayers()
-
-### CBitVec&lt;MAX_EDICTS&gt;* GetTransmitOutOfPVS()
-
-### CBitVec&lt;MAX_EDICTS&gt;* GetTransmitAlways()
-
-## IToolkitTransmit
-
-### bool HookEntity(owner, entity, defaultVisible)
+```cpp
+virtual bool HookEntity(PluginId owner, CEntityInstance* entity, bool defaultVisible = true) = 0;
+```
 
 Puts an entity under this interface's control.
 
-<ApiLabel>Parameters</ApiLabel>
+Until an entity is hooked, the setters below refuse it and it is sent as the engine decides. The hook goes away with the entity, with the plugin, or with UnhookEntity().
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the hook
-- <ApiParam name="entity" type="CEntityInstance*" /> — Entity to hook
-- <ApiParam name="defaultVisible" type="bool" /> — Whether viewers see it until told otherwise. false
+Hook a player's controller, not their pawn: a controller's visibility is applied to whatever pawn it is driving. Pawns are refused.
 
-### UnhookEntity(entity)
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  | Plugin ID that owns the hook |
+| `entity` | `CEntityInstance*` |  | Entity to hook |
+| `defaultVisible` | `bool` | `true` | Whether viewers see it until told otherwise. false is for "personal" entities: hidden from everybody, then SetVisible(entity, ownerSlot, true). |
+
+**Returns** `bool` — false when the entity is a pawn, already hooked, or about to be deleted.
+
+### `UnhookEntity`
+
+```cpp
+virtual void UnhookEntity(CEntityInstance* entity) = 0;
+```
 
 Forgets an entity: sent as the engine decides from now on.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `entity` | `CEntityInstance*` |
 
-- <ApiParam name="entity" type="CEntityInstance*" />
+### `IsEntityHooked`
 
-### bool IsEntityHooked(entity)
+```cpp
+virtual bool IsEntityHooked(CEntityInstance* entity) = 0;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `entity` | `CEntityInstance*` |
 
-- <ApiParam name="entity" type="CEntityInstance*" />
+### `SetVisible`
 
-### bool SetVisible(entity, viewer, visible, channel)
+```cpp
+virtual bool SetVisible(CEntityInstance* entity, CPlayerSlot viewer, bool visible, int channel = 0) = 0;
+```
 
 Shows or hides a hooked entity for one viewer.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `entity` | `CEntityInstance*` |  | Hooked entity |
+| `viewer` | `CPlayerSlot` |  | The player it is shown to / hidden from |
+| `visible` | `bool` |  | false hides it on @p channel; true withdraws that channel's objection, and for an entity hidden by default also marks the viewer as allowed |
+| `channel` | `int` | `0` | Channel 0..TRANSMIT_MAX_CHANNELS-1, or TRANSMIT_CHANNEL_ALL for every channel at once |
 
-- <ApiParam name="entity" type="CEntityInstance*" /> — Hooked entity
-- <ApiParam name="viewer" type="CPlayerSlot" /> — The player it is shown to / hidden from
-- <ApiParam name="visible" type="bool" /> — false hides it on @p channel; true withdraws that
-- <ApiParam name="channel" type="int" /> — Channel 0..TRANSMIT_MAX_CHANNELS-1, or
+**Returns** `bool` — false when the entity is not hooked.
 
-### bool SetVisibleToAll(entity, visible, channel)
+### `SetVisibleToAll`
+
+```cpp
+virtual bool SetVisibleToAll(CEntityInstance* entity, bool visible, int channel = 0) = 0;
+```
 
 SetVisible() for every player slot at once.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `entity` | `CEntityInstance*` |  |
+| `visible` | `bool` |  |
+| `channel` | `int` | `0` |
 
-- <ApiParam name="entity" type="CEntityInstance*" />
-- <ApiParam name="visible" type="bool" />
-- <ApiParam name="channel" type="int" />
+### `IsVisible`
 
-### bool IsVisible(entity, viewer)
+```cpp
+virtual bool IsVisible(CEntityInstance* entity, CPlayerSlot viewer) = 0;
+```
 
-Whether a viewer would receive the entity, the channels, the
+Whether a viewer would receive the entity, the channels, the default and BlockAll all taken into account. An unhooked entity is visible. The owner is not consulted -- ask about it directly.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `entity` | `CEntityInstance*` |
+| `viewer` | `CPlayerSlot` |
 
-- <ApiParam name="entity" type="CEntityInstance*" />
-- <ApiParam name="viewer" type="CPlayerSlot" />
+### `IsHiddenOnChannel`
 
-### bool IsHiddenOnChannel(entity, viewer, channel)
+```cpp
+virtual bool IsHiddenOnChannel(CEntityInstance* entity, CPlayerSlot viewer, int channel) = 0;
+```
 
 Whether one channel hides the entity from the viewer.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `entity` | `CEntityInstance*` |
+| `viewer` | `CPlayerSlot` |
+| `channel` | `int` |
 
-- <ApiParam name="entity" type="CEntityInstance*" />
-- <ApiParam name="viewer" type="CPlayerSlot" />
-- <ApiParam name="channel" type="int" />
+### `SetBlockAll`
 
-### bool SetBlockAll(entity, block)
+```cpp
+virtual bool SetBlockAll(CEntityInstance* entity, bool block) = 0;
+```
 
 Hides a hooked entity from everybody, whatever the channels say.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `entity` | `CEntityInstance*` |
+| `block` | `bool` |
 
-- <ApiParam name="entity" type="CEntityInstance*" />
-- <ApiParam name="block" type="bool" />
+### `GetBlockAll`
 
-### bool GetBlockAll(entity)
+```cpp
+virtual bool GetBlockAll(CEntityInstance* entity) = 0;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `entity` | `CEntityInstance*` |
 
-- <ApiParam name="entity" type="CEntityInstance*" />
+### `SetOwner`
 
-### bool SetOwner(entity, owner)
+```cpp
+virtual bool SetOwner(CEntityInstance* entity, CEntityInstance* owner) = 0;
+```
 
-Ties a hooked entity to an owner: wherever the owner is hidden,
+Ties a hooked entity to an owner: wherever the owner is hidden, so is the entity. The owner has to be hooked for that to apply.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Description |
+|---|---|---|
+| `entity` | `CEntityInstance*` |  |
+| `owner` | `CEntityInstance*` | Owner entity, nullptr to untie |
 
-- <ApiParam name="entity" type="CEntityInstance*" />
-- <ApiParam name="owner" type="CEntityInstance*" /> — Owner entity, nullptr to untie
+### `GetOwner`
 
-### CEntityInstance* GetOwner(entity)
+```cpp
+virtual CEntityInstance* GetOwner(CEntityInstance* entity) = 0;
+```
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `entity` | `CEntityInstance*` |
 
-- <ApiParam name="entity" type="CEntityInstance*" />
+### `ResetViewer`
 
-### ResetViewer(viewer)
+```cpp
+virtual void ResetViewer(CPlayerSlot viewer) = 0;
+```
 
 Puts every hooked entity back to its default for one viewer.
 
-<ApiLabel>Parameters</ApiLabel>
+Done by the toolkit when the player disconnects.
 
-- <ApiParam name="viewer" type="CPlayerSlot" />
+| Parameter | Type |
+|---|---|
+| `viewer` | `CPlayerSlot` |
 
-### HookCheckTransmit(owner, handler)
+### `HookCheckTransmit`
+
+```cpp
+virtual void HookCheckTransmit(PluginId owner, CheckTransmitHook handler) = 0;
+```
 
 Hooks CheckTransmit itself.
 
-<ApiLabel>Parameters</ApiLabel>
+One hook per plugin: hooking again replaces the previous handler, and the toolkit drops it when the plugin unloads. Handlers run after the toolkit's own pass, in the order they were added.
 
-- <ApiParam name="owner" type="PluginId" /> — Plugin ID that owns the hook
-- <ApiParam name="handler" type="CheckTransmitHook" /> — Callback, or nullptr to unhook
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the hook |
+| `handler` | [`CheckTransmitHook`](/docs/core-api/IToolkitTransmit#checktransmithook) | Callback, or nullptr to unhook |
 
-### UnhookCheckTransmit(owner)
+### `UnhookCheckTransmit`
+
+```cpp
+virtual void UnhookCheckTransmit(PluginId owner) = 0;
+```
 
 Drops this plugin's CheckTransmit hook.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 
-- <ApiParam name="owner" type="PluginId" />
+## `IToolkitTransmitInfo`
 
+One viewer's slice of a CheckTransmit call: who it is for, and which entities are on their way to them.
+
+Handed to a CheckTransmitHook, one per viewer, valid for the duration of the callback only.
+
+### `GetPlayerSlot`
+
+```cpp
+virtual CPlayerSlot GetPlayerSlot() const = 0;
+```
+
+The player this transmit set belongs to.
+
+### `IsFullUpdate`
+
+```cpp
+virtual bool IsFullUpdate() const = 0;
+```
+
+True when the player is being sent everything from scratch (first snapshot, reconnect), false for an ordinary delta.
+
+### `IsTransmitting`
+
+```cpp
+virtual bool IsTransmitting(int entityIndex) const = 0;
+```
+
+Whether the entity is currently in the set.
+
+| Parameter | Type |
+|---|---|
+| `entityIndex` | `int` |
+
+### `BlockTransmit`
+
+```cpp
+virtual void BlockTransmit(int entityIndex) = 0;
+virtual void BlockTransmit(CEntityInstance* entity) = 0;
+```
+
+Takes an entity out of the set, and lets the client keep track of it while it is gone, so it can come back later.
+
+This is the right way to hide an entity. Clearing the transmit bit alone makes the client forget the entity, and retransmitting it afterwards crashes the client on "missing client entity".
+
+| Parameter | Type |
+|---|---|
+| `entityIndex` | `int` |
+| `entity` | `CEntityInstance*` |
+
+### `AllowTransmit`
+
+```cpp
+virtual void AllowTransmit(int entityIndex) = 0;
+virtual void AllowTransmit(CEntityInstance* entity) = 0;
+```
+
+Puts an entity (back) into the set.
+
+| Parameter | Type |
+|---|---|
+| `entityIndex` | `int` |
+| `entity` | `CEntityInstance*` |
+
+### `GetTransmitEntity`
+
+```cpp
+virtual CBitVec<MAX_EDICTS>* GetTransmitEntity() = 0;
+```
+
+The four bit sets of CCheckTransmitInfo, for whatever the methods above do not cover. Entity index = bit index.
+
+TransmitEntity     -- entities sent this tick. TransmitNonPlayers -- entities the client keeps a record of without receiving them (what BlockTransmit() sets). TransmitOutOfPVS   -- entities that left the PVS but still get a delta. TransmitAlways     -- HLTV/replay only, may be nullptr.
+
+### `GetTransmitNonPlayers`
+
+```cpp
+virtual CBitVec<MAX_EDICTS>* GetTransmitNonPlayers() = 0;
+```
+
+### `GetTransmitOutOfPVS`
+
+```cpp
+virtual CBitVec<MAX_EDICTS>* GetTransmitOutOfPVS() = 0;
+```
+
+### `GetTransmitAlways`
+
+```cpp
+virtual CBitVec<MAX_EDICTS>* GetTransmitAlways() = 0;
+```
+
+## Macros
+
+### `TRANSMIT_HOOK_ENTITY`
+
+```cpp
+#define TRANSMIT_HOOK_ENTITY(entity, ...) g_pToolkitTransmit->HookEntity(g_PluginID, entity, ##__VA_ARGS__)
+```
+
+Shorthand accessors via g_pToolkitTransmit.
+
+### Other macros
+
+| Macro | Expands to |
+|---|---|
+| `TRANSMIT_UNHOOK_ENTITY(entity)` | `g_pToolkitTransmit->UnhookEntity(entity)` |
+| `TRANSMIT_SET_VISIBLE(entity, ...)` | `g_pToolkitTransmit->SetVisible(entity, __VA_ARGS__)` |
+| `TRANSMIT_SET_BLOCK_ALL(entity, on)` | `g_pToolkitTransmit->SetBlockAll(entity, on)` |
+| `HOOK_CHECK_TRANSMIT(handler)` | `g_pToolkitTransmit->HookCheckTransmit(g_PluginID, handler)` |
+| `UNHOOK_CHECK_TRANSMIT()` | `g_pToolkitTransmit->UnhookCheckTransmit(g_PluginID)` |

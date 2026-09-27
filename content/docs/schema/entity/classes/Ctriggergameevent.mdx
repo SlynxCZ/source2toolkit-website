@@ -1,36 +1,19 @@
 ---
-title: CTriggerGameEvent
+title: "CTriggerGameEvent"
+description: "Schema class CTriggerGameEvent, derived from CBaseTrigger."
 ---
 
-# CTriggerGameEvent
 
-**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTriggerGameEvent.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTriggerGameEvent.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_strStartTouchEventName" type="CUtlString" />
-- <ApiParam name="m_strEndTouchEventName" type="CUtlString" />
-- <ApiParam name="m_strTriggerID" type="CUtlString" />
+| Field | Type |
+|---|---|
+| `m_strStartTouchEventName` | `CUtlString` |
+| `m_strEndTouchEventName` | `CUtlString` |
+| `m_strTriggerID` | `CUtlString` |
 
-## Methods
-
-### CTriggerGameEvent* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTriggerGameEvent* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTriggerGameEvent* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTriggerGameEvent&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

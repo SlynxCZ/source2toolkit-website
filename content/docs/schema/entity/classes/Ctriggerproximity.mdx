@@ -1,37 +1,20 @@
 ---
-title: CTriggerProximity
+title: "CTriggerProximity"
+description: "Schema class CTriggerProximity, derived from CBaseTrigger."
 ---
 
-# CTriggerProximity
 
-**Inheritance**: [CBaseTrigger](/docs/schema/entity/classes/Cbasetrigger)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CTriggerProximity.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CTriggerProximity.h)
+
+**Inherits** [`CBaseTrigger`](/docs/schema/entity/classes/CBaseTrigger)
 
 ## Fields
 
-- <ApiParam name="m_hMeasureTarget" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_iszMeasureTarget" type="CUtlSymbolLarge" />
-- <ApiParam name="m_fRadius" type="float" />
-- <ApiParam name="m_nTouchers" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_hMeasureTarget` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_iszMeasureTarget` | `CUtlSymbolLarge` |
+| `m_fRadius` | `float` |
+| `m_nTouchers` | `int32_t` |
 
-## Methods
-
-### CTriggerProximity* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CTriggerProximity* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CTriggerProximity* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CTriggerProximity&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

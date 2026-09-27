@@ -1,13 +1,18 @@
 ---
-title: Constraint_hingeparams_t
+title: "constraint_hingeparams_t"
+description: "Schema class constraint_hingeparams_t."
 ---
 
-# constraint_hingeparams_t
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/constraint_hingeparams_t.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/constraint_hingeparams_t.h)
 
 ## Fields
 
-- <ApiParam name="worldPosition" type="Vector" />
-- <ApiParam name="worldAxisDirection" type="Vector" />
-- <ApiParam name="hingeAxis" type="constraint_axislimit_t" />
-- <ApiParam name="constraint" type="constraint_breakableparams_t" />
+| Field | Type |
+|---|---|
+| `worldPosition` | `Vector` |
+| `worldAxisDirection` | `Vector` |
+| `hingeAxis` | [`constraint_axislimit_t`](/docs/schema/entity/classes/constraint_axislimit_t) |
+| `constraint` | [`constraint_breakableparams_t`](/docs/schema/entity/classes/constraint_breakableparams_t) |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

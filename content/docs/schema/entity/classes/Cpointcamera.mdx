@@ -1,59 +1,42 @@
 ---
-title: CPointCamera
+title: "CPointCamera"
+description: "Schema class CPointCamera, derived from CBaseEntity."
 ---
 
-# CPointCamera
 
-**Inheritance**: [CBaseEntity](/docs/schema/entity/classes/Cbaseentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CPointCamera.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CPointCamera.h)
+
+**Inherits** [`CBaseEntity`](/docs/schema/entity/classes/CBaseEntity)
 
 ## Fields
 
-- <ApiParam name="m_FOV" type="float" />
-- <ApiParam name="m_Resolution" type="float" />
-- <ApiParam name="m_bFogEnable" type="bool" />
-- <ApiParam name="m_FogColor" type="Color" />
-- <ApiParam name="m_flFogStart" type="float" />
-- <ApiParam name="m_flFogEnd" type="float" />
-- <ApiParam name="m_flFogMaxDensity" type="float" />
-- <ApiParam name="m_bActive" type="bool" />
-- <ApiParam name="m_bUseScreenAspectRatio" type="bool" />
-- <ApiParam name="m_flAspectRatio" type="float" />
-- <ApiParam name="m_bNoSky" type="bool" />
-- <ApiParam name="m_fBrightness" type="float" />
-- <ApiParam name="m_flZFar" type="float" />
-- <ApiParam name="m_flZNear" type="float" />
-- <ApiParam name="m_bCanHLTVUse" type="bool" />
-- <ApiParam name="m_bAlignWithParent" type="bool" />
-- <ApiParam name="m_bDofEnabled" type="bool" />
-- <ApiParam name="m_flDofNearBlurry" type="float" />
-- <ApiParam name="m_flDofNearCrisp" type="float" />
-- <ApiParam name="m_flDofFarCrisp" type="float" />
-- <ApiParam name="m_flDofFarBlurry" type="float" />
-- <ApiParam name="m_flDofTiltToGround" type="float" />
-- <ApiParam name="m_TargetFOV" type="float" />
-- <ApiParam name="m_DegreesPerSecond" type="float" />
-- <ApiParam name="m_bIsOn" type="bool" />
-- <ApiParam name="m_pNext" type="[CPointCamera*](/docs/schema/entity/classes/Cpointcamera)" />
+| Field | Type |
+|---|---|
+| `m_FOV` | `float` |
+| `m_Resolution` | `float` |
+| `m_bFogEnable` | `bool` |
+| `m_FogColor` | `Color` |
+| `m_flFogStart` | `float` |
+| `m_flFogEnd` | `float` |
+| `m_flFogMaxDensity` | `float` |
+| `m_bActive` | `bool` |
+| `m_bUseScreenAspectRatio` | `bool` |
+| `m_flAspectRatio` | `float` |
+| `m_bNoSky` | `bool` |
+| `m_fBrightness` | `float` |
+| `m_flZFar` | `float` |
+| `m_flZNear` | `float` |
+| `m_bCanHLTVUse` | `bool` |
+| `m_bAlignWithParent` | `bool` |
+| `m_bDofEnabled` | `bool` |
+| `m_flDofNearBlurry` | `float` |
+| `m_flDofNearCrisp` | `float` |
+| `m_flDofFarCrisp` | `float` |
+| `m_flDofFarBlurry` | `float` |
+| `m_flDofTiltToGround` | `float` |
+| `m_TargetFOV` | `float` |
+| `m_DegreesPerSecond` | `float` |
+| `m_bIsOn` | `bool` |
+| `m_pNext` | `CPointCamera*` |
 
-## Methods
-
-### CPointCamera* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CPointCamera* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CPointCamera* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CPointCamera&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

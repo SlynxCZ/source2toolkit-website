@@ -1,111 +1,460 @@
 ---
-title: IToolkitPlugin
+title: "IToolkitPlugin"
+description: "Plugin interface and integration layer for Source2Toolkit."
 ---
 
-# IToolkitPlugin
 
-## IToolkitPlugin
+This file defines:
+- Plugin lifecycle interface (IToolkitPlugin)
+- Listener system (IToolkitListener)
+- Global variables and exposure macros
+- Interface helper macros
 
-### int GetApiVersion()
+<Callout type="info">This is the main entry point for plugin developers.</Callout>
 
-### bool Load(id, api, error, maxlen, late)
+Main plugin interface.
+
+Every plugin must implement this interface.
+
+**Interface id** `S2ToolkitKHook001` (`TOOLKIT_KHOOK_INTERFACE`) · **Interface id** `S2ToolkitKHookVersion001` (`TOOLKIT_KHOOK_VERSION_INTERFACE`) · **Header** [`source2toolkit/IToolkitPlugin.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitPlugin.h)
+
+## Types
+
+### `PluginId`
+
+```cpp
+using PluginId = int;
+```
+
+## Methods
+
+### `GetApiVersion`
+
+```cpp
+virtual int GetApiVersion();
+```
+
+### `Load`
+
+```cpp
+virtual bool Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late) = 0;
+```
 
 Called when plugin is loaded.
 
-<ApiLabel>Parameters</ApiLabel>
+<Callout type="info">This is the main initialization function.</Callout>
 
-- <ApiParam name="id" type="PluginId" /> — Plugin identifier
-- <ApiParam name="api" type="IToolkitAPI*" /> — Toolkit API instance
-- <ApiParam name="error" type="char*" /> — Buffer for error message
-- <ApiParam name="maxlen" type="size_t" /> — Error buffer size
-- <ApiParam name="late" type="bool" /> — True if loaded after server start
+| Parameter | Type | Description |
+|---|---|---|
+| `id` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin identifier |
+| `api` | [`IToolkitAPI*`](/docs/core-api/IToolkitApi) | Toolkit API instance |
+| `error` | `char*` | Buffer for error message |
+| `maxlen` | `size_t` | Error buffer size |
+| `late` | `bool` | True if loaded after server start |
 
-### bool Unload(error, maxlen)
+**Returns** `bool` — True on success, false on failure
+
+### `Unload`
+
+```cpp
+virtual bool Unload(char* error, size_t maxlen);
+```
 
 Called when plugin is unloaded.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `error` | `char*` |
+| `maxlen` | `size_t` |
 
-- <ApiParam name="error" type="char*" />
-- <ApiParam name="maxlen" type="size_t" />
+**Returns** `bool` — True on success
 
-### const char* GetAuthor()
+### `GetAuthor`
+
+```cpp
+virtual const char* GetAuthor() = 0;
+```
 
 Plugin author name
 
-### const char* GetName()
+### `GetName`
+
+```cpp
+virtual const char* GetName() = 0;
+```
 
 Plugin name
 
-### const char* GetDescription()
+### `GetDescription`
+
+```cpp
+virtual const char* GetDescription() = 0;
+```
 
 Plugin description
 
-### const char* GetVersion()
+### `GetVersion`
+
+```cpp
+virtual const char* GetVersion() = 0;
+```
 
 Plugin version
 
-## IToolkitListener
+## `IToolkitListener`
 
-### OnPluginLoad(id)
+Listener for toolkit and engine events.
+
+Allows plugins to react to lifecycle and map events.
+
+### `OnPluginLoad`
+
+```cpp
+virtual void OnPluginLoad(PluginId id);
+```
 
 Called when another toolkit plugin (.stx) is loaded. The id is a toolkit plugin id -- the one "toolkit list" shows.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `id` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 
-- <ApiParam name="id" type="PluginId" />
+### `OnPluginUnload`
 
-### OnPluginUnload(id)
+```cpp
+virtual void OnPluginUnload(PluginId id);
+```
 
 Called when another toolkit plugin (.stx) is unloaded.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `id` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 
-- <ApiParam name="id" type="PluginId" />
+### `OnMetamodPluginLoad`
 
-### OnMetamodPluginLoad(id)
+```cpp
+virtual void OnMetamodPluginLoad(PluginId id);
+```
 
-Called when a Metamod:Source plugin is loaded.  The id is Metamod's, from a different numbering than the toolkit's -- which is why this is not the same callback as OnPluginLoad().
+Called when a Metamod:Source plugin is loaded.
 
-<ApiLabel>Parameters</ApiLabel>
+The id is Metamod's, from a different numbering than the toolkit's -- which is why this is not the same callback as OnPluginLoad().
 
-- <ApiParam name="id" type="PluginId" />
+| Parameter | Type |
+|---|---|
+| `id` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 
-### OnMetamodPluginUnload(id)
+### `OnMetamodPluginUnload`
+
+```cpp
+virtual void OnMetamodPluginUnload(PluginId id);
+```
 
 Called when a Metamod:Source plugin is unloaded.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `id` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 
-- <ApiParam name="id" type="PluginId" />
+### `OnAllToolkitPluginsLoaded`
 
-### OnAllToolkitPluginsLoaded()
+```cpp
+virtual void OnAllToolkitPluginsLoaded();
+```
 
 Called when all toolkit plugins are loaded
 
-### OnAllMetamodPluginsLoaded()
+### `OnAllMetamodPluginsLoaded`
+
+```cpp
+virtual void OnAllMetamodPluginsLoaded();
+```
 
 Called when all Metamod plugins are loaded
 
-### OnLevelShutdown()
+### `OnLevelInit`
 
-Called when a map is initialized.Called when a map is shutting down
+```cpp
+virtual void OnLevelInit(const char* mapName, const char* mapEntities, const char* oldLevel, const char* landmarkName, bool loadGame, bool background);
+```
 
-### void* OnToolkitQuery(iface, ret)
+Called when a map is initialized.
+
+| Parameter | Type |
+|---|---|
+| `mapName` | `const char*` |
+| `mapEntities` | `const char*` |
+| `oldLevel` | `const char*` |
+| `landmarkName` | `const char*` |
+| `loadGame` | `bool` |
+| `background` | `bool` |
+
+### `OnLevelShutdown`
+
+```cpp
+virtual void OnLevelShutdown();
+```
+
+Called when a map is shutting down
+
+### `OnToolkitQuery`
+
+```cpp
+virtual void* OnToolkitQuery(const char* iface, int* ret);
+```
 
 Called when an interface is requested from toolkit.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type |
+|---|---|
+| `iface` | `const char*` |
+| `ret` | `int*` |
 
-- <ApiParam name="iface" type="const char*" />
-- <ApiParam name="ret" type="int*" />
+**Returns** `void*` — Pointer to interface or nullptr
 
-### void* OnMetamodQuery(iface, ret)
+### `OnMetamodQuery`
+
+```cpp
+virtual void* OnMetamodQuery(const char* iface, int* ret);
+```
 
 Called when a Metamod:Source plugin asks for an interface.
 
-<ApiLabel>Parameters</ApiLabel>
+A Metamod plugin reaching for something through g_SMAPI-&gt;MetaFactory() ends up here, so a toolkit plugin can hand its own interfaces to code that did not load through the toolkit.
 
-- <ApiParam name="iface" type="const char*" />
-- <ApiParam name="ret" type="int*" />
+By default this answers exactly like OnToolkitQuery(), which is what a plugin usually wants -- an interface worth exposing is worth exposing to either caller. Override it to answer a Metamod plugin differently, or return nullptr to keep an interface for toolkit plugins only. The two are separate callbacks precisely so that choice exists: OnToolkitQuery() cannot tell who is asking.
 
+| Parameter | Type |
+|---|---|
+| `iface` | `const char*` |
+| `ret` | `int*` |
+
+**Returns** `void*` — Pointer to interface or nullptr
+
+## Functions
+
+### `ToolkitKHookVersionMatches`
+
+```cpp
+inline bool ToolkitKHookVersionMatches(const char* coreCommit, char* error, size_t maxlen, const char** note);
+```
+
+The load-time half of the KHook check; TOOLKIT_SAVEVARS() calls it.
+
+Returns false and fills `error` only when both commits are known and differ. A side that cannot say -- a core too old to answer, a plugin built without git -- makes the check impossible, not failed: that goes out through `note` and the load goes on.
+
+| Parameter | Type |
+|---|---|
+| `coreCommit` | `const char*` |
+| `error` | `char*` |
+| `maxlen` | `size_t` |
+| `note` | `const char**` |
+
+## Macros
+
+### `TOOLKIT_KHOOK_COMMIT`
+
+```cpp
+#define TOOLKIT_KHOOK_COMMIT "unknown"
+```
+
+Set by the SDK's CMakeLists.txt / AMBuildScript from vendor/khook (the core: from metamod's copy). A build that bypassed both gets "unknown", which the check reports and lets through.
+
+### `TOOLKIT_INTERFACE_NAME`
+
+```cpp
+#define TOOLKIT_INTERFACE_NAME "S2ToolkitPlugin001"
+```
+
+Plugin interface name
+
+### `TOOLKIT_PLAPI_VERSION`
+
+```cpp
+#define TOOLKIT_PLAPI_VERSION 1
+```
+
+Plugin API version
+
+### `TOOLKIT_PLAPI_NAME`
+
+```cpp
+#define TOOLKIT_PLAPI_NAME "IToolkitPlugin"
+```
+
+Plugin API interface name
+
+### `TOOLKIT_EXPOSURE_FUNC`
+
+```cpp
+#define TOOLKIT_EXPOSURE_FUNC(name, var) EXPOSE_SINGLE_INTERFACE_GLOBALVAR(IToolkitPlugin, IToolkitPlugin, TOOLKIT_PLAPI_NAME, var);
+```
+
+Exposes plugin interface to engine.
+
+### `TOOLKIT_DEFINE_GLOBALVARS`
+
+```cpp
+#define TOOLKIT_DEFINE_GLOBALVARS() \
+    IToolkitAPI*             g_ToolkitAPI              = nullptr; 
+    IToolkitPlugin*          g_PluginAPI               = nullptr; 
+    PluginId                 g_PluginID                = 0; 
+    IToolkitAddresses*       g_pToolkitAddresses       = nullptr; 
+    IToolkitCommands*        g_pToolkitCommands        = nullptr; 
+    IToolkitConVars*         g_pToolkitConVars         = nullptr; 
+    ...
+```
+
+Defines the toolkit globals -- the API, the plugin identity and one pointer per toolkit interface.
+
+Part of TOOLKIT_EXPOSE for a plugin. The core expands it on its own too and fills the pointers with TOOLKIT_FILLVARS(), so SDK code reads the same globals (ADDR_*, g_pToolkitGameConfig, ...) whichever binary it is linked into.
+
+### `TOOLKIT_EXPOSE`
+
+```cpp
+#define TOOLKIT_EXPOSE(name, var) \
+    TOOLKIT_DEFINE_GLOBALVARS() 
+    namespace KHook { KHook::IKHook* __exported__khook = nullptr; } 
+    TOOLKIT_EXPOSURE_FUNC(name, var)
+```
+
+Defines global plugin variables.
+
+Creates:
+- everything TOOLKIT_DEFINE_GLOBALVARS() does
+- KHook::__exported__khook, the detour engine (see TOOLKIT_KHOOK_INTERFACE)
+
+### `TOOLKIT_GLOBALVARS`
+
+```cpp
+#define TOOLKIT_GLOBALVARS() \
+    extern IToolkitAPI*             g_ToolkitAPI; 
+    extern IToolkitPlugin*          g_PluginAPI; 
+    extern PluginId                 g_PluginID; 
+    extern IToolkitAddresses*       g_pToolkitAddresses; 
+    extern IToolkitCommands*        g_pToolkitCommands; 
+    extern IToolkitConVars*         g_pToolkitConVars; 
+    extern IToolkitCustomHud*       g_pToolkitCustomHud; 
+    ...
+```
+
+Declares external globals.
+
+### `TOOLKIT_FILLVARS`
+
+```cpp
+#define TOOLKIT_FILLVARS(api) \
+    g_pToolkitAddresses       = (IToolkitAddresses*)      (api)->ToolkitFactory(TOOLKIT_ADDRESSES_INTERFACE,       nullptr, nullptr); 
+    g_pToolkitCommands        = (IToolkitCommands*)       (api)->ToolkitFactory(TOOLKIT_COMMANDS_INTERFACE,        nullptr, nullptr); 
+    ...
+```
+
+Points every toolkit interface global at what the API hands out.
+
+Part of TOOLKIT_SAVEVARS() for a plugin; the core calls it once its interfaces exist (see TOOLKIT_DEFINE_GLOBALVARS()).
+
+### `TOOLKIT_SAVEVARS`
+
+```cpp
+#define TOOLKIT_SAVEVARS() \
+    g_ToolkitAPI = api; 
+    g_PluginAPI  = static_cast<IToolkitPlugin*>(this); 
+    g_PluginID   = id; 
+    KHook::__exported__khook = static_cast<KHook::IKHook*>(api->ToolkitFactory(TOOLKIT_KHOOK_INTERFACE, nullptr, nullptr)); 
+    { 
+        const char* toolkitKHookNote = nullptr; 
+    ...
+```
+
+Initializes global variables inside Load().
+
+<Callout type="info">Must be called in plugin Load(), with its parameters under their declared names (id, api, error, maxlen): the KHook version check in here writes `error` and returns false out of Load() when the KHook this plugin was compiled against is not the one the core runs (see TOOLKIT_KHOOK_VERSION_INTERFACE).</Callout>
+
+### `TOOLKIT_LOG`
+
+```cpp
+#define TOOLKIT_LOG g_ToolkitAPI->Log
+```
+
+Shortcut for logging
+
+### `TOOLKIT_CONPRINT`
+
+```cpp
+#define TOOLKIT_CONPRINT g_ToolkitAPI->ConPrint
+```
+
+Console print
+
+### `TOOLKIT_CONPRINTF`
+
+```cpp
+#define TOOLKIT_CONPRINTF g_ToolkitAPI->ConPrintf
+```
+
+Console printf
+
+### `GET_VALVE_IFACE_CURRENT`
+
+```cpp
+#define GET_VALVE_IFACE_CURRENT(v_factory, v_var, v_type, v_name) \
+    v_var = (v_type *)g_ToolkitAPI->QueryInterface(g_ToolkitAPI->v_factory(), v_name); 
+	if (!v_var) 
+	{ 
+		if (error && maxlen) 
+		{ 
+			g_ToolkitAPI->Format(error, maxlen, "Could not find interface: %s", v_name); 
+		} 
+		return false; 
+	}
+```
+
+Macro for automatically getting a current or newer Valve interface.
+
+### `GET_VALVE_IFACE_ANY`
+
+```cpp
+#define GET_VALVE_IFACE_ANY(v_factory, v_var, v_type, v_name) \
+    v_var = (v_type *)g_ToolkitAPI->QueryInterface(g_ToolkitAPI->v_factory(), v_name, 0); 
+	if (!v_var) 
+	{ 
+		if (error && maxlen) 
+		{ 
+			g_ToolkitAPI->Format(error, maxlen, "Could not find interface: %s", v_name); 
+		} 
+		return false; 
+	}
+```
+
+Same as GET_IFACE, except searches for any.
+
+### `GET_TOOLKIT_IFACE`
+
+```cpp
+#define GET_TOOLKIT_IFACE(v_var, v_type, v_name, v_ret) \
+    v_var = (v_type *)g_ToolkitAPI->ToolkitFactory(v_name, &(v_ret), nullptr); 
+	if (!v_var) 
+	{ 
+		(v_ret) = TOOLKIT_IFACE_FAILED; 
+	}
+```
+
+Macro for automatically getting a Source2Toolkit plugin exposed interface.
+
+Unlike the GET_VALVE_IFACE_* macros this one never returns on its own, so it is usable outside Load() -- in OnAllToolkitPluginsLoaded(), say, where the interface belongs to another plugin and its absence is an ordinary outcome rather than a fatal one. Test v_ret against TOOLKIT_IFACE_OK and decide.
+
+### `GET_METAMOD_IFACE`
+
+```cpp
+#define GET_METAMOD_IFACE(v_var, v_type, v_name, v_ret) \
+    v_var = (v_type *)g_ToolkitAPI->MetaFactory(v_name, &(v_ret), nullptr); 
+	if (!v_var) 
+	{ 
+		(v_ret) = TOOLKIT_IFACE_FAILED; 
+	}
+```
+
+Macro for automatically getting a Metamod:Source plugin exposed interface.
+
+Same contract as GET_TOOLKIT_IFACE: it never returns on its own, it only reports through v_ret. Metamod fills v_ret with META_IFACE_OK/META_IFACE_FAILED, which are binary-compatible with the TOOLKIT_IFACE_* values, so compare against those rather than pulling a metamod header in here.

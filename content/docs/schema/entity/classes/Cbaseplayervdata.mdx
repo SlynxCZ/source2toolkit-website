@@ -1,24 +1,29 @@
 ---
-title: CBasePlayerVData
+title: "CBasePlayerVData"
+description: "Schema class CBasePlayerVData, derived from CEntitySubclassVDataBase."
 ---
 
-# CBasePlayerVData
 
-**Inheritance**: CEntitySubclassVDataBase
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CBasePlayerVData.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CBasePlayerVData.h)
+
+**Inherits** [`CEntitySubclassVDataBase`](/docs/schema/entity/classes/CEntitySubclassVDataBase)
 
 ## Fields
 
-- <ApiParam name="m_flHeadDamageMultiplier" type="CSkillFloat" />
-- <ApiParam name="m_flChestDamageMultiplier" type="CSkillFloat" />
-- <ApiParam name="m_flStomachDamageMultiplier" type="CSkillFloat" />
-- <ApiParam name="m_flArmDamageMultiplier" type="CSkillFloat" />
-- <ApiParam name="m_flLegDamageMultiplier" type="CSkillFloat" />
-- <ApiParam name="m_flHoldBreathTime" type="float" />
-- <ApiParam name="m_flDrowningDamageInterval" type="float" />
-- <ApiParam name="m_nDrowningDamageInitial" type="int32_t" />
-- <ApiParam name="m_nDrowningDamageMax" type="int32_t" />
-- <ApiParam name="m_nWaterSpeed" type="int32_t" />
-- <ApiParam name="m_flUseRange" type="float" />
-- <ApiParam name="m_flUseAngleTolerance" type="float" />
-- <ApiParam name="m_flCrouchTime" type="float" />
+| Field | Type |
+|---|---|
+| `m_flHeadDamageMultiplier` | [`CSkillFloat`](/docs/schema/entity/classes/CSkillFloat) |
+| `m_flChestDamageMultiplier` | [`CSkillFloat`](/docs/schema/entity/classes/CSkillFloat) |
+| `m_flStomachDamageMultiplier` | [`CSkillFloat`](/docs/schema/entity/classes/CSkillFloat) |
+| `m_flArmDamageMultiplier` | [`CSkillFloat`](/docs/schema/entity/classes/CSkillFloat) |
+| `m_flLegDamageMultiplier` | [`CSkillFloat`](/docs/schema/entity/classes/CSkillFloat) |
+| `m_flHoldBreathTime` | `float` |
+| `m_flDrowningDamageInterval` | `float` |
+| `m_nDrowningDamageInitial` | `int32_t` |
+| `m_nDrowningDamageMax` | `int32_t` |
+| `m_nWaterSpeed` | `int32_t` |
+| `m_flUseRange` | `float` |
+| `m_flUseAngleTolerance` | `float` |
+| `m_flCrouchTime` | `float` |
 
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

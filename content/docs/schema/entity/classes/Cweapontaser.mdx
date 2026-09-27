@@ -1,35 +1,18 @@
 ---
-title: CWeaponTaser
+title: "CWeaponTaser"
+description: "Schema class CWeaponTaser, derived from CCSWeaponBaseGun."
 ---
 
-# CWeaponTaser
 
-**Inheritance**: CCSWeaponBaseGun
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CWeaponTaser.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CWeaponTaser.h)
+
+**Inherits** [`CCSWeaponBaseGun`](/docs/schema/entity/classes/CCSWeaponBaseGun)
 
 ## Fields
 
-- <ApiParam name="m_fFireTime" type="float" />
-- <ApiParam name="m_nLastAttackTick" type="int32_t" />
+| Field | Type |
+|---|---|
+| `m_fFireTime` | `float` |
+| `m_nLastAttackTick` | `int32_t` |
 
-## Methods
-
-### CWeaponTaser* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CWeaponTaser* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CWeaponTaser* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CWeaponTaser&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

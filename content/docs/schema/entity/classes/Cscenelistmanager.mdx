@@ -1,36 +1,19 @@
 ---
-title: CSceneListManager
+title: "CSceneListManager"
+description: "Schema class CSceneListManager, derived from CLogicalEntity."
 ---
 
-# CSceneListManager
 
-**Inheritance**: CLogicalEntity
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CSceneListManager.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CSceneListManager.h)
+
+**Inherits** [`CLogicalEntity`](/docs/schema/entity/classes/CLogicalEntity)
 
 ## Fields
 
-- <ApiParam name="m_hListManagers" type="CUtlVector&lt;CHandle&lt;CSceneListManager&gt;&gt;" />
-- <ApiParam name="m_iszScenes" type="CUtlSymbolLarge" />
-- <ApiParam name="m_hScenes" type="CHandle&lt;CBaseEntity&gt;" />
+| Field | Type |
+|---|---|
+| `m_hListManagers` | `CUtlVector<CHandle<CSceneListManager>>` |
+| `m_iszScenes` | `CUtlSymbolLarge` |
+| `m_hScenes` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
 
-## Methods
-
-### CSceneListManager* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CSceneListManager* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CSceneListManager* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CSceneListManager&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

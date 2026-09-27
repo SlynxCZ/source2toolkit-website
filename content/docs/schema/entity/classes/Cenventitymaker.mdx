@@ -1,45 +1,28 @@
 ---
-title: CEnvEntityMaker
+title: "CEnvEntityMaker"
+description: "Schema class CEnvEntityMaker, derived from CPointEntity."
 ---
 
-# CEnvEntityMaker
 
-**Inheritance**: [CPointEntity](/docs/schema/entity/classes/Cpointentity)
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CEnvEntityMaker.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CEnvEntityMaker.h)
+
+**Inherits** [`CPointEntity`](/docs/schema/entity/classes/CPointEntity)
 
 ## Fields
 
-- <ApiParam name="m_vecEntityMins" type="Vector" />
-- <ApiParam name="m_vecEntityMaxs" type="Vector" />
-- <ApiParam name="m_hCurrentInstance" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_hCurrentBlocker" type="CHandle&lt;CBaseEntity&gt;" />
-- <ApiParam name="m_vecBlockerOrigin" type="Vector" />
-- <ApiParam name="m_angPostSpawnDirection" type="QAngle" />
-- <ApiParam name="m_flPostSpawnDirectionVariance" type="float" />
-- <ApiParam name="m_flPostSpawnSpeed" type="float" />
-- <ApiParam name="m_bPostSpawnUseAngles" type="bool" />
-- <ApiParam name="m_iszTemplate" type="CUtlSymbolLarge" />
-- <ApiParam name="m_pOutputOnSpawned" type="[CEntityIOOutput](/docs/schema/Entityio)" />
-- <ApiParam name="m_pOutputOnFailedSpawn" type="[CEntityIOOutput](/docs/schema/Entityio)" />
+| Field | Type |
+|---|---|
+| `m_vecEntityMins` | `Vector` |
+| `m_vecEntityMaxs` | `Vector` |
+| `m_hCurrentInstance` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_hCurrentBlocker` | [`CHandle<CBaseEntity>`](/docs/schema/entity/classes/CBaseEntity) |
+| `m_vecBlockerOrigin` | `Vector` |
+| `m_angPostSpawnDirection` | `QAngle` |
+| `m_flPostSpawnDirectionVariance` | `float` |
+| `m_flPostSpawnSpeed` | `float` |
+| `m_bPostSpawnUseAngles` | `bool` |
+| `m_iszTemplate` | `CUtlSymbolLarge` |
+| `m_pOutputOnSpawned` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
+| `m_pOutputOnFailedSpawn` | [`CEntityIOOutput`](/docs/schema/Entityio#centityiooutput) |
 
-## Methods
-
-### CEnvEntityMaker* New(className)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="className" type="const char*" />
-
-### CEnvEntityMaker* FromIndex(iIndex)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="iIndex" type="int" />
-
-### CEnvEntityMaker* FromIndex(index)
-
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="index" type="CEntityIndex" />
-
-### CHandle&lt;CEnvEntityMaker&gt; GetHandle()
-
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).

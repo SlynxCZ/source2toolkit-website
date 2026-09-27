@@ -1,33 +1,46 @@
 ---
-title: CAttributeList
+title: "CAttributeList"
+description: "Schema class CAttributeList."
 ---
 
-# CAttributeList
+
+Generated from the game's schema. Header: [`source2toolkit/schema/entity/classes/CAttributeList.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/schema/entity/classes/CAttributeList.h)
 
 ## Fields
 
-- <ApiParam name="m_Attributes" type="CUtlVector&lt;CEconItemAttribute&gt;" />
-- <ApiParam name="m_pManager" type="[CAttributeManager*](/docs/schema/entity/classes/Cattributemanager)" />
+| Field | Type |
+|---|---|
+| `m_Attributes` | [`CUtlVector<CEconItemAttribute>`](/docs/schema/entity/classes/CEconItemAttribute) |
+| `m_pManager` | [`CAttributeManager*`](/docs/schema/entity/classes/CAttributeManager) |
+
+Schema fields are accessors: read with `entity->m_field()`, write with `entity->m_field = value` (the write marks the field for networking).
 
 ## Methods
 
-### SetOrAddAttribute(pszAttributeName, flValue, eChain)
+### `SetOrAddAttribute`
+
+```cpp
+void SetOrAddAttribute(const char* pszAttributeName, float flValue, HookChain eChain = HookChain::Run);
+```
 
 Sets an attribute by name, adding it to the list when it is not there yet.
 
-<ApiLabel>Parameters</ApiLabel>
+| Parameter | Type | Default |
+|---|---|---|
+| `pszAttributeName` | `const char*` |  |
+| `flValue` | `float` |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |
 
-- <ApiParam name="pszAttributeName" type="const char*" />
-- <ApiParam name="flValue" type="float" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
+### `SetOrAddAttributeValueByName`
 
-### SetOrAddAttributeValueByName(pszAttributeName, flValue, eChain)
+```cpp
+void SetOrAddAttributeValueByName(const char* pszAttributeName, float flValue, HookChain eChain = HookChain::Run);
+```
 
 CAttributeList::SetOrAddAttributeValueByName, the engine's name for SetOrAddAttribute.
 
-<ApiLabel>Parameters</ApiLabel>
-
-- <ApiParam name="pszAttributeName" type="const char*" />
-- <ApiParam name="flValue" type="float" />
-- <ApiParam name="eChain" type="[HookChain](/docs/enums/HookChain)" />
-
+| Parameter | Type | Default |
+|---|---|---|
+| `pszAttributeName` | `const char*` |  |
+| `flValue` | `float` |  |
+| `eChain` | [`HookChain`](/docs/core-api/IToolkitTypes#hookchain) | `HookChain::Run` |
