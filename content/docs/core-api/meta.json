@@ -37,7 +37,6 @@
     "IToolkitPaths",
     "---Other---",
     "IToolkitGameHooks",
-    "IToolkitHud",
     "IToolkitKHook",
     "utils"
   ]
