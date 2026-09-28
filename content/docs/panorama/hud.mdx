@@ -1,26 +1,49 @@
 ---
 title: HUD Menus, Texts and Prompts
-description: Menus, on-screen text and interaction prompts drawn by Panorama through layouts the core owns — HudMenu, IToolkitHud, the reference layouts and the addon that ships them.
+description: Menus, on-screen text and HUD elements drawn by Panorama through the s2t_hud plugin — HudMenu, IToolkitHud, the reference layouts and the addon that ships them.
 ---
 
 The [layout](/docs/panorama/layouts) and [click](/docs/panorama/click-callbacks)
 pages are the raw material: your own `custom_hud_layout`, your own ids, your
-own state. For the three things nearly every plugin wants — a menu, a line of
-text on the screen, a "press E" prompt — the core does that work itself, with
+own state. For the things nearly every plugin wants — a menu, a line of text
+on the screen, a "press E" prompt, a toast, a timer — the
+[**s2t_hud** plugin](https://github.com/SlynxCZ/s2t_hud) does that work, with
 two layouts it owns:
 
-| You call | Core draws with | Layout (`core.json`) |
+| You call | Drawn with | Layout |
 |---|---|---|
-| [`IToolkitMenus::OpenHudMenu`](/docs/core-api/IToolkitMenus#openhudmenu) with a `HudMenu` | one `custom_hud_layout`, per-player state | `HudMenuLayout`, default `s2t_menu` |
-| [`IToolkitHud`](/docs/core-api/IToolkitHud) — `ShowText`, `ShowPrompt` | one `custom_hud_layout`, per-player state | `HudTextLayout`, default `s2t_hud` |
+| [`IToolkitHud::OpenMenu`](/docs/core-api/IToolkitHud#openmenu) with a `HudMenu` | one `custom_hud_layout`, per-player state, through the core's menu system | `s2t_menu` |
+| [`IToolkitHud`](/docs/core-api/IToolkitHud) — `ShowText`, `ShowPrompt`, `ShowToast`, … | one `custom_hud_layout`, per-player state | `s2t_hud` |
 
 Each entity is spawned on first use once the map's game rules exist, and goes
-with the map. The core resets a slot's state when its player disconnects and
-hides everything it drew for a plugin's open menus when that plugin unloads.
+with the map. The plugin resets a slot's state when its player disconnects and
+the core closes a plugin's open menus when that plugin unloads.
 
-Nothing here works without the layout on the client: the toolkit repository
+Nothing here works without the layout on the client: the s2t_hud repository
 ships the reference layouts, and [the addon](#the-addon) is how they get to the
 players. A player without it sees nothing — the server cannot tell.
+
+## Getting the interface
+
+`IToolkitHud` is served by the plugin, not the core, so `TOOLKIT_SAVEVARS()`
+leaves `g_pToolkitHud` null. Fetch it once every plugin is loaded, and treat a
+null pointer as "no HUD" (the plugin is not installed, or it is older than the
+SDK you built against):
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitHud.h"
+
+void MyPlugin::OnAllToolkitPluginsLoaded()
+{
+    int ret;
+    GET_TOOLKIT_IFACE(g_pToolkitHud, IToolkitHud, TOOLKIT_HUD_INTERFACE, ret);
+    if (ret != TOOLKIT_IFACE_OK)
+        TOOLKIT_LOG(this, "s2t_hud is not loaded: nothing will be drawn on the HUD\n");
+}
+```
+
+The plugin itself is one `.stx` in `addons/source2toolkit/plugins/`, from the
+[s2t_hud releases](https://github.com/SlynxCZ/s2t_hud/releases).
 
 ## HUD menus
 
@@ -28,15 +51,15 @@ A `HudMenu` is a [`CenterHtmlMenu`](/docs/guides/menus) drawn on the HUD
 instead of in the center panel. Same `IBaseMenu`, same options and handlers,
 same `PostSelectAction`, same cooldown hooks; the differences:
 
-- the rows are **clickable** — the core enables input capture while the menu is
-  open and turns a click on a row into the key the row stands for;
+- the rows are **clickable** — the plugin enables input capture while the menu
+  is open and turns a click on a row into the key the row stands for;
 - `1`–`6` pick the options of the page, `7` previous page, `8` next page, `9`
   close — the chat triggers (`!3`) and console keys keep working;
 - the navigation texts (`PrevText`, `NextText`, `CloseText`) are the plugin's,
   so they can be in the player's language;
-- it is not redrawn every frame: the core redraws it when what would be drawn
+- it is not redrawn every frame: it is redrawn when what would be drawn
   changed (an option's `DisabledEvaluator` flipped, the menu was rebuilt in
-  place from a handler).
+  place from a handler, the player died).
 
 ```cpp title="plugin.cpp"
 static HudMenu g_ShopMenu("Shop");
@@ -56,12 +79,13 @@ void OpenShop(CCSPlayerController* player)
 }
 ```
 
-Three fields shape it per open, so a plugin can make them the player's
+Four fields shape it per open, so a plugin can make them the player's
 choice:
 
 | Field | Default | |
 |---|---|---|
-| `CaptureInput` | `true` | A cursor and clickable rows — and no moving or aiming while the menu is open. `false` is display-only: the number keys pick, the player keeps playing. |
+| `CaptureInput` | `true` | A cursor and clickable rows — and no moving or aiming while the menu is open. `false` is display-only: the number keys pick, the player keeps playing. With the cursor on, the number keys are ignored. |
+| `CaptureWhenDead` | `true` | A dead player cannot use the slot binds (they do nothing without a pawn), so a menu without `CaptureInput` takes the mouse while the player is dead and lets go on respawn. The keys and chat triggers keep working meanwhile. |
 | `Position` | `Left` | `HudMenuPosition::Left`, `Center` or `Right`; a class (`pos-left`, `pos-center`, `pos-right`) on `menu_root` the stylesheet places. |
 | `DimBackground` | `true` | Darkens the screen behind the window. |
 
@@ -126,8 +150,8 @@ this replaces: `point_worldtext` parented to the pawn and moved every tick, and
 
 ## Toasts, announcements, countdown, chips, progress, hits, feed, overlays
 
-`IToolkitHud002` adds the rest of what the hudkit gallery has, all on the
-same layout and all per player:
+The rest of what the hudkit gallery has, all on the same layout and all per
+player:
 
 | Call | Draws |
 |---|---|
@@ -139,6 +163,8 @@ same layout and all per player:
 | `ShowHit(player, damage, headshot, kill)` | the crosshair flashes and the number drifts up — gold on a headshot, red on a kill; gone by itself |
 | `AddFeed(player, style, time, text, seconds)` | a row in the event feed at the top left, newest first; five are kept |
 | `ShowOverlay(player, overlay, text, seconds)` | a full-screen tint: `Poison`, `Burn`, `Freeze`, `Heal`, `Blind`, `Black`, with an optional centred label |
+| `ShowTimer(player, tag, time, sub, color)` | the big timer: a tag pill, a large time in a halo and a line under it; each call pulses the number, so a countdown is one call a second. Until `HideTimer`. |
+| `ShowCard(player, tag, title, sub, color)` | the corner card at the top left — the day of a jail, a role, the mode. Until `HideCard`. |
 
 ```cpp
 g_pToolkitHud->ShowToast(player, HudToastStyle::Success, "Quest done", "+500 credits", 5.0f);
@@ -170,8 +196,9 @@ not restart when the texts around it change.
 
 ## The addon
 
-The core addresses the layouts by **panel id**; the reference layouts in the
-toolkit repository are the contract, the stylesheets are the look:
+The plugin addresses the layouts by **panel id**; the reference layouts in the
+[s2t_hud repository](https://github.com/SlynxCZ/s2t_hud/tree/main/panorama)
+(also in every release archive) are the contract, the stylesheets are the look:
 
 ```
 panorama/layout/custom_game/s2t_menu.xml    menu — keep the ids
@@ -185,9 +212,9 @@ The ids are listed at the top of each XML and on the
 [`IToolkitHud`](/docs/core-api/IToolkitHud) page; the menu's
 are `menu_dim`, `menu_root`, `menu_title`, `menu_row_0` … `menu_row_5` (each
 with `_key` and `_text` labels), `menu_prev`, `menu_next`, `menu_close` (with
-`_text` labels) and `menu_footer`. The classes the core toggles: `show`,
-`disabled` on rows, and `pos-left` / `pos-center` / `pos-right` on `menu_root`. Rename the layout files if you like and put
-the names into `core.json`; the ids inside stay.
+`_text` labels) and `menu_footer`. The classes the plugin toggles: `show`,
+`disabled` on rows, and `pos-left` / `pos-center` / `pos-right` on `menu_root`.
+The layout names are fixed (`s2t_menu`, `s2t_hud`); the ids inside stay.
 
 Getting them to players is a Workshop addon plus something on the server that
 hands it out — see [Shipping to clients](/docs/panorama/authoring#shipping-to-clients).
@@ -200,7 +227,7 @@ server with `mm_extra_addons <id>`.
 
 | | |
 |---|---|
-| Menu API | [`IToolkitMenus`](/docs/core-api/IToolkitMenus) — `HudMenu`, `OpenHudMenu`; the [Menus guide](/docs/guides/menus) for everything a menu does |
-| Text and prompt API | [`IToolkitHud`](/docs/core-api/IToolkitHud) |
+| HUD API | [`IToolkitHud`](/docs/core-api/IToolkitHud) — `HudMenu`, `OpenMenu` and every element; the [Menus guide](/docs/guides/menus) for everything a menu does |
+| The plugin | [s2t_hud on GitHub](https://github.com/SlynxCZ/s2t_hud): the `.stx`, the reference layouts, the build |
 | Your own layouts | [Layouts](/docs/panorama/layouts), [Click callbacks](/docs/panorama/click-callbacks), [Authoring](/docs/panorama/authoring) |
 | Sample plugin | section 11, `sample_hudmenu`, `sample_hudtext`, `sample_prompt` |

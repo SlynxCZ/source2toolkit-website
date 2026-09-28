@@ -67,9 +67,11 @@ keys work in chat (`!3`) and from the console (`3`, bindable to a key).
 
 ### On the HUD
 
-A `HudMenu` is opened with `OPEN_HUD_MENU(player, menu)` instead. Its rows are
-clickable, `1`–`6` pick the options of the page (`7`, `8`, `9` as above), and
-the navigation texts are fields of the menu so they can be in the player's
+A `HudMenu` is opened with `OPEN_HUD_MENU(player, menu)` instead — that is
+`g_pToolkitHud->OpenMenu(...)`, the [s2t_hud plugin's](/docs/panorama/hud)
+interface, fetched in `OnAllToolkitPluginsLoaded()`. Its rows are clickable,
+`1`–`6` pick the options of the page (`7`, `8`, `9` as above), and the
+navigation texts are fields of the menu so they can be in the player's
 language:
 
 ```cpp
@@ -80,12 +82,36 @@ g_TeamMenu.CloseText = "Zavřít";
 OPEN_HUD_MENU(player, &g_TeamMenu);
 ```
 
-`CaptureInput` (cursor and clicks, or keys with free movement) and `Position`
-(left, center, right) are fields of the menu too — see
-[HUD menus](/docs/panorama/hud#hud-menus). It is not redrawn every frame: the
-core redraws it when what would be drawn changed. A player without the layout
-sees nothing, so a public server ships the [addon](/docs/panorama/hud#the-addon)
-first.
+`CaptureInput` (cursor and clicks, or keys with free movement),
+`CaptureWhenDead` (the cursor for a dead player, whose binds do nothing) and
+`Position` (left, center, right) are fields of the menu too — see
+[HUD menus](/docs/panorama/hud#hud-menus). It is not redrawn every frame, only
+when what would be drawn changed. A player without the layout sees nothing, so
+a public server ships the [addon](/docs/panorama/hud#the-addon) first.
+
+### A menu of your own
+
+The core's menu system takes instances other libraries build
+(`IToolkitMenus::OpenMenu`, `IToolkitMenus005`): derive from `IMenuInstance`,
+draw in `Display()`, react in `OnKeyPress()`, and the core does the rest —
+it holds one instance per player, calls `OnFrame()` every frame (redraw, or
+refresh only when something changed), feeds it the `1`–`9` keys unless
+`AcceptsKeys()` says no, and frees it through `Destroy()` when it is closed,
+replaced, the player leaves or your plugin unloads. That is how the s2t_hud
+plugin serves `HudMenu`; a plugin with a screen of its own does the same:
+
+```cpp
+class MyScreenMenu final : public IMenuInstance
+{
+public:
+    MyScreenMenu(CCSPlayerController* player, IBaseMenu* menu) : IMenuInstance(player, menu) {}
+    void Display() override { /* draw the current page somewhere */ }
+    void OnKeyPress(CCSPlayerController* player, int key) override { /* pick, page, close */ }
+    void Close() override { CLOSE_ACTIVE_MENU(player_); }
+};
+
+g_pToolkitMenus->OpenMenu(g_PluginID, player, new MyScreenMenu(player, &g_Menu));
+```
 
 ### Appearance
 

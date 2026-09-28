@@ -119,8 +119,6 @@ On its first start the core copies `configs/core.example.json` to `configs/core.
   "UnlockConVars": true,
   "CrashHandlerEnabled": true,
   "CrashDiscordWebhook": "",
-  "HudMenuLayout": "s2t_menu",
-  "HudTextLayout": "s2t_hud",
   "SlowCallbackWarnMs": 100
 }
 ```
@@ -135,8 +133,6 @@ On its first start the core copies `configs/core.example.json` to `configs/core.
 | `UnlockConVars` | `true` | The same for ConVars. |
 | `CrashHandlerEnabled` | `true` | Install the crash handler. |
 | `CrashDiscordWebhook` | `""` | Discord webhook URL for crash reports. Empty disables Discord reporting; dumps are still written. |
-| `HudMenuLayout` | `"s2t_menu"` | The Panorama layout HUD menus are drawn with (`panorama/layout/custom_game/<name>.vxml_c` on the client). See [HUD menus, texts and prompts](/docs/panorama/hud). |
-| `HudTextLayout` | `"s2t_hud"` | The layout for HUD texts and interaction prompts. |
 | `SlowCallbackWarnMs` | `100` | A plugin callback that takes longer than this is logged with its name and plugin — see [Compatibility](/docs/development/compatibility#when-the-server-stalls). `0` turns it off. |
 
 The file is read once, when the core loads. Restart the server after changing it.
@@ -146,6 +142,8 @@ The file is read once, when the core loads. Restart the server after changing it
 Copy a plugin's `.stx` file into `addons/source2toolkit/plugins/`. If it comes with configs, gamedata or shared data, those go into `configs/`, `gamedata/` and `shared/` as its instructions say.
 
 On a running server, `toolkit refresh` loads every `.stx` in `plugins/` that is not loaded yet; a new gamedata file, however, is only read when the server restarts.
+
+One plugin most servers want: [**s2t_hud**](https://github.com/SlynxCZ/s2t_hud/releases), the Panorama HUD — menus on the HUD, on-screen texts, toasts, timers. Plugins that draw on the HUD ask for its interface at load; without it they draw nothing. Its players need the addon described in [HUD menus, texts and prompts](/docs/panorama/hud#the-addon).
 
 ## Verifying the installation
 

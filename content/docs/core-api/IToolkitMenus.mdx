@@ -11,7 +11,15 @@ Provides functionality for:
 
 Interface for menu system management.
 
-**Interface id** `IToolkitMenus004` (`TOOLKIT_MENUS_INTERFACE`) · **Global** `g_pToolkitMenus` · **Header** [`source2toolkit/IToolkitMenus.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitMenus.h)
+**Interface id** `IToolkitMenus005` (`TOOLKIT_MENUS_INTERFACE`) · **Global** `g_pToolkitMenus` · **Header** [`source2toolkit/IToolkitMenus.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitMenus.h)
+
+## Types
+
+### `PluginId`
+
+```cpp
+using PluginId = int;
+```
 
 ## Methods
 
@@ -70,21 +78,21 @@ Handles key press input.
 | `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) | Player who pressed key |
 | `key` | `int` | Pressed key (1-9) |
 
-### `OpenHudMenu`
+### `OpenMenu`
 
 ```cpp
-virtual void OpenHudMenu(PluginId owner, CCSPlayerController* player, HudMenu* menu) = 0;
+virtual void OpenMenu(PluginId owner, CCSPlayerController* player, IMenuInstance* instance) = 0;
 ```
 
-Opens a HudMenu for a player, on the Panorama HUD.
+Opens a menu instance another library built.
 
-<Callout type="info">Closed for you as OpenCenterHtmlMenu's are. Draws nothing for a player without the layout; where that cannot be assumed, a CenterHtmlMenu is the fallback.</Callout>
+The instance is drawn, refreshed (OnFrame) and fed the keys by the core like its own, and Destroy()ed when closed, replaced, the player leaves or `owner` unloads. This is how the s2t_hud plugin serves its HudMenu (IToolkitHud::OpenMenu); a plugin with a screen of its own can do the same.
 
 | Parameter | Type | Description |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin the menu belongs to |
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin the menu belongs to (whose unload closes it) |
 | `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) | Target player |
-| `menu` | [`HudMenu*`](/docs/core-api/IToolkitMenus#hudmenu) | Menu to open |
+| `instance` | [`IMenuInstance*`](/docs/core-api/IToolkitMenus#imenuinstance) | Built with new by the caller; the core owns it from here |
 
 ## `ChatMenuOption`
 
@@ -359,6 +367,36 @@ virtual void Close() = 0;
 
 Closes the menu.
 
+### `OnFrame`
+
+```cpp
+virtual void OnFrame();
+```
+
+Once a frame while this is the player's open menu.
+
+The default redraws, which is what a center HTML menu needs (it fades). A menu drawn on a HUD layout overrides it to refresh only when something changed.
+
+### `AcceptsKeys`
+
+```cpp
+virtual bool AcceptsKeys() const;
+```
+
+Whether the number keys (chat triggers, binds) pick options.
+
+A menu the player clicks instead returns false and the core drops the key presses while it is open.
+
+### `Destroy`
+
+```cpp
+virtual void Destroy();
+```
+
+Destroys the instance.
+
+The core calls this, never delete, when the menu is closed, replaced or the player leaves -- so an instance a plugin built (OpenMenu) is freed by the library that allocated it.
+
 ### `Menu`
 
 ```cpp
@@ -404,27 +442,6 @@ explicit CenterHtmlMenu(std::string title);
 
 Constructs center HTML menu.
 
-## `HudMenu`
-
-**Inherits** [`IBaseMenu`](/docs/core-api/IToolkitMenus#ibasemenu)
-
-### Fields
-
-| Field | Type | Description |
-|---|---|---|
-| `PrevText` | `std::string` |  |
-| `NextText` | `std::string` |  |
-| `CloseText` | `std::string` |  |
-| `DimBackground` | `bool` | Dims the screen behind the menu. |
-| `CaptureInput` | `bool` | With input capture the player gets a cursor and can click the rows, but cannot move or aim while the menu is open. Without it the menu is display-only: the number keys (binds, chat triggers) pick the options and the player keeps playing. Per menu, so a plugin can make it the player's choice. |
-| `Position` | [`HudMenuPosition`](/docs/core-api/IToolkitMenus#hudmenuposition) | Where the window sits: the core puts one of the classes pos-left, pos-center, pos-right on menu_root and the stylesheet places it. |
-
-### Constructors
-
-```cpp
-explicit HudMenu(std::string title);
-```
-
 ## Enums
 
 ### `PostSelectAction`
@@ -441,26 +458,11 @@ Action executed after selecting a menu option.
 | `Reset` | Reset menu to first page |
 | `Nothing` | Do nothing |
 
-### `HudMenuPosition`
-
-```cpp
-enum class HudMenuPosition : int
-```
-
-Where on the screen a HudMenu is drawn; a class on the layout's menu_root.
-
-| Name | Value |
-|---|---|
-| `Left` | `0` |
-| `Center` |  |
-| `Right` |  |
-
 ## Macros
 
 | Macro | Expands to |
 |---|---|
 | `OPEN_CENTER_HTML_MENU(player, menu)` | `g_pToolkitMenus->OpenCenterHtmlMenu(g_PluginID, player, menu)` |
-| `OPEN_HUD_MENU(player, menu)` | `g_pToolkitMenus->OpenHudMenu(g_PluginID, player, menu)` |
 | `GET_ACTIVE_MENU(player)` | `g_pToolkitMenus->GetActiveMenu(player)` |
 | `CLOSE_ACTIVE_MENU(player)` | `g_pToolkitMenus->CloseActiveMenu(player)` |
 | `MENU_ON_KEY_PRESS(player, key)` | `g_pToolkitMenus->OnKeyPress(player, key)` |
