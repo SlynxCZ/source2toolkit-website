@@ -1,13 +1,13 @@
 ---
 title: HUD Menus, Texts and Prompts
-description: Menus, on-screen text and HUD elements drawn by Panorama through the s2t_hud plugin — HudMenu, IToolkitHud, the reference layouts and the addon that ships them.
+description: Menus, on-screen text and HUD elements drawn by Panorama through the CustomhudManager_s2t plugin — HudMenu, IToolkitHud, the reference layouts and the addon that ships them.
 ---
 
 The [layout](/docs/panorama/layouts) and [click](/docs/panorama/click-callbacks)
 pages are the raw material: your own `custom_hud_layout`, your own ids, your
 own state. For the things nearly every plugin wants — a menu, a line of text
 on the screen, a "press E" prompt, a toast, a timer — the
-[**s2t_hud** plugin](https://github.com/SlynxCZ/s2t_hud) does that work, with
+[**CustomhudManager_s2t** plugin](https://github.com/SlynxCZ/CustomhudManager_s2t) does that work, with
 two layouts it owns:
 
 | You call | Drawn with | Layout |
@@ -19,7 +19,7 @@ Each entity is spawned on first use once the map's game rules exist, and goes
 with the map. The plugin resets a slot's state when its player disconnects and
 the core closes a plugin's open menus when that plugin unloads.
 
-Nothing here works without the layout on the client: the s2t_hud repository
+Nothing here works without the layout on the client: the CustomhudManager_s2t repository
 ships the reference layouts, and [the addon](#the-addon) is how they get to the
 players. A player without it sees nothing — the server cannot tell.
 
@@ -38,12 +38,12 @@ void MyPlugin::OnAllToolkitPluginsLoaded()
     int ret;
     GET_TOOLKIT_IFACE(g_pToolkitHud, IToolkitHud, TOOLKIT_HUD_INTERFACE, ret);
     if (ret != TOOLKIT_IFACE_OK)
-        TOOLKIT_LOG(this, "s2t_hud is not loaded: nothing will be drawn on the HUD\n");
+        TOOLKIT_LOG(this, "CustomhudManager_s2t is not loaded: nothing will be drawn on the HUD\n");
 }
 ```
 
 The plugin itself is one `.stx` in `addons/source2toolkit/plugins/`, from the
-[s2t_hud releases](https://github.com/SlynxCZ/s2t_hud/releases).
+[CustomhudManager_s2t releases](https://github.com/SlynxCZ/CustomhudManager_s2t/releases).
 
 ## HUD menus
 
@@ -197,7 +197,7 @@ not restart when the texts around it change.
 ## The addon
 
 The plugin addresses the layouts by **panel id**; the reference layouts in the
-[s2t_hud repository](https://github.com/SlynxCZ/s2t_hud/tree/main/panorama)
+[CustomhudManager_s2t repository](https://github.com/SlynxCZ/CustomhudManager_s2t/tree/main/panorama)
 (also in every release archive) are the contract, the stylesheets are the look:
 
 ```
@@ -228,6 +228,6 @@ server with `mm_extra_addons <id>`.
 | | |
 |---|---|
 | HUD API | [`IToolkitHud`](/docs/core-api/IToolkitHud) — `HudMenu`, `OpenMenu` and every element; the [Menus guide](/docs/guides/menus) for everything a menu does |
-| The plugin | [s2t_hud on GitHub](https://github.com/SlynxCZ/s2t_hud): the `.stx`, the reference layouts, the build |
+| The plugin | [CustomhudManager_s2t on GitHub](https://github.com/SlynxCZ/CustomhudManager_s2t): the `.stx`, the reference layouts, the build |
 | Your own layouts | [Layouts](/docs/panorama/layouts), [Click callbacks](/docs/panorama/click-callbacks), [Authoring](/docs/panorama/authoring) |
 | Sample plugin | section 11, `sample_hudmenu`, `sample_hudtext`, `sample_prompt` |
