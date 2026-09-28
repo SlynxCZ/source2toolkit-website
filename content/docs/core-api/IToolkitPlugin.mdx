@@ -12,11 +12,7 @@ This file defines:
 
 <Callout type="info">This is the main entry point for plugin developers.</Callout>
 
-Main plugin interface.
-
-Every plugin must implement this interface.
-
-**Interface id** `S2ToolkitKHook001` (`TOOLKIT_KHOOK_INTERFACE`) · **Interface id** `S2ToolkitKHookVersion001` (`TOOLKIT_KHOOK_VERSION_INTERFACE`) · **Header** [`source2toolkit/IToolkitPlugin.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitPlugin.h)
+**Interface id** `IToolkitGameHooks002` (`TOOLKIT_GAMEHOOKS_INTERFACE`) · **Interface id** `S2ToolkitKHook001` (`TOOLKIT_KHOOK_INTERFACE`) · **Interface id** `S2ToolkitKHookVersion001` (`TOOLKIT_KHOOK_VERSION_INTERFACE`) · **Header** [`source2toolkit/IToolkitPlugin.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitPlugin.h)
 
 ## Types
 
@@ -100,6 +96,22 @@ virtual const char* GetVersion() = 0;
 ```
 
 Plugin version
+
+### `GetKHookCommit`
+
+```cpp
+virtual const char* GetKHookCommit();
+```
+
+The KHook commit this plugin was built against (the SDK's vendor/khook), "" when built without git.
+
+### `GetRawHookCount`
+
+```cpp
+virtual int GetRawHookCount();
+```
+
+How many KHook hooks the plugin declared through the KHOOK_* macros: none means the plugin is on the stable tier and an engine update is the core's problem alone.
 
 ## `IToolkitListener`
 
@@ -234,6 +246,119 @@ By default this answers exactly like OnToolkitQuery(), which is what a plugin us
 
 **Returns** `void*` — Pointer to interface or nullptr
 
+### `OnGameFrame`
+
+```cpp
+virtual void OnGameFrame(bool simulating, bool firstTick, bool lastTick);
+```
+
+Post ISource2Server::GameFrame: once a frame, after the toolkit's own per-frame work (timers, menus).
+
+| Parameter | Type |
+|---|---|
+| `simulating` | `bool` |
+| `firstTick` | `bool` |
+| `lastTick` | `bool` |
+
+### `OnStartupServer`
+
+```cpp
+virtual void OnStartupServer(const GameSessionConfiguration_t& config, ISource2WorldSession* session, const char* mapName);
+```
+
+Post INetworkServerService::StartupServer: a new server session; the entity system of the new map is already the toolkit's.
+
+| Parameter | Type |
+|---|---|
+| `config` | [`const GameSessionConfiguration_t&`](/docs/core-api/Schema#gamesessionconfiguration_t) |
+| `session` | `ISource2WorldSession*` |
+| `mapName` | `const char*` |
+
+### `OnClientPutInServer`
+
+```cpp
+virtual void OnClientPutInServer(CPlayerSlot slot, const char* name, int type, uint64 xuid);
+```
+
+Post IServerGameClients::ClientPutInServer.
+
+| Parameter | Type |
+|---|---|
+| `slot` | `CPlayerSlot` |
+| `name` | `const char*` |
+| `type` | `int` |
+| `xuid` | `uint64` |
+
+### `OnClientVoice`
+
+```cpp
+virtual void OnClientVoice(CPlayerSlot slot);
+```
+
+Post IServerGameClients::ClientVoice.
+
+| Parameter | Type |
+|---|---|
+| `slot` | `CPlayerSlot` |
+
+### `OnClientSettingsChanged`
+
+```cpp
+virtual void OnClientSettingsChanged(CPlayerSlot slot);
+```
+
+Post IServerGameClients::ClientSettingsChanged.
+
+| Parameter | Type |
+|---|---|
+| `slot` | `CPlayerSlot` |
+
+### `OnClientDisconnect`
+
+```cpp
+virtual void OnClientDisconnect(CPlayerSlot slot, ENetworkDisconnectionReason reason, const char* name, uint64 xuid, const char* networkId);
+```
+
+Post IServerGameClients::ClientDisconnect.
+
+| Parameter | Type |
+|---|---|
+| `slot` | `CPlayerSlot` |
+| `reason` | `ENetworkDisconnectionReason` |
+| `name` | `const char*` |
+| `xuid` | `uint64` |
+| `networkId` | `const char*` |
+
+### `OnGameServerSteamAPIActivated`
+
+```cpp
+virtual void OnGameServerSteamAPIActivated();
+```
+
+Post ISource2Server::GameServerSteamAPIActivated: the Steam API is up.
+
+### `OnGameServerSteamAPIDeactivated`
+
+```cpp
+virtual void OnGameServerSteamAPIDeactivated();
+```
+
+Pre ISource2Server::GameServerSteamAPIDeactivated: the Steam API is about to go.
+
+### `OnLoadEventsFromFile`
+
+```cpp
+virtual void OnLoadEventsFromFile(IGameEventManager2* manager, const char* filename, bool searchAll);
+```
+
+Post IGameEventManager2::LoadEventsFromFile, with the manager it was called on: the place to keep it, or to register a .gameevents file of your own.
+
+| Parameter | Type |
+|---|---|
+| `manager` | `IGameEventManager2*` |
+| `filename` | `const char*` |
+| `searchAll` | `bool` |
+
 ## Functions
 
 ### `ToolkitKHookVersionMatches`
@@ -252,6 +377,15 @@ Returns false and fills `error` only when both commits are known and differ. A s
 | `error` | `char*` |
 | `maxlen` | `size_t` |
 | `note` | `const char**` |
+
+### `ToolkitRawHookCount`
+
+```cpp
+int ToolkitRawHookCount();
+inline int ToolkitRawHookCount();
+```
+
+Defined by IToolkitHooks.h for a plugin; the core never asks itself.
 
 ## Macros
 
@@ -274,7 +408,7 @@ Plugin interface name
 ### `TOOLKIT_PLAPI_VERSION`
 
 ```cpp
-#define TOOLKIT_PLAPI_VERSION 1
+#define TOOLKIT_PLAPI_VERSION 2
 ```
 
 Plugin API version
@@ -302,9 +436,9 @@ Exposes plugin interface to engine.
     IToolkitAPI*             g_ToolkitAPI              = nullptr; 
     IToolkitPlugin*          g_PluginAPI               = nullptr; 
     PluginId                 g_PluginID                = 0; 
+    const char*             g_ToolkitCoreKHookCommit = nullptr; 
     IToolkitAddresses*       g_pToolkitAddresses       = nullptr; 
     IToolkitCommands*        g_pToolkitCommands        = nullptr; 
-    IToolkitConVars*         g_pToolkitConVars         = nullptr; 
     ...
 ```
 
@@ -334,10 +468,10 @@ Creates:
     extern IToolkitAPI*             g_ToolkitAPI; 
     extern IToolkitPlugin*          g_PluginAPI; 
     extern PluginId                 g_PluginID; 
+    extern const char*             g_ToolkitCoreKHookCommit; 
     extern IToolkitAddresses*       g_pToolkitAddresses; 
     extern IToolkitCommands*        g_pToolkitCommands; 
     extern IToolkitConVars*         g_pToolkitConVars; 
-    extern IToolkitCustomHud*       g_pToolkitCustomHud; 
     ...
 ```
 
@@ -364,9 +498,8 @@ Part of TOOLKIT_SAVEVARS() for a plugin; the core calls it once its interfaces e
     g_PluginAPI  = static_cast<IToolkitPlugin*>(this); 
     g_PluginID   = id; 
     KHook::__exported__khook = static_cast<KHook::IKHook*>(api->ToolkitFactory(TOOLKIT_KHOOK_INTERFACE, nullptr, nullptr)); 
-    { 
-        const char* toolkitKHookNote = nullptr; 
-    ...
+    g_ToolkitCoreKHookCommit = static_cast<const char*>(api->ToolkitFactory(TOOLKIT_KHOOK_VERSION_INTERFACE, nullptr, nullptr)); 
+    TOOLKIT_FILLVARS(api)
 ```
 
 Initializes global variables inside Load().

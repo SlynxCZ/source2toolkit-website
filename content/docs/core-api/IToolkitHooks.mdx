@@ -116,6 +116,14 @@ static void DestructAll();
 
 Destruct() on every hook declared in this plugin, last first.
 
+### `Count`
+
+```cpp
+static int Count();
+```
+
+How many hooks this plugin declared -- IToolkitPlugin::GetRawHookCount().
+
 ## `CToolkitVTableName`
 
 The vtable a global virtual hook attaches to: an RTTI class name inside a module ("server", "engine2", ...).
@@ -145,9 +153,18 @@ The module through a pointer to an IToolkitModule* the plugin fills in at load (
 
 The table of a base class sub-object inside the class -- for an interface that is not its first base (IToolkitModule::GetVirtualTableByBase).
 
-## `CToolkitVirtualHook`
+## `CToolkitVirtualIndex`
 
-A KHook::Virtual plus where it goes.
+A virtual hook's slot given both ways: the member function pointer the interface header compiles to, and the name of a gamedata offset for the same function. Gamedata wins at KHOOK_INIT(); a difference between the two is reported (one of them is stale), and a missing entry for this platform leaves the interface's index in place. KHOOK_GAMEDATA() makes one.
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `mfp` | `MFP` |
+| `pszName` | `const char*` |
+
+## `CToolkitVirtualHook`
 
 **Inherits** [`IToolkitHook`](/docs/core-api/IToolkitHooks#itoolkithook)
 
@@ -228,7 +245,7 @@ Runs the original on pThis, bypassing the hook chain.
 ### `HookType`
 
 ```cpp
-using HookType = KHook::Virtual<CLASS, RETURN, ARGS...>;
+using HookType = ToolkitKHook::Virtual<CLASS, RETURN, ARGS...>;
 ```
 
 ## `CToolkitMemberHook`
@@ -368,6 +385,25 @@ template <typename R, typename... A> inline IToolkitMemory ToMemory(R (*pfnFunct
 | `address` | [`IToolkitMemory`](/docs/core-api/IToolkitMemory) |
 | `pfnFunction` | `R (*)(A...)` |
 
+### `ToolkitVirtualIndex`
+
+```cpp
+template <typename MFP> constexpr CToolkitVirtualIndex<MFP> ToolkitVirtualIndex(MFP mfp, const char* pszName);
+```
+
+| Parameter | Type |
+|---|---|
+| `mfp` | `MFP` |
+| `pszName` | `const char*` |
+
+### `ToolkitRawHookCount`
+
+```cpp
+inline int ToolkitRawHookCount();
+```
+
+See IToolkitPlugin::GetRawHookCount().
+
 ## Macros
 
 ### `KHOOK_VTABLE`
@@ -394,9 +430,20 @@ The vtable of a base class sub-object inside an RTTI class: for an interface tha
 
 Declares a virtual hook as a class member.
 
+Which form to pick: a gamedata name (alone or with KHOOK_GAMEDATA) follows the core's gamedata, so an engine update that moves the slot is fixed by updating the core; a bare `&Class::Method` compiles the slot in from the SDK's header and needs a rebuild when it moves.
+
 ```cpp
 KHOOK_VIRTUAL(m_hGameFrame, &ISource2Server::GameFrame, &g_pSource2Server, nullptr, &Plugin::Hook_GameFrame);
+KHOOK_VIRTUAL(m_hGameFrame, KHOOK_GAMEDATA(&ISource2Server::GameFrame, "ISource2Server::GameFrame"), &g_pSource2Server, nullptr, &Plugin::Hook_GameFrame);
 ```
+
+### `KHOOK_GAMEDATA`
+
+```cpp
+#define KHOOK_GAMEDATA(function, name) ::ToolkitVirtualIndex(function, name)
+```
+
+A virtual hook's slot from the interface header and from gamedata at once, for KHOOK_VIRTUAL's `function`. See there.
 
 ### `KHOOK_MEMBER`
 
@@ -421,13 +468,24 @@ KHOOK_MEMBER(m_hTakeDamageOld, ADDR_TAKE_DAMAGE_OLD(), &Plugin::Hook_TakeDamageO
 
 Declares a hook on a free function found by address. Same parameters as KHOOK_MEMBER; the handler takes no hooked object.
 
-### `KHOOK_INIT`
+### `KHOOK_CHECK`
 
 ```cpp
-#define KHOOK_INIT() ::IToolkitHook::InitAll()
+#define KHOOK_CHECK() \
+    do { 
+        const char* toolkitKHookNote = nullptr; 
+        if (!::ToolkitKHookVersionMatches(g_ToolkitCoreKHookCommit, error, maxlen, &toolkitKHookNote)) 
+            return false; 
+        if (toolkitKHookNote) 
+            g_ToolkitAPI->Log(g_PluginAPI, "%s\n", toolkitKHookNote); 
+    } while (0)
 ```
 
 Installs every hook declared with the macros above. Call in Load(), after TOOLKIT_SAVEVARS() and once the instance pointers hooks read are set.
+
+This is also where the KHook commit check happens: a plugin that hooks through KHook shares the detour engine with the core and must have been built against the same KHook (template layout), so a mismatch returns false out of Load() with the reason in `error`. A plugin that never calls this is not checked -- it does not hook, so it does not care. A plugin using raw KHook objects (KHOOK_NEW) without any KHOOK_* macro must call KHOOK_CHECK() itself before the first one.
+
+Each hook that could not be resolved is logged and skipped.
 
 ### `KHOOK_DESTRUCT`
 
@@ -436,3 +494,9 @@ Installs every hook declared with the macros above. Call in Load(), after TOOLKI
 ```
 
 Takes every hook down. Call in Unload().
+
+### Other macros
+
+| Macro | Expands to |
+|---|---|
+| `KHOOK_INIT()` | `do { KHOOK_CHECK(); ::IToolkitHook::InitAll(); } while (0)` |

@@ -538,3 +538,11 @@ Formats string using va_list.
 | `maxlength` | `size_t` |
 | `format` | `const char*` |
 | `ap` | `va_list` |
+
+### `GameHooks`
+
+```cpp
+virtual IToolkitGameHooks* GameHooks() = 0;
+```
+
+Access the core's hooks on common game functions.

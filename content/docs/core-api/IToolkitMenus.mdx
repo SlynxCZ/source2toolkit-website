@@ -11,7 +11,7 @@ Provides functionality for:
 
 Interface for menu system management.
 
-**Interface id** `IToolkitMenus002` (`TOOLKIT_MENUS_INTERFACE`) · **Global** `g_pToolkitMenus` · **Header** [`source2toolkit/IToolkitMenus.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitMenus.h)
+**Interface id** `IToolkitMenus003` (`TOOLKIT_MENUS_INTERFACE`) · **Global** `g_pToolkitMenus` · **Header** [`source2toolkit/IToolkitMenus.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitMenus.h)
 
 ## Methods
 
@@ -69,6 +69,22 @@ Handles key press input.
 |---|---|---|
 | `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) | Player who pressed key |
 | `key` | `int` | Pressed key (1-9) |
+
+### `OpenHudMenu`
+
+```cpp
+virtual void OpenHudMenu(PluginId owner, CCSPlayerController* player, HudMenu* menu) = 0;
+```
+
+Opens a HudMenu for a player, on the Panorama HUD.
+
+<Callout type="info">Closed for you as OpenCenterHtmlMenu's are. Draws nothing for a player without the layout; where that cannot be assumed, a CenterHtmlMenu is the fallback.</Callout>
+
+| Parameter | Type | Description |
+|---|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin the menu belongs to |
+| `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) | Target player |
+| `menu` | [`HudMenu*`](/docs/core-api/IToolkitMenus#hudmenu) | Menu to open |
 
 ## `ChatMenuOption`
 
@@ -388,6 +404,31 @@ explicit CenterHtmlMenu(std::string title);
 
 Constructs center HTML menu.
 
+## `HudMenu`
+
+A menu drawn with a custom_hud_layout (IToolkitMenus::OpenHudMenu).
+
+The same options and handlers as CenterHtmlMenu; only the screen differs. The player clicks the rows or presses 1-6 (the options of the page), 7 (previous page), 8 (next page), 9 (close), so the chat triggers keep working. The navigation texts are the plugin's, which is how they get to be in the player's language.
+
+Needs the menu layout (HudMenuLayout in core.json; the reference layout is panorama/layout/custom_game/s2t_menu.xml in the toolkit repository) in an addon the player has. A player without it sees nothing.
+
+**Inherits** [`IBaseMenu`](/docs/core-api/IToolkitMenus#ibasemenu)
+
+### Fields
+
+| Field | Type | Description |
+|---|---|---|
+| `PrevText` | `std::string` |  |
+| `NextText` | `std::string` |  |
+| `CloseText` | `std::string` |  |
+| `DimBackground` | `bool` | Dims the screen behind the menu. |
+
+### Constructors
+
+```cpp
+explicit HudMenu(std::string title);
+```
+
 ## Enums
 
 ### `PostSelectAction`
@@ -409,6 +450,7 @@ Action executed after selecting a menu option.
 | Macro | Expands to |
 |---|---|
 | `OPEN_CENTER_HTML_MENU(player, menu)` | `g_pToolkitMenus->OpenCenterHtmlMenu(g_PluginID, player, menu)` |
+| `OPEN_HUD_MENU(player, menu)` | `g_pToolkitMenus->OpenHudMenu(g_PluginID, player, menu)` |
 | `GET_ACTIVE_MENU(player)` | `g_pToolkitMenus->GetActiveMenu(player)` |
 | `CLOSE_ACTIVE_MENU(player)` | `g_pToolkitMenus->CloseActiveMenu(player)` |
 | `MENU_ON_KEY_PRESS(player, key)` | `g_pToolkitMenus->OnKeyPress(player, key)` |

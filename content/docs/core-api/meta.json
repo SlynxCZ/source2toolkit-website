@@ -35,6 +35,10 @@
     "IToolkitJSON",
     "IToolkitMySQL",
     "IToolkitPaths",
+    "---Other---",
+    "IToolkitGameHooks",
+    "IToolkitHud",
+    "IToolkitKHook",
     "utils"
   ]
 }

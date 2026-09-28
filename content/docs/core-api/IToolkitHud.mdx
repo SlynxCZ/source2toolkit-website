@@ -1,0 +1,171 @@
+---
+title: "IToolkitHud"
+description: "On-screen text and interaction prompts on the Panorama HUD."
+---
+
+
+Text a plugin puts on a player's screen used to be a point_worldtext parented to the pawn or a center HTML print redrawn every tick. This interface draws it with a `custom_hud_layout` instead: crisp, positioned by the stylesheet, per player, and gone when its time is up. The core owns the one layout entity (created on first use, per map) and the per-player state; a plugin calls ShowText() and forgets about it.
+
+What the client needs: the layout named by `HudTextLayout` in core.json (default "s2t_hud"), compiled into an addon the players have -- see panorama/README.md in the toolkit repository, which ships the reference layout and stylesheet. The layout has to follow the id contract below; the stylesheet is free.
+
+Layout contract (panel ids the core addresses):
+
+hud_top, hud_topleft, hud_topright, hud_left, hud_right, hud_center, hud_bottom, hud_panel        one Panel per HudSlot; the core toggles the class `show` and one colour class (c-white .. c-grey, see HudColor) and one size class (s-small .. s-huge, HudSize) &lt;slot&gt;_text                  a Label inside it with text="\{s:text\}" hud_prompt                   the interaction prompt Panel (`show`) hud_prompt_key               Label text="\{s:text\}": the key, e.g. "E" hud_prompt_text              Label text="\{s:text\}": what the key does hud_prompt_barwrap           Panel shown (`show`) while a progress is given hud_prompt_bar               Panel that gets one of w0 .. w20 (5 % steps)
+
+Everything is per player: what one player sees, nobody else does.
+
+**Interface id** `IToolkitHud001` (`TOOLKIT_HUD_INTERFACE`) · **Global** `g_pToolkitHud` · **Header** [`source2toolkit/IToolkitHud.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitHud.h)
+
+## Methods
+
+### `IsAvailable`
+
+```cpp
+virtual bool IsAvailable() = 0;
+```
+
+Whether the text layout exists for the running map.
+
+False before the first map, after the entity failed to spawn (logged once), or when the client would draw nothing anyway is not something the server can tell -- a player without the addon simply sees no text.
+
+### `ShowText`
+
+```cpp
+virtual void ShowText(CCSPlayerController* player, HudSlot slot, const char* text, float seconds, HudTextStyle style = {}) = 0;
+```
+
+Shows a text in a slot for one player, replacing what was there.
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) |  | Who sees it |
+| `slot` | [`HudSlot`](/docs/core-api/IToolkitHud#hudslot) |  | Where |
+| `text` | `const char*` |  | Plain text; "\n" starts a new line, there is no markup |
+| `seconds` | `float` |  | How long, 0 or less: until HideText() |
+| `style` | [`HudTextStyle`](/docs/core-api/IToolkitHud#hudtextstyle) | `{}` | Colour and size |
+
+### `HideText`
+
+```cpp
+virtual void HideText(CCSPlayerController* player, HudSlot slot) = 0;
+```
+
+Clears one slot for one player.
+
+| Parameter | Type |
+|---|---|
+| `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) |
+| `slot` | [`HudSlot`](/docs/core-api/IToolkitHud#hudslot) |
+
+### `ShowPrompt`
+
+```cpp
+virtual void ShowPrompt(CCSPlayerController* player, const char* key, const char* text, float progress = -1.0f) = 0;
+```
+
+Shows the interaction prompt: a key cap and what it does.
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) |  | Who sees it |
+| `key` | `const char*` |  | The key, e.g. "E" |
+| `text` | `const char*` |  | e.g. "Steal the weapon" |
+| `progress` | `float` | `-1.0f` | 0..1 draws a progress bar; below 0 hides the bar |
+
+### `HidePrompt`
+
+```cpp
+virtual void HidePrompt(CCSPlayerController* player) = 0;
+```
+
+| Parameter | Type |
+|---|---|
+| `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) |
+
+### `HideAll`
+
+```cpp
+virtual void HideAll(CCSPlayerController* player) = 0;
+```
+
+Every slot and the prompt, for one player.
+
+| Parameter | Type |
+|---|---|
+| `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) |
+
+### `LayoutName`
+
+```cpp
+virtual const char* LayoutName() = 0;
+```
+
+The layout name the core uses (HudTextLayout in core.json).
+
+## `HudTextStyle`
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `color` | [`HudColor`](/docs/core-api/IToolkitHud#hudcolor) |
+| `size` | [`HudSize`](/docs/core-api/IToolkitHud#hudsize) |
+
+## Enums
+
+### `HudSlot`
+
+```cpp
+enum class HudSlot : int
+```
+
+Where on the screen a text goes. Each is a panel of the layout; the stylesheet decides where that panel is.
+
+| Name | Value | Description |
+|---|---|---|
+| `Top` | `0` | top centre -- announcements |
+| `TopLeft` |  |  |
+| `TopRight` |  |  |
+| `Left` |  | left of the crosshair |
+| `Right` |  | right of the crosshair |
+| `Center` |  | over the crosshair -- countdowns, "START" |
+| `Bottom` |  | above the weapon HUD |
+| `Panel` |  | a boxed multi-line panel (quests, info) |
+| `Count` |  |  |
+
+### `HudColor`
+
+```cpp
+enum class HudColor : int
+```
+
+The colour classes the stylesheet defines (c-white, c-red, ...).
+
+| Name | Value |
+|---|---|
+| `White` | `0` |
+| `Red` |  |
+| `Green` |  |
+| `Blue` |  |
+| `Yellow` |  |
+| `Orange` |  |
+| `Purple` |  |
+| `Cyan` |  |
+| `Grey` |  |
+| `Count` |  |
+
+### `HudSize`
+
+```cpp
+enum class HudSize : int
+```
+
+The size classes the stylesheet defines (s-small, s-normal, ...).
+
+| Name | Value |
+|---|---|
+| `Small` | `0` |
+| `Normal` |  |
+| `Large` |  |
+| `Huge` |  |
+| `Count` |  |

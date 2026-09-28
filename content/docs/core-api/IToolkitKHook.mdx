@@ -1,0 +1,19 @@
+---
+title: "IToolkitKHook"
+description: "KHook's virtual hook, with the one thing the toolkit needs to see that KHook keeps protected: the slot the hook is on."
+---
+
+
+**Header** [`source2toolkit/IToolkitKHook.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitKHook.h)
+
+**Inherits** `KHook::Virtual<CLASS, RETURN, ARGS...>`
+
+## Methods
+
+### `GetIndex`
+
+```cpp
+std::int32_t GetIndex() const;
+```
+
+The vtable slot this hook is on: what the member function pointer or the index it was made with came to, or what Configure() set.

@@ -27,15 +27,13 @@ Supports:
 ### `ChatHandler`
 
 ```cpp
-using ChatHandler = std::function<void(const CCommandContext&, const CCommand&, bool post)>;
+using ChatHandler = std::function<void(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
 ```
-
-Callback for chat messages.
 
 ### `CommandHandler`
 
 ```cpp
-using CommandHandler = std::function<Action(const CCommandContext&, const CCommand&, bool post)>;
+using CommandHandler = std::function<Action(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
 ```
 
 Callback for console commands.
@@ -130,6 +128,87 @@ Drops one of this plugin's console listeners.
 | `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `pchName` | `const char*` |
 | `post` | `bool` |
+
+## `ToolkitCommandContext`
+
+Where a command came from, in the toolkit's own layout.
+
+The engine's CCommandContext is what the core sees; what a handler gets is this, so the engine type's layout is not part of the plugin API. The two methods handlers use are the same as on the engine type.
+
+### Constructors
+
+```cpp
+ToolkitCommandContext(CPlayerSlot slot, int target);
+```
+
+### `GetPlayerSlot`
+
+```cpp
+CPlayerSlot GetPlayerSlot() const;
+```
+
+The player who issued the command; invalid for the server console.
+
+### `GetCommandTarget`
+
+```cpp
+int GetCommandTarget() const;
+```
+
+The engine's CommandTarget_t (CT_NO_TARGET, CT_FIRST_SPLITSCREEN_CLIENT, ...).
+
+## `ToolkitCommandArgs`
+
+A command's arguments, in the toolkit's own layout; same accessors as the engine's CCommand. The strings belong to the dispatch and are gone when the handler returns -- copy what has to outlive it.
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `kMaxArgs` | `int` |
+
+### Constructors
+
+```cpp
+ToolkitCommandArgs() = default;
+ToolkitCommandArgs(int argc, const char* const* argv, const char* argS, const char* command);
+```
+
+### `ArgC`
+
+```cpp
+int ArgC() const;
+```
+
+Number of arguments, the command name included.
+
+### `Arg`
+
+```cpp
+const char* Arg(int i) const;
+```
+
+Argument i, the command name at 0; "" past the end.
+
+| Parameter | Type |
+|---|---|
+| `i` | `int` |
+
+### `ArgS`
+
+```cpp
+const char* ArgS() const;
+```
+
+Everything after the command name, as typed.
+
+### `GetCommandString`
+
+```cpp
+const char* GetCommandString() const;
+```
+
+The whole command line, as typed.
 
 ## Macros
 

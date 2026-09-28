@@ -75,6 +75,7 @@ Represents schema offset information.
 | `offset` | `int32` | Offset of the field |
 | `networked` | `bool` | True if field is networked |
 | `manipulator` | `SchemaCollectionManipulatorFn_t` | For an atomic collection field, the engine's own element accessor. |
+| `valid` | `bool` | False when the field is not in the running game's schema (renamed, removed). Reads then come from zeroed scratch memory and writes go there, so the plugin keeps running with that one field doing nothing -- an error line says which, once. |
 
 ## `CNetworkVarChainer2`
 
@@ -313,6 +314,24 @@ Gets schema offset for a field.
 | `memberName` | `const char*` |
 | `memberKey` | `uint32_t` |
 | `—` | `const T*` |
+
+### `MissingFieldStorage`
+
+```cpp
+void* MissingFieldStorage(size_t size);
+```
+
+Scratch memory a missing field reads from and writes to; zeroed, one block for every such field in the plugin.
+
+| Parameter | Type |
+|---|---|
+| `size` | `size_t` |
+
+### `MissingField`
+
+```cpp
+template <typename T> T& MissingField();
+```
 
 ### `GetServerOffset`
 
