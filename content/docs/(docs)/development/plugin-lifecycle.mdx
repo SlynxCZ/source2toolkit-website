@@ -84,7 +84,7 @@ Calling `UNREGISTER_CON_COMMAND`, `UNHOOK_GAME_EVENT`, `KILL_TIMER` and the like
 
 Some things live in your own library and the toolkit cannot reach them:
 
-- **KHook hooks.** Call `KHOOK_DESTRUCT()` in `Unload()`. A hook left installed after the library is closed jumps into unmapped memory on its next call.
+- **KHook hooks.** Call `KHOOK_DESTRUCT()` in `Unload()`. A hook left installed after the library is closed jumps into unmapped memory on its next call. Member and function detours come out right there; a virtual hook only stops calling back, and the core removes it once `Unload()` has returned — removing it from inside `Unload()` would wait for the call of the hooked function the unload command itself arrived through (`ICvar::DispatchConCommand`), which is a deadlock. The library is closed only after that.
 - **`CConVar`s you declared.** Call `ConVar_Unregister()` in `Unload()`. It only walks the list of the library that calls it, so the core cannot do it for you.
 - **Game systems** you registered on the engine's factory list.
 - Threads, sockets, files and any other resource you created yourself.
