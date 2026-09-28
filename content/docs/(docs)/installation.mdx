@@ -120,7 +120,8 @@ On its first start the core copies `configs/core.example.json` to `configs/core.
   "CrashHandlerEnabled": true,
   "CrashDiscordWebhook": "",
   "HudMenuLayout": "s2t_menu",
-  "HudTextLayout": "s2t_hud"
+  "HudTextLayout": "s2t_hud",
+  "SlowCallbackWarnMs": 100
 }
 ```
 
@@ -136,6 +137,7 @@ On its first start the core copies `configs/core.example.json` to `configs/core.
 | `CrashDiscordWebhook` | `""` | Discord webhook URL for crash reports. Empty disables Discord reporting; dumps are still written. |
 | `HudMenuLayout` | `"s2t_menu"` | The Panorama layout HUD menus are drawn with (`panorama/layout/custom_game/<name>.vxml_c` on the client). See [HUD menus, texts and prompts](/docs/panorama/hud). |
 | `HudTextLayout` | `"s2t_hud"` | The layout for HUD texts and interaction prompts. |
+| `SlowCallbackWarnMs` | `100` | A plugin callback that takes longer than this is logged with its name and plugin — see [Compatibility](/docs/development/compatibility#when-the-server-stalls). `0` turns it off. |
 
 The file is read once, when the core loads. Restart the server after changing it.
 

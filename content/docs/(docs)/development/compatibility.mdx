@@ -38,13 +38,12 @@ compares what the plugin asks for with what the core has:
 | The plugin asks for | The core |
 |---|---|
 | the current revision | serves it |
-| an older one | serves it through a **compat adapter** — a snapshot of the old header forwarding to the current implementation — and logs `X was built against IToolkitMenus002, this core serves IToolkitMenus003: served through a compatibility adapter, rebuild the plugin when convenient` |
-| an older one the core keeps no adapter for | refuses it: `… keeps no adapter for it: rebuild the plugin against the current SDK` |
+| an older one | refuses it: `X was built against IToolkitMenus003, this core serves IToolkitMenus004: rebuild the plugin against the current SDK` |
 | a newer one | refuses it: `… newer than this core's …: update the core` |
 
-Adapters are kept until the next major version. So a core update never breaks
-a plugin over an interface it did not change the meaning of; the warning is a
-reminder, not a deadline.
+An interface changes rarely, and when it does the log says exactly which
+plugin and which interface. Everything else a core update touches — gamedata,
+schema, the game hooks' prototypes — is the core's alone.
 
 ## The plugin API version
 
@@ -86,6 +85,22 @@ plugin using raw `KHOOK_NEW` objects without any `KHOOK_*` macro calls
   logged once.
 - Take command arguments as `ToolkitCommandContext` / `ToolkitCommandArgs`,
   not the engine's types.
+
+## When the server stalls
+
+Everything a plugin does runs inside a hook of the core, so the engine's
+frame-time report blames `Source2Toolkit` for a stall wherever it really is.
+The core times every plugin callback it dispatches — command and chat
+handlers, game event handlers, menu options, timers and next-frame tasks,
+game hook handlers, listener callbacks, HTTP callbacks — and logs the ones
+that take longer than `SlowCallbackWarnMs` (core.json, default 100):
+
+```
+slow callback: command handler 'admin' of Core took 4530 ms -- the whole server waited for it
+```
+
+Set it to 0 to turn the check off. The cost when nothing is slow is two clock
+reads per callback.
 
 What stays raw by nature: protobuf messages by generated type, hl2sdk classes
 used directly, `TOOLKIT_ORIGINAL`, and any hook on a function the core does not

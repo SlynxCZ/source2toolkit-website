@@ -61,9 +61,13 @@ If a plugin was built without git metadata for KHook, the check is skipped with 
 
 The plugin was built against a **newer** `TOOLKIT_PLAPI_VERSION` than the core speaks: update the core. The other way round is fine — a plugin built against an older API loads, and the core simply never calls the callbacks it does not have. `toolkit version` shows the API version the core expects, `toolkit list` the one each plugin was built against.
 
-### "was built against IToolkitMenus002, this core serves IToolkitMenus003"
+### "was built against IToolkitMenus003, this core serves IToolkitMenus004"
 
-Every toolkit interface name carries a revision. When a plugin asks for an older one, the core serves it through a compat adapter and logs this as a reminder to rebuild when convenient — the plugin works. `… keeps no adapter for it` means the core dropped that revision: rebuild the plugin against the current SDK. `… newer than this core's …: update the core` is the other direction. See [Compatibility](/docs/development/compatibility).
+Every toolkit interface name carries a revision. The plugin was built against an older one: rebuild it against the current SDK. `… newer than this core's …: update the core` is the other direction. See [Compatibility](/docs/development/compatibility).
+
+### The server freezes for seconds and the frame report blames Source2Toolkit
+
+Every plugin callback runs inside a hook of the core, so that is where the engine puts the time. Look for `slow callback: … took N ms` in the toolkit log: it names the command, event, timer or menu option and the plugin. The threshold is `SlowCallbackWarnMs` in `core.json`.
 
 ### A plugin does not show up at all
 

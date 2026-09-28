@@ -56,8 +56,16 @@ void OpenShop(CCSPlayerController* player)
 }
 ```
 
-`DimBackground` (default `true`) darkens the screen behind the window. The
-rules on [ownership and lifetime](/docs/guides/menus#ownership-and-lifetime)
+Three fields shape it per open, so a plugin can make them the player's
+choice:
+
+| Field | Default | |
+|---|---|---|
+| `CaptureInput` | `true` | A cursor and clickable rows — and no moving or aiming while the menu is open. `false` is display-only: the number keys pick, the player keeps playing. |
+| `Position` | `Left` | `HudMenuPosition::Left`, `Center` or `Right`; a class (`pos-left`, `pos-center`, `pos-right`) on `menu_root` the stylesheet places. |
+| `DimBackground` | `true` | Darkens the screen behind the window. |
+
+The rules on [ownership and lifetime](/docs/guides/menus#ownership-and-lifetime)
 are the same as for a center HTML menu.
 
 <Callout type="info">
@@ -134,7 +142,8 @@ The ids are listed at the top of each XML and on the
 [`IToolkitHud`](/docs/core-api/IToolkitHud) page; the menu's
 are `menu_dim`, `menu_root`, `menu_title`, `menu_row_0` … `menu_row_5` (each
 with `_key` and `_text` labels), `menu_prev`, `menu_next`, `menu_close` (with
-`_text` labels) and `menu_footer`. Rename the layout files if you like and put
+`_text` labels) and `menu_footer`. The classes the core toggles: `show`,
+`disabled` on rows, and `pos-left` / `pos-center` / `pos-right` on `menu_root`. Rename the layout files if you like and put
 the names into `core.json`; the ids inside stay.
 
 Getting them to players is a Workshop addon plus something on the server that
