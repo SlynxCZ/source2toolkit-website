@@ -1,5 +1,5 @@
 ---
-title: "IToolkitHud"
+title: "ICustomhudManager"
 description: "On-screen text, prompts, toasts, announcements, countdowns, status chips, progress bars, hit feedback, an event feed and overlays on the Panorama HUD."
 ---
 
@@ -8,9 +8,9 @@ Text a plugin puts on a player's screen used to be a point_worldtext parented to
 
 Served by the s2t_hud plugin, not the core: it is not filled by TOOLKIT_SAVEVARS(). Fetch it once every plugin is loaded:
 
-void MyPlugin::OnAllToolkitPluginsLoaded() \{ int ret; GET_TOOLKIT_IFACE(g_pToolkitHud, IToolkitHud, TOOLKIT_HUD_INTERFACE, ret); \}
+void MyPlugin::OnAllToolkitPluginsLoaded() \{ int ret; GET_TOOLKIT_IFACE(g_pCustomhudManager, ICustomhudManager, CUSTOMHUD_MANAGER_INTERFACE_VERSION, ret); \}
 
-and treat a null g_pToolkitHud as "no HUD" (the plugin is not installed, or it is older than this header). The HudMenu below is a menu drawn by the same plugin through the core's menu system (IToolkitMenus::OpenMenu).
+and treat a null g_pCustomhudManager as "no HUD" (the plugin is not installed, or it is older than this header). The HudMenu below is a menu drawn by the same plugin through the core's menu system (IToolkitMenus::OpenMenu).
 
 What the client needs: the layouts "s2t_hud" (texts) and "s2t_menu" (menus), compiled into an addon the players have -- see panorama/README.md in the toolkit repository, which ships the reference layouts and stylesheets. A layout has to follow the id contract below; the stylesheet is free.
 
@@ -20,7 +20,7 @@ hud_top, hud_topleft, hud_topright, hud_left, hud_right, hud_center, hud_bottom,
 
 Everything is per player: what one player sees, nobody else does.
 
-**Interface id** `IToolkitHud004` (`TOOLKIT_HUD_INTERFACE`) · **Global** `g_pToolkitHud` · **Header** [`source2toolkit/IToolkitHud.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitHud.h)
+**Interface id** `ICustomhudManager001` (`CUSTOMHUD_MANAGER_INTERFACE_VERSION`) · **Global** `g_pCustomhudManager` (declared by your plugin) · **Header** [`public/ICustomhudManager.h`](https://github.com/SlynxCZ/CustomhudManager_s2t/blob/main/public/ICustomhudManager.h) in the CustomhudManager_s2t repository
 
 ## Methods
 
@@ -45,10 +45,10 @@ Shows a text in a slot for one player, replacing what was there.
 | Parameter | Type | Default | Description |
 |---|---|---|---|
 | `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) |  | Who sees it |
-| `slot` | [`HudSlot`](/docs/core-api/IToolkitHud#hudslot) |  | Where |
+| `slot` | [`HudSlot`](/docs/panorama/hud-api#hudslot) |  | Where |
 | `text` | `const char*` |  | Plain text; "\n" starts a new line, there is no markup |
 | `seconds` | `float` |  | How long, 0 or less: until HideText() |
-| `style` | [`HudTextStyle`](/docs/core-api/IToolkitHud#hudtextstyle) | `{}` | Colour, size and the offset from the slot's place |
+| `style` | [`HudTextStyle`](/docs/panorama/hud-api#hudtextstyle) | `{}` | Colour, size and the offset from the slot's place |
 
 ### `HideText`
 
@@ -61,7 +61,7 @@ Clears one slot for one player.
 | Parameter | Type |
 |---|---|
 | `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) |
-| `slot` | [`HudSlot`](/docs/core-api/IToolkitHud#hudslot) |
+| `slot` | [`HudSlot`](/docs/panorama/hud-api#hudslot) |
 
 ### `ShowPrompt`
 
@@ -121,7 +121,7 @@ Four are kept; a fifth pushes the oldest out. Each goes away after its own time.
 | Parameter | Type | Description |
 |---|---|---|
 | `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) | Who sees it |
-| `style` | [`HudToastStyle`](/docs/core-api/IToolkitHud#hudtoaststyle) | Its colour and the edge (HudToastStyle) |
+| `style` | [`HudToastStyle`](/docs/panorama/hud-api#hudtoaststyle) | Its colour and the edge (HudToastStyle) |
 | `title` | `const char*` | One line, bold |
 | `text` | `const char*` | The message under it, may wrap; "" for none |
 | `seconds` | `float` | How long, 0 or less: until ClearToasts() or pushed out |
@@ -150,7 +150,7 @@ The big announcement in the upper centre: a title and a line under it, with an e
 | `title` | `const char*` |  |  |
 | `subtitle` | `const char*` |  |  |
 | `seconds` | `float` |  | How long, 0 or less: until HideAnnounce() |
-| `color` | [`HudColor`](/docs/core-api/IToolkitHud#hudcolor) | `HudColor::White` |  |
+| `color` | [`HudColor`](/docs/panorama/hud-api#hudcolor) | `HudColor::White` |  |
 
 ### `HideAnnounce`
 
@@ -175,7 +175,7 @@ The giant centre number or word: "3", "2", "1", "GO". Each call pops it again, s
 | `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) |  |  |
 | `text` | `const char*` |  |  |
 | `seconds` | `float` |  | How long this text stays, 0 or less: until HideCountdown() |
-| `color` | [`HudColor`](/docs/core-api/IToolkitHud#hudcolor) | `HudColor::White` |  |
+| `color` | [`HudColor`](/docs/panorama/hud-api#hudcolor) | `HudColor::White` |  |
 
 ### `HideCountdown`
 
@@ -201,7 +201,7 @@ A status chip in the row under the round timer: a small label and a value. Stays
 | `chip` | `int` |  | 0 .. 3, left to right |
 | `label` | `const char*` |  |  |
 | `value` | `const char*` |  |  |
-| `color` | [`HudColor`](/docs/core-api/IToolkitHud#hudcolor) | `HudColor::White` |  |
+| `color` | [`HudColor`](/docs/panorama/hud-api#hudcolor) | `HudColor::White` |  |
 
 ### `HideStatus`
 
@@ -230,7 +230,7 @@ A labelled progress bar under the crosshair. Stays until hidden; call again to m
 | `label` | `const char*` |  |  |
 | `value` | `const char*` |  | Text at the right end of the label row, e.g. "7 s"; "" for none |
 | `progress` | `float` |  | 0..1 |
-| `color` | [`HudColor`](/docs/core-api/IToolkitHud#hudcolor) | `HudColor::White` |  |
+| `color` | [`HudColor`](/docs/panorama/hud-api#hudcolor) | `HudColor::White` |  |
 
 ### `HideProgress`
 
@@ -268,7 +268,7 @@ A row in the event feed at the top left, newest first. Five are kept; a sixth pu
 | Parameter | Type | Description |
 |---|---|---|
 | `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) |  |
-| `style` | [`HudToastStyle`](/docs/core-api/IToolkitHud#hudtoaststyle) |  |
+| `style` | [`HudToastStyle`](/docs/panorama/hud-api#hudtoaststyle) |  |
 | `time` | `const char*` | The short text at the left, e.g. "12:04" or "R3"; "" for none |
 | `text` | `const char*` |  |
 | `seconds` | `float` | How long the row stays, 0 or less: until ClearFeed() or pushed out |
@@ -294,7 +294,7 @@ A full-screen tint: poison, burn, freeze, heal, a white-out or a fade to black, 
 | Parameter | Type | Description |
 |---|---|---|
 | `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) |  |
-| `overlay` | [`HudOverlay`](/docs/core-api/IToolkitHud#hudoverlay) |  |
+| `overlay` | [`HudOverlay`](/docs/panorama/hud-api#hudoverlay) |  |
 | `text` | `const char*` |  |
 | `seconds` | `float` | How long, 0 or less: until HideOverlay() |
 
@@ -322,7 +322,7 @@ Goes through the core's menu system (IToolkitMenus::OpenMenu), so it closes the 
 |---|---|---|
 | `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin the menu belongs to |
 | `player` | [`CCSPlayerController*`](/docs/schema/entity/classes/CCSPlayerController) | Target player |
-| `menu` | [`HudMenu*`](/docs/core-api/IToolkitHud#hudmenu) | The menu; must outlive the time it is open |
+| `menu` | [`HudMenu*`](/docs/panorama/hud-api#hudmenu) | The menu; must outlive the time it is open |
 
 ### `ShowTimer`
 
@@ -340,7 +340,7 @@ A countdown is one call a second with the new time; the caller keeps the clock. 
 | `tag` | `const char*` | The pill above the number, e.g. "FREE DAY"; "" for none |
 | `time` | `const char*` | The number, e.g. "2:45" |
 | `sub` | `const char*` | The line under it; "" for none |
-| `color` | [`HudColor`](/docs/core-api/IToolkitHud#hudcolor) | The halo and the number |
+| `color` | [`HudColor`](/docs/panorama/hud-api#hudcolor) | The halo and the number |
 
 ### `HideTimer`
 
@@ -368,7 +368,7 @@ Stays until HideCard(); a new call replaces the texts in place.
 | `tag` | `const char*` | Small line above the title, e.g. "DAY 3"; "" for none |
 | `title` | `const char*` | The big line |
 | `sub` | `const char*` | The line under it; "" for none |
-| `color` | [`HudColor`](/docs/core-api/IToolkitHud#hudcolor) | The edge and the tag |
+| `color` | [`HudColor`](/docs/panorama/hud-api#hudcolor) | The edge and the tag |
 
 ### `HideCard`
 
@@ -386,14 +386,14 @@ virtual void HideCard(CCSPlayerController* player) = 0;
 
 | Field | Type | Description |
 |---|---|---|
-| `color` | [`HudColor`](/docs/core-api/IToolkitHud#hudcolor) |  |
-| `size` | [`HudSize`](/docs/core-api/IToolkitHud#hudsize) |  |
+| `color` | [`HudColor`](/docs/panorama/hud-api#hudcolor) |  |
+| `size` | [`HudSize`](/docs/panorama/hud-api#hudsize) |  |
 | `offsetX` | `int` | Where the slot sits, relative to the place the stylesheet gives it: steps of 40 px on a 1080p reference, -10..10, positive is right and down. Classes xm10..xp10 / ym10..yp10 on the slot panel; a value outside the range is clamped. |
 | `offsetY` | `int` |  |
 
 ## `HudMenu`
 
-A menu drawn with a custom_hud_layout (IToolkitHud::OpenMenu).
+A menu drawn with a custom_hud_layout (ICustomhudManager::OpenMenu).
 
 The same options and handlers as CenterHtmlMenu; only the screen differs. The player clicks the rows or presses 1-6 (the options of the page), 7 (previous page), 8 (next page), 9 (close), so the chat triggers keep working. The navigation texts are the plugin's, which is how they get to be in the player's language.
 
@@ -411,7 +411,7 @@ Needs the menu layout ("s2t_menu"; the reference layout is panorama/layout/custo
 | `DimBackground` | `bool` | Dims the screen behind the menu. |
 | `CaptureInput` | `bool` | With input capture the player gets a cursor and can click the rows, but cannot move or aim while the menu is open. Without it the menu is display-only: the number keys (binds, chat triggers) pick the options and the player keeps playing. Per menu, so a plugin can make it the player's choice. |
 | `CaptureWhenDead` | `bool` | A dead player cannot use the slot binds (they do nothing without a pawn), so a menu without CaptureInput takes the mouse for as long as the player is dead and lets go on respawn. The keys and the chat triggers keep working meanwhile; the clicks are added, not swapped in. |
-| `Position` | [`HudMenuPosition`](/docs/core-api/IToolkitHud#hudmenuposition) | Where the window sits: one of the classes pos-left, pos-center, pos-right goes on menu_root and the stylesheet places it. |
+| `Position` | [`HudMenuPosition`](/docs/panorama/hud-api#hudmenuposition) | Where the window sits: one of the classes pos-left, pos-center, pos-right goes on menu_root and the stylesheet places it. |
 
 ### Constructors
 
@@ -531,4 +531,3 @@ Where on the screen a HudMenu is drawn; a class on the layout's menu_root.
 
 | Macro | Expands to |
 |---|---|
-| `OPEN_HUD_MENU(player, menu)` | `g_pToolkitHud->OpenMenu(g_PluginID, player, menu)` |

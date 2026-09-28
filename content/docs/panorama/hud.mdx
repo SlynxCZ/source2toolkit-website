@@ -1,6 +1,6 @@
 ---
 title: HUD Menus, Texts and Prompts
-description: Menus, on-screen text and HUD elements drawn by Panorama through the CustomhudManager_s2t plugin — HudMenu, IToolkitHud, the reference layouts and the addon that ships them.
+description: Menus, on-screen text and HUD elements drawn by Panorama through the CustomhudManager_s2t plugin — HudMenu, ICustomhudManager, the reference layouts and the addon that ships them.
 ---
 
 The [layout](/docs/panorama/layouts) and [click](/docs/panorama/click-callbacks)
@@ -12,8 +12,8 @@ two layouts it owns:
 
 | You call | Drawn with | Layout |
 |---|---|---|
-| [`IToolkitHud::OpenMenu`](/docs/core-api/IToolkitHud#openmenu) with a `HudMenu` | one `custom_hud_layout`, per-player state, through the core's menu system | `s2t_menu` |
-| [`IToolkitHud`](/docs/core-api/IToolkitHud) — `ShowText`, `ShowPrompt`, `ShowToast`, … | one `custom_hud_layout`, per-player state | `s2t_hud` |
+| [`ICustomhudManager::OpenMenu`](/docs/panorama/hud-api#openmenu) with a `HudMenu` | one `custom_hud_layout`, per-player state, through the core's menu system | `s2t_menu` |
+| [`ICustomhudManager`](/docs/panorama/hud-api) — `ShowText`, `ShowPrompt`, `ShowToast`, … | one `custom_hud_layout`, per-player state | `s2t_hud` |
 
 Each entity is spawned on first use once the map's game rules exist, and goes
 with the map. The plugin resets a slot's state when its player disconnects and
@@ -25,18 +25,22 @@ players. A player without it sees nothing — the server cannot tell.
 
 ## Getting the interface
 
-`IToolkitHud` is served by the plugin, not the core, so `TOOLKIT_SAVEVARS()`
-leaves `g_pToolkitHud` null. Fetch it once every plugin is loaded, and treat a
-null pointer as "no HUD" (the plugin is not installed, or it is older than the
-SDK you built against):
+`ICustomhudManager` is the plugin's own interface, not one of the core's: the
+header is `public/ICustomhudManager.h` in the plugin's repository (vendor it,
+a git submodule is the usual way, and add `public/` to your include path), you
+declare the pointer, and you fetch it once every plugin is loaded, treating a
+null pointer as "no HUD" (the plugin is not installed, or it serves another
+revision than your header):
 
 ```cpp title="plugin.cpp"
-#include "source2toolkit/IToolkitHud.h"
+#include "ICustomhudManager.h"
+
+ICustomhudManager* g_pCustomhudManager = nullptr;
 
 void MyPlugin::OnAllToolkitPluginsLoaded()
 {
     int ret;
-    GET_TOOLKIT_IFACE(g_pToolkitHud, IToolkitHud, TOOLKIT_HUD_INTERFACE, ret);
+    GET_TOOLKIT_IFACE(g_pCustomhudManager, ICustomhudManager, CUSTOMHUD_MANAGER_INTERFACE_VERSION, ret);
     if (ret != TOOLKIT_IFACE_OK)
         TOOLKIT_LOG(this, "CustomhudManager_s2t is not loaded: nothing will be drawn on the HUD\n");
 }
@@ -75,7 +79,7 @@ void OpenShop(CCSPlayerController* player)
     g_ShopMenu.NextText = Translate(player, "menu.next");
     g_ShopMenu.CloseText = Translate(player, "menu.close");
 
-    OPEN_HUD_MENU(player, &g_ShopMenu);
+    g_pCustomhudManager->OpenMenu(g_PluginID, player, &g_ShopMenu);
 }
 ```
 
@@ -100,20 +104,20 @@ two share `IBaseMenu`, so a menu object can be either.
 
 ## Texts
 
-`IToolkitHud` puts a text into one of eight **slots** — positions the
+`ICustomhudManager` puts a text into one of eight **slots** — positions the
 stylesheet defines — with a colour and a size that are classes of the
 stylesheet too. A plugin never sends a colour, only a name; and where it wants
 a text somewhere else than the slot's place, it says so in steps, not pixels.
 
 ```cpp
-#include "source2toolkit/IToolkitHud.h"
+#include "ICustomhudManager.h"
 
 // Five seconds, top of the screen, yellow and large.
-g_pToolkitHud->ShowText(player, HudSlot::Top, "Round starts in 5", 5.0f, { HudColor::Yellow, HudSize::Large });
+g_pCustomhudManager->ShowText(player, HudSlot::Top, "Round starts in 5", 5.0f, { HudColor::Yellow, HudSize::Large });
 
 // A boxed multi-line panel, until it is hidden.
-g_pToolkitHud->ShowText(player, HudSlot::Panel, "Quest: 3 / 10 kills\nReward: 500 credits", 0.0f);
-g_pToolkitHud->HideText(player, HudSlot::Panel);
+g_pCustomhudManager->ShowText(player, HudSlot::Panel, "Quest: 3 / 10 kills\nReward: 500 credits", 0.0f);
+g_pCustomhudManager->HideText(player, HudSlot::Panel);
 ```
 
 | `HudSlot` | Where (reference stylesheet) |
@@ -127,7 +131,7 @@ g_pToolkitHud->HideText(player, HudSlot::Panel);
 
 ### Moving a slot
 
-`HudTextStyle` carries `offsetX` and `offsetY` (`IToolkitHud003`): steps of
+`HudTextStyle` carries `offsetX` and `offsetY` (`ICustomhudManager003`): steps of
 40 px on the 1080p reference the stylesheet is written for, `-10 .. 10`,
 positive is right and down. Panorama scales the whole layout with the
 resolution, so a step is the same share of the screen on 1080p, 1440p and 4K.
@@ -139,7 +143,7 @@ slot (its anchor, colour, size) stays.
 ```cpp
 HudTextStyle style{ HudColor::Blue, HudSize::Normal };
 style.offsetY = 2;   // 80 px below the top slot's place
-g_pToolkitHud->ShowText(player, HudSlot::Top, "Round starts in 5", 4.0f, style);
+g_pCustomhudManager->ShowText(player, HudSlot::Top, "Round starts in 5", 4.0f, style);
 ```
 
 The text is plain: `\n` starts a line, there is no markup. A text with
@@ -167,10 +171,10 @@ player:
 | `ShowCard(player, tag, title, sub, color)` | the corner card at the top left — the day of a jail, a role, the mode. Until `HideCard`. |
 
 ```cpp
-g_pToolkitHud->ShowToast(player, HudToastStyle::Success, "Quest done", "+500 credits", 5.0f);
-g_pToolkitHud->ShowAnnounce(player, "Free day", "No orders until the next round", 5.0f, HudColor::Green);
-g_pToolkitHud->ShowStatus(player, 0, "Day", "Freeday", HudColor::Yellow);
-g_pToolkitHud->ShowHit(attacker, damage, hitgroup == 1, health <= 0);
+g_pCustomhudManager->ShowToast(player, HudToastStyle::Success, "Quest done", "+500 credits", 5.0f);
+g_pCustomhudManager->ShowAnnounce(player, "Free day", "No orders until the next round", 5.0f, HudColor::Green);
+g_pCustomhudManager->ShowStatus(player, 0, "Day", "Freeday", HudColor::Yellow);
+g_pCustomhudManager->ShowHit(attacker, damage, hitgroup == 1, health <= 0);
 ```
 
 `HideAll(player)` clears every one of them together with the texts and the
@@ -182,13 +186,13 @@ A key cap, what the key does, and — for a hold-to-use action — a progress ba
 
 ```cpp
 // While the player looks at the thing.
-g_pToolkitHud->ShowPrompt(player, "E", "Steal the weapon");
+g_pCustomhudManager->ShowPrompt(player, "E", "Steal the weapon");
 
 // While holding: 0..1 fills the bar.
-g_pToolkitHud->ShowPrompt(player, "E", "Stealing...", held / 2.0f);
+g_pCustomhudManager->ShowPrompt(player, "E", "Stealing...", held / 2.0f);
 
 // Looked away, or done.
-g_pToolkitHud->HidePrompt(player);
+g_pCustomhudManager->HidePrompt(player);
 ```
 
 `progress` below zero hides the bar. The bar is a clip, not a width, so it does
@@ -209,7 +213,7 @@ panorama/README.md                          build and publish
 ```
 
 The ids are listed at the top of each XML and on the
-[`IToolkitHud`](/docs/core-api/IToolkitHud) page; the menu's
+[`ICustomhudManager`](/docs/panorama/hud-api) page; the menu's
 are `menu_dim`, `menu_root`, `menu_title`, `menu_row_0` … `menu_row_5` (each
 with `_key` and `_text` labels), `menu_prev`, `menu_next`, `menu_close` (with
 `_text` labels) and `menu_footer`. The classes the plugin toggles: `show`,
@@ -227,7 +231,7 @@ server with `mm_extra_addons <id>`.
 
 | | |
 |---|---|
-| HUD API | [`IToolkitHud`](/docs/core-api/IToolkitHud) — `HudMenu`, `OpenMenu` and every element; the [Menus guide](/docs/guides/menus) for everything a menu does |
+| HUD API | [`ICustomhudManager`](/docs/panorama/hud-api) — `HudMenu`, `OpenMenu` and every element; the [Menus guide](/docs/guides/menus) for everything a menu does |
 | The plugin | [CustomhudManager_s2t on GitHub](https://github.com/SlynxCZ/CustomhudManager_s2t): the `.stx`, the reference layouts, the build |
 | Your own layouts | [Layouts](/docs/panorama/layouts), [Click callbacks](/docs/panorama/click-callbacks), [Authoring](/docs/panorama/authoring) |
 | Sample plugin | section 11, `sample_hudmenu`, `sample_hudtext`, `sample_prompt` |

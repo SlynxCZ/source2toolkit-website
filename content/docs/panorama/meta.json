@@ -6,6 +6,7 @@
     "pages": [
         "index",
         "hud",
+        "hud-api",
         "layouts",
         "click-callbacks",
         "authoring"
