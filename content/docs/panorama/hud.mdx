@@ -107,6 +107,32 @@ The text is plain: `\n` starts a line, there is no markup. A text with
 this replaces: `point_worldtext` parented to the pawn and moved every tick, and
 `PrintToCenterHtml` printed every tick to keep a panel up.
 
+## Toasts, announcements, countdown, chips, progress, hits, feed, overlays
+
+`IToolkitHud002` adds the rest of what the hudkit gallery has, all on the
+same layout and all per player:
+
+| Call | Draws |
+|---|---|
+| `ShowToast(player, style, title, text, seconds)` | a card in the stack at the top right, newest first; four are kept. Styles `Info`, `Success`, `Warning`, `Danger`, `Neutral`. |
+| `ShowAnnounce(player, title, subtitle, seconds, color)` | the big upper-centre callout, with an entrance each time |
+| `ShowCountdown(player, "3", seconds, color)` | the giant centre number or word; each call pops it again, so a countdown is one call a second |
+| `ShowStatus(player, chip, label, value, color)` | one of four chips under the round timer, until `HideStatus` |
+| `ShowProgress(player, label, value, 0..1, color)` | a labelled bar under the crosshair, until `HideProgress` |
+| `ShowHit(player, damage, headshot, kill)` | the crosshair flashes and the number drifts up — gold on a headshot, red on a kill; gone by itself |
+| `AddFeed(player, style, time, text, seconds)` | a row in the event feed at the top left, newest first; five are kept |
+| `ShowOverlay(player, overlay, text, seconds)` | a full-screen tint: `Poison`, `Burn`, `Freeze`, `Heal`, `Blind`, `Black`, with an optional centred label |
+
+```cpp
+g_pToolkitHud->ShowToast(player, HudToastStyle::Success, "Quest done", "+500 credits", 5.0f);
+g_pToolkitHud->ShowAnnounce(player, "Free day", "No orders until the next round", 5.0f, HudColor::Green);
+g_pToolkitHud->ShowStatus(player, 0, "Day", "Freeday", HudColor::Yellow);
+g_pToolkitHud->ShowHit(attacker, damage, hitgroup == 1, health <= 0);
+```
+
+`HideAll(player)` clears every one of them together with the texts and the
+prompt. The sample plugin's `sample_hud <what>` shows each.
+
 ## Interaction prompts
 
 A key cap, what the key does, and — for a hold-to-use action — a progress bar:
