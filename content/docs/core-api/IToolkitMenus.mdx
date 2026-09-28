@@ -11,7 +11,7 @@ Provides functionality for:
 
 Interface for menu system management.
 
-**Interface id** `IToolkitMenus003` (`TOOLKIT_MENUS_INTERFACE`) · **Global** `g_pToolkitMenus` · **Header** [`source2toolkit/IToolkitMenus.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitMenus.h)
+**Interface id** `IToolkitMenus004` (`TOOLKIT_MENUS_INTERFACE`) · **Global** `g_pToolkitMenus` · **Header** [`source2toolkit/IToolkitMenus.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitMenus.h)
 
 ## Methods
 
@@ -406,12 +406,6 @@ Constructs center HTML menu.
 
 ## `HudMenu`
 
-A menu drawn with a custom_hud_layout (IToolkitMenus::OpenHudMenu).
-
-The same options and handlers as CenterHtmlMenu; only the screen differs. The player clicks the rows or presses 1-6 (the options of the page), 7 (previous page), 8 (next page), 9 (close), so the chat triggers keep working. The navigation texts are the plugin's, which is how they get to be in the player's language.
-
-Needs the menu layout (HudMenuLayout in core.json; the reference layout is panorama/layout/custom_game/s2t_menu.xml in the toolkit repository) in an addon the player has. A player without it sees nothing.
-
 **Inherits** [`IBaseMenu`](/docs/core-api/IToolkitMenus#ibasemenu)
 
 ### Fields
@@ -422,6 +416,8 @@ Needs the menu layout (HudMenuLayout in core.json; the reference layout is panor
 | `NextText` | `std::string` |  |
 | `CloseText` | `std::string` |  |
 | `DimBackground` | `bool` | Dims the screen behind the menu. |
+| `CaptureInput` | `bool` | With input capture the player gets a cursor and can click the rows, but cannot move or aim while the menu is open. Without it the menu is display-only: the number keys (binds, chat triggers) pick the options and the player keeps playing. Per menu, so a plugin can make it the player's choice. |
+| `Position` | [`HudMenuPosition`](/docs/core-api/IToolkitMenus#hudmenuposition) | Where the window sits: the core puts one of the classes pos-left, pos-center, pos-right on menu_root and the stylesheet places it. |
 
 ### Constructors
 
@@ -444,6 +440,20 @@ Action executed after selecting a menu option.
 | `Close` | Close menu after selection |
 | `Reset` | Reset menu to first page |
 | `Nothing` | Do nothing |
+
+### `HudMenuPosition`
+
+```cpp
+enum class HudMenuPosition : int
+```
+
+Where on the screen a HudMenu is drawn; a class on the layout's menu_root.
+
+| Name | Value |
+|---|---|
+| `Left` | `0` |
+| `Center` |  |
+| `Right` |  |
 
 ## Macros
 

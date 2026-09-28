@@ -78,8 +78,8 @@ two share `IBaseMenu`, so a menu object can be either.
 
 `IToolkitHud` puts a text into one of eight **slots** — positions the
 stylesheet defines — with a colour and a size that are classes of the
-stylesheet too. A plugin never sends a colour, only a name; and it never
-positions anything.
+stylesheet too. A plugin never sends a colour, only a name; and where it wants
+a text somewhere else than the slot's place, it says so in steps, not pixels.
 
 ```cpp
 #include "source2toolkit/IToolkitHud.h"
@@ -100,6 +100,23 @@ g_pToolkitHud->HideText(player, HudSlot::Panel);
 | `Center` | over the crosshair — countdowns, "START" |
 | `Bottom` | above the weapon HUD |
 | `Panel` | a boxed panel on the right — quests, info |
+
+### Moving a slot
+
+`HudTextStyle` carries `offsetX` and `offsetY` (`IToolkitHud003`): steps of
+40 px on the 1080p reference the stylesheet is written for, `-10 .. 10`,
+positive is right and down. Panorama scales the whole layout with the
+resolution, so a step is the same share of the screen on 1080p, 1440p and 4K.
+The core turns the two numbers into the classes `xm10 .. xp10` and
+`ym10 .. yp10` on the slot panel; the reference stylesheet generates them, and
+a stylesheet of your own can give them any meaning. Everything else about the
+slot (its anchor, colour, size) stays.
+
+```cpp
+HudTextStyle style{ HudColor::Blue, HudSize::Normal };
+style.offsetY = 2;   // 80 px below the top slot's place
+g_pToolkitHud->ShowText(player, HudSlot::Top, "Round starts in 5", 4.0f, style);
+```
 
 The text is plain: `\n` starts a line, there is no markup. A text with
 `seconds` above zero goes away by itself; `HideText` for the rest, and
