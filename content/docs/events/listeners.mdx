@@ -56,8 +56,8 @@ plugin's listeners when the plugin unloads (or when its `Load()` fails).
 
 | Callback | Fires |
 | --- | --- |
-| `OnPluginLoad(PluginId id)` | After a toolkit plugin (`.stx`) loaded successfully, on every plugin's listeners — **including the new plugin's own**, so you see your own `g_PluginID` once. |
-| `OnPluginUnload(PluginId id)` | When a toolkit plugin is about to unload — before its `Unload()` runs — on every plugin's listeners, including the one going away. |
+| `OnPluginLoad(PluginId id, const char* name)` | After a toolkit plugin (`.stx`) loaded successfully, on every plugin's listeners — **including the new plugin's own**, so you see your own `g_PluginID` once. |
+| `OnPluginUnload(PluginId id, const char* name)` | When a toolkit plugin is about to unload — before its `Unload()` runs — on every plugin's listeners, including the one going away. |
 | `OnAllToolkitPluginsLoaded()` | After the toolkit loaded the plugins folder at startup, and again after `toolkit refresh` loaded at least one new plugin. |
 | `OnMetamodPluginLoad(PluginId id)` | A Metamod:Source plugin was loaded. |
 | `OnMetamodPluginUnload(PluginId id)` | A Metamod:Source plugin was unloaded. |

@@ -45,7 +45,7 @@ For each `.stx` the core:
 2. compares `GetApiVersion()` with the core's `TOOLKIT_PLAPI_VERSION` — a mismatch is refused with `Plugin API version mismatch`;
 3. assigns the next plugin id and adds the plugin to its list;
 4. calls `Load(id, api, error, maxlen, late)`;
-5. on success, calls `OnPluginLoad(newId)` on every listener of every loaded plugin — including the new plugin's own, if it added one in `Load()`.
+5. on success, calls `OnPluginLoad(newId, name)` on every listener of every loaded plugin — including the new plugin's own, if it added one in `Load()`.
 
 If `Load()` returns `false`, the core removes everything the plugin registered under its id so far, closes the library and logs `Plugin <name> refused to load: <error>`.
 
@@ -102,7 +102,7 @@ bool MyPlugin::Unload(char* error, size_t maxlen)
 
 A plugin is unloaded by `toolkit unload <id>`, by a hot reload, or when the toolkit itself unloads (server shutdown). In each case, for that plugin:
 
-1. `OnPluginUnload(id)` is called on every listener of every plugin — including the plugin being unloaded;
+1. `OnPluginUnload(id, name)` is called on every listener of every plugin — including the plugin being unloaded;
 2. `Unload(error, maxlen)` is called;
 3. its listeners and everything it owns are removed (see above);
 4. the library is closed on the **next frame**, so that no stack frame still points into it (a `toolkit unload` is itself running inside a hook).
@@ -117,8 +117,8 @@ Implement `IToolkitListener` and register it with `api->AddListener(this, listen
 
 | Callback | When |
 |---|---|
-| `OnPluginLoad(PluginId id)` | A toolkit plugin (`.stx`) finished loading. `id` is a toolkit plugin id. |
-| `OnPluginUnload(PluginId id)` | A toolkit plugin is about to be unloaded. |
+| `OnPluginLoad(PluginId id, const char* name)` | A toolkit plugin (`.stx`) finished loading. `id` is a toolkit plugin id, `name` its `GetName()`. |
+| `OnPluginUnload(PluginId id, const char* name)` | A toolkit plugin is about to be unloaded. |
 | `OnMetamodPluginLoad(PluginId id)` | A Metamod:Source plugin was loaded. `id` is Metamod's id, a different numbering. |
 | `OnMetamodPluginUnload(PluginId id)` | A Metamod:Source plugin was unloaded. |
 | `OnAllToolkitPluginsLoaded()` | After the start-up load of `plugins/`, and after a `toolkit refresh` that loaded at least one plugin. Called on **every** plugin's listeners each time. Not called for `toolkit load` or a hot reload. |

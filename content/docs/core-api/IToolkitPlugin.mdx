@@ -110,19 +110,20 @@ Allows plugins to react to lifecycle and map events.
 ### `OnPluginLoad`
 
 ```cpp
-virtual void OnPluginLoad(PluginId id);
+virtual void OnPluginLoad(PluginId id, const char* name);
 ```
 
-Called when a toolkit plugin (.stx) has loaded, after its Load() returned. The id is a toolkit plugin id -- the one "toolkit list" shows. Fires for your own plugin too (a listener added in Load() gets it right after Load() returns); compare against your own id to skip it.
+Called when a toolkit plugin (.stx) has loaded, after its Load() returned. The id is a toolkit plugin id -- the one "toolkit list" shows. Fires for your own plugin too (a listener added in Load() gets it right after Load() returns); compare against your own id to skip it. The name is what the plugin's GetName() returns.
 
 | Parameter | Type |
 |---|---|
 | `id` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `name` | `const char*` |
 
 ### `OnPluginUnload`
 
 ```cpp
-virtual void OnPluginUnload(PluginId id);
+virtual void OnPluginUnload(PluginId id, const char* name);
 ```
 
 Called when a toolkit plugin (.stx) is about to unload, before its Unload() runs. Fires for your own plugin too, like OnPluginLoad().
@@ -130,6 +131,7 @@ Called when a toolkit plugin (.stx) is about to unload, before its Unload() runs
 | Parameter | Type |
 |---|---|
 | `id` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `name` | `const char*` |
 
 ### `OnMetamodPluginLoad`
 
