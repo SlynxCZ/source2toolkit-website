@@ -1,12 +1,13 @@
 {
-    "title":  "Panorama",
-    "description":  "Custom HUD layouts and menus on screen",
-    "root":  true,
-    "icon":  "PanelsTopLeft",
-    "pages":  [
-                  "index",
-                  "layouts",
-                  "click-callbacks",
-                  "authoring"
-              ]
+    "title": "Panorama",
+    "description": "Custom HUD layouts and menus on screen",
+    "root": true,
+    "icon": "PanelsTopLeft",
+    "pages": [
+        "index",
+        "hud",
+        "layouts",
+        "click-callbacks",
+        "authoring"
+    ]
 }

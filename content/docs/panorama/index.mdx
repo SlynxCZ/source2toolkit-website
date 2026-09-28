@@ -10,6 +10,7 @@ per player, and get a callback when a player clicks a button in it. Menus,
 shops, vote prompts, status bars and toasts can all be built this way.
 
 <Cards>
+  <Card title="HUD menus, texts and prompts" href="/docs/panorama/hud">What the core draws for you: HudMenu, IToolkitHud texts and interaction prompts, the reference layouts and the addon.</Card>
   <Card title="Layouts" href="/docs/panorama/layouts">Create, per-player and global state, CSS classes, dialog variables, input capture.</Card>
   <Card title="Click callbacks" href="/docs/panorama/click-callbacks">HookClick, button ids and IToolkitCustomHud.</Card>
   <Card title="Authoring" href="/docs/panorama/authoring">Writing the layout and stylesheet, what the sandbox allows, compiling.</Card>
@@ -48,8 +49,8 @@ panorama/styles/custom_game/<name>.vcss_c     compiled stylesheet it includes (c
 `panorama/layout/custom_game/my_panel.vxml_c`, so you pass only the name.
 If a client does not have that file, it draws nothing.
 
-Getting those files onto players' machines is the part of this feature that is
-**not** solved by the plugin; see [Authoring](/docs/panorama/authoring#shipping-to-clients)
+Getting those files onto players' machines is a Workshop addon plus something
+on the server that hands it out; see [Authoring](/docs/panorama/authoring#shipping-to-clients)
 before you build something players are meant to see.
 
 ## The flow

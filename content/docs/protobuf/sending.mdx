@@ -10,7 +10,7 @@ message can go out as many times as you like before you free it.
 ```cpp title="plugin.cpp"
 #include "usermessages.pb.h"   // UM_Shake
 
-REGISTER_CON_COMMAND("sample_shake", [](const CCommandContext& context, const CCommand& args, bool post)
+REGISTER_CON_COMMAND("sample_shake", [](const ToolkitCommandContext& context, const ToolkitCommandArgs& args, bool post)
 {
     void* pMsg = NET_MSG_ALLOC_BY_ID(UM_Shake);
     if (!pMsg)

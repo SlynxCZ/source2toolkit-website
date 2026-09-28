@@ -36,7 +36,7 @@ The command context gives you the caller's slot. The sample plugin's helper:
 
 ```cpp title="plugin.cpp"
 // A controller for a player, nullptr for the server console.
-static CCSPlayerController* CallerOf(const CCommandContext& context)
+static CCSPlayerController* CallerOf(const ToolkitCommandContext& context)
 {
     const CPlayerSlot slot = context.GetPlayerSlot();
     return slot.IsValid() ? CCSPlayerController::FromSlot(slot) : nullptr;

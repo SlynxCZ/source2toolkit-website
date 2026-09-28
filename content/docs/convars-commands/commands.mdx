@@ -14,7 +14,7 @@ bool MyPlugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, b
 {
     TOOLKIT_SAVEVARS();
 
-    REGISTER_CON_COMMAND("hello", [](const CCommandContext& ctx, const CCommand& args, bool post)
+    REGISTER_CON_COMMAND("hello", [](const ToolkitCommandContext& ctx, const ToolkitCommandArgs& args, bool post)
     {
         TOOLKIT_CONPRINTF("hello from slot %d: %s\n", ctx.GetPlayerSlot().Get(), args.ArgS());
     });
@@ -29,8 +29,8 @@ chat as `!hello` or `/hello`.
 ## The API
 
 ```cpp title="IToolkitCommands.h"
-using ChatHandler    = std::function<void(const CCommandContext&, const CCommand&, bool post)>;
-using CommandHandler = std::function<Action(const CCommandContext&, const CCommand&, bool post)>;
+using ChatHandler    = std::function<void(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
+using CommandHandler = std::function<Action(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
 
 virtual void RegisterChatListener(PluginId owner, const char* pchName, ChatHandler handler) = 0;
 virtual void UnregisterChatListener(PluginId owner, const char* pchName) = 0;
@@ -82,7 +82,10 @@ found — while `!mycmd` and `!MyCmd` in chat both reach one registered as `"myc
 
 ### Arguments
 
-`CCommand` is hl2sdk's tokenized command line:
+`ToolkitCommandArgs` is the tokenized command line — the toolkit's own type,
+built at the dispatch boundary, so neither the engine's `CCommand` nor
+`CCommandContext` is part of the plugin API (their layout can change without a
+rebuild). The calls are the ones the engine type has:
 
 | Call | Returns |
 | --- | --- |
@@ -93,10 +96,12 @@ found — while `!mycmd` and `!MyCmd` in chat both reach one registered as `"myc
 | `args.GetCommandString()` | the whole line |
 
 From chat the trigger is already stripped: `!hello a b` gives
-`Arg(0) == "hello"`, `Arg(1) == "a"`, `ArgC() == 3`.
+`Arg(0) == "hello"`, `Arg(1) == "a"`, `ArgC() == 3`. `Arg(i)` past the end is
+`""`, never null; the strings belong to the dispatch and are gone when the
+handler returns — copy what has to outlive it.
 
 ```cpp title="plugin.cpp"
-REGISTER_CON_COMMAND("sample_echo", [](const CCommandContext& context, const CCommand& args, bool post)
+REGISTER_CON_COMMAND("sample_echo", [](const ToolkitCommandContext& context, const ToolkitCommandArgs& args, bool post)
 {
     if (args.ArgC() < 2)
     {
@@ -112,21 +117,21 @@ REGISTER_CON_COMMAND("sample_echo", [](const CCommandContext& context, const CCo
 
 ### The caller
 
-`CCommandContext::GetPlayerSlot()` tells you who ran the command. A player has
+`ToolkitCommandContext::GetPlayerSlot()` tells you who ran the command. A player has
 a valid slot; the server console (and RCON) has none — the slot is `-1` and
 `IsValid()` is false. The sample plugin wraps this in two small helpers that
 are worth copying:
 
 ```cpp title="plugin.cpp"
 // A controller for a player, nullptr for the server console.
-static CCSPlayerController* CallerOf(const CCommandContext& context)
+static CCSPlayerController* CallerOf(const ToolkitCommandContext& context)
 {
     const CPlayerSlot slot = context.GetPlayerSlot();
     return slot.IsValid() ? CCSPlayerController::FromSlot(slot) : nullptr;
 }
 
 // Answers where the command came from: the player's chat, or the server console.
-static void Reply(const CCommandContext& context, const char* pszFormat, ...)
+static void Reply(const ToolkitCommandContext& context, const char* pszFormat, ...)
 {
     char szBuffer[512];
 
@@ -160,7 +165,7 @@ client-executable, so **any player can run any plugin command** from their
 console or chat. Check the caller yourself before doing anything privileged:
 
 ```cpp
-REGISTER_CON_COMMAND("myplugin_reload", [](const CCommandContext& ctx, const CCommand& args, bool post)
+REGISTER_CON_COMMAND("myplugin_reload", [](const ToolkitCommandContext& ctx, const ToolkitCommandArgs& args, bool post)
 {
     // Server console and RCON only.
     if (ctx.GetPlayerSlot().IsValid())
@@ -182,7 +187,7 @@ creating a console command. It fires when a player types `!name` or `/name`
 in chat:
 
 ```cpp title="plugin.cpp"
-REGISTER_CHAT_LISTENER("noshake", [this](const CCommandContext& context, const CCommand& args, bool post)
+REGISTER_CHAT_LISTENER("noshake", [this](const ToolkitCommandContext& context, const ToolkitCommandArgs& args, bool post)
 {
     const CPlayerSlot slot = context.GetPlayerSlot();
     if (!slot.IsValid())

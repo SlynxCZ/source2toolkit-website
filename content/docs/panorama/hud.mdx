@@ -1,0 +1,154 @@
+---
+title: HUD Menus, Texts and Prompts
+description: Menus, on-screen text and interaction prompts drawn by Panorama through layouts the core owns — HudMenu, IToolkitHud, the reference layouts and the addon that ships them.
+---
+
+The [layout](/docs/panorama/layouts) and [click](/docs/panorama/click-callbacks)
+pages are the raw material: your own `custom_hud_layout`, your own ids, your
+own state. For the three things nearly every plugin wants — a menu, a line of
+text on the screen, a "press E" prompt — the core does that work itself, with
+two layouts it owns:
+
+| You call | Core draws with | Layout (`core.json`) |
+|---|---|---|
+| [`IToolkitMenus::OpenHudMenu`](/docs/core-api/IToolkitMenus#openhudmenu) with a `HudMenu` | one `custom_hud_layout`, per-player state | `HudMenuLayout`, default `s2t_menu` |
+| [`IToolkitHud`](/docs/core-api/IToolkitHud) — `ShowText`, `ShowPrompt` | one `custom_hud_layout`, per-player state | `HudTextLayout`, default `s2t_hud` |
+
+Each entity is spawned on first use once the map's game rules exist, and goes
+with the map. The core resets a slot's state when its player disconnects and
+hides everything it drew for a plugin's open menus when that plugin unloads.
+
+Nothing here works without the layout on the client: the toolkit repository
+ships the reference layouts, and [the addon](#the-addon) is how they get to the
+players. A player without it sees nothing — the server cannot tell.
+
+## HUD menus
+
+A `HudMenu` is a [`CenterHtmlMenu`](/docs/guides/menus) drawn on the HUD
+instead of in the center panel. Same `IBaseMenu`, same options and handlers,
+same `PostSelectAction`, same cooldown hooks; the differences:
+
+- the rows are **clickable** — the core enables input capture while the menu is
+  open and turns a click on a row into the key the row stands for;
+- `1`–`6` pick the options of the page, `7` previous page, `8` next page, `9`
+  close — the chat triggers (`!3`) and console keys keep working;
+- the navigation texts (`PrevText`, `NextText`, `CloseText`) are the plugin's,
+  so they can be in the player's language;
+- it is not redrawn every frame: the core redraws it when what would be drawn
+  changed (an option's `DisabledEvaluator` flipped, the menu was rebuilt in
+  place from a handler).
+
+```cpp title="plugin.cpp"
+static HudMenu g_ShopMenu("Shop");
+
+void OpenShop(CCSPlayerController* player)
+{
+    g_ShopMenu.ClearOptions();
+    g_ShopMenu.AddMenuOption("AWP  -  4750", [](CCSPlayerController* p, ChatMenuOption&) { Buy(p, "weapon_awp"); });
+    g_ShopMenu.AddMenuOption("AK-47 - 2700", [](CCSPlayerController* p, ChatMenuOption&) { Buy(p, "weapon_ak47"); });
+
+    // In the player's language.
+    g_ShopMenu.PrevText = Translate(player, "menu.prev");
+    g_ShopMenu.NextText = Translate(player, "menu.next");
+    g_ShopMenu.CloseText = Translate(player, "menu.close");
+
+    OPEN_HUD_MENU(player, &g_ShopMenu);
+}
+```
+
+`DimBackground` (default `true`) darkens the screen behind the window. The
+rules on [ownership and lifetime](/docs/guides/menus#ownership-and-lifetime)
+are the same as for a center HTML menu.
+
+<Callout type="info">
+A player without the addon sees no menu — and, with input capture on, has a
+cursor. Where you cannot assume the addon, open a `CenterHtmlMenu` instead; the
+two share `IBaseMenu`, so a menu object can be either.
+</Callout>
+
+## Texts
+
+`IToolkitHud` puts a text into one of eight **slots** — positions the
+stylesheet defines — with a colour and a size that are classes of the
+stylesheet too. A plugin never sends a colour, only a name; and it never
+positions anything.
+
+```cpp
+#include "source2toolkit/IToolkitHud.h"
+
+// Five seconds, top of the screen, yellow and large.
+g_pToolkitHud->ShowText(player, HudSlot::Top, "Round starts in 5", 5.0f, { HudColor::Yellow, HudSize::Large });
+
+// A boxed multi-line panel, until it is hidden.
+g_pToolkitHud->ShowText(player, HudSlot::Panel, "Quest: 3 / 10 kills\nReward: 500 credits", 0.0f);
+g_pToolkitHud->HideText(player, HudSlot::Panel);
+```
+
+| `HudSlot` | Where (reference stylesheet) |
+|---|---|
+| `Top` | top centre — announcements |
+| `TopLeft`, `TopRight` | the corners |
+| `Left`, `Right` | beside the crosshair |
+| `Center` | over the crosshair — countdowns, "START" |
+| `Bottom` | above the weapon HUD |
+| `Panel` | a boxed panel on the right — quests, info |
+
+The text is plain: `\n` starts a line, there is no markup. A text with
+`seconds` above zero goes away by itself; `HideText` for the rest, and
+`HideAll` for a player whose texts no longer apply (death, team change). What
+this replaces: `point_worldtext` parented to the pawn and moved every tick, and
+`PrintToCenterHtml` printed every tick to keep a panel up.
+
+## Interaction prompts
+
+A key cap, what the key does, and — for a hold-to-use action — a progress bar:
+
+```cpp
+// While the player looks at the thing.
+g_pToolkitHud->ShowPrompt(player, "E", "Steal the weapon");
+
+// While holding: 0..1 fills the bar.
+g_pToolkitHud->ShowPrompt(player, "E", "Stealing...", held / 2.0f);
+
+// Looked away, or done.
+g_pToolkitHud->HidePrompt(player);
+```
+
+`progress` below zero hides the bar. The bar is a clip, not a width, so it does
+not restart when the texts around it change.
+
+## The addon
+
+The core addresses the layouts by **panel id**; the reference layouts in the
+toolkit repository are the contract, the stylesheets are the look:
+
+```
+panorama/layout/custom_game/s2t_menu.xml    menu — keep the ids
+panorama/layout/custom_game/s2t_hud.xml     texts and the prompt — keep the ids
+panorama/styles/custom_game/s2t_menu.css    yours to change
+panorama/styles/custom_game/s2t_hud.css
+panorama/README.md                          build and publish
+```
+
+The ids are listed at the top of each XML and on the
+[`IToolkitHud`](/docs/core-api/IToolkitHud) page; the menu's
+are `menu_dim`, `menu_root`, `menu_title`, `menu_row_0` … `menu_row_5` (each
+with `_key` and `_text` labels), `menu_prev`, `menu_next`, `menu_close` (with
+`_text` labels) and `menu_footer`. Rename the layout files if you like and put
+the names into `core.json`; the ids inside stay.
+
+Getting them to players is a Workshop addon plus something on the server that
+hands it out — see [Shipping to clients](/docs/panorama/authoring#shipping-to-clients).
+The short version: create an addon in the CS2 Workshop Tools, copy `panorama/`
+into its content folder, compile, publish, and install
+[MultiAddonManager](https://github.com/Source2ZE/MultiAddonManager) on the
+server with `mm_extra_addons <id>`.
+
+## What is where
+
+| | |
+|---|---|
+| Menu API | [`IToolkitMenus`](/docs/core-api/IToolkitMenus) — `HudMenu`, `OpenHudMenu`; the [Menus guide](/docs/guides/menus) for everything a menu does |
+| Text and prompt API | [`IToolkitHud`](/docs/core-api/IToolkitHud) |
+| Your own layouts | [Layouts](/docs/panorama/layouts), [Click callbacks](/docs/panorama/click-callbacks), [Authoring](/docs/panorama/authoring) |
+| Sample plugin | section 11, `sample_hudmenu`, `sample_hudtext`, `sample_prompt` |

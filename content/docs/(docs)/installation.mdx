@@ -118,7 +118,9 @@ On its first start the core copies `configs/core.example.json` to `configs/core.
   "UnlockConCommands": true,
   "UnlockConVars": true,
   "CrashHandlerEnabled": true,
-  "CrashDiscordWebhook": ""
+  "CrashDiscordWebhook": "",
+  "HudMenuLayout": "s2t_menu",
+  "HudTextLayout": "s2t_hud"
 }
 ```
 
@@ -132,6 +134,8 @@ On its first start the core copies `configs/core.example.json` to `configs/core.
 | `UnlockConVars` | `true` | The same for ConVars. |
 | `CrashHandlerEnabled` | `true` | Install the crash handler. |
 | `CrashDiscordWebhook` | `""` | Discord webhook URL for crash reports. Empty disables Discord reporting; dumps are still written. |
+| `HudMenuLayout` | `"s2t_menu"` | The Panorama layout HUD menus are drawn with (`panorama/layout/custom_game/<name>.vxml_c` on the client). See [HUD menus, texts and prompts](/docs/panorama/hud). |
+| `HudTextLayout` | `"s2t_hud"` | The layout for HUD texts and interaction prompts. |
 
 The file is read once, when the core loads. Restart the server after changing it.
 
@@ -154,8 +158,8 @@ toolkit list
 
 | Command | What it does |
 |---|---|
-| `toolkit list` | Lists loaded plugins as `[id] name (version) by author`. |
-| `toolkit info <id>` | Name, version, author, description and file path of one plugin. |
+| `toolkit list` | Lists loaded plugins as `[id] name (version) by author`, with a second line per plugin: its plugin API version, the KHook commit it was built against and its tier — *stable* (no KHook hooks of its own: a game or KHook change needs only a core update) or *raw* (rebuild). See [Compatibility](/docs/development/compatibility). |
+| `toolkit info <id>` | Name, version, author, description, file path, plugin API, KHook commit, how many hooks of its own it declared, and every toolkit interface (with revision) it asked for. |
 | `toolkit load <name>` | Loads the first `.stx` in `plugins/` whose file name contains `<name>`. |
 | `toolkit unload <id>` | Unloads a plugin by the id `toolkit list` shows. |
 | `toolkit refresh` | Loads every `.stx` in `plugins/` that is not loaded yet. |

@@ -1,12 +1,15 @@
 ---
 title: Menus
-description: Center-screen HTML menus with numbered options, paging, per-player instances and cleanup on unload.
+description: Menus with numbered options, paging, per-player instances and cleanup on unload — in the center panel (CenterHtmlMenu) or on the Panorama HUD (HudMenu).
 ---
 
-`IToolkitMenus` shows a `CenterHtmlMenu` in the middle of a player's screen and
-turns their `!1`–`!9` presses into option callbacks. You build the menu, the
-toolkit keeps one active instance per player, draws it every frame and handles
-paging and the close button.
+`IToolkitMenus` shows a menu to a player and turns their `!1`–`!9` presses into
+option callbacks. You build the menu, the toolkit keeps one active instance per
+player and handles paging and the close button. There are two kinds of screen:
+a `CenterHtmlMenu`, drawn in the center panel every frame, and a `HudMenu`,
+drawn by Panorama with clickable rows — same `IBaseMenu`, everything on this
+page applies to both; the HUD one needs an addon on the client, see
+[HUD menus](/docs/panorama/hud#hud-menus).
 
 ```cpp title="plugin.cpp"
 #include "source2toolkit/IToolkitMenus.h"
@@ -39,7 +42,7 @@ void BuildTeamMenu()
     g_TeamMenu.AddMenuOption("Spectators (closed)", nullptr, true);
 }
 
-REGISTER_CON_COMMAND("team_menu", [](const CCommandContext& context, const CCommand& args, bool post)
+REGISTER_CON_COMMAND("team_menu", [](const ToolkitCommandContext& context, const ToolkitCommandArgs& args, bool post)
 {
     CCSPlayerController* player = CCSPlayerController::FromSlot(context.GetPlayerSlot());
     if (!player)
@@ -61,6 +64,25 @@ button); `!7` goes to the previous page, `!8` to the next, and `!9` closes the m
 the exit button is on (`SetExitButton(true)`, the default for
 `CenterHtmlMenu`). The toolkit registers the `1`–`9` commands itself, so the
 keys work in chat (`!3`) and from the console (`3`, bindable to a key).
+
+### On the HUD
+
+A `HudMenu` is opened with `OPEN_HUD_MENU(player, menu)` instead. Its rows are
+clickable, `1`–`6` pick the options of the page (`7`, `8`, `9` as above), and
+the navigation texts are fields of the menu so they can be in the player's
+language:
+
+```cpp
+static HudMenu g_TeamMenu("Pick a team");
+g_TeamMenu.PrevText = "Zpět";
+g_TeamMenu.NextText = "Další";
+g_TeamMenu.CloseText = "Zavřít";
+OPEN_HUD_MENU(player, &g_TeamMenu);
+```
+
+It is not redrawn every frame: the core redraws it when what would be drawn
+changed. A player without the layout sees nothing, so a public server ships
+the [addon](/docs/panorama/hud#the-addon) first.
 
 ### Appearance
 
@@ -150,8 +172,8 @@ HOOK_GAME_EVENT("player_death", [](IGameEvent* event, bool post, bool& dontBroad
 
 ## Ownership and lifetime
 
-- **You own the menu object.** The toolkit stores a raw `CenterHtmlMenu*` in
-  the player's instance and never deletes it. It has to stay alive for as long
+- **You own the menu object.** The toolkit stores a raw `CenterHtmlMenu*` /
+  `HudMenu*` in the player's instance and never deletes it. It has to stay alive for as long
   as it is open for anyone: a static or member menu, or a per-player
   `std::unique_ptr` you replace only after the new menu is open.
 - **Do not free or rebuild a menu from inside one of its own option

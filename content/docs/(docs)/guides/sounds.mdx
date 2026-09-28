@@ -34,7 +34,7 @@ The first three play "in the head" of each recipient — no position, no
 falloff. From the sample plugin:
 
 ```cpp title="plugin.cpp"
-REGISTER_CON_COMMAND("sample_sound", [](const CCommandContext& context, const CCommand& args, bool post)
+REGISTER_CON_COMMAND("sample_sound", [](const ToolkitCommandContext& context, const ToolkitCommandArgs& args, bool post)
 {
     const CPlayerSlot slot = context.GetPlayerSlot();
     const char* pszSound = args.ArgC() >= 2 ? args.Arg(1) : "Weapon_AK47.Single";

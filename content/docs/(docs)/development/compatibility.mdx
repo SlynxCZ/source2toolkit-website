@@ -1,0 +1,106 @@
+---
+title: Compatibility
+description: What a core update means for a plugin — the stable and raw tiers, interface revisions and the compat adapters, the plugin API version, the KHook check, and what toolkit list shows.
+---
+
+A game update changes the server binaries; the toolkit core follows with new
+gamedata and a release. The question for every plugin on the server is whether
+it has to be rebuilt too. The answer depends on what the plugin uses, and the
+toolkit is built so that the answer is **no** for as much as possible.
+
+## Two tiers
+
+| Tier | What the plugin uses | After a game or core update |
+|---|---|---|
+| **Stable** | the `IToolkit*` interfaces, `IToolkitListener` callbacks, [game hooks](/docs/hooks/game-hooks), schema fields by name, `KHOOK_VIRTUAL` with a gamedata name | update the core; the plugin keeps running |
+| **Raw** | its own KHook hooks (`KHOOK_MEMBER`, `KHOOK_VIRTUAL` with `&Class::Method`), hl2sdk classes and their layouts, protobuf messages by generated type, `TOOLKIT_ORIGINAL` | rebuild when the thing it compiled in moved |
+
+The line runs through the plugin: everything resolved at run time from the
+core's gamedata or the schema system is the core's to keep working, everything
+compiled in from a header is the plugin's. A plugin with no raw hooks is on the
+stable tier; `toolkit list` says which is which:
+
+```
+[2] Sample Plugin (1.0.0) by Slynx
+     API 2, KHook 2a8953533da2, raw tier (own KHook hooks: rebuild on a KHook or engine change)
+```
+
+`toolkit info <id>` adds the interfaces the plugin asked for, its KHook commit
+and how many hooks of its own it declared.
+
+## Interface revisions
+
+Every interface name carries a revision — `IToolkitMenus003`,
+`IToolkitEntities002`. The C++ name never changes; the number does whenever
+the interface does, a changed slot or an appended one alike. The factory
+compares what the plugin asks for with what the core has:
+
+| The plugin asks for | The core |
+|---|---|
+| the current revision | serves it |
+| an older one | serves it through a **compat adapter** — a snapshot of the old header forwarding to the current implementation — and logs `X was built against IToolkitMenus002, this core serves IToolkitMenus003: served through a compatibility adapter, rebuild the plugin when convenient` |
+| an older one the core keeps no adapter for | refuses it: `… keeps no adapter for it: rebuild the plugin against the current SDK` |
+| a newer one | refuses it: `… newer than this core's …: update the core` |
+
+Adapters are kept until the next major version. So a core update never breaks
+a plugin over an interface it did not change the meaning of; the warning is a
+reminder, not a deadline.
+
+## The plugin API version
+
+`TOOLKIT_PLAPI_VERSION` numbers the plugin-side interface: `IToolkitPlugin`,
+`IToolkitListener` and the globals. New callbacks are appended, so a plugin
+built against an older API loads and the core simply never calls what it does
+not have; a plugin built against a **newer** API than the core's is refused
+(`plugin API version 3 but this core speaks 2`). Version 2 (core v1.0.26) added
+the engine callbacks (`OnGameFrame`, `OnClientPutInServer`, …) and
+`IToolkitAPI::GameHooks()`.
+
+## The KHook check
+
+Plugins share Metamod's detour engine with the core, so a plugin that hooks
+through KHook has to be built against the same KHook (the templates are the
+engine's layout). The SDK stamps its `vendor/khook` commit into the binary and
+`KHOOK_INIT()` compares it with the core's: a mismatch returns `false` out of
+`Load()` with `KHook mismatch: …` in `error`.
+
+A plugin that never calls `KHOOK_INIT()` — no hooks of its own — is not
+checked; it does not hook, so it does not care which KHook the core runs. A
+plugin using raw `KHOOK_NEW` objects without any `KHOOK_*` macro calls
+`KHOOK_CHECK()` itself before the first one. See
+[SDK dependencies](/docs/development/sdk-dependencies) for keeping
+`vendor/khook` at the commit Metamod pins.
+
+## Keeping a plugin on the stable tier
+
+- Hook game functions through [`IToolkitGameHooks`](/docs/hooks/game-hooks)
+  where the function is in its set.
+- Take engine callbacks from `IToolkitListener` (`OnGameFrame`,
+  `OnStartupServer`, `OnClientPutInServer`, `OnClientDisconnect`, …) instead of
+  a `KHOOK_VIRTUAL` of your own.
+- Where a virtual hook of your own is unavoidable, give it a gamedata name —
+  `KHOOK_GAMEDATA(&Class::Method, "Class::Method")` or the name alone — so the
+  slot follows the core's gamedata.
+- Read schema fields through the SDK's classes: a field the running game does
+  not have does nothing instead of writing at offset 0, and the error is
+  logged once.
+- Take command arguments as `ToolkitCommandContext` / `ToolkitCommandArgs`,
+  not the engine's types.
+
+What stays raw by nature: protobuf messages by generated type, hl2sdk classes
+used directly, `TOOLKIT_ORIGINAL`, and any hook on a function the core does not
+know. Those are rebuilt when the thing they compiled in moves, and `toolkit
+list` shows the server owner which plugins that concerns.
+
+## Unloading, and why it happens between frames
+
+A plugin's own hooks come out synchronously in `KHOOK_DESTRUCT()`, in
+`Unload()`. That is only safe because the core never unloads a plugin from
+inside a hooked function: a detour's dispatch holds the function's lock for
+the whole pre → original → post run, and removing a hook on that function from
+inside it waits forever. `GameFrame` is the function most plugins hook, so no
+unload runs from a game callback — a `toolkit unload` from the console runs
+right away (the command buffer runs between frames), a hot reload and an
+unload requested from code are queued into the same command buffer. The one
+function a plugin cannot be unloaded from inside is
+`ICvar::DispatchConCommand` itself, which is how the console command arrives.

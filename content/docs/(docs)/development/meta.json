@@ -1,11 +1,12 @@
 {
-    "title":  "Development",
-    "defaultOpen":  true,
-    "pages":  [
-                  "first-plugin",
-                  "plugin-lifecycle",
-                  "building",
-                  "sdk-dependencies",
-                  "gamedata"
-              ]
+    "title": "Development",
+    "defaultOpen": true,
+    "pages": [
+        "first-plugin",
+        "plugin-lifecycle",
+        "compatibility",
+        "building",
+        "sdk-dependencies",
+        "gamedata"
+    ]
 }

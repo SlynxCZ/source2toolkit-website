@@ -12,7 +12,7 @@ command runs at all.
 #include "source2toolkit/IToolkitCommands.h"
 
 // No spectators: refuse "jointeam 1".
-REGISTER_CON_LISTENER("jointeam", [](const CCommandContext& context, const CCommand& args, bool post) -> Action
+REGISTER_CON_LISTENER("jointeam", [](const ToolkitCommandContext& context, const ToolkitCommandArgs& args, bool post) -> Action
 {
     if (args.ArgC() >= 2 && atoi(args.Arg(1)) == 1)
     {
@@ -29,7 +29,7 @@ REGISTER_CON_LISTENER("jointeam", [](const CCommandContext& context, const CComm
 ## The API
 
 ```cpp title="IToolkitCommands.h"
-using CommandHandler = std::function<Action(const CCommandContext&, const CCommand&, bool post)>;
+using CommandHandler = std::function<Action(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
 
 virtual void RegisterConListener(PluginId owner, const char* pchName, CommandHandler handler, bool post) = 0;
 virtual void UnregisterConListener(PluginId owner, const char* pchName, bool post) = 0;
@@ -42,8 +42,8 @@ virtual void UnregisterConListener(PluginId owner, const char* pchName, bool pos
   lower-cases what was typed before it looks for listeners).
 - `post` — `false` to run before the command, `true` to run after it. Register
   twice if you need both.
-- The handler gets the same `CCommandContext` and `CCommand` a command handler
-  gets — see [arguments and the caller](/docs/convars-commands/commands#arguments).
+- The handler gets the same `ToolkitCommandContext` and `ToolkitCommandArgs` a
+  command handler gets — see [arguments and the caller](/docs/convars-commands/commands#arguments).
 
 A plugin can register several listeners on the same command. They are called in
 registration order. `UNREGISTER_CON_LISTENER(name, post)` drops all of this
@@ -72,13 +72,13 @@ including other plugins' and the handler of a command registered with
 ## Pre and post together
 
 ```cpp title="plugin.cpp"
-REGISTER_CON_LISTENER("jointeam", [](const CCommandContext& context, const CCommand& args, bool post) -> Action
+REGISTER_CON_LISTENER("jointeam", [](const ToolkitCommandContext& context, const ToolkitCommandArgs& args, bool post) -> Action
 {
     // Pre: decide.
     return Action::Ignore;
 }, false);
 
-REGISTER_CON_LISTENER("jointeam", [](const CCommandContext& context, const CCommand& args, bool post) -> Action
+REGISTER_CON_LISTENER("jointeam", [](const ToolkitCommandContext& context, const ToolkitCommandArgs& args, bool post) -> Action
 {
     // Post: the team change has been processed -- react to it.
     TOOLKIT_LOG(&g_Plugin, "Slot %d ran \"%s\"\n", context.GetPlayerSlot().Get(), args.GetCommandString());
@@ -110,7 +110,7 @@ pre listener on them is a chat filter; `Supersede` drops the message. This is
 how FUNPLAY's Public plugin stops empty and repeated messages:
 
 ```cpp title="chat.cpp"
-static Action OnPlayerChat(const CCommandContext& ctx, const CCommand& args, bool post)
+static Action OnPlayerChat(const ToolkitCommandContext& ctx, const ToolkitCommandArgs& args, bool post)
 {
     CCSPlayerController* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot().Get());
     if (!player)

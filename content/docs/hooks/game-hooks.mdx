@@ -1,0 +1,144 @@
+---
+title: Game Hooks
+description: IToolkitGameHooks — the game functions plugins hook most, detoured once by the core from its gamedata; a handler and a context instead of a KHook, a signature and a prototype of your own.
+---
+
+Most plugins hook the same few dozen game functions: `TakeDamage`,
+`CanAcquire`, `PostThink`, the movement services, the jump code. Every one of
+them written as a `KHOOK_MEMBER` ties the plugin to that function's exact
+prototype and to a signature of its own — and when Valve moves an argument or
+changes the order between Windows and Linux, every plugin has to be rebuilt.
+
+`IToolkitGameHooks` holds those hooks in the core. You register a handler; the
+core resolves the function from **its** gamedata, places the detour the first
+time anybody listens and takes it out again once the last listener is gone. A
+changed prototype is fixed in the core's one call site, and the plugins keep
+running. This is what puts a plugin on the **stable tier** — see
+[Compatibility](/docs/development/compatibility).
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitGameHooks.h"
+
+bool MyPlugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late)
+{
+    TOOLKIT_SAVEVARS();
+
+    // Pre: halve every hit on a player.
+    m_hDamage = g_pToolkitGameHooks->HookTakeDamage(g_PluginID, [](TakeDamageContext& ctx, bool post) -> Action
+    {
+        if (ctx.entity && ctx.entity->IsPlayerPawn())
+            ctx.info->m_flDamage = ctx.info->m_flDamage() * 0.5f;   // by pointer: the original sees it
+
+        return Action::Ignore;
+    }, false);
+
+    // Post: react to what CanAcquire decided.
+    g_pToolkitGameHooks->HookCanAcquire(g_PluginID, [](CanAcquireContext& ctx, bool post) -> Action
+    {
+        if (ctx.result == AcquireResult::Allowed && ctx.method == AcquireMethod::Buy)
+            TOOLKIT_LOG(&g_Plugin, "bought something\n");
+
+        return Action::Ignore;
+    }, true);
+
+    return true;
+}
+```
+
+There is no `KHOOK_INIT()` in this: the plugin declared no hook of its own.
+
+## The handler
+
+Every hook hands its handler a **context** — a plain struct with the hooked
+object, the function's arguments and, where the function returns something,
+`result` — plus `post`, which pass this is. The handler returns `Action`:
+
+| Return | Pre | Post |
+|---|---|---|
+| `Ignore` | nothing changed | nothing changed |
+| `Override` | the original still runs, the function returns `ctx.result` | the function returns `ctx.result` instead of the original's value |
+| `Supersede` | the original does not run, the function returns `ctx.result`; the remaining pre handlers are skipped | — |
+
+```cpp
+// Nobody moves while frozen: CanMove returns false.
+g_pToolkitGameHooks->HookCanMove(g_PluginID, [](CanMoveContext& ctx, bool post) -> Action
+{
+    if (IsFrozen(ctx.pawn))
+    {
+        ctx.result = false;
+        return Action::Supersede;
+    }
+
+    return Action::Ignore;
+}, false);
+```
+
+Arguments passed **by pointer** (the damage info, the move data, the weapon)
+can be changed in place and the original sees the change. Arguments passed
+**by value** (a speed, a flag) cannot; a handler that needs to change one keeps
+a raw `KHOOK_MEMBER` of its own and uses [`KHook::Recall`](/docs/hooks/handlers#changing-the-arguments).
+
+Handlers run in registration order, pre before the original, post after it. In
+post, `result` holds what the original returned. A `Supersede` stops the
+remaining pre handlers — the same rule as [command listeners](/docs/convars-commands/command-listeners).
+
+## Which functions
+
+The set is the one Swiftly hooks, which is what most plugins reach for:
+
+| Group | Hooks |
+|---|---|
+| Damage and items | `TakeDamage`, `CanAcquire`, `CanUse`, `DropWeapon` |
+| Player | `CanMove`, `PostThink`, `ProcessUsercmds`, `SimulateUserCommands`, `RunCommand` |
+| Entities | `AcceptInput`, `Touch` |
+| Movement services | `AirAccelerate`, `AirMove`, `CanUnduck`, `CategorizePosition`, `CheckFalling`, `CheckParameters`, `CheckVelocity`, `CheckWater`, `Duck`, `Friction`, `FullWalkMove`, `GroundAccelerate`, `LadderMove`, `MoveInit`, `PlayerMove`, `ProcessMovement`, `SetupMove`, `TryPlayerMove`, `WalkMove`, `WaterMove` |
+| Jump | `OnJumpLegacy`, `OnJumpModern`, `CheckJumpButtonLegacy`, `CheckJumpButtonModern` |
+
+Every context is listed in the [IToolkitGameHooks reference](/docs/core-api/IToolkitGameHooks).
+Two things to know:
+
+- `GroundAccelerate`'s arguments come in a different order on Windows and
+  Linux. The context always has them in one order; that swap is the core's.
+- `Touch` is a vtable hook on `CBaseEntity`'s own table, so an entity class
+  that overrides `Touch` is not seen. `CanUse` and `DropWeapon` are vtable hooks
+  on the weapon services; everything else is found by signature.
+
+`IsAvailable(GameHook::X)` says whether the core's gamedata has the function on
+this platform. Handlers can be registered either way; on a missing entry they
+never run.
+
+## Several handlers, unhooking
+
+`HookX()` returns a `GameHookId`. A plugin may put several handlers on one
+function — a pre and a post, two features that both care about damage — and
+drop any one of them with the matching `UnhookX(id)`:
+
+```cpp
+GameHookId m_hDamage = 0;
+
+m_hDamage = g_pToolkitGameHooks->HookTakeDamage(g_PluginID, OnTakeDamage, false);
+...
+g_pToolkitGameHooks->UnhookTakeDamage(m_hDamage);
+```
+
+Unhooking from inside the handler is fine: the detour itself comes out on the
+next frame, never from inside its own dispatch. Whatever a plugin still holds
+when it unloads, the core drops for it — nothing to do in `Unload()`.
+
+## When to still hook yourself
+
+- The function is not in the set.
+- You need to change an argument passed by value, or call the original with
+  different arguments (`KHook::Recall`).
+- You need `CallOriginal` from inside the handler — the FUNPLAY jump code does,
+  for `CheckJumpButton`.
+
+Those are raw hooks — [`KHOOK_MEMBER`](/docs/hooks/function-hooks),
+[`KHOOK_VIRTUAL`](/docs/hooks/virtual-hooks) — and they put the plugin on the
+raw tier: it hooks through KHook itself and is rebuilt when the function
+changes. `toolkit list` shows which tier each plugin is on.
+
+## Reference
+
+- [`IToolkitGameHooks`](/docs/core-api/IToolkitGameHooks) — every hook, context and enum
+- [`IToolkitApi::GameHooks()`](/docs/core-api/IToolkitApi) — the same interface through the API

@@ -14,6 +14,7 @@ hooked call runs and which macro fits which target; the subpages go through
 each part in detail.
 
 <Cards>
+  <Card title="Game hooks" href="/docs/hooks/game-hooks">IToolkitGameHooks: the game functions plugins hook most, detoured once by the core — a handler and a context, no KHook of your own.</Card>
   <Card title="Virtual hooks" href="/docs/hooks/virtual-hooks">KHOOK_VIRTUAL on one instance or a whole vtable.</Card>
   <Card title="Function hooks" href="/docs/hooks/function-hooks">KHOOK_MEMBER / KHOOK_FUNCTION by gamedata name, ADDR_* getter or address; KHOOK_INIT and KHOOK_DESTRUCT.</Card>
   <Card title="Writing handlers" href="/docs/hooks/handlers">Signatures, KHook::Return, CallOriginal, changing arguments and return values.</Card>
@@ -72,9 +73,10 @@ bool Plugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, boo
 ```
 
 The KHook headers come from the SDK's `vendor/khook` submodule. The SDK stamps
-that commit into your binary and `TOOLKIT_SAVEVARS()` refuses the load when it
+that commit into your binary and `KHOOK_INIT()` refuses the load when it
 differs from the one the core was built with, so a plugin built against one
-KHook never hooks through another.
+KHook never hooks through another. A plugin with no hooks of its own is never
+checked — it does not hook, so it does not care.
 
 ## How a hooked call runs
 
@@ -158,7 +160,9 @@ this way and `KHOOK_DESTRUCT()` in `Unload()` takes them all down — see
 
 | you want to hook | use | target |
 |---|---|---|
-| a method of an engine interface you hold a pointer to (`ISource2Server::GameFrame`) | `KHOOK_VIRTUAL` | `&g_pInstance` |
+| a game function in the core's set (`TakeDamage`, `CanAcquire`, `PostThink`, the movement services…) | [`IToolkitGameHooks`](/docs/hooks/game-hooks) | a handler — no hook of your own |
+| an engine call the core already fans out (`GameFrame`, `ClientPutInServer`, `ClientDisconnect`, `StartupServer`…) | an [`IToolkitListener` callback](/docs/events/listeners#engine-callbacks) | — |
+| a method of an engine interface you hold a pointer to (`ISource2Server::GameFrame`) | `KHOOK_VIRTUAL` | `&g_pInstance`, the function as `KHOOK_GAMEDATA(&Class::Method, "name")` to follow the core's gamedata |
 | a virtual of a game class, for every object of that class (`CCSPlayerController::Respawn`) | `KHOOK_VIRTUAL` | `KHOOK_VTABLE(module, class)`, function as a gamedata offset name or `&Class::Method` |
 | an interface that is not the class's first base (`IHLTVDirector` in `CCSHLTVDirector`) | `KHOOK_VIRTUAL` | `KHOOK_VTABLE_BASE(module, class, base)` |
 | a function the toolkit already resolves (`TakeDamageOld`, `TerminateRound`, movement…) | `KHOOK_MEMBER` | an `ADDR_*()` getter |
@@ -167,7 +171,8 @@ this way and `KHOOK_DESTRUCT()` in `Unload()` takes them all down — see
 | something the macros cannot express | `KHook::Virtual` / `Member` / `Function` | see [Raw KHook](/docs/hooks/raw-khook) |
 
 Before you hook anything, check whether the toolkit already dispatches it.
-Game events ([Events](/docs/events)), net and user messages
+[Game hooks](/docs/hooks/game-hooks) and the listener's engine callbacks cover
+most of what plugins detour; game events ([Events](/docs/events)), net and user messages
 ([Protobuf](/docs/protobuf/hooking)), console commands and chat
 ([ConVars & Commands](/docs/convars-commands)), entity outputs, sounds and
 transmit all have listener APIs that are already hooked once in the core —

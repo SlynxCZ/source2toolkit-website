@@ -40,7 +40,7 @@ player pawn, while the controller itself keeps being sent so the scoreboard
 stays whole. From the sample plugin:
 
 ```cpp title="plugin.cpp"
-REGISTER_CON_COMMAND("sample_hide", [](const CCommandContext& context, const CCommand& args, bool post)
+REGISTER_CON_COMMAND("sample_hide", [](const ToolkitCommandContext& context, const ToolkitCommandArgs& args, bool post)
 {
     CCSPlayerController* pCaller = CCSPlayerController::FromSlot(context.GetPlayerSlot());
     if (!pCaller || args.ArgC() < 2)

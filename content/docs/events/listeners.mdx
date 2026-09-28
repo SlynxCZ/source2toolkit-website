@@ -116,6 +116,118 @@ A plugin loaded while a map is already running has missed that map's
 engine rather than waiting for the next map change.
 </Callout>
 
+### Engine callbacks
+
+Plugin API 2 (core v1.0.26) fans the engine calls most plugins used to hook
+themselves out of the core's own hooks, so a plugin needs no `KHOOK_VIRTUAL`
+for any of these — and stays on the [stable tier](/docs/development/compatibility):
+
+| Callback | Fires |
+| --- | --- |
+| `OnGameFrame(bool simulating, bool firstTick, bool lastTick)` | Once a frame, after `ISource2Server::GameFrame` and the toolkit's own per-frame work (timers, menus). |
+| `OnStartupServer(const GameSessionConfiguration_t& config, ISource2WorldSession* session, const char* mapName)` | After `INetworkServerService::StartupServer`: a new server session, the new map's entity system is the toolkit's. |
+| `OnClientPutInServer(CPlayerSlot slot, const char* name, int type, uint64 xuid)` | After `IServerGameClients::ClientPutInServer`. |
+| `OnClientVoice(CPlayerSlot slot)` | After `ClientVoice`. |
+| `OnClientSettingsChanged(CPlayerSlot slot)` | After `ClientSettingsChanged`. |
+| `OnClientDisconnect(CPlayerSlot slot, ENetworkDisconnectionReason reason, const char* name, uint64 xuid, const char* networkId)` | After `ClientDisconnect`; the controller still exists. |
+| `OnGameServerSteamAPIActivated()` | After the Steam API came up. |
+| `OnGameServerSteamAPIDeactivated()` | Before it goes. |
+| `OnLoadEventsFromFile(IGameEventManager2* manager, const char* filename, bool searchAll)` | After `IGameEventManager2::LoadEventsFromFile`, with the manager it was called on — the place to keep it, or to register a `.gameevents` file of your own. |
+
+They are appended after the older callbacks, so a plugin built against API 1
+keeps loading; the core just never calls them on it.
+
+```cpp title="plugin.cpp"
+void MyPlugin::OnClientPutInServer(CPlayerSlot slot, const char* name, int type, uint64 xuid)
+{
+    TOOLKIT_LOG(this, "%s is in (slot %d)\n", name, slot.Get());
+}
+```
+
+### Engine callbacks
+
+Plugin API 2 (core v1.0.26) fans the engine calls most plugins used to hook
+themselves out of the core's own hooks, so a plugin needs no `KHOOK_VIRTUAL`
+for any of these — and stays on the [stable tier](/docs/development/compatibility):
+
+| Callback | Fires |
+| --- | --- |
+| `OnGameFrame(bool simulating, bool firstTick, bool lastTick)` | Once a frame, after `ISource2Server::GameFrame` and the toolkit's own per-frame work (timers, menus). |
+| `OnStartupServer(const GameSessionConfiguration_t& config, ISource2WorldSession* session, const char* mapName)` | After `INetworkServerService::StartupServer`: a new server session, the new map's entity system is the toolkit's. |
+| `OnClientPutInServer(CPlayerSlot slot, const char* name, int type, uint64 xuid)` | After `IServerGameClients::ClientPutInServer`. |
+| `OnClientVoice(CPlayerSlot slot)` | After `ClientVoice`. |
+| `OnClientSettingsChanged(CPlayerSlot slot)` | After `ClientSettingsChanged`. |
+| `OnClientDisconnect(CPlayerSlot slot, ENetworkDisconnectionReason reason, const char* name, uint64 xuid, const char* networkId)` | After `ClientDisconnect`; the controller still exists. |
+| `OnGameServerSteamAPIActivated()` | After the Steam API came up. |
+| `OnGameServerSteamAPIDeactivated()` | Before it goes. |
+| `OnLoadEventsFromFile(IGameEventManager2* manager, const char* filename, bool searchAll)` | After `IGameEventManager2::LoadEventsFromFile`, with the manager it was called on — the place to keep it, or to register a `.gameevents` file of your own. |
+
+They are appended after the older callbacks, so a plugin built against API 1
+keeps loading; the core just never calls them on it.
+
+```cpp title="plugin.cpp"
+void MyPlugin::OnClientPutInServer(CPlayerSlot slot, const char* name, int type, uint64 xuid)
+{
+    TOOLKIT_LOG(this, "%s is in (slot %d)\n", name, slot.Get());
+}
+```
+
+### Engine callbacks
+
+Plugin API 2 (core v1.0.26) fans the engine calls most plugins used to hook
+themselves out of the core's own hooks, so a plugin needs no `KHOOK_VIRTUAL`
+for any of these — and stays on the [stable tier](/docs/development/compatibility):
+
+| Callback | Fires |
+| --- | --- |
+| `OnGameFrame(bool simulating, bool firstTick, bool lastTick)` | Once a frame, after `ISource2Server::GameFrame` and the toolkit's own per-frame work (timers, menus). |
+| `OnStartupServer(const GameSessionConfiguration_t& config, ISource2WorldSession* session, const char* mapName)` | After `INetworkServerService::StartupServer`: a new server session, the new map's entity system is the toolkit's. |
+| `OnClientPutInServer(CPlayerSlot slot, const char* name, int type, uint64 xuid)` | After `IServerGameClients::ClientPutInServer`. |
+| `OnClientVoice(CPlayerSlot slot)` | After `ClientVoice`. |
+| `OnClientSettingsChanged(CPlayerSlot slot)` | After `ClientSettingsChanged`. |
+| `OnClientDisconnect(CPlayerSlot slot, ENetworkDisconnectionReason reason, const char* name, uint64 xuid, const char* networkId)` | After `ClientDisconnect`; the controller still exists. |
+| `OnGameServerSteamAPIActivated()` | After the Steam API came up. |
+| `OnGameServerSteamAPIDeactivated()` | Before it goes. |
+| `OnLoadEventsFromFile(IGameEventManager2* manager, const char* filename, bool searchAll)` | After `IGameEventManager2::LoadEventsFromFile`, with the manager it was called on — the place to keep it, or to register a `.gameevents` file of your own. |
+
+They are appended after the older callbacks, so a plugin built against API 1
+keeps loading; the core just never calls them on it.
+
+```cpp title="plugin.cpp"
+void MyPlugin::OnClientPutInServer(CPlayerSlot slot, const char* name, int type, uint64 xuid)
+{
+    TOOLKIT_LOG(this, "%s is in (slot %d)\n", name, slot.Get());
+}
+```
+
+### Engine callbacks
+
+Plugin API 2 (core v1.0.26) fans the engine calls most plugins used to hook
+themselves out of the core's own hooks, so a plugin needs no `KHOOK_VIRTUAL`
+for any of these — and stays on the [stable tier](/docs/development/compatibility):
+
+| Callback | Fires |
+| --- | --- |
+| `OnGameFrame(bool simulating, bool firstTick, bool lastTick)` | Once a frame, after `ISource2Server::GameFrame` and the toolkit's own per-frame work (timers, menus). |
+| `OnStartupServer(const GameSessionConfiguration_t& config, ISource2WorldSession* session, const char* mapName)` | After `INetworkServerService::StartupServer`: a new server session, the new map's entity system is the toolkit's. |
+| `OnClientPutInServer(CPlayerSlot slot, const char* name, int type, uint64 xuid)` | After `IServerGameClients::ClientPutInServer`. |
+| `OnClientVoice(CPlayerSlot slot)` | After `ClientVoice`. |
+| `OnClientSettingsChanged(CPlayerSlot slot)` | After `ClientSettingsChanged`. |
+| `OnClientDisconnect(CPlayerSlot slot, ENetworkDisconnectionReason reason, const char* name, uint64 xuid, const char* networkId)` | After `ClientDisconnect`; the controller still exists. |
+| `OnGameServerSteamAPIActivated()` | After the Steam API came up. |
+| `OnGameServerSteamAPIDeactivated()` | Before it goes. |
+| `OnLoadEventsFromFile(IGameEventManager2* manager, const char* filename, bool searchAll)` | After `IGameEventManager2::LoadEventsFromFile`, with the manager it was called on — the place to keep it, or to register a `.gameevents` file of your own. |
+
+They are appended after the older callbacks, so a plugin built against API 1
+keeps loading; the core just never calls them on it.
+
+```cpp title="plugin.cpp"
+void MyPlugin::OnClientPutInServer(CPlayerSlot slot, const char* name, int type, uint64 xuid)
+{
+    TOOLKIT_LOG(this, "%s is in (slot %d)\n", name, slot.Get());
+}
+```
+
 ### Interface queries
 
 These let your plugin **expose** interfaces to other plugins:
@@ -151,8 +263,8 @@ void* MyPlugin::OnToolkitQuery(const char* iface, int* ret)
 
 | Event | Where |
 | --- | --- |
-| Client connect, put in server, disconnect | KHook on `ISource2GameClients` (`ClientConnect`, `ClientPutInServer`, `ClientDisconnect`, …) — see [Hooking](/docs/hooks), or the `player_connect_full` / `player_disconnect` [game events](/docs/events/game-events) |
-| Every server frame | KHook on `ISource2Server::GameFrame` |
+| Client connect (`ClientConnect`, `OnClientConnected`, `ClientActive`, `ClientCommand`) | KHook on `ISource2GameClients` — see [Hooking](/docs/hooks), or the `player_connect_full` [game event](/docs/events/game-events); put in server and disconnect are listener callbacks above |
+| Damage, movement, item pickup, entity inputs | [Game hooks](/docs/hooks/game-hooks) |
 | Entity created / spawned / deleted | `IEntityListener` via `ADD_ENTITY_LISTENER` — see [Entities](/docs/entities) |
 | Entity outputs | `IEntityIOListener` via `ADD_ENTITY_IO_LISTENER` — see [Entities](/docs/entities) |
 | Round start, deaths, bomb, … | [Game events](/docs/events/game-events) |

@@ -170,6 +170,15 @@ available as `field.GetManipulator()` (null for every other field). The SDK's
 `CCSCustomHudLayout::GetLayoutState` is an example of using it; when a helper
 exists for such a field, use the helper.
 
+## When a field is missing
+
+A field the running game does not have — renamed by an update, gone, a class
+that lost it — does not write at offset 0 and does not stop the plugin from
+loading. The first access logs an error naming the class and the field; reads
+return a zeroed value of the field's type, writes and `NetworkStateChanged()`
+do nothing. The rest of the plugin keeps working, and the log line says what
+to rename.
+
 ## Adding your own helpers
 
 The generated classes carry the game's fields and the SDK's helpers, not yours.

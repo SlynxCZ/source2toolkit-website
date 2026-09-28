@@ -50,16 +50,20 @@ No. The core refuses a late load (`Late load is not supported`); it has to be lo
 Plugin myplugin refused to load: KHook mismatch: plugin built against 1111aaaa2222, toolkit core runs 3333bbbb4444 -- rebuild the plugin with the SDK's vendor/khook at the core's commit, or update the core
 ```
 
-The toolkit core is built against the KHook inside Metamod:Source, and every plugin against the SDK's `vendor/khook`. KHook's headers and its engine are one library, so a plugin built against a different KHook than the one running could corrupt hooks — `TOOLKIT_SAVEVARS()` compares the two commits and refuses the load instead.
+The toolkit core is built against the KHook inside Metamod:Source, and every plugin against the SDK's `vendor/khook`. KHook's headers and its engine are one library, so a plugin built against a different KHook than the one running could corrupt hooks — `KHOOK_INIT()` compares the two commits and refuses the load instead. A plugin with no hooks of its own (nothing but the toolkit's interfaces) is never checked; it does not hook, so it does not care.
 
 - **Plugin developer:** update the SDK and run `python tools/deps.py update`, which moves `vendor/khook` to the commit Metamod:Source pins, then rebuild. See [SDK dependencies](/docs/development/sdk-dependencies).
 - **Server owner:** the plugin and the toolkit core are from different generations. Update the core to the latest release, or ask the plugin's author for a build that matches the core you run.
 
 If a plugin was built without git metadata for KHook, the check is skipped with a note — it does not fail.
 
-### A plugin refuses to load with "Plugin API version mismatch"
+### A plugin refuses to load with "plugin API version 3 but this core speaks 2"
 
-The plugin was built against a different `TOOLKIT_PLAPI_VERSION` than the core speaks. Rebuild it against the current SDK, or update the core; `toolkit version` shows the API version the core expects.
+The plugin was built against a **newer** `TOOLKIT_PLAPI_VERSION` than the core speaks: update the core. The other way round is fine — a plugin built against an older API loads, and the core simply never calls the callbacks it does not have. `toolkit version` shows the API version the core expects, `toolkit list` the one each plugin was built against.
+
+### "was built against IToolkitMenus002, this core serves IToolkitMenus003"
+
+Every toolkit interface name carries a revision. When a plugin asks for an older one, the core serves it through a compat adapter and logs this as a reminder to rebuild when convenient — the plugin works. `… keeps no adapter for it` means the core dropped that revision: rebuild the plugin against the current SDK. `… newer than this core's …: update the core` is the other direction. See [Compatibility](/docs/development/compatibility).
 
 ### A plugin does not show up at all
 

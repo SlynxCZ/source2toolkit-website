@@ -42,7 +42,7 @@ The other plugin answers that query in its own listener's `OnToolkitQuery()`.
 For each `.stx` the core:
 
 1. opens the library and calls its `CreateInterface` export for `IToolkitPlugin` (which `TOOLKIT_EXPOSE` provides);
-2. compares `GetApiVersion()` with the core's `TOOLKIT_PLAPI_VERSION` — a mismatch is refused with `Plugin API version mismatch`;
+2. compares `GetApiVersion()` with the core's `TOOLKIT_PLAPI_VERSION` — a plugin built against a **newer** API than the core's is refused (`plugin API version 3 but this core speaks 2`); an older one loads, and the core calls nothing it does not have (see [Compatibility](/docs/development/compatibility));
 3. assigns the next plugin id and adds the plugin to its list;
 4. calls `Load(id, api, error, maxlen, late)`;
 5. on success, calls `OnPluginLoad(newId, name)` on every listener of every loaded plugin — including the new plugin's own, if it added one in `Load()`.
@@ -65,6 +65,7 @@ Everything registered through a toolkit interface is stored under the owning plu
 
 - console commands, command listeners and chat listeners;
 - game event hooks;
+- [game hook](/docs/hooks/game-hooks) handlers;
 - ConVar change callbacks;
 - network message hooks;
 - custom HUD callbacks;
@@ -75,7 +76,7 @@ Everything registered through a toolkit interface is stored under the owning plu
 - pending HTTP requests;
 - MySQL connections;
 - entity listeners;
-- open menus;
+- open menus (a HUD menu is hidden for the player as well);
 - the plugin's `IToolkitListener`s.
 
 Calling `UNREGISTER_CON_COMMAND`, `UNHOOK_GAME_EVENT`, `KILL_TIMER` and the like yourself is only needed to turn a feature off while the plugin stays loaded.
@@ -84,7 +85,7 @@ Calling `UNREGISTER_CON_COMMAND`, `UNHOOK_GAME_EVENT`, `KILL_TIMER` and the like
 
 Some things live in your own library and the toolkit cannot reach them:
 
-- **KHook hooks.** Call `KHOOK_DESTRUCT()` in `Unload()`. A hook left installed after the library is closed jumps into unmapped memory on its next call. Member and function detours come out right there; a virtual hook only stops calling back, and the core removes it once `Unload()` has returned — removing it from inside `Unload()` would wait for the call of the hooked function the unload command itself arrived through (`ICvar::DispatchConCommand`), which is a deadlock. The library is closed only after that.
+- **KHook hooks.** Call `KHOOK_DESTRUCT()` in `Unload()`. A hook left installed after the library is closed jumps into unmapped memory on its next call. Every hook comes out right there, synchronously — which is safe only because the core never unloads a plugin from inside a function the plugin might hook; see [Unloading](#unloading).
 - **`CConVar`s you declared.** Call `ConVar_Unregister()` in `Unload()`. It only walks the list of the library that calls it, so the core cannot do it for you.
 - **Game systems** you registered on the engine's factory list.
 - Threads, sockets, files and any other resource you created yourself.
@@ -105,7 +106,13 @@ A plugin is unloaded by `toolkit unload <id>`, by a hot reload, or when the tool
 1. `OnPluginUnload(id, name)` is called on every listener of every plugin — including the plugin being unloaded;
 2. `Unload(error, maxlen)` is called;
 3. its listeners and everything it owns are removed (see above);
-4. the library is closed on the **next frame**, so that no stack frame still points into it (a `toolkit unload` is itself running inside a hook).
+4. the library is closed on the **next frame**, so that no stack frame still points into it.
+
+### Never from inside a hooked function
+
+A KHook detour holds the hooked function's lock for the whole pre → original → post run, and taking a hook on that function out from inside it waits forever. So the core never runs an unload from a game callback — `GameFrame` is the function most plugins hook. A `toolkit unload` typed into the console runs right away: the command buffer is executed between frames, outside every hooked function. A hot reload, and an unload a plugin requests from code, are queued and pushed into that same command buffer (`toolkit _pending`), and run on its next pass. The one function a plugin cannot be unloaded from inside is `ICvar::DispatchConCommand`, which is how the console command itself arrives.
+
+The toolkit's own unload (`meta unload`) arrives through that hook too; the core supersedes the command, drops its `DispatchConCommand` hook at the end of the frame and re-issues the unload from the command buffer.
 
 The return value of `Unload()` and anything written to `error` are ignored — a plugin cannot refuse to be unloaded.
 
@@ -125,6 +132,11 @@ Implement `IToolkitListener` and register it with `api->AddListener(this, listen
 | `OnAllMetamodPluginsLoaded()` | Metamod finished loading all its plugins. |
 | `OnLevelInit(mapName, mapEntities, oldLevel, landmarkName, loadGame, background)` | A map is starting. |
 | `OnLevelShutdown()` | A map is shutting down. |
+| `OnGameFrame(simulating, firstTick, lastTick)` | Once a frame, after the engine's `GameFrame` and the toolkit's own per-frame work. Plugin API 2. |
+| `OnStartupServer(config, session, mapName)` | A new server session; the new map's entity system is up. API 2. |
+| `OnClientPutInServer(slot, name, type, xuid)`, `OnClientVoice(slot)`, `OnClientSettingsChanged(slot)`, `OnClientDisconnect(slot, reason, name, xuid, networkId)` | After the engine's `IServerGameClients` call of the same name. API 2. |
+| `OnGameServerSteamAPIActivated()`, `OnGameServerSteamAPIDeactivated()` | The Steam API came up / is about to go. API 2. |
+| `OnLoadEventsFromFile(manager, filename, searchAll)` | After `IGameEventManager2::LoadEventsFromFile`; the place to keep the manager or register a `.gameevents` file of your own. API 2. |
 | `OnToolkitQuery(const char* iface, int* ret)` | Another toolkit plugin asked for an interface. Return a pointer and set `*ret = TOOLKIT_IFACE_OK` to answer. |
 | `OnMetamodQuery(const char* iface, int* ret)` | A Metamod plugin asked for an interface. Defaults to answering like `OnToolkitQuery()`; return `nullptr` to keep an interface for toolkit plugins only. |
 
@@ -144,7 +156,7 @@ TOOLKIT_GLOBALVARS();
 
 void Greeter::Setup()
 {
-    REGISTER_CON_COMMAND("greet", [](const CCommandContext& context, const CCommand& args, bool post)
+    REGISTER_CON_COMMAND("greet", [](const ToolkitCommandContext& context, const ToolkitCommandArgs& args, bool post)
     {
         TOOLKIT_CONPRINTF("Greetings.\n");
     });

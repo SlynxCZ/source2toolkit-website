@@ -32,6 +32,18 @@ The **function** argument says where in the vtable the hook goes:
 - a gamedata offset name (`"CCSPlayerController::Respawn"`) — read from
   gamedata at `KHOOK_INIT()`. Offsets differ between Windows and Linux, and
   gamedata keeps one per platform — see [Gamedata](/docs/hooks/gamedata).
+- `KHOOK_GAMEDATA(&Class::Method, "name")` — both at once. Gamedata wins; a
+  difference between the two is logged (one of them is stale), and a missing
+  entry for this platform leaves the header's index in place. The core's
+  gamedata carries the engine interfaces' slots (`ISource2Server::GameFrame`,
+  `ISource2GameClients::ClientPutInServer`, …), so a hook written this way
+  follows a core update instead of a rebuild.
+
+The last two keep the plugin on the [stable tier](/docs/development/compatibility):
+a bare `&Class::Method` compiles the slot in from the SDK's header and needs a
+rebuild when the slot moves. Before writing one at all, check whether the
+engine call is already an [`IToolkitListener` callback](/docs/events/listeners#engine-callbacks)
+(`OnGameFrame`, `OnClientPutInServer`, `OnClientDisconnect`, …).
 
 When the method is overloaded, the member function pointer has to be
 disambiguated with a `static_cast` to the exact signature. `PostEventAbstract`

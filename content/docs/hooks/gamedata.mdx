@@ -51,6 +51,8 @@ here only as examples of the shape. Use your own key names.)
 |---|---|---|
 | `KHOOK_MEMBER(m_hX, "Name", ...)` / `KHOOK_FUNCTION` | `signatures` | `IToolkitGameConfig::ResolveSignature` |
 | `KHOOK_VIRTUAL(m_hX, "Name", KHOOK_VTABLE(...), ...)` | `offsets` | `IToolkitGameConfig::GetOffset` |
+| `KHOOK_VIRTUAL(m_hX, KHOOK_GAMEDATA(&Class::Method, "Name"), ...)` | `offsets`, checked against the header's index | the same |
+| [`IToolkitGameHooks`](/docs/hooks/game-hooks) | the core's own `signatures` and `offsets` | the core |
 | `GAMECONFIG_RESOLVE("Name")` | `signatures` | the same, for calling |
 | `GAMECONFIG_OFFSET("Name")` | `offsets` | the same, for `CALL_VIRTUAL` |
 

@@ -10,11 +10,13 @@ stricter than Panorama itself, and Panorama CSS is not web CSS. Both fail
 does not understand is dropped. This page collects what is known to work.
 
 <Callout type="info">
-The SDK does not ship layouts or tooling for them, and the toolkit
-repository's `panorama/layout/custom_game` and `panorama/styles/custom_game`
-folders are empty placeholders. What follows comes from hands-on testing of
-`custom_hud_layout` on CS2 builds from August–September 2026. Valve marks the
-feature experimental; re-check after game updates.
+The toolkit repository's `panorama/` folder holds the reference layouts the
+core draws [HUD menus, texts and prompts](/docs/panorama/hud) with
+(`s2t_menu`, `s2t_hud`), with their stylesheets and a README on building the
+addon — a working starting point for a layout of your own. What follows comes
+from hands-on testing of `custom_hud_layout` on CS2 builds from
+August–September 2026. Valve marks the feature experimental; re-check after
+game updates.
 </Callout>
 
 ## File layout
@@ -168,12 +170,30 @@ did not. Get the plugin side working first, then iterate on the stylesheet.
 
 ## Shipping to clients
 
-<Callout type="warn">
-As of the last testing, the retail client **refuses layouts supplied by an
-addon** — the console shows
-`client disallowing panorama layout file creation`. A layout loads when the
-compiled files reach the client through a search path in its `gameinfo.gi`,
-which is a development setup, not a way to ship to players. Treat custom HUD
-layouts as something to build and test now, and check the current state
-before depending on them for a public server.
+Since the CS2 update of 24 August 2026 the client loads custom HUD layouts
+from a **Workshop addon** (earlier builds refused them with
+`client disallowing panorama layout file creation`). The way to players:
+
+1. Create an addon in the **Counter-Strike 2 Workshop Tools** and copy your
+   `panorama/` folder into `content/csgo_addons/<addon>/`.
+2. Compile — the tools do it on publish, or run `resourcecompiler.exe -i` on
+   each file — and publish the addon from the Workshop Manager. Note the file
+   id.
+3. Make the server hand it out. The engine only downloads the **map's** addon
+   by itself; an extra addon needs
+   [MultiAddonManager](https://github.com/Source2ZE/MultiAddonManager)
+   (`mm_extra_addons <id>`) or an equivalent. `S2C_CONNECTION [addons:'<id>']`
+   in the server log shows it being sent.
+
+Panorama caches layouts for the whole client session: after a republish,
+players see the new version once they restart the game.
+
+<Callout type="info">
+The server cannot tell whether a player has the addon. A player without it
+draws nothing — and, with input capture on, is left with a cursor. Plan for
+that where you cannot assume it (a center HTML fallback for menus, say).
 </Callout>
+
+For a local client, a search path in `gameinfo.gi` pointing at the compiled
+`game/csgo_addons/<addon>/` works too; that is a development setup, not a way
+to ship.
