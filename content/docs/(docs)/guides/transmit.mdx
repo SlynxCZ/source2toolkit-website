@@ -110,8 +110,8 @@ you every viewer's transmit set once per tick, after the toolkit has applied
 its own hooked entities:
 
 ```cpp
-using CheckTransmitHook = std::function<void(IToolkitTransmitInfo* const* infos, int infoCount,
-                                             const uint16_t* entityIndices, int entityCount)>;
+using CheckTransmitHook = ToolkitCallback<void(IToolkitTransmitInfo* const* infos, int infoCount,
+                                                const uint16_t* entityIndices, int entityCount)>;
 ```
 
 `entityIndices` lists the entities the engine considered this tick; anything
@@ -159,9 +159,12 @@ HOOK_CHECK_TRANSMIT([](IToolkitTransmitInfo* const* infos, int infoCount, const 
   entity".
 </Callout>
 
-One hook per plugin: hooking again replaces the handler, `UNHOOK_CHECK_TRANSMIT()`
-removes it. Handlers of different plugins run in the order they were added.
-The `IToolkitTransmitInfo` pointers are only valid during the callback.
+A plugin may add as many handlers as it likes; all of them run in the order
+they were added. `HOOK_CHECK_TRANSMIT()` returns a `ToolkitHookId`:
+`g_pToolkitTransmit->UnhookCheckTransmit(id)` removes that handler, and
+`UNHOOK_CHECK_TRANSMIT(handler)` removes a function or object-and-method
+handler passed again (a lambda only goes by id). The `IToolkitTransmitInfo`
+pointers are only valid during the callback.
 
 ## Pitfalls
 
@@ -169,7 +172,7 @@ The `IToolkitTransmitInfo` pointers are only valid during the callback.
   at the top, keep the per-viewer loop to bit operations, and avoid allocating
   (reuse a static vector as above).
 - **Lifetime.** An entity hook goes away with the entity, with your plugin, or
-  with `UnhookEntity()`. Hooks and the CheckTransmit handler are removed when
+  with `UnhookEntity()`. Entity hooks and CheckTransmit handlers are removed when
   your plugin unloads — nothing to undo in `Unload()`.
 - **Disconnects.** When a player leaves, every hooked entity is reset to its
   default for their slot (`ResetViewer()`), so the next player in that slot

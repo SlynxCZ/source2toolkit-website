@@ -47,6 +47,18 @@ platform differences. The full list is on [Addresses](/docs/hooks/addresses).
 For a function the toolkit does not know, add an entry to your gamedata (see
 [Gamedata](/docs/hooks/gamedata)) and name it.
 
+A pattern you keep in the plugin instead is scanned yourself and passed as an
+address. `WIN_LINUX(win, lin)` from `IToolkitModule.h` picks the platform's
+pattern at compile time:
+
+```cpp
+IToolkitMemory addr = pServer->FindPattern(WIN_LINUX("48 89 7C 24 ? 55", "55 48 89 E5 41 57"));
+```
+
+See [Memory & modules](/docs/guides/memory-and-modules#pattern-scanning). A
+gamedata entry is still the better choice for anything a game update moves: it
+is fixed without a rebuild.
+
 ### Deferred targets
 
 The target is **not** evaluated when your object is constructed. The macro

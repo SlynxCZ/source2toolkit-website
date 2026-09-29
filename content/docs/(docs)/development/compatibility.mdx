@@ -45,6 +45,15 @@ An interface changes rarely, and when it does the log says exactly which
 plugin and which interface. Everything else a core update touches — gamedata,
 schema, the game hooks' prototypes — is the core's alone.
 
+The last such change (core v1.0.35) took the `PluginId` out of every call that takes a
+handler (the core now reads the owner off the handler) and made every
+`Register*` / `Hook*` return a `ToolkitHookId`. It bumped `IToolkitCommands002`,
+`IToolkitConVars002`, `IToolkitCustomHud002`, `IToolkitEntities002`,
+`IToolkitEvents002`, `IToolkitGameHooks003`, `IToolkitHTTP002`,
+`IToolkitNetworkMessages002`, `IToolkitScheduler002`, `IToolkitScripts002`,
+`IToolkitSounds002` and `IToolkitTransmit002`; a plugin built against the
+revisions before those has to be rebuilt against the current SDK.
+
 ## The plugin API version
 
 `TOOLKIT_PLAPI_VERSION` numbers the plugin-side interface: `IToolkitPlugin`,

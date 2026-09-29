@@ -29,29 +29,48 @@ chat as `!hello` or `/hello`.
 ## The API
 
 ```cpp title="IToolkitCommands.h"
-using ChatHandler    = std::function<void(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
-using CommandHandler = std::function<Action(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
+using ChatHandler    = ToolkitCallback<void(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
+using CommandHandler = ToolkitCallback<Action(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
 
-virtual void RegisterChatListener(PluginId owner, const char* pchName, ChatHandler handler) = 0;
-virtual void UnregisterChatListener(PluginId owner, const char* pchName) = 0;
+virtual ToolkitHookId RegisterChatListener(const char* pchName, ChatHandler handler) = 0;
+virtual bool UnregisterChatListener(const char* pchName, const ChatHandler& handler) = 0;
+virtual bool UnregisterChatListener(ToolkitHookId id) = 0;
 
-virtual void RegisterConCommand(PluginId owner, const char* pchName, ChatHandler handler) = 0;
-virtual void UnregisterConCommand(PluginId owner, const char* pchName) = 0;
+virtual ToolkitHookId RegisterConCommand(const char* pchName, ChatHandler handler) = 0;
+virtual bool UnregisterConCommand(const char* pchName, const ChatHandler& handler) = 0;
+virtual bool UnregisterConCommand(ToolkitHookId id) = 0;
 
-virtual void RegisterConListener(PluginId owner, const char* pchName, CommandHandler handler, bool post) = 0;
-virtual void UnregisterConListener(PluginId owner, const char* pchName, bool post) = 0;
+virtual ToolkitHookId RegisterConListener(const char* pchName, CommandHandler handler, bool post) = 0;
+virtual bool UnregisterConListener(const char* pchName, const CommandHandler& handler, bool post) = 0;
+virtual bool UnregisterConListener(ToolkitHookId id) = 0;
 ```
 
-And the macros that fill in `owner` with your `g_PluginID`:
+There is no plugin id argument. A handler is a `ToolkitCallback`: a lambda, a
+free or static function, or an object and a method, and the core reads which
+plugin it belongs to off the handler itself:
+
+```cpp
+REGISTER_CON_COMMAND("hello", OnHello);                                 // function
+REGISTER_CON_COMMAND("hello", &Commands::OnHello);                      // static method
+REGISTER_CON_COMMAND("hello", TOOLKIT_MEMBER(this, &MyPlugin::OnHello)); // object and method
+REGISTER_CON_COMMAND("hello", [](auto& ctx, auto& args, bool post) {}); // lambda
+```
+
+`TOOLKIT_MEMBER(inst, func)` (or `{ this, &MyPlugin::OnHello }`) and
+`TOOLKIT_STATIC(func)` are SourceHook's `SH_MEMBER` / `SH_STATIC` spelling of
+the same thing. Inside a macro argument use `TOOLKIT_MEMBER`: the comma in a
+bare `{ this, &MyPlugin::OnHello }` would split it into two arguments.
+
+The macros just forward:
 
 | Macro | Calls |
 | --- | --- |
-| `REGISTER_CON_COMMAND(name, handler)` | `RegisterConCommand` |
-| `UNREGISTER_CON_COMMAND(name)` | `UnregisterConCommand` |
-| `REGISTER_CHAT_LISTENER(name, handler)` | `RegisterChatListener` |
-| `UNREGISTER_CHAT_LISTENER(name)` | `UnregisterChatListener` |
-| `REGISTER_CON_LISTENER(name, handler, post)` | `RegisterConListener` |
-| `UNREGISTER_CON_LISTENER(name, post)` | `UnregisterConListener` |
+| `REGISTER_CON_COMMAND(name, handler)` | `RegisterConCommand(name, handler)` |
+| `REGISTER_CHAT_LISTENER(name, handler)` | `RegisterChatListener(name, handler)` |
+| `REGISTER_CON_LISTENER(name, handler, post)` | `RegisterConListener(name, handler, post)` |
+
+There are no unregister macros; call `Unregister*` on `g_pToolkitCommands`
+(see [Unregistering](#unregistering)).
 
 Commands and chat listeners take a `ChatHandler`, which returns nothing. A
 handler that needs to block something is a *listener*, which returns an
@@ -212,11 +231,18 @@ You rarely need to — everything is dropped when your plugin unloads. To turn a
 command off while the plugin keeps running:
 
 ```cpp
-UNREGISTER_CON_COMMAND("hello");     // the handler and its chat forms
-UNREGISTER_CHAT_LISTENER("noshake");
+// By the id the registration returned -- the only way for a lambda.
+ToolkitHookId m_hHello = REGISTER_CON_COMMAND("hello", [](auto& ctx, auto& args, bool post) { /* ... */ });
+g_pToolkitCommands->UnregisterConCommand(m_hHello);     // the handler and its chat forms
+
+// Or by the same function / object and method again.
+REGISTER_CHAT_LISTENER("noshake", TOOLKIT_MEMBER(this, &MyPlugin::OnNoShake));
+g_pToolkitCommands->UnregisterChatListener("noshake", TOOLKIT_MEMBER(this, &MyPlugin::OnNoShake));
 ```
 
-`UNREGISTER_CON_COMMAND` removes your handlers. The engine `ConCommand` stays
+Each returns `true` when it found the handler. Several handlers may share one
+command name; each runs, and unregistering removes only the one you name.
+`UnregisterConCommand` removes your handler. The engine `ConCommand` stays
 until the plugin unloads (it just does nothing in the meantime); registering
 the same name again reuses it. On unload the toolkit gives the name back to the
 engine, so a reloaded plugin — or another one — can register it again.

@@ -38,41 +38,66 @@ player->m_iPawnHealth() = 1337; // Without automatic SetStateChanged`,
   },
   {
     id: 'hooks',
-    tab: 'Hooks',
-    file: 'movement_hook.cpp',
-    title: 'Hook anything that exists in memory',
+    tab: 'Game hooks',
+    file: 'bhop.cpp',
+    title: 'Hook the game without a signature',
     description:
-      'Pattern scan a module, point a KHook function hook at the address and take over the call. KHook is the engine Metamod itself runs, so it is the same vocabulary Metamod plugins already use.',
-    bullets: ['Pattern scanning', 'Virtual & function hooks', 'KHook::Action control'],
+      'The core hooks the functions plugins reach for most — TakeDamage, CanAcquire, PostThink, the movement and jump code — from its own gamedata. Register a handler, get a context, answer like KHook does. No signature, no prototype, no rebuild when Valve moves an argument.',
+    bullets: ['~35 game functions', 'Survives engine updates', 'CallOriginal & { action, value }'],
+    code: `
+CConVarRef<bool> sv_autobunnyhopping("sv_autobunnyhopping");
+
+// No KHOOK_INIT(), no signature: the core places the detour from its gamedata
+// the first time anybody listens, and whose handler it is, it reads off it.
+g_pToolkitGameHooks->HookCheckJumpButtonLegacy([](LegacyJumpContext& ctx, bool post) -> Action
+{
+    if (sv_autobunnyhopping.Get())
+        return Action::Ignore;
+
+    // The game's own code, right now, with bunnyhopping on for this one call.
+    sv_autobunnyhopping.Set(true);
+    ctx.CallOriginal();
+    sv_autobunnyhopping.Set(false);
+
+    return Action::Supersede;   // it has run already
+}, false);
+
+// A function with a return value: the value goes with the action.
+g_pToolkitGameHooks->HookTakeDamage([](TakeDamageContext& ctx, bool post) -> GameHookReturn<TakeDamageContext::Return>
+{
+    if (IsSpawnProtected(ctx.entity))
+        return { Action::Supersede, 0 };
+
+    return Action::Ignore;
+}, false);`,
+  },
+  {
+    id: 'khook',
+    tab: 'KHook',
+    file: 'switch_team.cpp',
+    title: 'And anything else that exists in memory',
+    description:
+      'What the game hooks do not cover, hook yourself: a gamedata entry, an address the toolkit already resolved, or a pattern of your own. KHook is the engine Metamod itself runs, so it is the same vocabulary Metamod plugins already use.',
+    bullets: ['Gamedata, addresses & patterns', 'Virtual & function hooks', 'KHook::Action control'],
     code: `
 class Plugin final : public IToolkitPlugin
 {
-    KHook::Return<void> Hook_CheckJumpButtonLegacy(CCSPlayerLegacyJump* pThis, void* mv);
+    KHook::Return<void> Hook_SwitchTeam(CCSPlayerController* pThis, int nTeam);
+    KHook::Return<void> Hook_SnapViewAngles(CBasePlayerPawn* pThis, QAngle* pAngles);
 
-    // One line: the type comes from the handler, the address from gamedata,
-    // KHOOK_INIT() in Load() places the detour, KHOOK_DESTRUCT() removes it.
-    KHOOK_MEMBER(m_hCheckJumpButtonLegacy, "CCSPlayerLegacyJump::CheckJumpButtonLegacy", &Plugin::Hook_CheckJumpButtonLegacy, nullptr);
+    // A gamedata entry by name: a game update is a gamedata update.
+    KHOOK_MEMBER(m_hSwitchTeam, "CCSPlayerController::SwitchTeam", &Plugin::Hook_SwitchTeam, nullptr);
+
+    // A pattern of your own, the platform's picked at compile time.
+    KHOOK_MEMBER(m_hSnapViewAngles,
+                 g_pServerModule->FindPattern(WIN_LINUX("48 89 7C 24 ? 55 48 8B EC", "55 48 89 E5 41 57 49 89 FF")),
+                 &Plugin::Hook_SnapViewAngles, nullptr);
 };
 
-CConVarRef<bool> sv_autobunnyhopping("sv_autobunnyhopping");
-
-KHook::Return<void> Plugin::Hook_CheckJumpButtonLegacy(CCSPlayerLegacyJump* pThis, void* mv)
+KHook::Return<void> Plugin::Hook_SwitchTeam(CCSPlayerController* pThis, int nTeam)
 {
-    CCSPlayer_MovementServices* ms = pThis->m_pMovementServices;
-    CCSPlayerPawn* pawn = ms ? ms->GetPawn() : nullptr;
-    CCSPlayerController* player = pawn ? pawn->GetController() : nullptr;
-
-    bool canBhop = true;
-    bool originalBhop = sv_autobunnyhopping.Get();
-
-    if (canBhop && !originalBhop)
-    {
-        sv_autobunnyhopping.Set(true);
-        m_hCheckJumpButtonLegacy->CallOriginal(pThis, mv);
-        sv_autobunnyhopping.Set(false);
-
-        return { KHook::Action::Supersede };
-    }
+    if (nTeam == CS_TEAM_SPECTATOR && IsInDuel(pThis))
+        return { KHook::Action::Supersede };   // stays where they are
 
     return { KHook::Action::Ignore };
 }`,
@@ -86,7 +111,7 @@ KHook::Return<void> Plugin::Hook_CheckJumpButtonLegacy(CCSPlayerLegacyJump* pThi
       'Console commands, chat triggers and listeners for commands the game already owns — intercept them before the engine ever sees them.',
     bullets: ['Console & chat', 'Listeners on native commands', 'Supersede or ignore'],
     code: `
-REG_CON_COMMAND("s2t_test", [](const CCommandContext& ctx, const CCommand&, bool)
+g_pToolkitCommands->RegisterConCommand("s2t_test", [](const ToolkitCommandContext& ctx, const ToolkitCommandArgs&, bool)
 {
     auto* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot());
     if (!player)
@@ -95,7 +120,7 @@ REG_CON_COMMAND("s2t_test", [](const CCommandContext& ctx, const CCommand&, bool
     player->PrintToChat("Hello!");
 });
 
-REG_CON_LISTENER("jointeam", [](const CCommandContext& ctx, const CCommand& args, bool) -> Action
+g_pToolkitCommands->RegisterConListener("jointeam", [](const ToolkitCommandContext& ctx, const ToolkitCommandArgs& args, bool) -> Action
 {
     auto* player = CCSPlayerController::FromSlot(ctx.GetPlayerSlot());
     if (!player)

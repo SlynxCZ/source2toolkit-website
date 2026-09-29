@@ -93,8 +93,9 @@ public:
 
     bool Unload(char* error, size_t maxlen) override
     {
-        // The command, the event hook and the listener belong to this plugin's
-        // id; the toolkit removes them on unload. Nothing else to undo here.
+        // The command, the event hook and the listener belong to this plugin
+        // (the core reads that off the handlers); the toolkit removes them on
+        // unload. Nothing else to undo here.
         TOOLKIT_LOG(this, "Unloaded.\n");
         return true;
     }
@@ -160,7 +161,7 @@ None of them add a newline — end your format strings with `\n`. They go throug
 
 ## Commands and events
 
-`REGISTER_CON_COMMAND(name, handler)` registers a console command owned by your plugin. The handler signature is `void(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)`. The same handler runs for `!name` and `/name` in chat (the triggers are set in [core.json](/docs/installation#core-configuration)). See [ConVars & Commands](/docs/convars-commands) and the [IToolkitCommands reference](/docs/core-api/IToolkitCommands).
+`REGISTER_CON_COMMAND(name, handler)` registers a console command owned by your plugin; there is no plugin id to pass, the core reads the owner off the handler. The handler is a lambda, a free or static function, or an object and a method (`TOOLKIT_MEMBER(this, &HelloPlugin::OnHello)`), with the signature `void(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)`. The same handler runs for `!name` and `/name` in chat (the triggers are set in [core.json](/docs/installation#core-configuration)). See [ConVars & Commands](/docs/convars-commands) and the [IToolkitCommands reference](/docs/core-api/IToolkitCommands).
 
 `HOOK_GAME_EVENT(name, handler, post)` hooks a game event. The handler returns an `Action`: in a pre hook (`post = false`) you may change fields, set `dontBroadcast`, or return `Action::Supersede` to cancel the event; in a post hook you only react. See [Events](/docs/events) and the [IToolkitEvents reference](/docs/core-api/IToolkitEvents).
 

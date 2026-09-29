@@ -6,6 +6,7 @@ import {
   ArrowRight,
   Boxes,
   Braces,
+  Crosshair,
   EyeOff,
   GitBranch,
   LayoutList,
@@ -65,6 +66,7 @@ const specs = [
 
 const marquee = [
   'schema system',
+  'game hooks',
   'inline hooks',
   'virtual hooks',
   'pattern scanning',
@@ -91,9 +93,14 @@ const capabilities = [
     body: 'Entities, offsets and fields resolved through the schema the game itself ships — not through headers that rot on the next update.',
   },
   {
+    icon: Crosshair,
+    title: 'Game hooks',
+    body: 'TakeDamage, CanAcquire, PostThink, movement, jumps — about 35 game functions the core hooks from its own gamedata. A handler and a context, no signature of your own, and a plugin that survives an engine update with a core update.',
+  },
+  {
     icon: GitBranch,
     title: 'Hooks on KHook',
-    body: 'Virtual, vtable and function detours on the one KHook engine Metamod runs, so the core, every plugin and Metamod itself compose correctly.',
+    body: 'Virtual, vtable and function detours on the one KHook engine Metamod runs, so the core, every plugin and Metamod itself compose correctly — for everything the game hooks do not cover.',
   },
   {
     icon: Terminal,
@@ -196,8 +203,8 @@ export default function HomePage() {
 
               <p className="mt-7 max-w-xl text-lg leading-relaxed text-fd-muted-foreground">
                 A plugin framework for Counter-Strike 2 that keeps you at engine
-                level. Schema-based entities, KHook detours and native
-                events — in C++, with nothing between your code and the game.
+                level. Schema-based entities, game hooks, KHook detours and
+                native events — in C++, with nothing between your code and the game.
               </p>
 
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">

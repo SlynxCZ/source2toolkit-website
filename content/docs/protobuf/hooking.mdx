@@ -14,8 +14,11 @@ the server processes it), may read and change its fields, and returns an
 | `HOOK_CLIENT_MESSAGE(handler)` | `Action(CPlayerSlot slot, int messageid, void* msg)` | every message a client sends to the server |
 | `HOOK_SERVER_INTERNAL_MESSAGE(handler)` | `Action(CPlayerSlot slot, int messageid, void* msg)` | messages as they are sent on one client's channel |
 
-Each has an `UNHOOK_*()` counterpart. The handlers are `std::function`s, so a
-lambda capturing `this` is fine.
+Each returns a `ToolkitHookId` and has an `UNHOOK_*()` counterpart. The handlers
+are `ToolkitCallback`s — a lambda (capturing `this` is fine), a free or static
+function, or an object and a method (`TOOLKIT_MEMBER(this, &MyPlugin::OnMessage)`).
+There is no plugin id to pass; the core reads which plugin a hook belongs to off
+the handler.
 
 ## Outgoing: HOOK_SERVER_MESSAGE
 
@@ -112,14 +115,25 @@ HOOK_SERVER_INTERNAL_MESSAGE([](CPlayerSlot slot, int messageid, void* msg) -> A
 });
 ```
 
-## One hook per plugin, several plugins
+## Several handlers, several plugins
 
-- **One handler per plugin per kind.** Hooking again replaces your previous
-  handler; pass `nullptr` or call `UNHOOK_SERVER_MESSAGE()` (and friends) to
-  remove it. Handle every message id you care about inside the one handler.
-- **Removed on unload.** The toolkit drops a plugin's hooks when it unloads, so
-  a forgotten unhook never leaves the engine calling into a closed library.
-- **Every plugin's handler runs.** The toolkit calls all of them in turn with
+- **As many handlers as you like.** A plugin may hook each kind as often as it
+  wants; every handler runs. To remove one, pass the id the hook returned to
+  `g_pToolkitNetworkMessages->UnhookServerMessage(id)` (and friends), or pass
+  the same function or object and method again to `UNHOOK_SERVER_MESSAGE(handler)`
+  — a lambda has no identity and only goes by id:
+
+  ```cpp
+  ToolkitHookId id = HOOK_SERVER_MESSAGE([this](uint64_t* clients, int messageid, void* msg) -> Action { /* ... */ return Action::Ignore; });
+  g_pToolkitNetworkMessages->UnhookServerMessage(id);
+
+  HOOK_CLIENT_MESSAGE(TOOLKIT_MEMBER(this, &MyPlugin::OnClientMessage));
+  UNHOOK_CLIENT_MESSAGE(TOOLKIT_MEMBER(this, &MyPlugin::OnClientMessage));
+  ```
+- **Removed on unload.** The toolkit drops what a plugin still has hooked when
+  it unloads, so a forgotten unhook never leaves the engine calling into a
+  closed library.
+- **Every handler runs.** The toolkit calls all of them in turn with
   the same message — changes one plugin makes are visible to the next — and
   keeps the strongest answer: one `Supersede` blocks the message whatever the
   others returned.

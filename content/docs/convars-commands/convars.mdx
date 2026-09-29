@@ -201,10 +201,9 @@ getter and setter takes an optional last `CSplitScreenSlot` (default `-1`),
 which you can leave alone on a server.
 
 <Callout type="warn">
-`GetConvarAccessIndexByName` returns `0` when the name does not exist — and `0`
-is also a valid index. If the ConVar may be missing, verify the lookup, e.g.
-`V_strcmp(g_pToolkitConVars->GetName(idx), "mp_roundtime") == 0`, or use a
-`ConVarRef` and `IsValidRef()`.
+`GetConvarAccessIndexByName` returns `TOOLKIT_INVALID_CONVAR_INDEX` (`0xFFFF`)
+when the name does not exist. Check for it before reading or writing -- `0` is
+a valid index, so do not test against that.
 </Callout>
 
 `GetString` returns a pointer into a thread-local buffer: copy it before the
@@ -264,15 +263,28 @@ HOOK_CONVAR_CHANGE([](ConVarRefAbstract* ref, CSplitScreenSlot slot, const char*
 ```
 
 ```cpp title="IToolkitConVars.h"
-using ConVarChangeHandler = std::function<void(ConVarRefAbstract* ref, CSplitScreenSlot slot,
-                                               const char* pszNewValue, const char* pszOldValue)>;
+using ConVarChangeHandler = ToolkitCallback<void(ConVarRefAbstract* ref, CSplitScreenSlot slot,
+                                                  const char* pszNewValue, const char* pszOldValue)>;
 
-virtual void HookConVarChange(PluginId owner, ConVarChangeHandler handler) = 0;
-virtual void UnhookConVarChange(PluginId owner) = 0;
+virtual ToolkitHookId HookConVarChange(ConVarChangeHandler handler) = 0;
+virtual bool UnhookConVarChange(const ConVarChangeHandler& handler) = 0;
+virtual bool UnhookConVarChange(ToolkitHookId id) = 0;
 ```
 
 Filter by name first — the callback fires for all ConVars, the game's included.
-`UNHOOK_CONVAR_CHANGE()` drops every change handler your plugin registered.
+A plugin may register as many handlers as it likes. There is no plugin id to
+pass: the handler is a lambda, a function or an object and a method, and the
+core reads the owner off it. `HOOK_CONVAR_CHANGE(handler)` returns a
+`ToolkitHookId`; to drop one handler while the plugin stays loaded, pass that id
+to `g_pToolkitConVars->UnhookConVarChange(id)`, or pass the same function or
+object and method again to `UNHOOK_CONVAR_CHANGE(handler)` (a lambda only goes
+by id):
+
+```cpp
+HOOK_CONVAR_CHANGE(TOOLKIT_MEMBER(this, &MyPlugin::OnConVarChanged));
+// ...
+UNHOOK_CONVAR_CHANGE(TOOLKIT_MEMBER(this, &MyPlugin::OnConVarChanged));
+```
 
 ## See also
 

@@ -24,7 +24,7 @@ bool MyPlugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, b
     TOOLKIT_SAVEVARS();
 
     // Pre: halve every hit on a player.
-    m_hDamage = g_pToolkitGameHooks->HookTakeDamage(g_PluginID, [](TakeDamageContext& ctx, bool post) -> Action
+    m_hDamage = g_pToolkitGameHooks->HookTakeDamage([](TakeDamageContext& ctx, bool post) -> Action
     {
         if (ctx.entity && ctx.entity->IsPlayerPawn())
             ctx.info->m_flDamage = ctx.info->m_flDamage() * 0.5f;   // by pointer: the original sees it
@@ -32,46 +32,47 @@ bool MyPlugin::Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, b
         return Action::Ignore;
     }, false);
 
-    // Post: react to what CanAcquire decided.
-    g_pToolkitGameHooks->HookCanAcquire(g_PluginID, [](CanAcquireContext& ctx, bool post) -> Action
-    {
-        if (ctx.result == AcquireResult::Allowed && ctx.method == AcquireMethod::Buy)
-            TOOLKIT_LOG(&g_Plugin, "bought something\n");
-
-        return Action::Ignore;
-    }, true);
+    // Post: react to what CanAcquire decided -- a method as the handler.
+    g_pToolkitGameHooks->HookCanAcquire(TOOLKIT_MEMBER(this, &MyPlugin::OnCanAcquire), true);
 
     return true;
 }
 ```
 
-There is no `KHOOK_INIT()` in this: the plugin declared no hook of its own.
+There is no `KHOOK_INIT()` in this: the plugin declared no hook of its own. No
+plugin id either — whose a handler is, the core reads off the handler itself
+(see [Handlers and owners](#handlers-and-owners)).
 
 ## The handler
 
 Every hook hands its handler a **context** — a plain struct with the hooked
 object, the function's arguments and, where the function returns something,
-`result` — plus `post`, which pass this is. The handler returns `Action`:
+`result` — plus `post`, which pass this is. The handler answers the way a
+KHook handler does: an action, and for a function with a return value the
+value that goes with it (`GameHookReturn`).
 
-| Return | Pre | Post |
+| Answer | Pre | Post |
 |---|---|---|
-| `Ignore` | nothing changed | nothing changed |
-| `Override` | the original still runs, the function returns `ctx.result` | the function returns `ctx.result` instead of the original's value |
-| `Supersede` | the original does not run, the function returns `ctx.result`; the remaining pre handlers are skipped | — |
+| `Action::Ignore` | nothing changed | nothing changed |
+| `{ Action::Override, value }` | the original still runs, the function returns `value` | the function returns `value` instead of the original's |
+| `{ Action::Supersede, value }` | the original does not run, the function returns `value`; the remaining pre handlers are skipped | — |
 
 ```cpp
 // Nobody moves while frozen: CanMove returns false.
-g_pToolkitGameHooks->HookCanMove(g_PluginID, [](CanMoveContext& ctx, bool post) -> Action
+g_pToolkitGameHooks->HookCanMove([](CanMoveContext& ctx, bool post) -> GameHookReturn<CanMoveContext::Return>
 {
     if (IsFrozen(ctx.pawn))
-    {
-        ctx.result = false;
-        return Action::Supersede;
-    }
+        return { Action::Supersede, false };
 
     return Action::Ignore;
 }, false);
 ```
+
+An action alone takes its value from `ctx.result`, so setting the field and
+returning `Action::Supersede` works too — but keep the two in one statement:
+an `if` without braces around `ctx.result = x; return Action::Supersede;`
+guards only the first of them. A function without a return value (PostThink,
+the movement functions) answers the action alone.
 
 Arguments passed **by pointer** (the damage info, the move data, the weapon)
 can be changed in place and the original sees the change. Arguments passed
@@ -79,8 +80,53 @@ can be changed in place and the original sees the change. Arguments passed
 a raw `KHOOK_MEMBER` of its own and uses [`KHook::Recall`](/docs/hooks/handlers#changing-the-arguments).
 
 Handlers run in registration order, pre before the original, post after it. In
-post, `result` holds what the original returned. A `Supersede` stops the
-remaining pre handlers — the same rule as [command listeners](/docs/convars-commands/command-listeners).
+post, `ctx.result` holds what the original returned. A value a handler returns
+lands in `ctx.result` right away, so the next handler sees it. A `Supersede`
+stops the remaining pre handlers — the same rule as
+[command listeners](/docs/convars-commands/command-listeners).
+
+## What the game would do: CallOriginal
+
+`ctx.CallOriginal()` runs the game's function now, with the arguments the game
+passed, past every hook on it — SourceHook's `SH_CALL` — and returns what it
+returned. From a pre handler that is how you learn what the game would answer:
+
+```cpp
+g_pToolkitGameHooks->HookCanAcquire([](CanAcquireContext& ctx, bool post) -> GameHookReturn<CanAcquireContext::Return>
+{
+    const AcquireResult game = ctx.CallOriginal();
+
+    if (game == AcquireResult::Allowed && IsBlockedHere(ctx))
+        return { Action::Supersede, AcquireResult::NotAllowedByMode };
+
+    return { Action::Supersede, game };   // it has run already -- do not let it run twice
+}, false);
+```
+
+In a pre handler the function **really runs**, side effects and all, so a
+handler that calls it answers `Supersede` with the value; with `Ignore` the
+game would run it a second time. A changed pointed-to object (the damage info,
+the move data) counts in that call; a scalar field changed in the context does
+not. In a post handler `ctx.result` already holds the game's answer.
+
+The same trick without a value — the game's own code, run with a setting
+flipped for one call:
+
+```cpp
+CConVarRef<bool> sv_autobunnyhopping("sv_autobunnyhopping");
+
+g_pToolkitGameHooks->HookCheckJumpButtonLegacy([](LegacyJumpContext& ctx, bool post) -> Action
+{
+    if (sv_autobunnyhopping.Get())
+        return Action::Ignore;
+
+    sv_autobunnyhopping.Set(true);
+    ctx.CallOriginal();
+    sv_autobunnyhopping.Set(false);
+
+    return Action::Supersede;
+}, false);
+```
 
 ## Which functions
 
@@ -107,31 +153,52 @@ Two things to know:
 this platform. Handlers can be registered either way; on a missing entry they
 never run.
 
-## Several handlers, unhooking
+## Handlers and owners
+
+A handler is a `ToolkitCallback`: a lambda, a free or static function, or an
+object and one of its methods — SourceHook's `SH_STATIC` / `SH_MEMBER`, spelt
+`TOOLKIT_STATIC(func)` / `TOOLKIT_MEMBER(this, &Class::Method)` (or just `func`
+and `{ this, &Class::Method }`). Whose it is, the core reads off the handler:
+its code lies in the plugin's library, and that is the owner. No call takes a
+plugin id, and what a plugin still holds when it unloads, the core drops for
+it — nothing to do in `Unload()`.
 
 `HookX()` returns a `GameHookId`. A plugin may put several handlers on one
 function — a pre and a post, two features that both care about damage — and
-drop any one of them with the matching `UnhookX(id)`:
+drop any one of them with `UnhookX(id)`, or with the same function or method
+it hooked with (a lambda has no such identity; it goes by its id):
 
 ```cpp
 GameHookId m_hDamage = 0;
 
-m_hDamage = g_pToolkitGameHooks->HookTakeDamage(g_PluginID, OnTakeDamage, false);
+m_hDamage = g_pToolkitGameHooks->HookTakeDamage(OnTakeDamage, false);
+g_pToolkitGameHooks->HookPostThink(TOOLKIT_MEMBER(this, &MyPlugin::OnPostThink), true);
 ...
 g_pToolkitGameHooks->UnhookTakeDamage(m_hDamage);
+g_pToolkitGameHooks->UnhookPostThink(TOOLKIT_MEMBER(this, &MyPlugin::OnPostThink), true);
 ```
 
 Unhooking from inside the handler is fine: the detour itself comes out on the
-next frame, never from inside its own dispatch. Whatever a plugin still holds
-when it unloads, the core drops for it — nothing to do in `Unload()`.
+next frame, never from inside its own dispatch.
+
+## Debugging
+
+`toolkit hookdebug <part of a hook name|all|off>` in the server console logs
+every call of the matching game hooks: each plugin's answer, the outcome and
+the return value; `TakeDamage` adds the victim, the damage and the damage bits.
+
+```
+toolkit hookdebug TakeDamage
+... hookdebug CBaseEntity::TakeDamageOld pre: JailBreak.stx -> Supersede
+... hookdebug CBaseEntity::TakeDamageOld pre: Supersede (return 0) victim=func_breakable damage=25.000000 bits=4
+toolkit hookdebug off
+```
 
 ## When to still hook yourself
 
 - The function is not in the set.
 - You need to change an argument passed by value, or call the original with
   different arguments (`KHook::Recall`).
-- You need `CallOriginal` from inside the handler — the FUNPLAY jump code does,
-  for `CheckJumpButton`.
 
 Those are raw hooks — [`KHOOK_MEMBER`](/docs/hooks/function-hooks),
 [`KHOOK_VIRTUAL`](/docs/hooks/virtual-hooks) — and they put the plugin on the
@@ -141,4 +208,5 @@ changes. `toolkit list` shows which tier each plugin is on.
 ## Reference
 
 - [`IToolkitGameHooks`](/docs/core-api/IToolkitGameHooks) — every hook, context and enum
+- [`IToolkitTypes`](/docs/core-api/IToolkitTypes) — `ToolkitCallback`, `TOOLKIT_STATIC`, `TOOLKIT_MEMBER`
 - [`IToolkitApi::GameHooks()`](/docs/core-api/IToolkitApi) — the same interface through the API

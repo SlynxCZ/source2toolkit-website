@@ -16,8 +16,10 @@ plugins three things on top of it:
 The interfaces are [`IToolkitCommands`](/docs/core-api/IToolkitCommands) and
 [`IToolkitConVars`](/docs/core-api/IToolkitConVars). Both come filled in by
 `TOOLKIT_SAVEVARS()` as `g_pToolkitCommands` and `g_pToolkitConVars`, and both
-headers ship short macros (`REGISTER_CON_COMMAND`, `CVAR_GET_INT`, …) that pass
-your `g_PluginID` for you.
+headers ship short macros (`REGISTER_CON_COMMAND`, `CVAR_GET_INT`, …). None of
+the calls takes a plugin id: a handler is a lambda, a function or an object and
+a method (`TOOLKIT_MEMBER(this, &MyPlugin::OnCmd)`), and the core reads which
+plugin it belongs to off the handler itself.
 
 ## Console commands and chat commands
 
@@ -85,10 +87,11 @@ everything the game ships is reachable from the console and from plugins.
 
 ## Ownership and unloading
 
-Every command, listener and change callback is registered under your
-`PluginId`. When the plugin unloads, the toolkit drops all of them. You only
-call the `UNREGISTER_*` / `UNHOOK_*` macros to switch something off while the
-plugin stays loaded.
+Every command, listener and change callback belongs to the plugin whose
+handler it is. When the plugin unloads, the toolkit drops all of them. You only
+call `Unregister*` / `Unhook*` — with the `ToolkitHookId` the registration
+returned, or with the same function or object and method again — to switch
+something off while the plugin stays loaded.
 
 The one exception is a `CConVar` you declared yourself: it lives in your
 library, so your `Unload()` has to call `ConVar_Unregister()`. The

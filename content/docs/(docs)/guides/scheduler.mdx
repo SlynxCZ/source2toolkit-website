@@ -13,11 +13,14 @@ everything you schedule belongs to your plugin and is dropped when it unloads.
 
 | Call | Macro |
 | --- | --- |
-| `NextFrame(PluginId owner, std::function<void()>&& task)` | `NEXT_FRAME(task)` |
-| `AddTimer(PluginId owner, float interval, TimerCallback callback, int flags = 0)` | `ADD_TIMER(interval, cb, ...)` |
+| `NextFrame(TimerCallback task)` | `NEXT_FRAME(task)` |
+| `AddTimer(float interval, TimerCallback callback, int flags = 0)` | `ADD_TIMER(interval, cb, ...)` |
 | `KillTimer(Timer* timer)` | `KILL_TIMER(timer)` |
 
-The macros fill in `g_PluginID` for you.
+`TimerCallback` is `ToolkitCallback<void()>`: a lambda, a free or static
+function, or an object and a method (`TOOLKIT_MEMBER(this, &Plugin::Tick)`).
+There is no plugin id argument; the core reads which plugin a task or timer
+belongs to off the callback itself. The macros just forward.
 
 ## Next frame
 
@@ -139,8 +142,8 @@ ADD_TIMER(3.0f, [steamid, seq]()
   so the timer keeps going (or is dropped, for a one-shot) without a trace.
 - **Main thread.** `AddTimer()` and `KillTimer()` are not thread-safe; only
   `NextFrame()` is.
-- **Unload.** Timers and pending next-frame tasks are owned by your `PluginId`
-  and are dropped before your library is closed — a `std::function` destroyed
+- **Unload.** Timers and pending next-frame tasks belong to the plugin whose
+  callback they hold, and are dropped before its library is closed — a `std::function` destroyed
   afterwards would call into unmapped memory. `KILL_TIMER` in `Unload()` is not
   needed; it is for turning a feature off while the plugin stays loaded.
 

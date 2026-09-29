@@ -101,9 +101,13 @@ HOOK_SCRIPT_MESSAGE("myplugin", [](const char* pszChannel, const char* pszPayloa
 });
 ```
 
-Several plugins may hook one channel; each gets every message. Hooking the
-same channel again replaces your handler, `UNHOOK_SCRIPT_MESSAGE(channel)`
-removes it.
+Several handlers may hook one channel, from one plugin or more; each gets every
+message. `HOOK_SCRIPT_MESSAGE` returns a `ToolkitHookId`. To remove a handler,
+pass that id to `g_pToolkitScripts->UnhookScriptMessage(id)`, or pass the same
+function or object and method again with
+`UNHOOK_SCRIPT_MESSAGE(channel, handler)`. A lambda has no identity, so it can
+only be removed by id. Whatever your plugin still has hooked at unload is
+dropped for it.
 
 <Callout type="warn">
   The line goes through the server's command buffer: it arrives on a **later

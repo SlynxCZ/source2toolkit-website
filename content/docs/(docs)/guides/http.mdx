@@ -32,25 +32,35 @@ HTTP_GET("https://api.example.com/status", [](const ToolkitHTTPResponse& r)
 ## The calls
 
 ```cpp
-void Request(PluginId owner, EToolkitHTTPMethod method, const char* pszUrl, const char* pszBody,
-             ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr);
+using ToolkitHTTPCallback = ToolkitCallback<void(const ToolkitHTTPResponse& response)>;
 
-void Get   (PluginId owner, const char* pszUrl, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr);
-void Post  (PluginId owner, const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr);
-void Put   (...same as Post...);
-void Patch (...same as Post...);
-void Delete(...same as Post...);
+virtual void Request(EToolkitHTTPMethod method,
+                     const char* pszUrl,
+                     const char* pszBody,
+                     ToolkitHTTPCallback callback,
+                     const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+
+virtual void Get(const char* pszUrl, ToolkitHTTPCallback callback,
+                 const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+virtual void Post(const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback,
+                  const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+// Put, Patch, Delete: same as Post
 ```
 
 | Macro | Call |
 | --- | --- |
-| `HTTP_REQUEST(method, url, body, cb, ...)` | `Request(g_PluginID, ...)` |
-| `HTTP_GET(url, cb, ...)` | `Get(g_PluginID, ...)` |
-| `HTTP_POST(url, body, cb, ...)` | `Post(g_PluginID, ...)` |
+| `HTTP_REQUEST(method, url, body, cb, ...)` | `Request(method, url, body, cb, ...)` |
+| `HTTP_GET(url, cb, ...)` | `Get(url, cb, ...)` |
+| `HTTP_POST(url, body, cb, ...)` | `Post(url, body, cb, ...)` |
 | `HTTP_PUT`, `HTTP_PATCH`, `HTTP_DELETE` | same shape as `HTTP_POST` |
 
 `EToolkitHTTPMethod` is `Get`, `Post`, `Put`, `Patch`, `Delete` or `Head`. The
-callback may be `nullptr` for fire-and-forget requests.
+callback may be empty (`nullptr`) for fire-and-forget requests.
+
+The callback is a `ToolkitCallback`: a lambda, a free or static function, or an
+object and a method (`TOOLKIT_MEMBER(this, &Plugin::OnStats)`). There is no
+plugin id argument — the core reads which plugin the request belongs to off the
+callback itself, and cancels it if that plugin unloads.
 
 ## POST with headers
 

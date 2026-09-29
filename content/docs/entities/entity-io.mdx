@@ -89,13 +89,18 @@ ADD_ENTITY_IO_LISTENER(this, nullptr, "OnStartTouch", true); // Post, any class
 ```
 
 ```cpp
-virtual void AddEntityIOListener(PluginId owner, IEntityIOListener* pListener,
-                                 const char* pchClassName, const char* pchOutputName,
+virtual void AddEntityIOListener(IEntityIOListener* pListener,
+                                 const char* pchClassName,
+                                 const char* pchOutputName,
                                  bool post = false) = 0;
 ```
 
 `nullptr` for the classname or the output name means "any". The classname is
 matched against the **caller's** classname — the entity whose output fired.
+
+There is no plugin id argument: the listener belongs to the plugin whose
+library the listener object's class lives in, which the core finds through the
+object's vtable.
 
 In the callback:
 

@@ -100,22 +100,30 @@ callback: the match is made on the full handle, serial number included.
 
 `HookClick` and `UnhookClicks` forward to
 [IToolkitCustomHud](/docs/core-api/IToolkitCustomHud), the registry of
-callbacks the core owns. You can call it directly; the macros fill in
-`g_pToolkitCustomHud` and your plugin id:
+callbacks the core owns. You can call it directly; the macros only fill in
+`g_pToolkitCustomHud`:
 
 ```cpp
 #include "source2toolkit/IToolkitCustomHud.h"
 
-using CustomHudClickHandler = std::function<void(CCSPlayerController* player,
-                                                 CCSCustomHudLayout* pLayout,
-                                                 const char* pszButtonId)>;
+using CustomHudClickHandler = ToolkitCallback<void(CCSPlayerController* player, CCSCustomHudLayout* pLayout, const char* pszButtonId)>;
 
-virtual void HookCustomHudClick(PluginId owner, CCSCustomHudLayout* pLayout, CustomHudClickHandler handler) = 0;
+virtual ToolkitHookId HookCustomHudClick(CCSCustomHudLayout* pLayout, CustomHudClickHandler handler) = 0;
+virtual bool UnhookCustomHudClick(CCSCustomHudLayout* pLayout, const CustomHudClickHandler& handler) = 0;
+virtual bool UnhookCustomHudClick(ToolkitHookId id) = 0;
 virtual void UnhookCustomHudClick(CCSCustomHudLayout* pLayout) = 0;
 
-HOOK_CUSTOM_HUD_CLICK(pLayout, handler);   // g_pToolkitCustomHud->HookCustomHudClick(g_PluginID, pLayout, handler)
+HOOK_CUSTOM_HUD_CLICK(pLayout, handler);   // g_pToolkitCustomHud->HookCustomHudClick(pLayout, handler)
 UNHOOK_CUSTOM_HUD_CLICK(pLayout);          // g_pToolkitCustomHud->UnhookCustomHudClick(pLayout)
 ```
+
+There is no plugin id argument: the handler is a lambda, a function or an
+object and a method (`TOOLKIT_MEMBER(this, &MyPlugin::OnMenuClick)`), and the
+core reads which plugin it belongs to off the handler. `HookCustomHudClick`
+returns a `ToolkitHookId`; `UnhookCustomHudClick(id)` drops that one callback,
+`UnhookCustomHudClick(pLayout, handler)` drops a function or object-and-method
+callback passed again (a lambda only goes by id), and
+`UnhookCustomHudClick(pLayout)` drops every callback on the layout.
 
 It exists as an interface because the click arrives on the core's own hook
 (`ClientSvcUserMessage`) and has to be routed back to whichever plugin created

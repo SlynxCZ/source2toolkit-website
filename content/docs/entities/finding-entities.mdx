@@ -186,5 +186,7 @@ void SamplePlugin::OnEntitySpawned(CEntityInstance* pEntity)
 }
 ```
 
-The listener is removed for you when your plugin unloads;
-`REMOVE_ENTITY_LISTENER(this)` removes it earlier.
+`AddEntityListener(IEntityListener* pListener)` takes no plugin id; the core
+works out which plugin the listener belongs to from the object's vtable, i.e.
+the library its class lives in. The listener is removed for you when that
+plugin unloads; `REMOVE_ENTITY_LISTENER(this)` removes it earlier.

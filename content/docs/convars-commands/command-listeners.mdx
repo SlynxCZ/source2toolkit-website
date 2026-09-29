@@ -29,25 +29,39 @@ REGISTER_CON_LISTENER("jointeam", [](const ToolkitCommandContext& context, const
 ## The API
 
 ```cpp title="IToolkitCommands.h"
-using CommandHandler = std::function<Action(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
+using CommandHandler = ToolkitCallback<Action(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
 
-virtual void RegisterConListener(PluginId owner, const char* pchName, CommandHandler handler, bool post) = 0;
-virtual void UnregisterConListener(PluginId owner, const char* pchName, bool post) = 0;
+virtual ToolkitHookId RegisterConListener(const char* pchName, CommandHandler handler, bool post) = 0;
+virtual bool UnregisterConListener(const char* pchName, const CommandHandler& handler, bool post) = 0;
+virtual bool UnregisterConListener(ToolkitHookId id) = 0;
 
-#define REGISTER_CON_LISTENER(pchName, handler, post)
-#define UNREGISTER_CON_LISTENER(pchName, post)
+#define REGISTER_CON_LISTENER(pchName, handler, post) g_pToolkitCommands->RegisterConListener(pchName, handler, post)
 ```
 
 - `pchName` — the command to listen to, in **lower case** (the dispatcher
   lower-cases what was typed before it looks for listeners).
 - `post` — `false` to run before the command, `true` to run after it. Register
   twice if you need both.
-- The handler gets the same `ToolkitCommandContext` and `ToolkitCommandArgs` a
-  command handler gets — see [arguments and the caller](/docs/convars-commands/commands#arguments).
+- The handler is a lambda, a function or an object and a method
+  (`TOOLKIT_MEMBER(this, &MyPlugin::OnJoinTeam)`); the core reads which plugin
+  it belongs to off the handler, so there is no plugin id to pass. It gets the
+  same `ToolkitCommandContext` and `ToolkitCommandArgs` a command handler
+  gets — see [arguments and the caller](/docs/convars-commands/commands#arguments).
 
 A plugin can register several listeners on the same command. They are called in
-registration order. `UNREGISTER_CON_LISTENER(name, post)` drops all of this
-plugin's listeners on `name` for that side; unloading the plugin drops all of them.
+registration order. `RegisterConListener` returns a `ToolkitHookId`;
+`g_pToolkitCommands->UnregisterConListener(id)` drops that one listener, and
+`UnregisterConListener(name, handler, post)` drops a function or
+object-and-method listener passed again (a lambda only goes by id). Unloading
+the plugin drops all of them.
+
+```cpp
+// in Load()
+REGISTER_CON_LISTENER("say", OnPlayerChat, false);
+
+// later, to turn the filter off
+g_pToolkitCommands->UnregisterConListener("say", OnPlayerChat, false);
+```
 
 ## Return values
 

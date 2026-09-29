@@ -47,7 +47,7 @@ For each `.stx` the core:
 4. calls `Load(id, api, error, maxlen, late)`;
 5. on success, calls `OnPluginLoad(newId, name)` on every listener of every loaded plugin — including the new plugin's own, if it added one in `Load()`.
 
-If `Load()` returns `false`, the core removes everything the plugin registered under its id so far, closes the library and logs `Plugin <name> refused to load: <error>`.
+If `Load()` returns `false`, the core removes everything the plugin registered so far, closes the library and logs `Plugin <name> refused to load: <error>`.
 
 ### The `late` flag
 
@@ -57,11 +57,24 @@ If `Load()` returns `false`, the core removes everything the plugin registered u
 
 Ids start at 1 and increase with every load; they are never reused while the server runs. A hot-reloaded or re-loaded plugin gets a **new** id. The id is what `toolkit list`, `toolkit info` and `toolkit unload` use, and what `OnPluginLoad` / `OnPluginUnload` report.
 
-Your own id is `g_PluginID` after `TOOLKIT_SAVEVARS()`. The registration macros (`REGISTER_CON_COMMAND`, `HOOK_GAME_EVENT`, `ADD_TIMER`, …) pass it for you; when you call an interface method directly, it is the `owner` argument.
+Your own id is `g_PluginID` after `TOOLKIT_SAVEVARS()`.
+
+Calls that take a handler — `RegisterConCommand`, `HookGameEvent`, `AddTimer`, `Get`, the game hooks, … — have no id argument. Every handler is a `ToolkitCallback` (a free or static function, an object and a method, or a lambda), and the core reads the owner off the handler itself: it maps a code address of the function, method or lambda to the plugin library it lives in. Entity listeners work the same way through the listener object's class. So the registration macros (`REGISTER_CON_COMMAND`, `HOOK_GAME_EVENT`, `ADD_TIMER`, …) just forward their arguments.
+
+`g_PluginID` is still passed to the calls that have no handler to read it from: `PluginConfigDirectory`, `CreateConnection` / `CreateServerless`, `CreateSound`, the transmit `HookEntity`, the scripts' `LoadAsset` / `RunSource` / `RunFile`, and opening a menu (`OpenCenterHtmlMenu`, `OpenMenu`). Their macros (`PLUGIN_CONFIG_DIR()`, `MYSQL_CREATE_CONNECTION`, `TRANSMIT_HOOK_ENTITY`, `SCRIPTS_RUN_FILE`, `OPEN_CENTER_HTML_MENU`, …) fill it in for you.
+
+A plugin that wraps a handler another plugin handed it (a command framework, a menu library) keeps that other plugin as the owner with `ToolkitCallback::OwnedAs()`:
+
+```cpp
+ChatHandler wrapped = [handler](auto& ctx, auto& args, bool post) { if (Allowed(ctx)) handler(ctx, args, post); };
+g_pToolkitCommands->RegisterConCommand(name, std::move(wrapped.OwnedAs(handler)));
+```
+
+The registration then goes when the plugin that made `handler` unloads.
 
 ## Ownership: what the toolkit cleans up
 
-Everything registered through a toolkit interface is stored under the owning plugin's id. On unload (and on a failed load) the core removes, for that id:
+Everything registered through a toolkit interface belongs to the plugin whose handler (or id) it was registered with. On unload (and on a failed load) the core removes, for that plugin:
 
 - console commands, command listeners and chat listeners;
 - game event hooks;
@@ -79,7 +92,7 @@ Everything registered through a toolkit interface is stored under the owning plu
 - open menus (a HUD menu is hidden for the player as well);
 - the plugin's `IToolkitListener`s.
 
-Calling `UNREGISTER_CON_COMMAND`, `UNHOOK_GAME_EVENT`, `KILL_TIMER` and the like yourself is only needed to turn a feature off while the plugin stays loaded.
+Calling `UnregisterConCommand`, `UNHOOK_GAME_EVENT`, `KILL_TIMER` and the like yourself is only needed to turn a feature off while the plugin stays loaded. Every `Register*` / `Hook*` that takes a handler returns a `ToolkitHookId`; the matching `Unregister*` / `Unhook*` takes that id, or the same function or object-and-method again (a lambda has no identity, so it only goes by id).
 
 ### What you must undo yourself
 

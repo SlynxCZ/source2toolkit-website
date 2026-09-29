@@ -137,7 +137,7 @@ instant feedback.
 ## Hooking the game's sounds
 
 `HOOK_SOUND(handler)` installs a `SoundHook`
-(`std::function<Action(IToolkitSound* sound)>`) that sees every sound the game
+(`ToolkitCallback<Action(IToolkitSound* sound)>`) that sees every sound the game
 is about to send. Return `Action::Ignore` to leave it alone,
 `Action::Override` to send it with your changes, `Action::Supersede` to drop it.
 
@@ -166,8 +166,10 @@ HOOK_SOUND([](IToolkitSound* sound) -> Action
 - Client-predicted sounds (a player's own shots, knife swings, footsteps) are
   played locally by that client and never reach the server; the copy the
   *other* players get does pass through the hook.
-- One hook per plugin: hooking again replaces the handler. `UNHOOK_SOUND()`
-  removes it.
+- A plugin may hook as often as it likes; each handler runs. `HOOK_SOUND()`
+  returns a `ToolkitHookId`; `g_pToolkitSounds->UnhookSound(id)` removes that
+  handler, and `UNHOOK_SOUND(handler)` removes a function or object-and-method
+  handler by passing it again (a lambda only goes by id).
 
 ## Pitfalls
 

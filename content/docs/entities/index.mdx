@@ -79,7 +79,7 @@ crosses a frame — a timer, a `NEXT_FRAME` lambda, a map in your plugin — hol
 ```cpp title="plugin.cpp"
 CHandle<CCSPlayerController> hPlayer = pController->GetHandle();
 
-g_pToolkitScheduler->AddTimer(g_PluginID, 3.0f, [hPlayer]()
+g_pToolkitScheduler->AddTimer(3.0f, [hPlayer]()
 {
     CCSPlayerController* pPlayer = hPlayer.Get();
     if (!pPlayer)

@@ -67,6 +67,17 @@ using MyFunction_t = void (*)(CBaseEntity*);
 auto pfn = addr.RCast<MyFunction_t>();
 ```
 
+A pattern differs between the Windows and the Linux binary. `WIN_LINUX(win, lin)`
+(`IToolkitModule.h`) picks the platform's one of the two at compile time — for
+a pattern, an offset or a library name:
+
+```cpp
+IToolkitMemory addr = server->FindPattern(WIN_LINUX("48 89 7C 24 ? 55", "55 48 89 E5 41 57"));
+```
+
+Prefer a gamedata entry for anything the game moves; that is updated without a
+rebuild. `WIN_LINUX` is for a pattern a plugin keeps to itself.
+
 ### Following references
 
 Patterns often land on an instruction that *references* what you want rather
