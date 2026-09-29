@@ -60,6 +60,8 @@ virtual void Request(EToolkitHTTPMethod method, const char* pszUrl, const char* 
 
 Issues a request.
 
+The plugin the callback's code lies in owns the request.
+
 <Callout type="info">Cancelled, callback and all, if the owning plugin unloads first -- the callback holds code inside that plugin's library.</Callout>
 
 | Parameter | Type | Default | Description |

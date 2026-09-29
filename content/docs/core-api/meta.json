@@ -23,8 +23,10 @@
     "IToolkitScheduler",
     "IToolkitScripts",
     "---Engine---",
+    "IToolkitGameHooks",
     "IToolkitAddresses",
     "IToolkitHooks",
+    "IToolkitKHook",
     "IToolkitGameConfig",
     "IToolkitGameSystems",
     "IToolkitMemory",
@@ -35,9 +37,6 @@
     "IToolkitJSON",
     "IToolkitMySQL",
     "IToolkitPaths",
-    "---Other---",
-    "IToolkitGameHooks",
-    "IToolkitKHook",
     "utils"
   ]
 }

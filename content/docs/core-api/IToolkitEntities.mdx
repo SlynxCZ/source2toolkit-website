@@ -95,7 +95,7 @@ Adds listener for entity spawn, creation, deletion and parent change.
 
 | Parameter | Type | Description |
 |---|---|---|
-| `pListener` | `IEntityListener*` | Listener object |
+| `pListener` | `IEntityListener*` | Listener object; the plugin whose class it is owns it |
 
 ### `RemoveEntityListener`
 
@@ -150,7 +150,7 @@ Queues an entity I/O event.
 virtual void AddEntityIOListener(IEntityIOListener* pListener, const char* pchClassName, const char* pchOutputName, bool post = false) = 0;
 ```
 
-Adds listener for entity outputs.
+Adds listener for entity outputs; the plugin whose class the listener is owns it.
 
 <Callout type="info">Removed for you if the owning plugin unloads, for the same reason as AddEntityListener().</Callout>
 
