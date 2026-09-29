@@ -20,6 +20,7 @@ import { LuGithub } from 'react-icons/lu';
 import { CodeBlock } from '@/components/code-block';
 import { CodeShowcase } from '@/components/home/code-showcase';
 import { DownloadMenu } from '@/components/home/download-menu';
+import { SiteFooter } from '@/components/site-footer';
 import { docsRoute, gitConfig } from '@/lib/shared';
 import { docsSections } from '@/lib/sections';
 
@@ -443,11 +444,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ----------------------------------------------------------- footer */}
-      <footer className="mx-auto flex w-full max-w-6xl flex-col gap-3 border-fd-border px-6 py-10 text-xs text-fd-muted-foreground sm:flex-row sm:items-center sm:justify-between md:border-x">
-        <p className="font-mono">Source2Toolkit — built by Slynx</p>
-        <p>Not affiliated with Valve Corporation.</p>
-      </footer>
+      <SiteFooter />
     </main>
   );
 }
