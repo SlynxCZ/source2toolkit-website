@@ -1,0 +1,52 @@
+---
+title: Credits
+description: The people and projects Source2Toolkit is built on.
+---
+
+Source2Toolkit — the core, the plugin system and the SDK — is written by
+Michal "Slynx" Přikryl. It stands on other people's work, and this is who they
+are. The same list is in `ACKNOWLEDGEMENTS.md` in both repositories, and
+`toolkit credits` prints the short version in the server console.
+
+## AlliedModders
+
+[Metamod:Source](https://github.com/alliedmodders/metamod-source), which loads
+the toolkit, and [HL2SDK](https://github.com/alliedmodders/hl2sdk/tree/cs2),
+which it compiles against, are AlliedModders LLC's work — Metamod:Source by
+David "BAILOPAN" Anderson and Scott "DS" Ehlert. The toolkit's plugin manager,
+interface sharing and GameDLL communication follow Metamod:Source's model, and
+HL2SDK is its reference for engine structures and interfaces.
+
+## KHook
+
+[KHook](https://github.com/Kenzzer/KHook) by Benoist "Kenzzer" André is the
+detour library the toolkit and every plugin hook through — virtual, vtable and
+function detours on the one engine Metamod:Source runs, shipped as part of
+Metamod:Source.
+
+## CS2Fixes
+
+Some reverse-engineered implementations and parts of the codebase are adapted
+from [CS2Fixes](https://github.com/Source2ZE/CS2Fixes) (Source2ZE, GPL-3.0).
+
+## CounterStrikeSharp
+
+The schema generator (`tools/schemagen`) started from
+[CounterStrikeSharp](https://github.com/roflmuffin/CounterStrikeSharp)'s.
+
+## SwiftlyS2
+
+[SwiftlyS2](https://github.com/swiftly-solution/swiftlys2) is the reference the
+core gamedata is cross-checked against for signatures and virtual function
+indexes, and the base the sound system's reverse engineering started from.
+
+## Libraries
+
+- [nlohmann/json](https://github.com/nlohmann/json) — JSON on the native side.
+- [spdlog](https://github.com/gabime/spdlog) — logging.
+- [Breakpad](https://chromium.googlesource.com/breakpad/breakpad) — crash dumps.
+- [DynLibUtils](https://github.com/SlynxCZ/DynLibUtils) — module and pattern scanning.
+- [SteamDatabase/Protobufs](https://github.com/SteamDatabase/Protobufs) — the game's protobuf definitions.
+
+Source and Source 2 are Copyright © Valve Corporation. All trademarks are
+property of their respective owners.
