@@ -1236,3 +1236,24 @@ The hooks, for IsAvailable().
 | `CheckJumpButtonLegacy` |
 | `CheckJumpButtonModern` |
 | `Count` |
+
+## Macros
+
+### `TOOLKIT_GAMEHOOK_CALL_ORIGINAL`
+
+```cpp
+#define TOOLKIT_GAMEHOOK_CALL_ORIGINAL(RET) \
+    RET CallOriginal() const { return callOriginal_(callOriginalData_); } 
+    RET (*callOriginal_)(const void*) = nullptr;                          
+    const void* callOriginalData_ = nullptr;
+```
+
+Every context ends with CallOriginal(): the game's function, run now with the arguments the game passed, past every hook on it -- SourceHook's SH_CALL. What it returns is what the game would have answered.
+
+In a pre handler the function really runs (with all its side effects), so a handler that calls it should answer Supersede with ctx.result set to the value, or the game runs it a second time after the handlers:
+
+const AcquireResult game = ctx.CallOriginal(); ctx.result = game == AcquireResult::Allowed &amp;&amp; Blocked(ctx) ? AcquireResult::NotAllowedByMode : game; return Action::Supersede;
+
+A changed pointed-to object (the damage info, the move data) counts; a scalar field changed in the context does not, the call takes what the game passed. In a post handler ctx.result already holds the game's answer.
+
+The two members after it belong to the core; the movement contexts shared by void and bool functions answer false for the void ones.
