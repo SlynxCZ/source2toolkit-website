@@ -7,6 +7,7 @@
         "compatibility",
         "building",
         "sdk-dependencies",
-        "gamedata"
+        "gamedata",
+        "contributing"
     ]
 }

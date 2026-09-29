@@ -1,0 +1,110 @@
+---
+title: Contributing
+description: Fork, branch off main, open a pull request against main — how to get a change into the core or the SDK.
+---
+
+import { Step, Steps } from 'fumadocs-ui/components/steps';
+
+Bug fixes, gamedata updates, new toolkit features and docs fixes are all
+welcome, in both [source2toolkit](https://github.com/Source2Toolkit/source2toolkit)
+(the core) and [source2toolkit-sdk](https://github.com/Source2Toolkit/source2toolkit-sdk).
+Changes come in as pull requests from your own fork.
+
+## Branches
+
+| Branch | What it is |
+|---|---|
+| `main` | The released line. **Pull requests go against `main`.** |
+| `dev` | The maintainer's own working branch. It can be rebased or force-pushed at any time — do not base work on it and do not open pull requests against it. |
+
+## Workflow
+
+<Steps>
+<Step>
+
+### Fork and clone
+
+Fork the repository on GitHub (the **Fork** button, top right), then clone your
+fork with its submodules:
+
+```bash
+git clone --recurse-submodules https://github.com/<you>/source2toolkit.git
+cd source2toolkit
+```
+
+For the SDK, run `python tools/deps.py init` once afterwards — see
+[SDK dependencies](/docs/development/sdk-dependencies).
+
+</Step>
+<Step>
+
+### Add the upstream remote
+
+`origin` is your fork; `upstream` is the project, where `main` moves:
+
+```bash
+git remote add upstream https://github.com/Source2Toolkit/source2toolkit.git
+git fetch upstream
+```
+
+</Step>
+<Step>
+
+### Branch off main
+
+One branch per pull request, from an up-to-date `upstream/main`:
+
+```bash
+git switch -c fix/take-damage-crash upstream/main
+```
+
+</Step>
+<Step>
+
+### Commit, and stay current
+
+Keep commits focused: the first line says what the change does, the body why.
+Before opening the pull request, and whenever `main` moves under you:
+
+```bash
+git fetch upstream
+git rebase upstream/main
+git submodule update --init --recursive
+```
+
+</Step>
+<Step>
+
+### Push and open the pull request
+
+```bash
+git push -u origin fix/take-damage-crash
+```
+
+GitHub offers to open a pull request; make sure the base is
+`Source2Toolkit/<repo>:main`. After a rebase, push with
+`git push --force-with-lease`.
+
+</Step>
+</Steps>
+
+## What a pull request needs
+
+- **It builds** on Linux, and on Windows if it touches platform code — see
+  [Building](/docs/development/building).
+- **It was tested**, if it changes runtime behaviour: say how, and on which CS2 build.
+- **Interfaces stay compatible.** Changing an existing `IToolkit*` interface's
+  layout is a new revision with the old one still served — see
+  [Compatibility](/docs/development/compatibility). That is usually a pull
+  request in both the core and the SDK; link them to each other.
+- **Gamedata** has the Linux and the Windows entry, checked against the current build.
+- **In the SDK**, generated schema headers are not edited by hand (change
+  `tools/schemagen`), and `vendor/khook` stays at the commit Metamod:Source pins.
+- **It reads like the code around it**: naming, comments, formatting.
+
+By opening a pull request you agree that your contribution is licensed under
+the repository's licence (GPLv3, with the exceptions in `LICENSE_INFO.txt`).
+
+The same guide is in `CONTRIBUTING.md` in both repositories. Before starting on
+something large, ask in the [Discord](https://discord.gg/4Ck56eDNXj) or open an
+issue, so it does not collide with work already under way.

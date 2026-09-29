@@ -33,6 +33,7 @@ const help: FooterLink[] = [
   { label: 'Installation', href: `${docsRoute}/installation` },
   { label: 'FAQ', href: `${docsRoute}/resources/faq` },
   { label: 'Links', href: `${docsRoute}/resources/links` },
+  { label: 'Contributing', href: `${docsRoute}/development/contributing` },
   { label: 'Credits', href: `${docsRoute}/resources/credits` },
 ];
 
