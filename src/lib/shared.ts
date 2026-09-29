@@ -15,7 +15,7 @@ export const portfolioConfig = {
 }
 
 export const discordConfig = {
-  link: 'https://discord.gg/5eZxsqYRc',
+  link: 'https://discord.gg/4Ck56eDNXj',
 }
 
 export const steamConfig = {
