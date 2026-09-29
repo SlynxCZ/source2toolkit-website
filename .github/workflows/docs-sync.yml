@@ -15,14 +15,14 @@ jobs:
       - name: Checkout website repository
         uses: actions/checkout@v4
         with:
-          repository: SlynxCZ/source2toolkit-website
+          repository: Source2Toolkit/source2toolkit-website
           path: website
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout source2toolkit-sdk repository
         uses: actions/checkout@v4
         with:
-          repository: SlynxCZ/source2toolkit-sdk
+          repository: Source2Toolkit/source2toolkit-sdk
           path: source2toolkit-sdk
           ref: main
 
