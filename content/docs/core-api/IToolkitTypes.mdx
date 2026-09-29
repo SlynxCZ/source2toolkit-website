@@ -12,6 +12,22 @@ Defines:
 
 ## Types
 
+### `PluginId`
+
+```cpp
+using PluginId = int;
+```
+
+A plugin's id; the core hands it to Load().
+
+### `ToolkitHookId`
+
+```cpp
+using ToolkitHookId = int;
+```
+
+What a Register* / Hook* call returns and the matching Unregister* / Unhook* takes: the one handler it registered. 0 is never handed out.
+
 ### `Action`
 
 ```cpp
@@ -55,6 +71,31 @@ pController->TakeDamage(pAttacker, 50, DMG_BULLET, HookChain::Run); // opt in
 
 ## Functions
 
+### `defined`
+
+```cpp
+template <typename T> #if !defined(_MSC_VER) #endif void CallbackOrigin();
+```
+
+One per callable type, instantiated where the callable is: its address is a code address inside the plugin that made the callable, which is how the core tells whose a handler is. Hidden, so the dynamic linker never hands another module's copy out for it.
+
+| Parameter | Type |
+|---|---|
+| `—` | `_MSC_VER` |
+
+### `MethodOrigin`
+
+```cpp
+template <typename M> const void* MethodOrigin(const void* object, M method);
+```
+
+A code address of a method: its entry, or for a virtual method the object's vtable (both live in the module that defined the class).
+
+| Parameter | Type |
+|---|---|
+| `object` | `const void*` |
+| `method` | `M` |
+
 ### `ResolveHookChain`
 
 ```cpp
@@ -86,6 +127,26 @@ The function to call for vtable slot nIndex of pThis: whatever the slot holds, o
 
 ## Macros
 
+### `TOOLKIT_STATIC`
+
+```cpp
+#define TOOLKIT_STATIC(func) (func)
+```
+
+SourceHook's SH_STATIC / SH_MEMBER, for a toolkit handler argument.
+
+```cpp
+g_pToolkitEvents->HookGameEvent("round_end", TOOLKIT_STATIC(OnRoundEnd), true);
+g_pToolkitEvents->HookGameEvent("round_end", TOOLKIT_MEMBER(this, &Plugin::OnRoundEnd), true);
+// ... and later the same delegate takes it off again:
+g_pToolkitEvents->UnhookGameEvent("round_end", TOOLKIT_MEMBER(this, &Plugin::OnRoundEnd), true);
+```
+
+Plain `OnRoundEnd` / `{ this, &Plugin::OnRoundEnd }` do the same; these only spell it the SourceHook way. The owner is the plugin whose code the function or method is, as for every handler.
+
+### Other macros
+
 | Macro | Expands to |
 |---|---|
+| `TOOLKIT_MEMBER(inst, func)` | `{ inst, func }` |
 | `KHOOK_NEW(member, ...)` | `member(new std::remove_pointer_t<decltype(member)>(__VA_ARGS__))` |

@@ -16,6 +16,8 @@ Arguments passed by pointer (the damage info, the move data, the weapon) can be 
 
 HookX() returns a GameHookId for UnhookX(); a plugin may have several handlers on one function. The handlers are the plugin's until it unhooks them or unloads, whichever comes first; nothing to undo in Unload().
 
+Whose a handler is, the core reads off the handler (see ToolkitCallback): no call takes a plugin id. What a plugin still holds at unload the core drops for it.
+
 **Global** `g_pToolkitGameHooks` · **Header** [`source2toolkit/IToolkitGameHooks.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitGameHooks.h)
 
 ## Types
@@ -23,10 +25,10 @@ HookX() returns a GameHookId for UnhookX(); a plugin may have several handlers o
 ### `GameHookHandler`
 
 ```cpp
-template <typename CONTEXT> using GameHookHandler = std::function<Action(CONTEXT& ctx, bool post)>;
+template <typename CONTEXT> using GameHookHandler = ToolkitCallback<GameHookReturn<typename CONTEXT::Return>(CONTEXT& ctx, bool post)>;
 ```
 
-A handler: the context, and whether this is the post pass.
+A handler: the context, and whether this is the post pass. A function, an object and a method, or a lambda (ToolkitCallback).
 
 ### `GameHookId`
 
@@ -41,844 +43,914 @@ What HookX() returns and UnhookX() takes: one registered handler. A plugin may r
 ### `HookTakeDamage`
 
 ```cpp
-virtual GameHookId HookTakeDamage(PluginId owner, GameHookHandler<TakeDamageContext> handler, bool post) = 0;
+virtual GameHookId HookTakeDamage(GameHookHandler<TakeDamageContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<TakeDamageContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookCanAcquire`
 
 ```cpp
-virtual GameHookId HookCanAcquire(PluginId owner, GameHookHandler<CanAcquireContext> handler, bool post) = 0;
+virtual GameHookId HookCanAcquire(GameHookHandler<CanAcquireContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<CanAcquireContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookCanMove`
 
 ```cpp
-virtual GameHookId HookCanMove(PluginId owner, GameHookHandler<CanMoveContext> handler, bool post) = 0;
+virtual GameHookId HookCanMove(GameHookHandler<CanMoveContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<CanMoveContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookCanUse`
 
 ```cpp
-virtual GameHookId HookCanUse(PluginId owner, GameHookHandler<CanUseContext> handler, bool post) = 0;
+virtual GameHookId HookCanUse(GameHookHandler<CanUseContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<CanUseContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookPostThink`
 
 ```cpp
-virtual GameHookId HookPostThink(PluginId owner, GameHookHandler<PostThinkContext> handler, bool post) = 0;
+virtual GameHookId HookPostThink(GameHookHandler<PostThinkContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<PostThinkContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookProcessUsercmds`
 
 ```cpp
-virtual GameHookId HookProcessUsercmds(PluginId owner, GameHookHandler<ProcessUsercmdsContext> handler, bool post) = 0;
+virtual GameHookId HookProcessUsercmds(GameHookHandler<ProcessUsercmdsContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<ProcessUsercmdsContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookSimulateUserCommands`
 
 ```cpp
-virtual GameHookId HookSimulateUserCommands(PluginId owner, GameHookHandler<SimulateUserCommandsContext> handler, bool post) = 0;
+virtual GameHookId HookSimulateUserCommands(GameHookHandler<SimulateUserCommandsContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<SimulateUserCommandsContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookRunCommand`
 
 ```cpp
-virtual GameHookId HookRunCommand(PluginId owner, GameHookHandler<RunCommandContext> handler, bool post) = 0;
+virtual GameHookId HookRunCommand(GameHookHandler<RunCommandContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<RunCommandContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookAcceptInput`
 
 ```cpp
-virtual GameHookId HookAcceptInput(PluginId owner, GameHookHandler<AcceptInputContext> handler, bool post) = 0;
+virtual GameHookId HookAcceptInput(GameHookHandler<AcceptInputContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<AcceptInputContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookTouch`
 
 ```cpp
-virtual GameHookId HookTouch(PluginId owner, GameHookHandler<TouchContext> handler, bool post) = 0;
+virtual GameHookId HookTouch(GameHookHandler<TouchContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<TouchContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookDropWeapon`
 
 ```cpp
-virtual GameHookId HookDropWeapon(PluginId owner, GameHookHandler<DropWeaponContext> handler, bool post) = 0;
+virtual GameHookId HookDropWeapon(GameHookHandler<DropWeaponContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<DropWeaponContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookAirAccelerate`
 
 ```cpp
-virtual GameHookId HookAirAccelerate(PluginId owner, GameHookHandler<AirAccelerateContext> handler, bool post) = 0;
+virtual GameHookId HookAirAccelerate(GameHookHandler<AirAccelerateContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<AirAccelerateContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookAirMove`
 
 ```cpp
-virtual GameHookId HookAirMove(PluginId owner, GameHookHandler<MovementContext> handler, bool post) = 0;
+virtual GameHookId HookAirMove(GameHookHandler<MovementContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<MovementContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookCanUnduck`
 
 ```cpp
-virtual GameHookId HookCanUnduck(PluginId owner, GameHookHandler<MovementContext> handler, bool post) = 0;
+virtual GameHookId HookCanUnduck(GameHookHandler<MovementContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<MovementContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookCategorizePosition`
 
 ```cpp
-virtual GameHookId HookCategorizePosition(PluginId owner, GameHookHandler<CategorizePositionContext> handler, bool post) = 0;
+virtual GameHookId HookCategorizePosition(GameHookHandler<CategorizePositionContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<CategorizePositionContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookCheckFalling`
 
 ```cpp
-virtual GameHookId HookCheckFalling(PluginId owner, GameHookHandler<MovementContext> handler, bool post) = 0;
+virtual GameHookId HookCheckFalling(GameHookHandler<MovementContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<MovementContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookCheckParameters`
 
 ```cpp
-virtual GameHookId HookCheckParameters(PluginId owner, GameHookHandler<MovementContext> handler, bool post) = 0;
+virtual GameHookId HookCheckParameters(GameHookHandler<MovementContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<MovementContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookCheckVelocity`
 
 ```cpp
-virtual GameHookId HookCheckVelocity(PluginId owner, GameHookHandler<CheckVelocityContext> handler, bool post) = 0;
+virtual GameHookId HookCheckVelocity(GameHookHandler<CheckVelocityContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<CheckVelocityContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookCheckWater`
 
 ```cpp
-virtual GameHookId HookCheckWater(PluginId owner, GameHookHandler<MovementContext> handler, bool post) = 0;
+virtual GameHookId HookCheckWater(GameHookHandler<MovementContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<MovementContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookDuck`
 
 ```cpp
-virtual GameHookId HookDuck(PluginId owner, GameHookHandler<MovementContext> handler, bool post) = 0;
+virtual GameHookId HookDuck(GameHookHandler<MovementContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<MovementContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookFriction`
 
 ```cpp
-virtual GameHookId HookFriction(PluginId owner, GameHookHandler<MovementContext> handler, bool post) = 0;
+virtual GameHookId HookFriction(GameHookHandler<MovementContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<MovementContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookFullWalkMove`
 
 ```cpp
-virtual GameHookId HookFullWalkMove(PluginId owner, GameHookHandler<FullWalkMoveContext> handler, bool post) = 0;
+virtual GameHookId HookFullWalkMove(GameHookHandler<FullWalkMoveContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<FullWalkMoveContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookGroundAccelerate`
 
 ```cpp
-virtual GameHookId HookGroundAccelerate(PluginId owner, GameHookHandler<GroundAccelerateContext> handler, bool post) = 0;
+virtual GameHookId HookGroundAccelerate(GameHookHandler<GroundAccelerateContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<GroundAccelerateContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookLadderMove`
 
 ```cpp
-virtual GameHookId HookLadderMove(PluginId owner, GameHookHandler<MovementContext> handler, bool post) = 0;
+virtual GameHookId HookLadderMove(GameHookHandler<MovementContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<MovementContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookMoveInit`
 
 ```cpp
-virtual GameHookId HookMoveInit(PluginId owner, GameHookHandler<MovementContext> handler, bool post) = 0;
+virtual GameHookId HookMoveInit(GameHookHandler<MovementContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<MovementContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookPlayerMove`
 
 ```cpp
-virtual GameHookId HookPlayerMove(PluginId owner, GameHookHandler<MovementContext> handler, bool post) = 0;
+virtual GameHookId HookPlayerMove(GameHookHandler<MovementContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<MovementContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookProcessMovement`
 
 ```cpp
-virtual GameHookId HookProcessMovement(PluginId owner, GameHookHandler<MovementContext> handler, bool post) = 0;
+virtual GameHookId HookProcessMovement(GameHookHandler<MovementContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<MovementContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookSetupMove`
 
 ```cpp
-virtual GameHookId HookSetupMove(PluginId owner, GameHookHandler<SetupMoveContext> handler, bool post) = 0;
+virtual GameHookId HookSetupMove(GameHookHandler<SetupMoveContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<SetupMoveContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookTryPlayerMove`
 
 ```cpp
-virtual GameHookId HookTryPlayerMove(PluginId owner, GameHookHandler<TryPlayerMoveContext> handler, bool post) = 0;
+virtual GameHookId HookTryPlayerMove(GameHookHandler<TryPlayerMoveContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<TryPlayerMoveContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookWalkMove`
 
 ```cpp
-virtual GameHookId HookWalkMove(PluginId owner, GameHookHandler<MovementContext> handler, bool post) = 0;
+virtual GameHookId HookWalkMove(GameHookHandler<MovementContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<MovementContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookWaterMove`
 
 ```cpp
-virtual GameHookId HookWaterMove(PluginId owner, GameHookHandler<MovementContext> handler, bool post) = 0;
+virtual GameHookId HookWaterMove(GameHookHandler<MovementContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<MovementContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookOnJumpLegacy`
 
 ```cpp
-virtual GameHookId HookOnJumpLegacy(PluginId owner, GameHookHandler<LegacyJumpContext> handler, bool post) = 0;
+virtual GameHookId HookOnJumpLegacy(GameHookHandler<LegacyJumpContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<LegacyJumpContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookOnJumpModern`
 
 ```cpp
-virtual GameHookId HookOnJumpModern(PluginId owner, GameHookHandler<ModernJumpContext> handler, bool post) = 0;
+virtual GameHookId HookOnJumpModern(GameHookHandler<ModernJumpContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<ModernJumpContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookCheckJumpButtonLegacy`
 
 ```cpp
-virtual GameHookId HookCheckJumpButtonLegacy(PluginId owner, GameHookHandler<LegacyJumpContext> handler, bool post) = 0;
+virtual GameHookId HookCheckJumpButtonLegacy(GameHookHandler<LegacyJumpContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<LegacyJumpContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `HookCheckJumpButtonModern`
 
 ```cpp
-virtual GameHookId HookCheckJumpButtonModern(PluginId owner, GameHookHandler<ModernJumpContext> handler, bool post) = 0;
+virtual GameHookId HookCheckJumpButtonModern(GameHookHandler<ModernJumpContext> handler, bool post) = 0;
 ```
 
 What HookX() returns and UnhookX() takes: one registered handler. A plugin may register several handlers on the same function and drop any one of them; whatever it still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`GameHookHandler<ModernJumpContext>`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
 | `post` | `bool` |
 
 ### `UnhookTakeDamage`
 
 ```cpp
-virtual void UnhookTakeDamage(GameHookId id) = 0;
+virtual bool UnhookTakeDamage(GameHookId id) = 0;
+virtual bool UnhookTakeDamage(const GameHookHandler<TakeDamageContext>& handler, bool post) = 0;
 ```
 
-Drops the one handler HookX() returned that id for.
+Drops a handler: the one HookX() returned the id for, or the one that is this function or object and method (a lambda goes by its id). True when it was found.
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<TakeDamageContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookCanAcquire`
 
 ```cpp
-virtual void UnhookCanAcquire(GameHookId id) = 0;
+virtual bool UnhookCanAcquire(GameHookId id) = 0;
+virtual bool UnhookCanAcquire(const GameHookHandler<CanAcquireContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<CanAcquireContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookCanMove`
 
 ```cpp
-virtual void UnhookCanMove(GameHookId id) = 0;
+virtual bool UnhookCanMove(GameHookId id) = 0;
+virtual bool UnhookCanMove(const GameHookHandler<CanMoveContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<CanMoveContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookCanUse`
 
 ```cpp
-virtual void UnhookCanUse(GameHookId id) = 0;
+virtual bool UnhookCanUse(GameHookId id) = 0;
+virtual bool UnhookCanUse(const GameHookHandler<CanUseContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<CanUseContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookPostThink`
 
 ```cpp
-virtual void UnhookPostThink(GameHookId id) = 0;
+virtual bool UnhookPostThink(GameHookId id) = 0;
+virtual bool UnhookPostThink(const GameHookHandler<PostThinkContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<PostThinkContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookProcessUsercmds`
 
 ```cpp
-virtual void UnhookProcessUsercmds(GameHookId id) = 0;
+virtual bool UnhookProcessUsercmds(GameHookId id) = 0;
+virtual bool UnhookProcessUsercmds(const GameHookHandler<ProcessUsercmdsContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<ProcessUsercmdsContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookSimulateUserCommands`
 
 ```cpp
-virtual void UnhookSimulateUserCommands(GameHookId id) = 0;
+virtual bool UnhookSimulateUserCommands(GameHookId id) = 0;
+virtual bool UnhookSimulateUserCommands(const GameHookHandler<SimulateUserCommandsContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<SimulateUserCommandsContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookRunCommand`
 
 ```cpp
-virtual void UnhookRunCommand(GameHookId id) = 0;
+virtual bool UnhookRunCommand(GameHookId id) = 0;
+virtual bool UnhookRunCommand(const GameHookHandler<RunCommandContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<RunCommandContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookAcceptInput`
 
 ```cpp
-virtual void UnhookAcceptInput(GameHookId id) = 0;
+virtual bool UnhookAcceptInput(GameHookId id) = 0;
+virtual bool UnhookAcceptInput(const GameHookHandler<AcceptInputContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<AcceptInputContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookTouch`
 
 ```cpp
-virtual void UnhookTouch(GameHookId id) = 0;
+virtual bool UnhookTouch(GameHookId id) = 0;
+virtual bool UnhookTouch(const GameHookHandler<TouchContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<TouchContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookDropWeapon`
 
 ```cpp
-virtual void UnhookDropWeapon(GameHookId id) = 0;
+virtual bool UnhookDropWeapon(GameHookId id) = 0;
+virtual bool UnhookDropWeapon(const GameHookHandler<DropWeaponContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<DropWeaponContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookAirAccelerate`
 
 ```cpp
-virtual void UnhookAirAccelerate(GameHookId id) = 0;
+virtual bool UnhookAirAccelerate(GameHookId id) = 0;
+virtual bool UnhookAirAccelerate(const GameHookHandler<AirAccelerateContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<AirAccelerateContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookAirMove`
 
 ```cpp
-virtual void UnhookAirMove(GameHookId id) = 0;
+virtual bool UnhookAirMove(GameHookId id) = 0;
+virtual bool UnhookAirMove(const GameHookHandler<MovementContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<MovementContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookCanUnduck`
 
 ```cpp
-virtual void UnhookCanUnduck(GameHookId id) = 0;
+virtual bool UnhookCanUnduck(GameHookId id) = 0;
+virtual bool UnhookCanUnduck(const GameHookHandler<MovementContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<MovementContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookCategorizePosition`
 
 ```cpp
-virtual void UnhookCategorizePosition(GameHookId id) = 0;
+virtual bool UnhookCategorizePosition(GameHookId id) = 0;
+virtual bool UnhookCategorizePosition(const GameHookHandler<CategorizePositionContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<CategorizePositionContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookCheckFalling`
 
 ```cpp
-virtual void UnhookCheckFalling(GameHookId id) = 0;
+virtual bool UnhookCheckFalling(GameHookId id) = 0;
+virtual bool UnhookCheckFalling(const GameHookHandler<MovementContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<MovementContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookCheckParameters`
 
 ```cpp
-virtual void UnhookCheckParameters(GameHookId id) = 0;
+virtual bool UnhookCheckParameters(GameHookId id) = 0;
+virtual bool UnhookCheckParameters(const GameHookHandler<MovementContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<MovementContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookCheckVelocity`
 
 ```cpp
-virtual void UnhookCheckVelocity(GameHookId id) = 0;
+virtual bool UnhookCheckVelocity(GameHookId id) = 0;
+virtual bool UnhookCheckVelocity(const GameHookHandler<CheckVelocityContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<CheckVelocityContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookCheckWater`
 
 ```cpp
-virtual void UnhookCheckWater(GameHookId id) = 0;
+virtual bool UnhookCheckWater(GameHookId id) = 0;
+virtual bool UnhookCheckWater(const GameHookHandler<MovementContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<MovementContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookDuck`
 
 ```cpp
-virtual void UnhookDuck(GameHookId id) = 0;
+virtual bool UnhookDuck(GameHookId id) = 0;
+virtual bool UnhookDuck(const GameHookHandler<MovementContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<MovementContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookFriction`
 
 ```cpp
-virtual void UnhookFriction(GameHookId id) = 0;
+virtual bool UnhookFriction(GameHookId id) = 0;
+virtual bool UnhookFriction(const GameHookHandler<MovementContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<MovementContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookFullWalkMove`
 
 ```cpp
-virtual void UnhookFullWalkMove(GameHookId id) = 0;
+virtual bool UnhookFullWalkMove(GameHookId id) = 0;
+virtual bool UnhookFullWalkMove(const GameHookHandler<FullWalkMoveContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<FullWalkMoveContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookGroundAccelerate`
 
 ```cpp
-virtual void UnhookGroundAccelerate(GameHookId id) = 0;
+virtual bool UnhookGroundAccelerate(GameHookId id) = 0;
+virtual bool UnhookGroundAccelerate(const GameHookHandler<GroundAccelerateContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<GroundAccelerateContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookLadderMove`
 
 ```cpp
-virtual void UnhookLadderMove(GameHookId id) = 0;
+virtual bool UnhookLadderMove(GameHookId id) = 0;
+virtual bool UnhookLadderMove(const GameHookHandler<MovementContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<MovementContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookMoveInit`
 
 ```cpp
-virtual void UnhookMoveInit(GameHookId id) = 0;
+virtual bool UnhookMoveInit(GameHookId id) = 0;
+virtual bool UnhookMoveInit(const GameHookHandler<MovementContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<MovementContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookPlayerMove`
 
 ```cpp
-virtual void UnhookPlayerMove(GameHookId id) = 0;
+virtual bool UnhookPlayerMove(GameHookId id) = 0;
+virtual bool UnhookPlayerMove(const GameHookHandler<MovementContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<MovementContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookProcessMovement`
 
 ```cpp
-virtual void UnhookProcessMovement(GameHookId id) = 0;
+virtual bool UnhookProcessMovement(GameHookId id) = 0;
+virtual bool UnhookProcessMovement(const GameHookHandler<MovementContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<MovementContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookSetupMove`
 
 ```cpp
-virtual void UnhookSetupMove(GameHookId id) = 0;
+virtual bool UnhookSetupMove(GameHookId id) = 0;
+virtual bool UnhookSetupMove(const GameHookHandler<SetupMoveContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<SetupMoveContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookTryPlayerMove`
 
 ```cpp
-virtual void UnhookTryPlayerMove(GameHookId id) = 0;
+virtual bool UnhookTryPlayerMove(GameHookId id) = 0;
+virtual bool UnhookTryPlayerMove(const GameHookHandler<TryPlayerMoveContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<TryPlayerMoveContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookWalkMove`
 
 ```cpp
-virtual void UnhookWalkMove(GameHookId id) = 0;
+virtual bool UnhookWalkMove(GameHookId id) = 0;
+virtual bool UnhookWalkMove(const GameHookHandler<MovementContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<MovementContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookWaterMove`
 
 ```cpp
-virtual void UnhookWaterMove(GameHookId id) = 0;
+virtual bool UnhookWaterMove(GameHookId id) = 0;
+virtual bool UnhookWaterMove(const GameHookHandler<MovementContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<MovementContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookOnJumpLegacy`
 
 ```cpp
-virtual void UnhookOnJumpLegacy(GameHookId id) = 0;
+virtual bool UnhookOnJumpLegacy(GameHookId id) = 0;
+virtual bool UnhookOnJumpLegacy(const GameHookHandler<LegacyJumpContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<LegacyJumpContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookOnJumpModern`
 
 ```cpp
-virtual void UnhookOnJumpModern(GameHookId id) = 0;
+virtual bool UnhookOnJumpModern(GameHookId id) = 0;
+virtual bool UnhookOnJumpModern(const GameHookHandler<ModernJumpContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<ModernJumpContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookCheckJumpButtonLegacy`
 
 ```cpp
-virtual void UnhookCheckJumpButtonLegacy(GameHookId id) = 0;
+virtual bool UnhookCheckJumpButtonLegacy(GameHookId id) = 0;
+virtual bool UnhookCheckJumpButtonLegacy(const GameHookHandler<LegacyJumpContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<LegacyJumpContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `UnhookCheckJumpButtonModern`
 
 ```cpp
-virtual void UnhookCheckJumpButtonModern(GameHookId id) = 0;
+virtual bool UnhookCheckJumpButtonModern(GameHookId id) = 0;
+virtual bool UnhookCheckJumpButtonModern(const GameHookHandler<ModernJumpContext>& handler, bool post) = 0;
 ```
 
 | Parameter | Type |
 |---|---|
 | `id` | [`GameHookId`](/docs/core-api/IToolkitGameHooks#gamehookid) |
+| `handler` | [`const GameHookHandler<ModernJumpContext>&`](/docs/core-api/IToolkitGameHooks#gamehookhandler) |
+| `post` | `bool` |
 
 ### `IsAvailable`
 
@@ -1152,6 +1224,35 @@ CCSPlayerModernJump::OnJump / CheckJumpButton(move)
 | `jump` | [`CCSPlayerModernJump*`](/docs/schema/entity/classes/CCSPlayerModernJump) |
 | `moveData` | [`CMoveData*`](/docs/schema/Movedata#cmovedata) |
 
+## `GameHookReturn`
+
+What a game hook handler answers -- KHook's \{ action, value \}.
+
+```cpp
+return { Action::Supersede, 0 };              // skip the original, it returns 0
+return { Action::Override, AcquireResult::NotAllowedByMode };
+return { Action::Supersede, ctx.CallOriginal() };
+return Action::Ignore;                         // an action alone
+```
+
+An action alone takes its value from ctx.result, so a handler that sets the field and returns Override / Supersede keeps working. For a function without a return value there is only the action.
+
+Several handlers on one function: Supersede stops the chain, otherwise the strongest action wins; each value a handler returns lands in ctx.result right away, so the last one to return a value decides it and the next handler sees it there.
+
+### Fields
+
+| Field | Type |
+|---|---|
+| `action` | [`Action`](/docs/core-api/IToolkitTypes#action) |
+| `hasValue` | `bool` |
+
+### Constructors
+
+```cpp
+GameHookReturn(Action a);
+GameHookReturn(Action a, RETURN v);
+```
+
 ## Enums
 
 ### `AcquireResult`
@@ -1243,6 +1344,7 @@ The hooks, for IsAvailable().
 
 ```cpp
 #define TOOLKIT_GAMEHOOK_CALL_ORIGINAL(RET) \
+    using Return = RET;                                                   
     RET CallOriginal() const { return callOriginal_(callOriginalData_); } 
     RET (*callOriginal_)(const void*) = nullptr;                          
     const void* callOriginalData_ = nullptr;

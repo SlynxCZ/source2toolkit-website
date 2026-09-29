@@ -86,7 +86,7 @@ Creates entity by classname.
 ### `AddEntityListener`
 
 ```cpp
-virtual void AddEntityListener(PluginId owner, IEntityListener* pListener) = 0;
+virtual void AddEntityListener(IEntityListener* pListener) = 0;
 ```
 
 Adds listener for entity spawn, creation, deletion and parent change.
@@ -95,7 +95,6 @@ Adds listener for entity spawn, creation, deletion and parent change.
 
 | Parameter | Type | Description |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin the listener belongs to |
 | `pListener` | `IEntityListener*` | Listener object |
 
 ### `RemoveEntityListener`
@@ -148,20 +147,19 @@ Queues an entity I/O event.
 ### `AddEntityIOListener`
 
 ```cpp
-virtual void AddEntityIOListener(PluginId owner, IEntityIOListener* pListener, const char* pchClassName, const char* pchOutputName, bool post = false) = 0;
+virtual void AddEntityIOListener(IEntityIOListener* pListener, const char* pchClassName, const char* pchOutputName, bool post = false) = 0;
 ```
 
 Adds listener for entity outputs.
 
 <Callout type="info">Removed for you if the owning plugin unloads, for the same reason as AddEntityListener().</Callout>
 
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  | Plugin the listener belongs to |
-| `pListener` | [`IEntityIOListener*`](/docs/schema/Entityio#ientityiolistener) |  |  |
-| `pchClassName` | `const char*` |  |  |
-| `pchOutputName` | `const char*` |  |  |
-| `post` | `bool` | `false` |  |
+| Parameter | Type | Default |
+|---|---|---|
+| `pListener` | [`IEntityIOListener*`](/docs/schema/Entityio#ientityiolistener) |  |
+| `pchClassName` | `const char*` |  |
+| `pchOutputName` | `const char*` |  |
+| `post` | `bool` | `false` |
 
 ### `RemoveEntityIOListener`
 
@@ -210,9 +208,9 @@ for (auto* pProp : UTIL_FindAllEntitiesByDesignerName<CDynamicProp>("prop_dynami
 | `FIND_ENTITY_BY_CLASSNAME(start, name)` | `g_pToolkitEntities->FindEntityByClassname(start, name)` |
 | `FIND_ENTITY_BY_NAME(start, name, ...)` | `g_pToolkitEntities->FindEntityByName(start, name, ##__VA_ARGS__)` |
 | `CREATE_ENTITY(classname)` | `g_pToolkitEntities->CreateEntityByName(classname)` |
-| `ADD_ENTITY_LISTENER(l)` | `g_pToolkitEntities->AddEntityListener(g_PluginID, l)` |
+| `ADD_ENTITY_LISTENER(l)` | `g_pToolkitEntities->AddEntityListener(l)` |
 | `REMOVE_ENTITY_LISTENER(l)` | `g_pToolkitEntities->RemoveEntityListener(l)` |
 | `ACCEPT_INPUT(target, input, ...)` | `g_pToolkitEntities->AcceptInput(target, input, ##__VA_ARGS__)` |
 | `ADD_ENTITY_IO_EVENT(target, input, ...)` | `g_pToolkitEntities->AddEntityIOEvent(target, input, ##__VA_ARGS__)` |
-| `ADD_ENTITY_IO_LISTENER(l, cls, out, ...)` | `g_pToolkitEntities->AddEntityIOListener(g_PluginID, l, cls, out, ##__VA_ARGS__)` |
+| `ADD_ENTITY_IO_LISTENER(l, cls, out, ...)` | `g_pToolkitEntities->AddEntityIOListener(l, cls, out, ##__VA_ARGS__)` |
 | `REMOVE_ENTITY_IO_LISTENER(l, cls, out, ...)` | `g_pToolkitEntities->RemoveEntityIOListener(l, cls, out, ##__VA_ARGS__)` |

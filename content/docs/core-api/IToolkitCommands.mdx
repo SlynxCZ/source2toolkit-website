@@ -18,22 +18,24 @@ Supports:
 - Console commands (server or client)
 - Command listeners with pre/post execution hooks
 
-<Callout type="info">All commands are owned by a plugin via PluginId.</Callout>
+<Callout type="info">Every registration belongs to the plugin whose handler it is.</Callout>
 
-**Interface id** `IToolkitCommands001` (`TOOLKIT_COMMANDS_INTERFACE`) · **Global** `g_pToolkitCommands` · **Header** [`source2toolkit/IToolkitCommands.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitCommands.h)
+**Interface id** `IToolkitCommands002` (`TOOLKIT_COMMANDS_INTERFACE`) · **Global** `g_pToolkitCommands` · **Header** [`source2toolkit/IToolkitCommands.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitCommands.h)
 
 ## Types
 
 ### `ChatHandler`
 
 ```cpp
-using ChatHandler = std::function<void(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
+using ChatHandler = ToolkitCallback<void(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
 ```
+
+A chat command or console command handler: a function, an object and a method, or a lambda (ToolkitCallback).
 
 ### `CommandHandler`
 
 ```cpp
-using CommandHandler = std::function<Action(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
+using CommandHandler = ToolkitCallback<Action(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
 ```
 
 Callback for console commands.
@@ -43,91 +45,119 @@ Callback for console commands.
 ### `RegisterChatListener`
 
 ```cpp
-virtual void RegisterChatListener(PluginId owner, const char* pchName, ChatHandler handler) = 0;
+virtual ToolkitHookId RegisterChatListener(const char* pchName, ChatHandler handler) = 0;
 ```
 
-Registers a chat command listener.
+Registers a chat command.
 
-<Callout type="info">Only fires for a chat message that starts with one of the configured chat triggers (public or silent, "!" and "/" by default), e.g. "!kick" or "/kick". Plain "kick" typed into chat does not fire it. The trigger is stripped before matching, so args.Arg(0) is the bare name. A silent trigger hides the message; a public one lets it show.</Callout>
+Only fires for a chat message that starts with one of the configured chat triggers (public or silent, "!" and "/" by default), e.g. "!kick" or "/kick"; plain "kick" typed into chat does not fire it. The trigger is stripped before matching, so args.Arg(0) is the bare name. A silent trigger hides the message; a public one lets it show.
+
+Whose it is, the core reads off the handler (see ToolkitCallback); what a plugin still holds at unload the core drops for it.
 
 | Parameter | Type | Description |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the command |
-| `pchName` | `const char*` | Command name without a trigger (e.g. "kick", "test") |
-| `handler` | [`ChatHandler`](/docs/core-api/IToolkitCommands#chathandler) | Callback executed when command is triggered |
+| `pchName` | `const char*` | Command name without a trigger (e.g. "kick") |
+| `handler` | [`ChatHandler`](/docs/core-api/IToolkitCommands#chathandler) | A function, an object and a method, or a lambda |
+
+**Returns** [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) — The id UnregisterChatListener(id) takes
 
 ### `UnregisterChatListener`
 
 ```cpp
-virtual void UnregisterChatListener(PluginId owner, const char* pchName) = 0;
+virtual bool UnregisterChatListener(const char* pchName, const ChatHandler& handler) = 0;
+virtual bool UnregisterChatListener(ToolkitHookId id) = 0;
 ```
 
-Drops one of this plugin's chat listeners.
+Drops the chat command with this handler -- a function or an object and a method; a lambda goes by its id.
+
+Drops the chat command RegisterChatListener() returned the id for.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `pchName` | `const char*` |
+| `handler` | [`const ChatHandler&`](/docs/core-api/IToolkitCommands#chathandler) |
+| `id` | [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) |
+
+**Returns** `bool` — true when one was found
 
 ### `RegisterConCommand`
 
 ```cpp
-virtual void RegisterConCommand(PluginId owner, const char* pchName, ChatHandler handler) = 0;
+virtual ToolkitHookId RegisterConCommand(const char* pchName, ChatHandler handler) = 0;
 ```
 
-Registers a console command.
+Registers a console command, reachable from chat as "!name" and "/name" too. Several handlers may share a name; each runs.
 
-<Callout type="info">This creates a new console command accessible via server/client console.</Callout>
+Whose it is, the core reads off the handler (see ToolkitCallback); what a plugin still holds at unload the core drops for it.
 
 | Parameter | Type | Description |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the command |
 | `pchName` | `const char*` | Command name (e.g. "sv_test") |
-| `handler` | [`ChatHandler`](/docs/core-api/IToolkitCommands#chathandler) | Callback executed when command is used |
+| `handler` | [`ChatHandler`](/docs/core-api/IToolkitCommands#chathandler) | A function, an object and a method, or a lambda |
+
+**Returns** [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) — The id UnregisterConCommand(id) takes
 
 ### `UnregisterConCommand`
 
 ```cpp
-virtual void UnregisterConCommand(PluginId owner, const char* pchName) = 0;
+virtual bool UnregisterConCommand(const char* pchName, const ChatHandler& handler) = 0;
+virtual bool UnregisterConCommand(ToolkitHookId id) = 0;
 ```
 
-Removes a console command this plugin created.
+Drops the console command handler -- a function or an object and a method; a lambda goes by its id. The command name stays claimed until the plugin unloads.
+
+Drops the console command handler RegisterConCommand() returned the id for.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `pchName` | `const char*` |
+| `handler` | [`const ChatHandler&`](/docs/core-api/IToolkitCommands#chathandler) |
+| `id` | [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) |
+
+**Returns** `bool` — true when one was found
 
 ### `RegisterConListener`
 
 ```cpp
-virtual void RegisterConListener(PluginId owner, const char* pchName, CommandHandler handler, bool post) = 0;
+virtual ToolkitHookId RegisterConListener(const char* pchName, CommandHandler handler, bool post) = 0;
 ```
 
-Registers a listener for an existing console command.
+Registers a listener on an existing console command.
+
+The handler's Action:
+- Ignore: do nothing
+- Override: the original still runs; commands return nothing, so this has no further effect. Later pre listeners and all post listeners still fire.
+- Supersede: block the original (pre only); the remaining pre listeners and all post listeners are skipped
+
+Whose it is, the core reads off the handler (see ToolkitCallback); what a plugin still holds at unload the core drops for it.
 
 | Parameter | Type | Description |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the listener |
 | `pchName` | `const char*` | Existing command name to listen for |
-| `handler` | [`CommandHandler`](/docs/core-api/IToolkitCommands#commandhandler) | Callback executed on command execution |
+| `handler` | [`CommandHandler`](/docs/core-api/IToolkitCommands#commandhandler) | A function, an object and a method, or a lambda |
 | `post` | `bool` | false to run before the original, true to run after |
 
-**Returns** `void` — Action to control command execution: * Action::Ignore: do nothing * Action::Override: the original still runs; commands return nothing, so this has no further effect. Later pre listeners and all post listeners still fire. * Action::Supersede: block original execution (pre only); the remaining pre listeners and all post listeners are skipped
+**Returns** [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) — The id UnregisterConListener(id) takes
 
 ### `UnregisterConListener`
 
 ```cpp
-virtual void UnregisterConListener(PluginId owner, const char* pchName, bool post) = 0;
+virtual bool UnregisterConListener(const char* pchName, const CommandHandler& handler, bool post) = 0;
+virtual bool UnregisterConListener(ToolkitHookId id) = 0;
 ```
 
-Drops one of this plugin's console listeners.
+Drops the console listener with this handler -- a function or an object and a method; a lambda goes by its id.
+
+Drops the console listener RegisterConListener() returned the id for.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `pchName` | `const char*` |
+| `handler` | [`const CommandHandler&`](/docs/core-api/IToolkitCommands#commandhandler) |
 | `post` | `bool` |
+| `id` | [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) |
+
+**Returns** `bool` — true when one was found
 
 ## `ToolkitCommandContext`
 
@@ -214,9 +244,6 @@ The whole command line, as typed.
 
 | Macro | Expands to |
 |---|---|
-| `REGISTER_CHAT_LISTENER(pchName, handler)` | `g_pToolkitCommands->RegisterChatListener(g_PluginID, pchName, handler)` |
-| `UNREGISTER_CHAT_LISTENER(pchName)` | `g_pToolkitCommands->UnregisterChatListener(g_PluginID, pchName)` |
-| `REGISTER_CON_COMMAND(pchName, handler)` | `g_pToolkitCommands->RegisterConCommand(g_PluginID, pchName, handler)` |
-| `UNREGISTER_CON_COMMAND(pchName)` | `g_pToolkitCommands->UnregisterConCommand(g_PluginID, pchName)` |
-| `REGISTER_CON_LISTENER(pchName, handler, post)` | `g_pToolkitCommands->RegisterConListener(g_PluginID, pchName, handler, post)` |
-| `UNREGISTER_CON_LISTENER(pchName, post)` | `g_pToolkitCommands->UnregisterConListener(g_PluginID, pchName, post)` |
+| `REGISTER_CHAT_LISTENER(pchName, handler)` | `g_pToolkitCommands->RegisterChatListener(pchName, handler)` |
+| `REGISTER_CON_COMMAND(pchName, handler)` | `g_pToolkitCommands->RegisterConCommand(pchName, handler)` |
+| `REGISTER_CON_LISTENER(pchName, handler, post)` | `g_pToolkitCommands->RegisterConListener(pchName, handler, post)` |

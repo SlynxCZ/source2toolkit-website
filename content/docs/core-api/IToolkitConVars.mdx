@@ -12,14 +12,14 @@ Provides functionality for:
 
 <Callout type="info">ConVars are identified by an internal access index.</Callout>
 
-**Interface id** `IToolkitConVars001` (`TOOLKIT_CONVARS_INTERFACE`) · **Global** `g_pToolkitConVars` · **Header** [`source2toolkit/IToolkitConVars.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitConVars.h)
+**Interface id** `IToolkitConVars002` (`TOOLKIT_CONVARS_INTERFACE`) · **Global** `g_pToolkitConVars` · **Header** [`source2toolkit/IToolkitConVars.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitConVars.h)
 
 ## Types
 
 ### `ConVarChangeHandler`
 
 ```cpp
-using ConVarChangeHandler = std::function<void(ConVarRefAbstract* ref, CSplitScreenSlot slot, const char* pszNewValue, const char* pszOldValue)>;
+using ConVarChangeHandler = ToolkitCallback<void(ConVarRefAbstract* ref, CSplitScreenSlot slot, const char* pszNewValue, const char* pszOldValue)>;
 ```
 
 Callback type for ConVar value changes.
@@ -375,31 +375,40 @@ Gets value into user-provided buffer.
 ### `HookConVarChange`
 
 ```cpp
-virtual void HookConVarChange(PluginId owner, ConVarChangeHandler handler) = 0;
+virtual ToolkitHookId HookConVarChange(ConVarChangeHandler handler) = 0;
 ```
 
 Registers a listener for every ConVar value change.
 
 The engine only takes plain function pointers here, and only keeps one list of them for the whole process. The toolkit installs a single one of those and fans out to the handlers registered through this, so a plugin can use a capturing lambda and does not have to unregister on unload.
 
+A plugin may register as many as it likes.
+
+Whose it is, the core reads off the handler (see ToolkitCallback); what a plugin still holds at unload the core drops for it.
+
 | Parameter | Type | Description |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the listener |
-| `handler` | [`ConVarChangeHandler`](/docs/core-api/IToolkitConVars#convarchangehandler) | Callback function |
+| `handler` | [`ConVarChangeHandler`](/docs/core-api/IToolkitConVars#convarchangehandler) | A function, an object and a method, or a lambda |
+
+**Returns** [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) — The id UnhookConVarChange(id) takes
 
 ### `UnhookConVarChange`
 
 ```cpp
-virtual void UnhookConVarChange(PluginId owner) = 0;
+virtual bool UnhookConVarChange(const ConVarChangeHandler& handler) = 0;
+virtual bool UnhookConVarChange(ToolkitHookId id) = 0;
 ```
 
-Drops every change listener a plugin registered.
+Drops the change listener with this handler -- a function or an object and a method; a lambda goes by its id.
 
-Done for you when the plugin unloads; call it only to stop listening earlier than that.
+Drops the change listener HookConVarChange() returned the id for.
 
-| Parameter | Type | Description |
-|---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID whose listeners to drop |
+| Parameter | Type |
+|---|---|
+| `handler` | [`const ConVarChangeHandler&`](/docs/core-api/IToolkitConVars#convarchangehandler) |
+| `id` | [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) |
+
+**Returns** `bool` — true when one was found
 
 ### `SetValue`
 
@@ -512,7 +521,7 @@ The type is what decides how the value is written, so call it as UTIL_SetConVar&
 ### `HOOK_CONVAR_CHANGE`
 
 ```cpp
-#define HOOK_CONVAR_CHANGE(passfunc) g_pToolkitConVars->HookConVarChange(g_PluginID, passfunc)
+#define HOOK_CONVAR_CHANGE(passfunc) g_pToolkitConVars->HookConVarChange(passfunc)
 ```
 
 Macro for listening to ConVar value changes.
@@ -520,10 +529,10 @@ Macro for listening to ConVar value changes.
 ### `UNHOOK_CONVAR_CHANGE`
 
 ```cpp
-#define UNHOOK_CONVAR_CHANGE() g_pToolkitConVars->UnhookConVarChange(g_PluginID)
+#define UNHOOK_CONVAR_CHANGE(passfunc) g_pToolkitConVars->UnhookConVarChange(passfunc)
 ```
 
-Macro for dropping the ConVar change hook.
+Macro for dropping a ConVar change hook (a function or an object and a method; a lambda goes by the id HOOK_CONVAR_CHANGE returned).
 
 ### Other macros
 

@@ -13,7 +13,7 @@ A sound event reaches a client as one network message (CMsgSosStartSoundEvent): 
 
 <Callout type="info">Everything here belongs on the main thread.</Callout>
 
-**Interface id** `IToolkitSounds001` (`TOOLKIT_SOUNDS_INTERFACE`) · **Global** `g_pToolkitSounds` · **Header** [`source2toolkit/IToolkitSounds.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitSounds.h)
+**Interface id** `IToolkitSounds002` (`TOOLKIT_SOUNDS_INTERFACE`) · **Global** `g_pToolkitSounds` · **Header** [`source2toolkit/IToolkitSounds.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitSounds.h)
 
 ## Types
 
@@ -38,7 +38,7 @@ Recipient set, one bit per player slot (bit N = slot N).
 ### `SoundHook`
 
 ```cpp
-using SoundHook = std::function<Action(IToolkitSound* sound)>;
+using SoundHook = ToolkitCallback<Action(IToolkitSound* sound)>;
 ```
 
 Hook called for every sound the game is about to send to clients.
@@ -278,29 +278,38 @@ Name for a hash, nullptr when the toolkit has not seen it.
 ### `HookSound`
 
 ```cpp
-virtual void HookSound(PluginId owner, SoundHook handler) = 0;
+virtual ToolkitHookId HookSound(SoundHook handler) = 0;
 ```
 
 Hooks the sounds the game sends to clients.
 
-One hook per plugin: hooking again replaces the previous handler, and the toolkit drops it when the plugin unloads.
+A plugin may hook as often as it likes; each handler runs.
+
+Whose it is, the core reads off the handler (see ToolkitCallback); what a plugin still holds at unload the core drops for it.
 
 | Parameter | Type | Description |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the hook |
-| `handler` | [`SoundHook`](/docs/core-api/IToolkitSounds#soundhook) | Callback, or nullptr to unhook |
+| `handler` | [`SoundHook`](/docs/core-api/IToolkitSounds#soundhook) | A function, an object and a method, or a lambda |
+
+**Returns** [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) — The id UnhookSound(id) takes
 
 ### `UnhookSound`
 
 ```cpp
-virtual void UnhookSound(PluginId owner) = 0;
+virtual bool UnhookSound(const SoundHook& handler) = 0;
+virtual bool UnhookSound(ToolkitHookId id) = 0;
 ```
 
-Drops this plugin's sound hook.
+Drops the hook with this handler -- a function or an object and a method; a lambda goes by its id.
+
+Drops the hook HookSound() returned the id for.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `handler` | [`const SoundHook&`](/docs/core-api/IToolkitSounds#soundhook) |
+| `id` | [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) |
+
+**Returns** `bool` — true when one was found
 
 ## `IToolkitSound`
 
@@ -770,5 +779,5 @@ Shorthand accessors via g_pToolkitSounds.
 | `SOUND_EMIT_TO_ALL(...)` | `g_pToolkitSounds->EmitSoundToAll(__VA_ARGS__)` |
 | `SOUND_EMIT_FROM_ENTITY(entity, ...)` | `g_pToolkitSounds->EmitSoundFromEntity(entity, __VA_ARGS__)` |
 | `SOUND_STOP(guid)` | `g_pToolkitSounds->StopSound(guid)` |
-| `HOOK_SOUND(handler)` | `g_pToolkitSounds->HookSound(g_PluginID, handler)` |
-| `UNHOOK_SOUND()` | `g_pToolkitSounds->UnhookSound(g_PluginID)` |
+| `HOOK_SOUND(handler)` | `g_pToolkitSounds->HookSound(handler)` |
+| `UNHOOK_SOUND(handler)` | `g_pToolkitSounds->UnhookSound(handler)` |

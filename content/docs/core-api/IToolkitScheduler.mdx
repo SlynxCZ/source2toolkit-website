@@ -18,17 +18,17 @@ Interface for scheduling tasks and timers.
 ### `TimerCallback`
 
 ```cpp
-using TimerCallback = std::function<void()>;
+using TimerCallback = ToolkitCallback<void()>;
 ```
 
-Callback executed by timers
+Callback executed by timers A timer's or a next-frame task's callback: a function, an object and a method, or a lambda (ToolkitCallback) -- whose it is, the core reads off it.
 
 ## Methods
 
 ### `NextFrame`
 
 ```cpp
-virtual void NextFrame(PluginId owner, std::function<void()>&& task) = 0;
+virtual void NextFrame(TimerCallback task) = 0;
 ```
 
 Executes a task on the next frame.
@@ -39,13 +39,12 @@ Executes a task on the next frame.
 
 | Parameter | Type | Description |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin the task belongs to |
-| `task` | `std::function<void()>&&` | Callback function |
+| `task` | [`TimerCallback`](/docs/core-api/IToolkitScheduler#timercallback) | Callback function |
 
 ### `AddTimer`
 
 ```cpp
-virtual Timer* AddTimer(PluginId owner, float interval, TimerCallback callback, int flags = 0) = 0;
+virtual Timer* AddTimer(float interval, TimerCallback callback, int flags = 0) = 0;
 ```
 
 Adds a timer.
@@ -54,7 +53,6 @@ Adds a timer.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  | Plugin the timer belongs to |
 | `interval` | `float` |  | Time in seconds between executions |
 | `callback` | [`TimerCallback`](/docs/core-api/IToolkitScheduler#timercallback) |  | Function to execute |
 | `flags` | `int` | `0` | Timer behavior flags |
@@ -118,6 +116,6 @@ Timer behavior flags.
 
 | Macro | Expands to |
 |---|---|
-| `NEXT_FRAME(task)` | `g_pToolkitScheduler->NextFrame(g_PluginID, task)` |
-| `ADD_TIMER(interval, cb, ...)` | `g_pToolkitScheduler->AddTimer(g_PluginID, interval, cb, ##__VA_ARGS__)` |
+| `NEXT_FRAME(task)` | `g_pToolkitScheduler->NextFrame(task)` |
+| `ADD_TIMER(interval, cb, ...)` | `g_pToolkitScheduler->AddTimer(interval, cb, ##__VA_ARGS__)` |
 | `KILL_TIMER(timer)` | `g_pToolkitScheduler->KillTimer(timer)` |

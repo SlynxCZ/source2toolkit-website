@@ -27,10 +27,10 @@ HTTP_GET("https://example.com/api", [](const ToolkitHTTPResponse& r)
 ### `ToolkitHTTPCallback`
 
 ```cpp
-using ToolkitHTTPCallback = std::function<void(const ToolkitHTTPResponse& response)>;
+using ToolkitHTTPCallback = ToolkitCallback<void(const ToolkitHTTPResponse& response)>;
 ```
 
-Callback for a completed request.
+Called with the response on the main thread: a function, an object and a method, or a lambda (ToolkitCallback) -- whose it is, the core reads off it.
 
 ## Methods
 
@@ -55,7 +55,7 @@ Number of requests waiting for Steam's HTTP client.
 ### `Request`
 
 ```cpp
-virtual void Request(PluginId owner, EToolkitHTTPMethod method, const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+virtual void Request(EToolkitHTTPMethod method, const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
 ```
 
 Issues a request.
@@ -64,7 +64,6 @@ Issues a request.
 
 | Parameter | Type | Default | Description |
 |---|---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  | Plugin the request belongs to |
 | `method` | [`EToolkitHTTPMethod`](/docs/core-api/IToolkitHTTP#etoolkithttpmethod) |  | HTTP method |
 | `pszUrl` | `const char*` |  | Absolute URL |
 | `pszBody` | `const char*` |  | Request body, or nullptr for methods that take none |
@@ -74,12 +73,11 @@ Issues a request.
 ### `Get`
 
 ```cpp
-virtual void Get(PluginId owner, const char* pszUrl, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+virtual void Get(const char* pszUrl, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
 ```
 
 | Parameter | Type | Default |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  |
 | `pszUrl` | `const char*` |  |
 | `callback` | [`ToolkitHTTPCallback`](/docs/core-api/IToolkitHTTP#toolkithttpcallback) |  |
 | `pHeaders` | [`const std::vector<ToolkitHTTPHeader>*`](/docs/core-api/IToolkitHTTP#toolkithttpheader) | `nullptr` |
@@ -87,12 +85,11 @@ virtual void Get(PluginId owner, const char* pszUrl, ToolkitHTTPCallback callbac
 ### `Post`
 
 ```cpp
-virtual void Post(PluginId owner, const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+virtual void Post(const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
 ```
 
 | Parameter | Type | Default |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  |
 | `pszUrl` | `const char*` |  |
 | `pszBody` | `const char*` |  |
 | `callback` | [`ToolkitHTTPCallback`](/docs/core-api/IToolkitHTTP#toolkithttpcallback) |  |
@@ -101,12 +98,11 @@ virtual void Post(PluginId owner, const char* pszUrl, const char* pszBody, Toolk
 ### `Put`
 
 ```cpp
-virtual void Put(PluginId owner, const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+virtual void Put(const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
 ```
 
 | Parameter | Type | Default |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  |
 | `pszUrl` | `const char*` |  |
 | `pszBody` | `const char*` |  |
 | `callback` | [`ToolkitHTTPCallback`](/docs/core-api/IToolkitHTTP#toolkithttpcallback) |  |
@@ -115,12 +111,11 @@ virtual void Put(PluginId owner, const char* pszUrl, const char* pszBody, Toolki
 ### `Patch`
 
 ```cpp
-virtual void Patch(PluginId owner, const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+virtual void Patch(const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
 ```
 
 | Parameter | Type | Default |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  |
 | `pszUrl` | `const char*` |  |
 | `pszBody` | `const char*` |  |
 | `callback` | [`ToolkitHTTPCallback`](/docs/core-api/IToolkitHTTP#toolkithttpcallback) |  |
@@ -129,12 +124,11 @@ virtual void Patch(PluginId owner, const char* pszUrl, const char* pszBody, Tool
 ### `Delete`
 
 ```cpp
-virtual void Delete(PluginId owner, const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
+virtual void Delete(const char* pszUrl, const char* pszBody, ToolkitHTTPCallback callback, const std::vector<ToolkitHTTPHeader>* pHeaders = nullptr) = 0;
 ```
 
 | Parameter | Type | Default |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |  |
 | `pszUrl` | `const char*` |  |
 | `pszBody` | `const char*` |  |
 | `callback` | [`ToolkitHTTPCallback`](/docs/core-api/IToolkitHTTP#toolkithttpcallback) |  |
@@ -196,9 +190,9 @@ HTTP method of a request.
 
 | Macro | Expands to |
 |---|---|
-| `HTTP_REQUEST(method, pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Request(g_PluginID, method, pszUrl, pszBody, cb, ##__VA_ARGS__)` |
-| `HTTP_GET(pszUrl, cb, ...)` | `g_pToolkitHTTP->Get(g_PluginID, pszUrl, cb, ##__VA_ARGS__)` |
-| `HTTP_POST(pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Post(g_PluginID, pszUrl, pszBody, cb, ##__VA_ARGS__)` |
-| `HTTP_PUT(pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Put(g_PluginID, pszUrl, pszBody, cb, ##__VA_ARGS__)` |
-| `HTTP_PATCH(pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Patch(g_PluginID, pszUrl, pszBody, cb, ##__VA_ARGS__)` |
-| `HTTP_DELETE(pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Delete(g_PluginID, pszUrl, pszBody, cb, ##__VA_ARGS__)` |
+| `HTTP_REQUEST(method, pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Request(method, pszUrl, pszBody, cb, ##__VA_ARGS__)` |
+| `HTTP_GET(pszUrl, cb, ...)` | `g_pToolkitHTTP->Get(pszUrl, cb, ##__VA_ARGS__)` |
+| `HTTP_POST(pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Post(pszUrl, pszBody, cb, ##__VA_ARGS__)` |
+| `HTTP_PUT(pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Put(pszUrl, pszBody, cb, ##__VA_ARGS__)` |
+| `HTTP_PATCH(pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Patch(pszUrl, pszBody, cb, ##__VA_ARGS__)` |
+| `HTTP_DELETE(pszUrl, pszBody, cb, ...)` | `g_pToolkitHTTP->Delete(pszUrl, pszBody, cb, ##__VA_ARGS__)` |

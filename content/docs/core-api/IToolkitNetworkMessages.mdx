@@ -14,14 +14,14 @@ Interface for working with Source2 network messages.
 
 All field access is done via protobuf reflection using field names. The @p msg pointer is an opaque handle to an allocated protobuf message; always deallocate with DeallocateNetMessage() when done.
 
-**Interface id** `IToolkitNetworkMessages001` (`TOOLKIT_NETWORKMESSAGES_INTERFACE`) · **Global** `g_pToolkitNetworkMessages` · **Header** [`source2toolkit/IToolkitNetworkMessages.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitNetworkMessages.h)
+**Interface id** `IToolkitNetworkMessages002` (`TOOLKIT_NETWORKMESSAGES_INTERFACE`) · **Global** `g_pToolkitNetworkMessages` · **Header** [`source2toolkit/IToolkitNetworkMessages.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitNetworkMessages.h)
 
 ## Types
 
 ### `NetMessageServerHook`
 
 ```cpp
-using NetMessageServerHook = std::function<Action(uint64_t* clients, int messageid, void* msg)>;
+using NetMessageServerHook = ToolkitCallback<Action(uint64_t* clients, int messageid, void* msg)>;
 ```
 
 Hook called when the server sends a message to a set of clients.
@@ -29,7 +29,7 @@ Hook called when the server sends a message to a set of clients.
 ### `NetMessageClientHook`
 
 ```cpp
-using NetMessageClientHook = std::function<Action(CPlayerSlot slot, int messageid, void* msg)>;
+using NetMessageClientHook = ToolkitCallback<Action(CPlayerSlot slot, int messageid, void* msg)>;
 ```
 
 Hook called when a client sends a message to the server, or for internal server sends.
@@ -985,79 +985,100 @@ Sends a network message to a set of players.
 ### `HookServerMessage`
 
 ```cpp
-virtual void HookServerMessage(PluginId owner, NetMessageServerHook handler) = 0;
+virtual ToolkitHookId HookServerMessage(NetMessageServerHook handler) = 0;
 ```
 
 Hooks outgoing server-to-client messages.
 
-One hook per plugin, as everywhere else in the toolkit: hooking again replaces the previous handler. The toolkit drops it when the plugin unloads, so a plugin that forgets to unhook does not leave the engine calling into a closed library.
+A plugin may hook as often as it likes; each handler runs. The toolkit drops what a plugin still holds when it unloads, so a plugin that forgets to unhook does not leave the engine calling into a closed library. Whose a hook is, the core reads off the handler (see ToolkitCallback).
 
 | Parameter | Type | Description |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the hook |
-| `handler` | [`NetMessageServerHook`](/docs/core-api/IToolkitNetworkMessages#netmessageserverhook) | Callback, or nullptr to unhook |
+| `handler` | [`NetMessageServerHook`](/docs/core-api/IToolkitNetworkMessages#netmessageserverhook) | A function, an object and a method, or a lambda |
+
+**Returns** [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) — The id UnhookServerMessage(id) takes
 
 ### `UnhookServerMessage`
 
 ```cpp
-virtual void UnhookServerMessage(PluginId owner) = 0;
+virtual bool UnhookServerMessage(const NetMessageServerHook& handler) = 0;
+virtual bool UnhookServerMessage(ToolkitHookId id) = 0;
 ```
 
-Drops this plugin's outgoing-message hook.
+Drops the hook with this handler -- a function or an object and a method; a lambda goes by its id.
+
+Drops the hook HookServerMessage() returned the id for.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `handler` | [`const NetMessageServerHook&`](/docs/core-api/IToolkitNetworkMessages#netmessageserverhook) |
+| `id` | [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) |
+
+**Returns** `bool` — true when one was found
 
 ### `HookClientMessage`
 
 ```cpp
-virtual void HookClientMessage(PluginId owner, NetMessageClientHook handler) = 0;
+virtual ToolkitHookId HookClientMessage(NetMessageClientHook handler) = 0;
 ```
 
-Hooks incoming client-to-server messages.
+Hooks incoming client-to-server messages (as HookServerMessage()).
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`NetMessageClientHook`](/docs/core-api/IToolkitNetworkMessages#netmessageclienthook) |
+
+**Returns** [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) — The id UnhookClientMessage(id) takes
 
 ### `UnhookClientMessage`
 
 ```cpp
-virtual void UnhookClientMessage(PluginId owner) = 0;
+virtual bool UnhookClientMessage(const NetMessageClientHook& handler) = 0;
+virtual bool UnhookClientMessage(ToolkitHookId id) = 0;
 ```
 
-Drops this plugin's incoming-message hook.
+Drops the hook with this handler -- a function or an object and a method; a lambda goes by its id.
+
+Drops the hook HookClientMessage() returned the id for.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `handler` | [`const NetMessageClientHook&`](/docs/core-api/IToolkitNetworkMessages#netmessageclienthook) |
+| `id` | [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) |
+
+**Returns** `bool` — true when one was found
 
 ### `HookServerInternalMessage`
 
 ```cpp
-virtual void HookServerInternalMessage(PluginId owner, NetMessageClientHook handler) = 0;
+virtual ToolkitHookId HookServerInternalMessage(NetMessageClientHook handler) = 0;
 ```
 
-Hooks internal server-side message sends (per-client).
+Hooks internal server-side message sends, per client (as HookServerMessage()).
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `handler` | [`NetMessageClientHook`](/docs/core-api/IToolkitNetworkMessages#netmessageclienthook) |
+
+**Returns** [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) — The id UnhookServerInternalMessage(id) takes
 
 ### `UnhookServerInternalMessage`
 
 ```cpp
-virtual void UnhookServerInternalMessage(PluginId owner) = 0;
+virtual bool UnhookServerInternalMessage(const NetMessageClientHook& handler) = 0;
+virtual bool UnhookServerInternalMessage(ToolkitHookId id) = 0;
 ```
 
-Drops this plugin's internal-send hook.
+Drops the hook with this handler -- a function or an object and a method; a lambda goes by its id.
+
+Drops the hook HookServerInternalMessage() returned the id for.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `handler` | [`const NetMessageClientHook&`](/docs/core-api/IToolkitNetworkMessages#netmessageclienthook) |
+| `id` | [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) |
+
+**Returns** `bool` — true when one was found
 
 ## Macros
 
@@ -1072,7 +1093,7 @@ Shorthand accessors via g_ToolkitAPI.
 ### `HOOK_SERVER_MESSAGE`
 
 ```cpp
-#define HOOK_SERVER_MESSAGE(handler) g_pToolkitNetworkMessages->HookServerMessage(g_PluginID, handler)
+#define HOOK_SERVER_MESSAGE(handler) g_pToolkitNetworkMessages->HookServerMessage(handler)
 ```
 
 Hook macros, matching HOOK_GAME_EVENT and HOOK_CONVAR_CHANGE: the plugin ID is filled in for you.
@@ -1085,8 +1106,8 @@ Hook macros, matching HOOK_GAME_EVENT and HOOK_CONVAR_CHANGE: the plugin ID is f
 | `NET_MSG_FREE(msg)` | `g_pToolkitNetworkMessages->DeallocateNetMessage(msg)` |
 | `NET_MSG_SEND(msg, id, slot)` | `g_pToolkitNetworkMessages->SendMessage(msg, id, slot)` |
 | `NET_MSG_SEND_PLAYERS(msg, id, mask)` | `g_pToolkitNetworkMessages->SendMessageToPlayers(msg, id, mask)` |
-| `UNHOOK_SERVER_MESSAGE()` | `g_pToolkitNetworkMessages->UnhookServerMessage(g_PluginID)` |
-| `HOOK_CLIENT_MESSAGE(handler)` | `g_pToolkitNetworkMessages->HookClientMessage(g_PluginID, handler)` |
-| `UNHOOK_CLIENT_MESSAGE()` | `g_pToolkitNetworkMessages->UnhookClientMessage(g_PluginID)` |
-| `HOOK_SERVER_INTERNAL_MESSAGE(handler)` | `g_pToolkitNetworkMessages->HookServerInternalMessage(g_PluginID, handler)` |
-| `UNHOOK_SERVER_INTERNAL_MESSAGE()` | `g_pToolkitNetworkMessages->UnhookServerInternalMessage(g_PluginID)` |
+| `UNHOOK_SERVER_MESSAGE(handler)` | `g_pToolkitNetworkMessages->UnhookServerMessage(handler)` |
+| `HOOK_CLIENT_MESSAGE(handler)` | `g_pToolkitNetworkMessages->HookClientMessage(handler)` |
+| `UNHOOK_CLIENT_MESSAGE(handler)` | `g_pToolkitNetworkMessages->UnhookClientMessage(handler)` |
+| `HOOK_SERVER_INTERNAL_MESSAGE(handler)` | `g_pToolkitNetworkMessages->HookServerInternalMessage(handler)` |
+| `UNHOOK_SERVER_INTERNAL_MESSAGE(handler)` | `g_pToolkitNetworkMessages->UnhookServerInternalMessage(handler)` |

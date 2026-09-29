@@ -15,14 +15,14 @@ Allows plugins to:
 - Modify event data
 - Block event propagation
 
-**Interface id** `IToolkitEvents001` (`TOOLKIT_EVENTS_INTERFACE`) · **Global** `g_pToolkitEvents` · **Header** [`source2toolkit/IToolkitEvents.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitEvents.h)
+**Interface id** `IToolkitEvents002` (`TOOLKIT_EVENTS_INTERFACE`) · **Global** `g_pToolkitEvents` · **Header** [`source2toolkit/IToolkitEvents.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitEvents.h)
 
 ## Types
 
 ### `GameEventHandler`
 
 ```cpp
-using GameEventHandler = std::function<Action(IGameEvent* event, bool post, bool& dontBroadcast)>;
+using GameEventHandler = ToolkitCallback<Action(IGameEvent* event, bool post, bool& dontBroadcast)>;
 ```
 
 Callback type for game events.
@@ -32,38 +32,47 @@ Callback type for game events.
 ### `HookGameEvent`
 
 ```cpp
-virtual void HookGameEvent(PluginId owner, const char* pchName, GameEventHandler handler, bool post) = 0;
+virtual ToolkitHookId HookGameEvent(const char* pchName, GameEventHandler handler, bool post) = 0;
 ```
 
-Registers a listener for a game event.
+Registers a listener for a game event. The same event may be hooked as often as a plugin likes; each handler runs.
+
+Whose it is, the core reads off the handler (see ToolkitCallback); what a plugin still holds at unload the core drops for it.
 
 | Parameter | Type | Description |
 |---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the listener |
 | `pchName` | `const char*` | Event name (e.g. "player_death") |
-| `handler` | [`GameEventHandler`](/docs/core-api/IToolkitEvents#gameeventhandler) | Callback function |
+| `handler` | [`GameEventHandler`](/docs/core-api/IToolkitEvents#gameeventhandler) | A function, an object and a method, or a lambda |
 | `post` | `bool` | false to be called before the engine processes the event, true to be called after |
+
+**Returns** [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) — The id UnhookGameEvent(id) takes
 
 ### `UnhookGameEvent`
 
 ```cpp
-virtual void UnhookGameEvent(PluginId owner, const char* pchName, bool post) = 0;
+virtual bool UnhookGameEvent(const char* pchName, const GameEventHandler& handler, bool post) = 0;
+virtual bool UnhookGameEvent(ToolkitHookId id) = 0;
 ```
 
-Drops one of this plugin's event hooks.
+Drops the hook with this handler -- a function or an object and a method; a lambda goes by its id.
 
-| Parameter | Type | Description |
-|---|---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) | Plugin ID that owns the listener |
-| `pchName` | `const char*` | Event name the hook was registered under |
-| `post` | `bool` | Which of the two hooks to drop |
+Drops the hook HookGameEvent() returned the id for.
+
+| Parameter | Type |
+|---|---|
+| `pchName` | `const char*` |
+| `handler` | [`const GameEventHandler&`](/docs/core-api/IToolkitEvents#gameeventhandler) |
+| `post` | `bool` |
+| `id` | [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) |
+
+**Returns** `bool` — true when one was found
 
 ## Macros
 
 ### `HOOK_GAME_EVENT`
 
 ```cpp
-#define HOOK_GAME_EVENT(passname, passfunc, post) g_pToolkitEvents->HookGameEvent(g_PluginID, passname, passfunc, post)
+#define HOOK_GAME_EVENT(passname, passfunc, post) g_pToolkitEvents->HookGameEvent(passname, passfunc, post)
 ```
 
 Macro for hooking a game event.
@@ -71,7 +80,7 @@ Macro for hooking a game event.
 ### `UNHOOK_GAME_EVENT`
 
 ```cpp
-#define UNHOOK_GAME_EVENT(passname, post) g_pToolkitEvents->UnhookGameEvent(g_PluginID, passname, post)
+#define UNHOOK_GAME_EVENT(passname, passfunc, post) g_pToolkitEvents->UnhookGameEvent(passname, passfunc, post)
 ```
 
-Macro for dropping a game event hook.
+Macro for dropping a game event hook (a function or an object and a method; a lambda goes by the id HOOK_GAME_EVENT returned).

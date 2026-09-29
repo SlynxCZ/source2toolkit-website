@@ -26,14 +26,14 @@ Runs cs_script scripts for plugins and carries messages both ways.
 
 A script is known by a name the plugin picks, which is also the targetname of its `point_script` entity; running a script under a name already in use replaces the old one. Every script and every message handler belongs to the plugin that created it and goes away when that plugin unloads.
 
-**Interface id** `IToolkitScripts001` (`TOOLKIT_SCRIPTS_INTERFACE`) · **Global** `g_pToolkitScripts` · **Header** [`source2toolkit/IToolkitScripts.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitScripts.h)
+**Interface id** `IToolkitScripts002` (`TOOLKIT_SCRIPTS_INTERFACE`) · **Global** `g_pToolkitScripts` · **Header** [`source2toolkit/IToolkitScripts.h`](https://github.com/SlynxCZ/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitScripts.h)
 
 ## Types
 
 ### `ScriptMessageHandler`
 
 ```cpp
-using ScriptMessageHandler = std::function<void(const char* pszChannel, const char* pszPayload)>;
+using ScriptMessageHandler = ToolkitCallback<void(const char* pszChannel, const char* pszPayload)>;
 ```
 
 Called with a message a script sent through `toolkit_script`.
@@ -164,31 +164,40 @@ This is the game's `RunScriptInput` entity input. Only the input name reaches th
 ### `HookScriptMessage`
 
 ```cpp
-virtual void HookScriptMessage(PluginId owner, const char* pszChannel, ScriptMessageHandler handler) = 0;
+virtual ToolkitHookId HookScriptMessage(const char* pszChannel, ScriptMessageHandler handler) = 0;
 ```
 
 Receives what scripts send on a channel through `toolkit_script`.
 
-Several plugins may hook one channel; each gets every message. A plugin hooking the same channel again replaces its handler.
+Several handlers may hook one channel, from one plugin or more; each gets every message.
+
+Whose it is, the core reads off the handler (see ToolkitCallback); what a plugin still holds at unload the core drops for it.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `pszChannel` | `const char*` |
 | `handler` | [`ScriptMessageHandler`](/docs/core-api/IToolkitScripts#scriptmessagehandler) |
+
+**Returns** [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) — The id UnhookScriptMessage(id) takes
 
 ### `UnhookScriptMessage`
 
 ```cpp
-virtual void UnhookScriptMessage(PluginId owner, const char* pszChannel) = 0;
+virtual bool UnhookScriptMessage(const char* pszChannel, const ScriptMessageHandler& handler) = 0;
+virtual bool UnhookScriptMessage(ToolkitHookId id) = 0;
 ```
 
-Unhooks this plugin's handler from a channel.
+Drops the hook with this handler -- a function or an object and a method; a lambda goes by its id.
+
+Drops the hook HookScriptMessage() returned the id for.
 
 | Parameter | Type |
 |---|---|
-| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
 | `pszChannel` | `const char*` |
+| `handler` | [`const ScriptMessageHandler&`](/docs/core-api/IToolkitScripts#scriptmessagehandler) |
+| `id` | [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) |
+
+**Returns** `bool` — true when one was found
 
 ## Macros
 
@@ -207,5 +216,5 @@ Shorthand accessors via g_pToolkitScripts.
 | `SCRIPTS_RUN_SOURCE(name, path, source, persistent)` | `g_pToolkitScripts->RunSource(g_PluginID, name, path, source, persistent)` |
 | `SCRIPTS_RUN_FILE(name, file, persistent)` | `g_pToolkitScripts->RunFile(g_PluginID, name, file, persistent)` |
 | `SCRIPTS_FIRE_INPUT(name, input)` | `g_pToolkitScripts->FireInput(name, input)` |
-| `HOOK_SCRIPT_MESSAGE(channel, handler)` | `g_pToolkitScripts->HookScriptMessage(g_PluginID, channel, handler)` |
-| `UNHOOK_SCRIPT_MESSAGE(channel)` | `g_pToolkitScripts->UnhookScriptMessage(g_PluginID, channel)` |
+| `HOOK_SCRIPT_MESSAGE(channel, handler)` | `g_pToolkitScripts->HookScriptMessage(channel, handler)` |
+| `UNHOOK_SCRIPT_MESSAGE(channel, handler)` | `g_pToolkitScripts->UnhookScriptMessage(channel, handler)` |
