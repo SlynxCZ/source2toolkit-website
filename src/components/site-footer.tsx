@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { FaDiscord, FaSteam } from 'react-icons/fa';
-import { LuGithub, LuGlobe } from 'react-icons/lu';
+import { LuGithub } from 'react-icons/lu';
 import ToolkitLogo from '@/app/(home)/logo.png';
 import { discordConfig, docsRoute, gitConfig, portfolioConfig, steamConfig } from '@/lib/shared';
 import { docsSections } from '@/lib/sections';
@@ -13,7 +13,6 @@ const socials = [
   { label: 'Discord', href: discordConfig.link, icon: FaDiscord },
   { label: 'GitHub', href: `${gh}/${gitConfig.repo}`, icon: LuGithub },
   { label: 'Steam', href: steamConfig.link, icon: FaSteam },
-  { label: 'Portfolio', href: portfolioConfig.link, icon: LuGlobe },
 ];
 
 interface FooterLink {

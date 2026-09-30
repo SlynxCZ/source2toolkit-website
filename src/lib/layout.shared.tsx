@@ -4,7 +4,6 @@ import ToolkitLogo from '@/app/(home)/logo.png';
 import {
   appName,
   gitConfig,
-  portfolioConfig,
   discordConfig,
   steamConfig,
 } from './shared';
@@ -12,7 +11,7 @@ import { docsSections } from './sections';
 import { TopicsMenu } from '@/components/topics-menu';
 
 import { FaDiscord, FaSteam } from 'react-icons/fa';
-import { LuGithub, LuGlobe } from 'react-icons/lu';
+import { LuGithub } from 'react-icons/lu';
 
 const iconLinks: LinkItemType[] = [
   {
@@ -21,14 +20,6 @@ const iconLinks: LinkItemType[] = [
     icon: <LuGithub />,
     text: 'GitHub',
     url: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
-    external: true,
-  },
-  {
-    type: 'icon',
-    label: 'Portfolio',
-    icon: <LuGlobe />,
-    text: 'Portfolio',
-    url: portfolioConfig.link,
     external: true,
   },
   {
