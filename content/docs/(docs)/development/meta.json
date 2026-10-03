@@ -3,6 +3,8 @@
     "defaultOpen": true,
     "pages": [
         "first-plugin",
+        "coming-from-counterstrikesharp",
+        "cpp-for-csharp-developers",
         "plugin-lifecycle",
         "compatibility",
         "building",

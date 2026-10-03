@@ -45,7 +45,11 @@ An interface changes rarely, and when it does the log says exactly which
 plugin and which interface. Everything else a core update touches — gamedata,
 schema, the game hooks' prototypes — is the core's alone.
 
-The last such change (core v1.0.35) took the `PluginId` out of every call that takes a
+The last such change (core v1.0.37) bumped `IToolkitCommands003`: commands
+take an optional [permission](/docs/guides/permissions), the context says
+where a command was typed, and `ReplyToCommand()` answers there.
+
+The one before it (core v1.0.35) took the `PluginId` out of every call that takes a
 handler (the core now reads the owner off the handler) and made every
 `Register*` / `Hook*` return a `ToolkitHookId`. It bumped `IToolkitCommands002`,
 `IToolkitConVars002`, `IToolkitCustomHud002`, `IToolkitEntities002`,
@@ -57,12 +61,16 @@ revisions before those has to be rebuilt against the current SDK.
 ## The plugin API version
 
 `TOOLKIT_PLAPI_VERSION` numbers the plugin-side interface: `IToolkitPlugin`,
-`IToolkitListener` and the globals. New callbacks are appended, so a plugin
-built against an older API loads and the core simply never calls what it does
-not have; a plugin built against a **newer** API than the core's is refused
-(`plugin API version 3 but this core speaks 2`). Version 2 (core v1.0.26) added
-the engine callbacks (`OnGameFrame`, `OnClientPutInServer`, …) and
-`IToolkitAPI::GameHooks()`.
+`IToolkitListener` and the globals. The core loads only plugins built
+against its own version: a **newer** one is refused with `plugin API version 4
+but this core speaks 3` (update the core), an **older** one with `plugin API
+version 2 but this core needs 3 -- update the plugin or rebuild it against the
+current SDK`.
+
+| Version | Core | What came with it |
+|---|---|---|
+| 3 | v1.0.37 | `OnClientAuthorized`, `OnClientAuthorizeFailed`, `OnPermissionsChanged`; the client callbacks of `IToolkitListener` in the order they happen; `g_pToolkitPermissions` |
+| 2 | v1.0.26 | the engine callbacks (`OnGameFrame`, `OnClientPutInServer`, …) and `IToolkitAPI::GameHooks()` |
 
 ## The KHook check
 

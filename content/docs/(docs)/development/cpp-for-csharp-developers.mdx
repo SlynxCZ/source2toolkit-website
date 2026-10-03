@@ -1,0 +1,354 @@
+---
+title: C++ for C# developers
+description: The part of C++ a plugin actually needs, explained from C# — pointers and lifetimes, strings, lambdas, collections, casting, headers, and what a crash tells you.
+---
+
+This is not a C++ course. It is the short list of things that work differently
+from C# **in a CS2 plugin**, and the habits that keep a plugin from taking the
+server down. If you are coming from CounterStrikeSharp, read it next to
+[Coming from CounterStrikeSharp](/docs/development/coming-from-counterstrikesharp).
+
+## The one big difference
+
+In C#, the runtime stands between your code and the machine. A null access
+throws a `NullReferenceException`, an index out of range throws, the garbage
+collector frees objects once nobody references them, and a plugin's exception
+is caught and logged.
+
+In a native plugin nothing stands in between. Your code runs inside the game
+server's process, with the game's memory. A null pointer you call through, a
+freed object you touch, an index past the end of an array — the server
+crashes, or worse, keeps running with corrupted memory.
+
+That sounds scarier than it is. Almost every crash in plugin code comes from a
+handful of patterns, all of them below. And when one does happen, the
+[crash handler](/docs/guides/crash-handler) tells you the file and line.
+
+## Values, pointers and references
+
+| C# | C++ | Meaning |
+|---|---|---|
+| `struct Vector` (value) | `Vector v` | A value. Copied on assignment. |
+| `class Foo` variable (reference) | `Foo* p` | A pointer. Can be `nullptr`. Does **not** keep the object alive. |
+| `ref Foo` / `out` | `Foo& r` | A reference: another name for an existing object. Never null. |
+| `in Foo` | `const Foo& r` | Read-only reference — the usual way to take a big parameter. |
+| `obj.Member` | `p->Member` (pointer), `r.Member` / `v.Member` | Arrow for pointers, dot for everything else. |
+| `null` | `nullptr` | |
+
+The game hands you pointers: `CCSPlayerController*`, `CCSPlayerPawn*`,
+`IGameEvent*`. Treat every pointer you get from a lookup as possibly null:
+
+```cpp
+CCSPlayerController* pPlayer = CCSPlayerController::FromSlot(slot);
+if (!pPlayer)
+    return;
+
+// C# 'is not null' pattern, C++17 style: declare and test in one if.
+if (CCSPlayerPawn* pPawn = pPlayer->GetPlayerPawn(); pPawn && pPlayer->m_bPawnIsAlive())
+    pPawn->m_iHealth = 100;
+```
+
+There is no `?.` operator. Write the checks out.
+
+## Who owns what
+
+C# has one rule: the GC frees what nobody references. C++ has three, and you
+need to know which one applies:
+
+1. **Locals live until the end of their block.** `std::string s = ...;` is
+   destroyed at the closing brace, automatically. This is RAII: the object's
+   destructor does the cleanup, like `using` in C# but for everything.
+2. **Objects you allocate, you own** — and you hold them in a smart pointer,
+   never a raw `new`/`delete`:
+   `auto data = std::make_unique<PlayerData>();` (one owner, freed when the
+   `unique_ptr` goes away) or `std::make_shared` (reference-counted, like a C#
+   reference, minus the cycle collection).
+3. **Entities belong to the engine.** You never `delete` an entity — call
+   `Remove()` and the engine frees it later. And the engine can free it at any
+   time: when the player disconnects, when the round restarts, when the map
+   changes.
+
+Rule 3 is the source of most plugin crashes. A raw `CCSPlayerPawn*` is only
+good **for the current call**. Anything that outlives it — a timer, a
+`NEXT_FRAME`, a member of your plugin class, a map — must hold something that
+can be looked up again:
+
+| Keep this | Look it up with |
+|---|---|
+| `CHandle<CCSPlayerPawn>` — like a `WeakReference<T>` | `handle.Get()` → `nullptr` once the entity is gone |
+| The player slot (`int` / `CPlayerSlot`) | `CCSPlayerController::FromSlot(slot)` |
+| The SteamID (`uint64`) | `CCSPlayerController::FromSteamId(id)` — survives reconnects |
+
+```cpp
+// Wrong: pPawn may be freed by the time the timer fires.
+ADD_TIMER(5.0f, [pPawn]() { pPawn->m_iHealth = 100; });
+
+// Right: capture a handle and resolve it inside.
+CHandle<CCSPlayerPawn> hPawn = pPawn->GetHandle();
+ADD_TIMER(5.0f, [hPawn]()
+{
+    if (CCSPlayerPawn* p = hPawn.Get())
+        p->m_iHealth = 100;
+});
+```
+
+Per-player state belongs in your own storage keyed by slot or SteamID, cleared
+in `OnClientDisconnect` — not on the entity.
+
+## Strings
+
+The API speaks `const char*`: a pointer to characters somebody else owns, ended
+by a zero byte. It is **borrowed**. Your own strings are `std::string`, which
+owns its characters, like a C# `string` (but mutable).
+
+```cpp
+// Keep a copy if you need it later: std::string copies the characters.
+std::string weapon = event->GetString("weapon");
+
+// Pass a std::string to the API with .c_str().
+pPlayer->PrintToChat(message.c_str());
+
+// Compare: == works on std::string, NOT on const char* (that compares addresses).
+if (weapon == "knife") { ... }
+if (V_strcmp(pEntity->GetClassname(), "smokegrenade_projectile") == 0) { ... }
+```
+
+| C# | C++ |
+|---|---|
+| `$"You have {hp} HP."` | `"You have " + std::to_string(hp) + " HP."`, or `snprintf` into a buffer |
+| `s.ToLower()`, `s.Split(' ')`, `s.Contains(x)` | No built-ins on `std::string` for most of these; `s.find(x) != std::string::npos` for contains |
+| `string.Equals(a, b, OrdinalIgnoreCase)` | `V_stricmp(a, b) == 0` |
+| `string? s` | `const char*` that may be `nullptr` — check before using it |
+
+Two traps:
+
+- **Never keep a `const char*` you were handed.** It points into memory the
+  game or another object owns, and it may be gone next frame. Copy it into a
+  `std::string`.
+- **Never return or keep `.c_str()` of a temporary.**
+  `const char* p = (a + b).c_str();` points into a string destroyed at the
+  semicolon.
+
+Printf-style logging uses format specifiers: `TOOLKIT_LOG(this, "%s has %d HP\n", name, hp);`
+— `%s` for `const char*` (use `.c_str()` for a `std::string`), `%d` for `int`,
+`%f` for `float`, `%llu` for `uint64`. A wrong specifier is a crash, not a
+formatting error.
+
+## Lambdas and captures
+
+Handlers are lambdas, much like C# lambdas — with one difference that matters.
+A C# closure keeps the variables it uses alive. A C++ lambda captures exactly
+what its **capture list** says:
+
+| Capture | Meaning |
+|---|---|
+| `[]` | Nothing. |
+| `[x]`, `[=]` | A copy of `x` / of everything used. Safe to run later. |
+| `[&x]`, `[&]` | A reference to `x` / to everything used. **Only safe while those variables still exist.** |
+| `[this]` | The plugin object. Fine — your plugin outlives its own handlers. |
+
+```cpp
+void Announce(int seconds)
+{
+    int remaining = seconds;
+
+    // Wrong: 'remaining' is a local, gone when Announce() returns. The timer
+    // fires later and writes into a dead stack frame.
+    ADD_TIMER(1.0f, [&remaining]() { remaining--; }, TIMER_FLAG_REPEAT);
+
+    // Right: keep the state in the plugin (captured via this), or copy it in.
+    m_nRemaining = seconds;
+    ADD_TIMER(1.0f, [this]() { m_nRemaining--; }, TIMER_FLAG_REPEAT);
+}
+```
+
+Rule of thumb: anything that runs **later** (timers, `NEXT_FRAME`, HTTP and
+MySQL callbacks, menu options) captures by value or `this`, never by `&`.
+Handlers that run right away may capture by reference.
+
+## Collections and LINQ
+
+| C# | C++ |
+|---|---|
+| `List<T>` | `std::vector<T>` |
+| `Dictionary<K, V>` | `std::unordered_map<K, V>` |
+| `HashSet<T>` | `std::unordered_set<T>` |
+| `foreach (var x in list)` | `for (auto& x : list)` — `auto&`, or every element is copied |
+| `dict.TryGetValue(k, out v)` | `if (auto it = map.find(k); it != map.end()) { auto& v = it->second; }` |
+| `dict[k]` (throws if missing) | `map.at(k)` throws; **`map[k]` silently inserts a default** |
+| `list.Any(p)`, `All`, `First(p)` | `std::any_of`, `std::all_of`, `std::find_if` from `<algorithm>` |
+| `list.Where(p).ToList()` | `std::copy_if` into a new vector, or a loop |
+| `list.Remove(x)` | `std::erase(list, x)` (C++20) |
+| `list.RemoveAll(p)` | `std::erase_if(list, p)` (C++20) |
+
+Removing from a collection **while looping over it** throws in C#. In C++ it
+is undefined behaviour: the loop reads freed memory. Use `std::erase_if`, or
+collect what to remove first.
+
+## Casting
+
+`static_cast<T*>(p)` converts a pointer when **you know** the type — the
+game event's controller is a `CCSPlayerController`, the entity with the
+classname `smokegrenade_projectile` is a `CSmokeGrenadeProjectile`. Nothing is
+checked; a wrong cast is a crash later.
+
+<Callout type="error">
+  Never use `dynamic_cast` on game types. The engine's RTTI does not work the
+  way the compiler expects, and a `dynamic_cast` on a CS2 class gives wrong
+  results or crashes. There is no `as` / `is` for entities.
+</Callout>
+
+Check the type first, then `static_cast`:
+
+```cpp
+if (pEntity->IsPlayerPawn())
+{
+    auto* pPawn = static_cast<CCSPlayerPawn*>(pEntity);
+    // ...
+}
+
+if (V_strcmp(pEntity->GetClassname(), "weapon_ak47") == 0)
+{
+    auto* pWeapon = static_cast<CBasePlayerWeapon*>(pEntity);
+    // ...
+}
+```
+
+`dynamic_cast` on your own classes is fine. On anything from the game, never.
+
+## Exceptions and errors
+
+The engine does not use exceptions, and an exception that escapes your handler
+into game code terminates the server. So:
+
+- Do not throw out of a handler. If you call something that throws
+  (`std::stoi`, `map.at`, a JSON parser), catch it inside the handler.
+- Report errors the way the API does: return `false`, return `nullptr`, write
+  into `error` in `Load()`.
+
+```cpp
+int amount = 0;
+try { amount = std::stoi(args.Arg(1)); }
+catch (...) { pPlayer->PrintToChat("Usage: !give <amount>"); return; }
+```
+
+## Threads and async
+
+There is no `async`/`await`. Game state lives on **one thread**, the main
+thread, and every toolkit callback — commands, events, timers, listeners, menu
+options, HTTP and MySQL results — runs on it. So inside a callback you may
+touch the game freely; there is nothing to lock.
+
+| C# | Source2Toolkit |
+|---|---|
+| `await Task.Delay(1000)` | `ADD_TIMER(1.0f, ...)` |
+| `Server.NextFrame(...)` | `NEXT_FRAME(...)` |
+| `await httpClient.GetAsync(...)` | [HTTP](/docs/guides/http) — the callback arrives on the main thread |
+| Dapper / `await conn.QueryAsync(...)` | [MySQL](/docs/guides/mysql) — runs off the main thread, the result arrives on it |
+
+If you start a thread of your own, it must not touch any game object. Hand the
+result back with `NEXT_FRAME`, the one scheduler call that is safe from any
+thread.
+
+## Headers, source files and the linker
+
+C# has one file per class and the compiler sees the whole project. C++ compiles
+every `.cpp` file **on its own**, and the linker joins them afterwards:
+
+- A **header** (`.h`) declares things — the class, the function signatures. It
+  starts with `#pragma once`, so including it twice does no harm.
+- A **source file** (`.cpp`) defines them — the bodies. Each function and
+  global is defined in exactly one `.cpp`.
+- `#include` pastes the header's text in. There are no namespaces-as-imports;
+  you include the header that declares what you use.
+
+```cpp title="src/greeter.h"
+#pragma once
+
+class Greeter
+{
+public:
+    void Setup();
+};
+```
+
+```cpp title="src/greeter.cpp"
+#include "greeter.h"
+#include "source2toolkit/IToolkitApi.h"
+
+TOOLKIT_GLOBALVARS(); // every .cpp that uses g_pToolkit* or a toolkit macro
+
+void Greeter::Setup() { /* ... */ }
+```
+
+The errors you will meet, and what they mean:
+
+| Error | Usually |
+|---|---|
+| `undefined reference to ...` / `unresolved external symbol` | Declared but never defined — a missing `.cpp` in `CMakeLists.txt`, or a method with no body. |
+| `multiple definition of ...` | Defined twice: a function body or a global in a header included by two `.cpp` files. Mark it `inline`, or move it into one `.cpp`. |
+| `'g_pToolkitCommands' was not declared` | `TOOLKIT_GLOBALVARS();` missing at the top of that `.cpp`. |
+| `incomplete type` | Only a forward declaration is visible — include the class's header. |
+| A wall of template errors | Read the **first** error only. The rest follows from it. |
+
+## Undefined behaviour
+
+C# defines what happens in every case. C++ leaves some cases undefined: the
+program may crash, may do the wrong thing, or may work perfectly on your test
+server and crash on a full one. The ones that show up in plugins:
+
+- using an object after it was freed (a raw entity pointer across frames);
+- reading past the end of an array or a `std::vector` (`v[i]` is not checked;
+  `v.at(i)` is);
+- reading a variable you never initialised — C++ does **not** zero locals or
+  members. `int m_nCount;` holds garbage; write `int m_nCount = 0;`;
+- changing a collection while looping over it;
+- a `printf` format that does not match its argument.
+
+"It works on my server" proves little. Initialise everything, check every
+pointer, and capture handles, not pointers.
+
+## When it crashes
+
+Build with debug info (`RelWithDebInfo`, and the `.pdb` next to the `.stx` on
+Windows) and the [crash handler](/docs/guides/crash-handler) turns a crash into
+a stack:
+
+```
+#0 some_plugin.stx + 0x1dcc0 (CBadClass::DoStuff() @ badclass.cpp:39)
+#1 some_plugin.stx + 0x1db86 (some_command_callback(...) @ commands.cpp:56)
+#2 libtier0.so + 0x15f682
+Suspected culprit: some_plugin.stx -> CBadClass::DoStuff() @ badclass.cpp:39
+```
+
+Read it top down: frame `#0` is where it died. Look at that line for the usual
+suspects — a pointer that can be null, an entity pointer kept from earlier, a
+`const char*` that is no longer valid, an index past the end.
+
+## Cheat sheet
+
+| C# habit | C++ in a plugin |
+|---|---|
+| `obj?.Member` | `if (p) p->Member` |
+| GC frees it | Locals and smart pointers free themselves; entities are the engine's |
+| Keep a reference to an entity | Keep a `CHandle`, a slot or a SteamID |
+| `string` | `std::string` to own, `const char*` at the API |
+| `a == b` on strings | `std::string ==`, or `V_strcmp` / `V_stricmp` on `const char*` |
+| Closure keeps variables alive | Capture by value or `this` for anything that runs later |
+| `foreach (var x in list)` | `for (auto& x : list)` |
+| `dict[k]` | `map.find(k)` — `map[k]` inserts |
+| `obj as T` / `is T` | Check the type, then `static_cast`; never `dynamic_cast` on game types |
+| `throw` / `try` | Don't let anything escape a handler |
+| `async` / `await` | Timers, `NEXT_FRAME`, callbacks on the main thread |
+| Fields default to 0 | Initialise every member yourself |
+
+## Learning more
+
+- [learncpp.com](https://www.learncpp.com/) — the best free tutorial; chapters
+  on pointers, references, `std::string`, lambdas and `std::vector` cover
+  nearly everything above.
+- [cppreference.com](https://en.cppreference.com/) — the reference for the
+  standard library, the C++ equivalent of the .NET API docs.
+- `samples/cs2_sample` in the [core repository](https://github.com/Source2Toolkit/source2toolkit/tree/main/samples/cs2_sample)
+  — real plugin code that follows every rule on this page.
+- Questions go to `#plugin-developers` on the [Discord](https://discord.gg/4Ck56eDNXj).

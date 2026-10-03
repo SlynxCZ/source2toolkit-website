@@ -11,6 +11,7 @@
     "IToolkitTypes",
     "---Gameplay---",
     "IToolkitCommands",
+    "IToolkitPermissions",
     "IToolkitConVars",
     "IToolkitEvents",
     "IToolkitEntities",

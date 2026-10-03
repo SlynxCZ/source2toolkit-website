@@ -38,6 +38,8 @@ Your plugins are not Metamod plugins and do not appear in `meta list` — use `t
 
 They are separate, independent projects. CounterStrikeSharp is a Metamod plugin that hosts plugins written in C# on .NET. Source2Toolkit plugins are native C++, compiled against the toolkit SDK, with direct access to engine memory, the schema system and KHook. Source2Toolkit does not need CounterStrikeSharp, and its API is its own — CounterStrikeSharp plugins do not run on it.
 
+Porting one is mostly mechanical: [Coming from CounterStrikeSharp](/docs/development/coming-from-counterstrikesharp) maps the concepts one to one and ports a full plugin, and [C++ for C# developers](/docs/development/cpp-for-csharp-developers) covers the language side.
+
 ### Can I load the toolkit with `meta load` on a running server?
 
 No. The core refuses a late load (`Late load is not supported`); it has to be loaded when the server starts. Plugins, on the other hand, can be loaded and unloaded at any time with `toolkit load` / `toolkit unload`.

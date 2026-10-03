@@ -97,7 +97,7 @@ game/csgo/addons/
 | Folder | What it is for |
 |---|---|
 | `bin/` | The toolkit core binary. |
-| `configs/` | `core.json`, and one `configs/<PluginName>/` folder per plugin for its own config files (`PLUGIN_CONFIG_DIR()`). |
+| `configs/` | `core.json`, `permissions.json` (admins and groups, see [Permissions](/docs/guides/permissions)), and one `configs/<PluginName>/` folder per plugin for its own config files (`PLUGIN_CONFIG_DIR()`). |
 | `gamedata/` | Every `.json` file here is loaded at start. Plugins that need signatures of their own ship an extra file next to `gamedata.json` — see [Gamedata](/docs/development/gamedata). |
 | `plugins/` | Every `.stx` file here is loaded at start. |
 | `shared/` | Data files read by more than one plugin (`TOOLKIT_SHARED_DIR()`). |
@@ -119,9 +119,13 @@ On its first start the core copies `configs/core.example.json` to `configs/core.
   "UnlockConVars": true,
   "CrashHandlerEnabled": true,
   "CrashDiscordWebhook": "",
-  "SlowCallbackWarnMs": 100
+  "SlowCallbackWarnMs": 100,
+  "SteamAuthMode": "auto",
+  "AccessDeniedMessage": "You do not have access to this command."
 }
 ```
+
+The file may contain `//` and `/* */` comments.
 
 | Key | Default | Meaning |
 |---|---|---|
@@ -134,6 +138,8 @@ On its first start the core copies `configs/core.example.json` to `configs/core.
 | `CrashHandlerEnabled` | `true` | Install the crash handler. |
 | `CrashDiscordWebhook` | `""` | Discord webhook URL for crash reports. Empty disables Discord reporting; dumps are still written. |
 | `SlowCallbackWarnMs` | `100` | A plugin callback that takes longer than this is logged with its name and plugin — see [Compatibility](/docs/development/compatibility#when-the-server-stalls). `0` turns it off. |
+| `SteamAuthMode` | `"auto"` | Which SteamID a player's [permissions](/docs/guides/permissions#which-steamid-counts) are looked up under: `"auto"`, `"flexible"` or `"strict"`. |
+| `AccessDeniedMessage` | `"You do not have access to this command."` | What a player is told when refused a command, unless a plugin set its own answer. |
 
 The file is read once, when the core loads. Restart the server after changing it.
 

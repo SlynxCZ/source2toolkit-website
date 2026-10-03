@@ -1,0 +1,343 @@
+---
+title: "IToolkitPermissions"
+description: "Admins, groups and permissions, and the commands they gate."
+---
+
+
+A permission is a lower-case dotted string a plugin makes up for itself: "funplay.admin.kick", "vip.trail". What a player holds may end in ".*", which covers that node and everything below it ("funplay.admin.*" covers "funplay.admin" and "funplay.admin.kick", not "funplay.adminx"), and "*" covers everything -- the root permission.
+
+A group is a name with permissions, an immunity and groups it inherits from. The group "default" applies to every player, also to one whose SteamID is not known yet.
+
+Players are looked up by SteamID64, so a SteamID can be granted things before its player connects. Which SteamID a connected player is checked under depends on SteamAuthMode in core.json:
+
+- "auto"     -- the SteamID the client claimed, right away, when the server does not validate Steam tickets (-insecure, sv_lan 1, no Steam connection); otherwise only once Steam validated it.
+- "flexible" -- always the claimed SteamID right away.
+- "strict"   -- always only once Steam validated it.
+
+Until then the player has the "default" group and nothing else. IToolkitListener::OnClientAuthorized() says when the validated one arrives.
+
+What a player holds comes in layers: configs/permissions.json (admins, groups and command overrides an owner writes by hand), and one layer per plugin that grants something at runtime. A player has the union of every layer. A plugin's layer is dropped when it unloads, and "toolkit admins reload" re-reads the file without touching the plugins' layers -- a plugin that loads admins from a database grants them again from its Load() and keeps them current itself.
+
+**Interface id** `IToolkitPermissions001` (`TOOLKIT_PERMISSIONS_INTERFACE`) · **Global** `g_pToolkitPermissions` · **Header** [`source2toolkit/IToolkitPermissions.h`](https://github.com/Source2Toolkit/source2toolkit-sdk/blob/main/public/source2toolkit/IToolkitPermissions.h)
+
+## Types
+
+### `AccessDeniedHandler`
+
+```cpp
+using AccessDeniedHandler = ToolkitCallback<void(const ToolkitCommandContext& ctx, const ToolkitCommandArgs& args, const char* permission)>;
+```
+
+What runs when a player is refused a command.
+
+## Methods
+
+### `HasPermission`
+
+```cpp
+virtual bool HasPermission(uint64 steamId, const char* permission) = 0;
+```
+
+Whether this SteamID64 holds the permission, through any layer, group or wildcard. 0 (an unknown player) has the "default" group only.
+
+| Parameter | Type |
+|---|---|
+| `steamId` | `uint64` |
+| `permission` | `const char*` |
+
+### `PlayerHasPermission`
+
+```cpp
+virtual bool PlayerHasPermission(CPlayerSlot slot, const char* permission) = 0;
+```
+
+Whether the player in this slot holds the permission, under the SteamID they are checked by (see GetPlayerSteamID()). The server console -- an invalid slot -- holds everything.
+
+| Parameter | Type |
+|---|---|
+| `slot` | `CPlayerSlot` |
+| `permission` | `const char*` |
+
+### `CheckAccess`
+
+```cpp
+virtual bool CheckAccess(CPlayerSlot slot, const char* name, const char* defaultPermission) = 0;
+```
+
+SourceMod's CheckCommandAccess: a feature gate the owner can re-assign in permissions.json.
+
+The permission checked is the "Overrides" entry for `name` when there is one, otherwise `defaultPermission`. An empty permission lets everybody through.
+
+| Parameter | Type |
+|---|---|
+| `slot` | `CPlayerSlot` |
+| `name` | `const char*` |
+| `defaultPermission` | `const char*` |
+
+### `InGroup`
+
+```cpp
+virtual bool InGroup(uint64 steamId, const char* group) = 0;
+```
+
+Whether this SteamID64 is in the group, directly or by inheritance.
+
+| Parameter | Type |
+|---|---|
+| `steamId` | `uint64` |
+| `group` | `const char*` |
+
+### `GetImmunity`
+
+```cpp
+virtual int GetImmunity(uint64 steamId) = 0;
+```
+
+The highest immunity among the player's own and their groups'.
+
+| Parameter | Type |
+|---|---|
+| `steamId` | `uint64` |
+
+### `CanTarget`
+
+```cpp
+virtual bool CanTarget(CPlayerSlot caller, CPlayerSlot target) = 0;
+```
+
+Whether `caller` may act on `target`: the server console and a root ("*") caller always may, anybody may act on themselves, and otherwise the caller's immunity has to be at least the target's.
+
+| Parameter | Type |
+|---|---|
+| `caller` | `CPlayerSlot` |
+| `target` | `CPlayerSlot` |
+
+### `GetPlayerSteamID`
+
+```cpp
+virtual uint64 GetPlayerSteamID(CPlayerSlot slot) = 0;
+```
+
+The SteamID64 the player in this slot is checked under: 0 for an empty slot, a bot, or a player Steam has not validated yet while SteamAuthMode wants it to.
+
+| Parameter | Type |
+|---|---|
+| `slot` | `CPlayerSlot` |
+
+### `IsPlayerAuthorized`
+
+```cpp
+virtual bool IsPlayerAuthorized(CPlayerSlot slot) = 0;
+```
+
+Whether Steam validated the player in this slot.
+
+| Parameter | Type |
+|---|---|
+| `slot` | `CPlayerSlot` |
+
+### `GrantPermission`
+
+```cpp
+virtual void GrantPermission(PluginId owner, uint64 steamId, const char* permission) = 0;
+```
+
+Grants a permission (wildcards allowed) to a SteamID64, in the owner's layer. Gone when the owner unloads, or by RevokePermission().
+
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `steamId` | `uint64` |
+| `permission` | `const char*` |
+
+### `RevokePermission`
+
+```cpp
+virtual void RevokePermission(PluginId owner, uint64 steamId, const char* permission) = 0;
+```
+
+Takes back what GrantPermission() gave in the owner's layer; other layers are untouched.
+
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `steamId` | `uint64` |
+| `permission` | `const char*` |
+
+### `AddToGroup`
+
+```cpp
+virtual void AddToGroup(PluginId owner, uint64 steamId, const char* group) = 0;
+```
+
+Puts a SteamID64 in a group, in the owner's layer.
+
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `steamId` | `uint64` |
+| `group` | `const char*` |
+
+### `RemoveFromGroup`
+
+```cpp
+virtual void RemoveFromGroup(PluginId owner, uint64 steamId, const char* group) = 0;
+```
+
+Takes a SteamID64 out of a group in the owner's layer.
+
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `steamId` | `uint64` |
+| `group` | `const char*` |
+
+### `SetImmunity`
+
+```cpp
+virtual void SetImmunity(PluginId owner, uint64 steamId, int immunity) = 0;
+```
+
+The player's own immunity in the owner's layer; the highest of all layers and groups counts.
+
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `steamId` | `uint64` |
+| `immunity` | `int` |
+
+### `ClearPlayer`
+
+```cpp
+virtual void ClearPlayer(PluginId owner, uint64 steamId) = 0;
+```
+
+Drops everything the owner's layer holds for this SteamID64.
+
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `steamId` | `uint64` |
+
+### `CreateGroup`
+
+```cpp
+virtual void CreateGroup(PluginId owner, const char* group, int immunity) = 0;
+```
+
+Defines a group in the owner's layer, or sets its immunity when it is already there. A group defined in several layers (the file and a plugin, two plugins) has all of their permissions and parents and the highest immunity.
+
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `group` | `const char*` |
+| `immunity` | `int` |
+
+### `DeleteGroup`
+
+```cpp
+virtual void DeleteGroup(PluginId owner, const char* group) = 0;
+```
+
+Drops the owner's definition of the group; other layers' stay.
+
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `group` | `const char*` |
+
+### `AddGroupPermission`
+
+```cpp
+virtual void AddGroupPermission(PluginId owner, const char* group, const char* permission) = 0;
+```
+
+Adds a permission to the owner's definition of the group (made if missing).
+
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `group` | `const char*` |
+| `permission` | `const char*` |
+
+### `RemoveGroupPermission`
+
+```cpp
+virtual void RemoveGroupPermission(PluginId owner, const char* group, const char* permission) = 0;
+```
+
+Takes a permission back out of the owner's definition of the group.
+
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `group` | `const char*` |
+| `permission` | `const char*` |
+
+### `AddGroupParent`
+
+```cpp
+virtual void AddGroupParent(PluginId owner, const char* group, const char* parent) = 0;
+```
+
+Makes the group inherit everything `parent` has (made if missing).
+
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `group` | `const char*` |
+| `parent` | `const char*` |
+
+### `RemoveGroupParent`
+
+```cpp
+virtual void RemoveGroupParent(PluginId owner, const char* group, const char* parent) = 0;
+```
+
+Undoes AddGroupParent() in the owner's layer.
+
+| Parameter | Type |
+|---|---|
+| `owner` | [`PluginId`](/docs/core-api/IToolkitApi#pluginid) |
+| `group` | `const char*` |
+| `parent` | `const char*` |
+
+### `SetAccessDeniedHandler`
+
+```cpp
+virtual ToolkitHookId SetAccessDeniedHandler(AccessDeniedHandler handler) = 0;
+```
+
+Replaces what a player sees when they are refused a command.
+
+The core answers "You do not have access to this command." (the AccessDeniedMessage of core.json) through ReplyToCommand() -- to chat when they typed it in chat, to their console otherwise. A plugin that wants its own wording (a translation, a prefix) sets a handler; the one set last is used, and when its plugin unloads the one before it takes over again.
+
+| Parameter | Type |
+|---|---|
+| `handler` | [`AccessDeniedHandler`](/docs/core-api/IToolkitPermissions#accessdeniedhandler) |
+
+**Returns** [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) — The id ClearAccessDeniedHandler() takes
+
+### `ClearAccessDeniedHandler`
+
+```cpp
+virtual bool ClearAccessDeniedHandler(ToolkitHookId id) = 0;
+```
+
+Drops a handler SetAccessDeniedHandler() returned the id for.
+
+| Parameter | Type |
+|---|---|
+| `id` | [`ToolkitHookId`](/docs/core-api/IToolkitTypes#toolkithookid) |
+
+## Macros
+
+| Macro | Expands to |
+|---|---|
+| `PERMISSIONS_HAS(steamId, permission)` | `g_pToolkitPermissions->HasPermission(steamId, permission)` |
+| `PERMISSIONS_PLAYER_HAS(slot, permission)` | `g_pToolkitPermissions->PlayerHasPermission(slot, permission)` |
+| `PERMISSIONS_CHECK_ACCESS(slot, name, permission)` | `g_pToolkitPermissions->CheckAccess(slot, name, permission)` |
+| `PERMISSIONS_GRANT(steamId, permission)` | `g_pToolkitPermissions->GrantPermission(g_PluginID, steamId, permission)` |
+| `PERMISSIONS_REVOKE(steamId, permission)` | `g_pToolkitPermissions->RevokePermission(g_PluginID, steamId, permission)` |
+| `PERMISSIONS_ADD_TO_GROUP(steamId, group)` | `g_pToolkitPermissions->AddToGroup(g_PluginID, steamId, group)` |
+| `PERMISSIONS_REMOVE_FROM_GROUP(steamId, group)` | `g_pToolkitPermissions->RemoveFromGroup(g_PluginID, steamId, group)` |

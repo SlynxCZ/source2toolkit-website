@@ -32,17 +32,19 @@ chat as `!hello` or `/hello`.
 using ChatHandler    = ToolkitCallback<void(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
 using CommandHandler = ToolkitCallback<Action(const ToolkitCommandContext&, const ToolkitCommandArgs&, bool post)>;
 
-virtual ToolkitHookId RegisterChatListener(const char* pchName, ChatHandler handler) = 0;
+virtual ToolkitHookId RegisterChatListener(const char* pchName, ChatHandler handler, const char* pchPermission = nullptr) = 0;
 virtual bool UnregisterChatListener(const char* pchName, const ChatHandler& handler) = 0;
 virtual bool UnregisterChatListener(ToolkitHookId id) = 0;
 
-virtual ToolkitHookId RegisterConCommand(const char* pchName, ChatHandler handler) = 0;
+virtual ToolkitHookId RegisterConCommand(const char* pchName, ChatHandler handler, const char* pchPermission = nullptr) = 0;
 virtual bool UnregisterConCommand(const char* pchName, const ChatHandler& handler) = 0;
 virtual bool UnregisterConCommand(ToolkitHookId id) = 0;
 
 virtual ToolkitHookId RegisterConListener(const char* pchName, CommandHandler handler, bool post) = 0;
 virtual bool UnregisterConListener(const char* pchName, const CommandHandler& handler, bool post) = 0;
 virtual bool UnregisterConListener(ToolkitHookId id) = 0;
+
+virtual void ReplyToCommand(const ToolkitCommandContext& ctx, const char* pszMessage) = 0;
 ```
 
 There is no plugin id argument. A handler is a `ToolkitCallback`: a lambda, a
@@ -138,8 +140,7 @@ REGISTER_CON_COMMAND("sample_echo", [](const ToolkitCommandContext& context, con
 
 `ToolkitCommandContext::GetPlayerSlot()` tells you who ran the command. A player has
 a valid slot; the server console (and RCON) has none — the slot is `-1` and
-`IsValid()` is false. The sample plugin wraps this in two small helpers that
-are worth copying:
+`IsValid()` is false.
 
 ```cpp title="plugin.cpp"
 // A controller for a player, nullptr for the server console.
@@ -148,28 +149,42 @@ static CCSPlayerController* CallerOf(const ToolkitCommandContext& context)
     const CPlayerSlot slot = context.GetPlayerSlot();
     return slot.IsValid() ? CCSPlayerController::FromSlot(slot) : nullptr;
 }
-
-// Answers where the command came from: the player's chat, or the server console.
-static void Reply(const ToolkitCommandContext& context, const char* pszFormat, ...)
-{
-    char szBuffer[512];
-
-    va_list args;
-    va_start(args, pszFormat);
-    vsnprintf(szBuffer, sizeof(szBuffer), pszFormat, args);
-    va_end(args);
-
-    if (CCSPlayerController* pCaller = CallerOf(context))
-        pCaller->PrintToChat(szBuffer);
-    else
-        TOOLKIT_CONPRINTF("%s\n", szBuffer);
-}
 ```
 
-`PrintToChat` lives on
-[`CBasePlayerController`](/docs/schema/entity/classes/CBasePlayerController),
-next to `PrintToConsole` and `PrintToCenter` if you would rather answer in the
-player's console.
+`GetSource()` says where it was typed:
+
+| `ToolkitCommandSource` | Typed |
+|---|---|
+| `Console` | in a console — the server's, RCON, or the player's own |
+| `Chat` | in chat with a public trigger (`!kick`); the message shows |
+| `SilentChat` | in chat with a silent trigger (`/kick`); the message is hidden |
+
+`IsFromChat()` is true for both chat kinds.
+
+### Replying
+
+`ReplyToCommand(ctx, message)` answers where the command came from: the
+player's chat for a chat command, the player's console for one typed there,
+the server console for the server. `REPLY_TO_COMMAND` formats first:
+
+```cpp
+REGISTER_CON_COMMAND("hp", [](const ToolkitCommandContext& ctx, const ToolkitCommandArgs& args, bool post)
+{
+    CCSPlayerController* pPlayer = CallerOf(ctx);
+    CCSPlayerPawn* pPawn = pPlayer ? pPlayer->GetPlayerPawn() : nullptr;
+    if (!pPawn)
+    {
+        REPLY_TO_COMMAND(ctx, "Players only.");
+        return;
+    }
+
+    REPLY_TO_COMMAND(ctx, "You have %d HP.", pPawn->m_iHealth());
+});
+```
+
+For a specific place regardless of where it was typed, use the controller's
+`PrintToChat`, `PrintToConsole` or `PrintToCenter` on
+[`CBasePlayerController`](/docs/schema/entity/classes/CBasePlayerController).
 
 ### The `post` argument
 
@@ -179,9 +194,22 @@ listeners; for commands you can ignore it.
 
 ## Permissions
 
-There is no permission system in the toolkit. The ConCommands it creates are
-client-executable, so **any player can run any plugin command** from their
-console or chat. Check the caller yourself before doing anything privileged:
+The ConCommands the toolkit creates are client-executable, so a command
+registered without a permission runs for **any player**. Give it one and the
+core checks it before your handler runs:
+
+```cpp
+REGISTER_CON_COMMAND("kick", OnKick, "myplugin.admin.kick");
+```
+
+A player without it does not reach the handler; they are told so where they
+typed the command (core.json's `AccessDeniedMessage`, or a plugin's own
+answer). The server console and RCON always may. The server owner can give
+the command another permission under `Overrides` in `permissions.json`.
+Who holds what — admins, groups, wildcards — is on the
+[Permissions](/docs/guides/permissions) page.
+
+For something only the server console should run, check the slot:
 
 ```cpp
 REGISTER_CON_COMMAND("myplugin_reload", [](const ToolkitCommandContext& ctx, const ToolkitCommandArgs& args, bool post)
@@ -193,10 +221,6 @@ REGISTER_CON_COMMAND("myplugin_reload", [](const ToolkitCommandContext& ctx, con
     // ...
 });
 ```
-
-For player admins, keep your own list (SteamIDs from
-`CBasePlayerController::GetSteamID()`, a database, another plugin's
-interface) and look the caller up in it.
 
 ## Chat-only commands
 

@@ -42,7 +42,7 @@ The other plugin answers that query in its own listener's `OnToolkitQuery()`.
 For each `.stx` the core:
 
 1. opens the library and calls its `CreateInterface` export for `IToolkitPlugin` (which `TOOLKIT_EXPOSE` provides);
-2. compares `GetApiVersion()` with the core's `TOOLKIT_PLAPI_VERSION` — a plugin built against a **newer** API than the core's is refused (`plugin API version 3 but this core speaks 2`); an older one loads, and the core calls nothing it does not have (see [Compatibility](/docs/development/compatibility));
+2. compares `GetApiVersion()` with the core's `TOOLKIT_PLAPI_VERSION` — a plugin built against another API than the core's, newer or older, is refused and has to be rebuilt against the matching SDK (see [Compatibility](/docs/development/compatibility#the-plugin-api-version));
 3. assigns the next plugin id and adds the plugin to its list;
 4. calls `Load(id, api, error, maxlen, late)`;
 5. on success, calls `OnPluginLoad(newId, name)` on every listener of every loaded plugin — including the new plugin's own, if it added one in `Load()`.
@@ -150,6 +150,9 @@ Implement `IToolkitListener` and register it with `api->AddListener(this, listen
 | `OnClientPutInServer(slot, name, type, xuid)`, `OnClientVoice(slot)`, `OnClientSettingsChanged(slot)`, `OnClientDisconnect(slot, reason, name, xuid, networkId)` | After the engine's `IServerGameClients` call of the same name. API 2. |
 | `OnGameServerSteamAPIActivated()`, `OnGameServerSteamAPIDeactivated()` | The Steam API came up / is about to go. API 2. |
 | `OnLoadEventsFromFile(manager, filename, searchAll)` | After `IGameEventManager2::LoadEventsFromFile`; the place to keep the manager or register a `.gameevents` file of your own. API 2. |
+| `OnClientAuthorized(slot, steamId)` | Steam validated the player; from now on their [permissions](/docs/guides/permissions) are looked up under `steamId`. Not called for bots. API 3. |
+| `OnClientAuthorizeFailed(slot, steamId)` | Steam refused the player's ticket; `steamId` is the one they claimed, and it no longer counts for permissions. API 3. |
+| `OnPermissionsChanged(steamId)` | What this SteamID holds may have changed. `0` when a change can touch anybody (a group edited, `permissions.json` reloaded, a plugin's grants dropped). API 3. |
 | `OnToolkitQuery(const char* iface, int* ret)` | Another toolkit plugin asked for an interface. Return a pointer and set `*ret = TOOLKIT_IFACE_OK` to answer. |
 | `OnMetamodQuery(const char* iface, int* ret)` | A Metamod plugin asked for an interface. Defaults to answering like `OnToolkitQuery()`; return `nullptr` to keep an interface for toolkit plugins only. |
 

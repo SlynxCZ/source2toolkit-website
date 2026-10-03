@@ -1,0 +1,310 @@
+---
+title: Coming from CounterStrikeSharp
+description: What a CounterStrikeSharp plugin turns into on Source2Toolkit — the same concepts side by side, a full plugin ported, and what you get for switching.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+If you have written CounterStrikeSharp plugins, you already know most of
+Source2Toolkit. Both sit on Metamod:Source, both expose the game's schema
+classes (`CCSPlayerController`, `CCSPlayerPawn`, …), both hook game events,
+register commands and run timers. The names are often the same.
+
+What changes is the language: plugins are native C++ built against the
+[SDK](/docs/development/building), not C# on .NET. This page maps one onto the
+other. For the language side — pointers, lifetimes, strings, lambdas —
+read [C++ for C# developers](/docs/development/cpp-for-csharp-developers) next to it.
+
+## Why switch
+
+- **Plugins survive CS2 updates.** A plugin on the [stable tier](/docs/development/compatibility)
+  ships no signatures and no offsets of its own; the core owns them. After a
+  Valve update you update the core, and the plugins keep running unchanged.
+- **Crashes point at your line.** The [crash handler](/docs/guides/crash-handler)
+  symbolizes plugin frames to `function @ file:line` and names a suspected
+  culprit, on the server itself, optionally straight into Discord.
+- **No managed runtime.** No .NET to install, no GC pauses, no marshalling
+  between managed and native code. Your code calls the game directly.
+- **Network state just works.** `pPawn->m_iHealth = 150;` announces the change
+  to clients by itself — there is no `Utilities.SetStateChanged` to forget.
+- **Everything is cleaned up for you.** Commands, hooks, timers, menus and
+  listeners belong to the plugin that registered them and are removed when it
+  unloads. On Linux, copying a new `.stx` over the old one
+  [hot reloads](/docs/development/plugin-lifecycle#hot-reload) it.
+- **Your license, your choice.** The toolkit is GPLv3 with an MIT exception for
+  derivative works: plugins can be open source, closed source or commercial.
+  See the [FAQ](/docs/resources/faq#licensing).
+
+## The concepts side by side
+
+### Plugin structure
+
+| CounterStrikeSharp | Source2Toolkit |
+|---|---|
+| `class MyPlugin : BasePlugin` | `class MyPlugin final : public IToolkitPlugin` |
+| `ModuleName`, `ModuleVersion`, `ModuleAuthor`, `ModuleDescription` | `GetName()`, `GetVersion()`, `GetAuthor()`, `GetDescription()` |
+| `Load(bool hotReload)` | `Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late)` — first line `TOOLKIT_SAVEVARS();` |
+| `Unload(bool hotReload)` | `Unload(char* error, size_t maxlen)` |
+| Throwing in `Load` to refuse loading | Write the reason into `error`, `return false;` |
+| The plugin class is found by reflection | `TOOLKIT_EXPOSE(name, g_Plugin);` once, at the bottom of one `.cpp` |
+| `.dll` in `plugins/MyPlugin/` | `.stx` in `addons/source2toolkit/plugins/` |
+| `css_plugins reload MyPlugin` | `toolkit unload <id>` + `toolkit load <name>` (`toolkit list` shows the ids); on Linux, copying the new `.stx` over the old one [hot reloads](/docs/development/plugin-lifecycle#hot-reload) it |
+| `Logger.LogInformation(...)` | `TOOLKIT_LOG(this, "...\n", ...)` (printf-style) |
+
+### Commands
+
+| CounterStrikeSharp | Source2Toolkit |
+|---|---|
+| `[ConsoleCommand("css_hello")]` / `AddCommand("css_hello", ...)` | `REGISTER_CON_COMMAND("hello", handler)` — `!hello` and `/hello` in chat reach it too |
+| `CCSPlayerController? player` (null = console) | `CCSPlayerController::FromSlot(context.GetPlayerSlot())` (nullptr = console) |
+| `command.GetArg(1)`, `command.ArgString`, `command.ArgCount` | `args.Arg(1)`, `args.ArgS()`, `args.ArgC()` — see [Commands](/docs/convars-commands/commands) |
+| `AddCommandListener("jointeam", ..., HookMode.Pre)` | `REGISTER_CON_LISTENER("jointeam", handler, false)` — see [Command listeners](/docs/convars-commands/command-listeners) |
+| `[RequiresPermissions("@css/kick")]` | `REGISTER_CON_COMMAND("kick", handler, "myplugin.admin.kick")` — see [Permissions](/docs/guides/permissions) |
+| `command.ReplyToCommand(...)` | `REPLY_TO_COMMAND(ctx, ...)` — to chat or console, wherever it was typed |
+| `AdminManager.PlayerHasPermissions(player, "@css/kick")` | `PERMISSIONS_PLAYER_HAS(slot, "myplugin.admin.kick")` |
+| `AdminManager.AddPlayerPermissions(steamId, ...)` | `PERMISSIONS_GRANT(steamId, ...)` / `PERMISSIONS_ADD_TO_GROUP(steamId, ...)` |
+| `admins.json`, `admin_groups.json`, `admin_overrides.json` | `configs/permissions.json` (`Admins`, `Groups`, `Overrides`) |
+
+### Events and listeners
+
+| CounterStrikeSharp | Source2Toolkit |
+|---|---|
+| `[GameEventHandler] OnPlayerDeath(EventPlayerDeath @event, GameEventInfo info)` | `HOOK_GAME_EVENT("player_death", handler, true)` |
+| `RegisterEventHandler<EventPlayerDeath>(..., HookMode.Pre)` | `HOOK_GAME_EVENT("player_death", handler, false)` |
+| `@event.Attacker`, `@event.Weapon` | `event->GetPlayerController("attacker")`, `event->GetString("weapon")` |
+| `info.DontBroadcast = true` | `dontBroadcast = true;` (a `bool&` parameter) |
+| `HookResult.Continue` | `Action::Ignore` |
+| `HookResult.Stop` / `HookResult.Handled` | `Action::Supersede` |
+| `RegisterListener<Listeners.OnMapStart>` | `OnLevelInit(...)` on your `IToolkitListener` |
+| `Listeners.OnMapEnd` | `OnLevelShutdown()` |
+| `Listeners.OnClientPutInServer` | `OnClientPutInServer(slot, name, type, xuid)` |
+| `Listeners.OnClientDisconnect` | `OnClientDisconnect(slot, reason, name, xuid, networkId)` |
+| `Listeners.OnTick` | `OnGameFrame(simulating, firstTick, lastTick)` |
+| `Listeners.OnEntityCreated` / `OnEntitySpawned` | `OnEntityCreated` / `OnEntitySpawned` — see [Finding entities](/docs/entities/finding-entities) |
+
+Listener callbacks are virtual methods: inherit `IToolkitListener`, override
+the ones you want and call `api->AddListener(this, this)` in `Load()`. The full
+list is in [Plugin lifecycle](/docs/development/plugin-lifecycle#listener-callbacks).
+
+### Players and entities
+
+| CounterStrikeSharp | Source2Toolkit |
+|---|---|
+| `Utilities.GetPlayerFromSlot(slot)` | `CCSPlayerController::FromSlot(slot)` |
+| `Utilities.GetPlayerFromUserid(id)` | `CCSPlayerController::FromUserId(id)` |
+| `Utilities.GetPlayerFromSteamId(id)` | `CCSPlayerController::FromSteamId(id)` |
+| `Utilities.GetPlayers()` | A loop over the slots — see [Iterating players](/docs/entities/finding-entities#iterating-players) |
+| `player.IsValid` | A null check, plus `m_iConnected()` when it matters |
+| `player.PlayerPawn.Value` | `player->GetPlayerPawn()` |
+| `player.PawnIsAlive` | `player->m_bPawnIsAlive()` |
+| `pawn.Health = 150;` + `Utilities.SetStateChanged(...)` | `pPawn->m_iHealth = 150;` — announced by itself |
+| `pawn.Health` (read) | `pPawn->m_iHealth()` |
+| `player.PrintToChat(...)`, `PrintToCenter(...)`, `PrintToCenterHtml(...)` | The same names on the controller |
+| `player.Respawn()`, `player.SwitchTeam(...)`, `pawn.CommitSuicide(...)` | The same names — see [Players](/docs/entities/players) |
+| `player.GiveNamedItem("weapon_ak47")` | `GiveNamedItem` on the pawn's item services |
+| `CHandle<T>` / `.Value` | `CHandle<T>` / `.Get()` |
+| `Utilities.CreateEntityByName<T>(...)` | See [Creating entities](/docs/entities/creating-entities) |
+| `entity.AcceptInput("Kill")` | `AcceptInput(...)`, or `Remove()` |
+
+Fields keep their schema names: CounterStrikeSharp's `pawn.ArmorValue` is
+`pPawn->m_ArmorValue()`, `controller.Score` is `m_iScore()`. The
+[schema reference](/docs/schema/entity/classes/CCSPlayerController) lists every
+class and field.
+
+### Timers, ConVars, hooks, services
+
+| CounterStrikeSharp | Source2Toolkit |
+|---|---|
+| `AddTimer(1.0f, ...)` | `ADD_TIMER(1.0f, ...)` |
+| `TimerFlags.REPEAT`, `TimerFlags.STOP_ON_MAPCHANGE` | `TIMER_FLAG_REPEAT`, `TIMER_FLAG_NO_MAPCHANGE` |
+| `timer.Kill()` | `KILL_TIMER(timer)` |
+| `Server.NextFrame(...)` | `NEXT_FRAME(...)` |
+| `FakeConVar<int>` | `CConVar<int>` at file scope — see [ConVars](/docs/convars-commands/convars) |
+| `ConVar.Find("mp_limitteams")` | `CConVarRef<int> mp_limitteams("mp_limitteams");` |
+| `VirtualFunctions.CBaseEntity_TakeDamageOldFunc.Hook(...)` | `g_pToolkitGameHooks->HookTakeDamage(...)` — no signature of your own, see [Game hooks](/docs/hooks/game-hooks) |
+| `MemoryFunctionVoid<...>` + a signature | [Gamedata](/docs/development/gamedata) and a [function hook](/docs/hooks/function-hooks) |
+| `HookUserMessage(...)` | [Network messages](/docs/protobuf) |
+| `CenterHtmlMenu` + `MenuManager.OpenCenterHtmlMenu(...)` | `CenterHtmlMenu` + `OPEN_CENTER_HTML_MENU(player, &menu)` — see [Menus](/docs/guides/menus) |
+| `IPluginConfig<T>` (JSON config) | `PLUGIN_CONFIG_DIR()` + [JSON](/docs/guides/json) |
+| `HttpClient` | [HTTP](/docs/guides/http) — callbacks on the main thread |
+| MySqlConnector / Dapper | [MySQL](/docs/guides/mysql) — queries off the main thread, results on it |
+
+## A plugin, ported
+
+A small plugin in both: every kill heals the killer by a ConVar's amount
+(capped at 100), and `!hp` tells a player their health.
+
+<Tabs items={['CounterStrikeSharp', 'Source2Toolkit']}>
+<Tab value="CounterStrikeSharp">
+
+```csharp title="KillHeal.cs"
+using CounterStrikeSharp.API;
+using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Core.Attributes.Registration;
+using CounterStrikeSharp.API.Modules.Commands;
+using CounterStrikeSharp.API.Modules.Cvars;
+
+public class KillHeal : BasePlugin
+{
+    public override string ModuleName => "Kill Heal";
+    public override string ModuleVersion => "1.0.0";
+    public override string ModuleAuthor => "You";
+    public override string ModuleDescription => "Heals the killer";
+
+    public FakeConVar<int> HealAmount = new("killheal_amount", "HP given per kill", 10);
+
+    [GameEventHandler]
+    public HookResult OnPlayerDeath(EventPlayerDeath @event, GameEventInfo info)
+    {
+        var attacker = @event.Attacker;
+        if (attacker == null || !attacker.IsValid || attacker == @event.Userid || !attacker.PawnIsAlive)
+            return HookResult.Continue;
+
+        var pawn = attacker.PlayerPawn.Value;
+        if (pawn == null)
+            return HookResult.Continue;
+
+        pawn.Health = Math.Min(pawn.Health + HealAmount.Value, 100);
+        Utilities.SetStateChanged(pawn, "CBaseEntity", "m_iHealth");
+        return HookResult.Continue;
+    }
+
+    [ConsoleCommand("css_hp", "Shows your health")]
+    public void OnHp(CCSPlayerController? player, CommandInfo command)
+    {
+        var pawn = player?.PlayerPawn.Value;
+        if (pawn != null)
+            player!.PrintToChat($"You have {pawn.Health} HP.");
+    }
+}
+```
+
+</Tab>
+<Tab value="Source2Toolkit">
+
+```cpp title="src/plugin.cpp"
+#include "source2toolkit/IToolkitPlugin.h"
+#include "source2toolkit/IToolkitApi.h"
+#include "source2toolkit/schema/entity/classes/CCSPlayerController.h"
+#include "source2toolkit/schema/entity/classes/CCSPlayerPawn.h"
+
+#include "igameevents.h"
+
+#include <algorithm>
+#include <string>
+
+TOOLKIT_GLOBALVARS();
+
+// FakeConVar<int> -> a CConVar at file scope, registered in Load().
+CConVar<int> killheal_amount("killheal_amount", FCVAR_NONE, "HP given per kill", 10);
+
+class KillHeal final : public IToolkitPlugin
+{
+public:
+    bool Load(PluginId id, IToolkitAPI* api, char* error, size_t maxlen, bool late) override
+    {
+        TOOLKIT_SAVEVARS();
+
+        g_pCVar = api->GetCVar();
+        ConVar_Register(FCVAR_RELEASE | FCVAR_CLIENT_CAN_EXECUTE | FCVAR_GAMEDLL);
+
+        // [GameEventHandler] -> HOOK_GAME_EVENT, post = true.
+        HOOK_GAME_EVENT("player_death", [](IGameEvent* event, bool post, bool& dontBroadcast) -> Action
+        {
+            auto* pVictim   = static_cast<CCSPlayerController*>(event->GetPlayerController("userid"));
+            auto* pAttacker = static_cast<CCSPlayerController*>(event->GetPlayerController("attacker"));
+
+            if (!pAttacker || pAttacker == pVictim || !pAttacker->m_bPawnIsAlive())
+                return Action::Ignore;
+
+            CCSPlayerPawn* pPawn = pAttacker->GetPlayerPawn();
+            if (!pPawn)
+                return Action::Ignore;
+
+            // Assigning the field is what sends it to clients -- no SetStateChanged.
+            pPawn->m_iHealth = std::min(pPawn->m_iHealth() + killheal_amount.Get(), 100);
+            return Action::Ignore;
+        }, true);
+
+        // [ConsoleCommand("css_hp")] -> "hp", reachable as !hp and /hp.
+        REGISTER_CON_COMMAND("hp", [](const ToolkitCommandContext& context, const ToolkitCommandArgs& args, bool post)
+        {
+            CCSPlayerController* pPlayer = CCSPlayerController::FromSlot(context.GetPlayerSlot());
+            if (!pPlayer)
+                return; // the server console
+
+            CCSPlayerPawn* pPawn = pPlayer->GetPlayerPawn();
+            if (!pPawn)
+                return;
+
+            const std::string message = "You have " + std::to_string(pPawn->m_iHealth()) + " HP.";
+            pPlayer->PrintToChat(message.c_str());
+        });
+
+        return true;
+    }
+
+    bool Unload(char* error, size_t maxlen) override
+    {
+        // The event hook and the command are removed by the toolkit.
+        // ConVars are the one thing every plugin unregisters itself.
+        ConVar_Unregister();
+        return true;
+    }
+
+    const char* GetName() override { return "Kill Heal"; }
+    const char* GetVersion() override { return "1.0.0"; }
+    const char* GetAuthor() override { return "You"; }
+    const char* GetDescription() override { return "Heals the killer"; }
+};
+
+KillHeal g_Plugin;
+TOOLKIT_EXPOSE(killheal, g_Plugin);
+```
+
+</Tab>
+</Tabs>
+
+Line for line, the two do the same thing. The differences worth noticing:
+
+- **Null checks are yours.** There is no `IsValid` wrapper and no
+  `NullReferenceException` — a null pointer you call through crashes the
+  server. Every lookup (`FromSlot`, `GetPlayerPawn`, `GetPlayerController`)
+  can return `nullptr`.
+- **Reading a field is a call.** `m_iHealth()` reads, `m_iHealth = x` writes
+  and announces. See [Schema fields](/docs/entities/schema-fields).
+- **Strings are `const char*`** at the API boundary. Build a `std::string`,
+  pass `.c_str()`. See [Strings](/docs/development/cpp-for-csharp-developers#strings).
+- **`static_cast`, never `dynamic_cast`**, on game types — see
+  [Casting](/docs/development/cpp-for-csharp-developers#casting).
+- **ConVars are unregistered in `Unload()`.** Everything else is cleaned up by
+  the toolkit.
+
+## Running both on one server
+
+Source2Toolkit and CounterStrikeSharp are separate Metamod plugins, and since
+CounterStrikeSharp v1.0.375 both hook through the same KHook instance in
+Metamod, so a server can load both while you move plugins over one at a time.
+What to know:
+
+- **CounterStrikeSharp v1.0.375 or newer.** Older builds use SourceHook, which
+  the KHook Metamod the toolkit needs no longer has; Metamod refuses to load them.
+- **Chat triggers.** Give the two frameworks different silent triggers
+  (`SilentChatTrigger` in the toolkit's `core.json`). The toolkit swallows
+  every silent chat message before the game's say code runs, so
+  CounterStrikeSharp never sees a `/command` that uses the same prefix.
+- **Blocking the same event twice.** Do not cancel the same game event in a
+  CounterStrikeSharp plugin and a toolkit plugin.
+- **Windows:** a server with CounterStrikeSharp needs `-DoNotPreloadDLLs` for
+  the toolkit's crash handler — see [Crash handler](/docs/guides/crash-handler#windows).
+
+## Next steps
+
+1. Set up the SDK: [SDK & Building](/docs/development/building).
+2. Build [your first plugin](/docs/development/first-plugin).
+3. Read [C++ for C# developers](/docs/development/cpp-for-csharp-developers) — the
+   short list of things C# never made you think about.
+4. Look at `samples/cs2_sample` in the [core repository](https://github.com/Source2Toolkit/source2toolkit/tree/main/samples/cs2_sample):
+   commands, events, menus, timers, hooks and ConVars in one plugin.
+5. Stuck? Ask in `#plugin-developers` or open a post in `#help` on the
+   [Discord](https://discord.gg/4Ck56eDNXj).

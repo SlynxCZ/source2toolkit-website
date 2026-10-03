@@ -1,0 +1,217 @@
+---
+title: Permissions
+description: Admins, groups and permissions — permission-gated commands, permissions.json, granting at runtime from your own database, and which SteamID a player is checked under.
+---
+
+`IToolkitPermissions` answers one question: may this player do this? A
+command registered with a permission is checked by the core before its
+handler runs; anything else (a menu entry, a feature, a target) a plugin
+checks itself.
+
+```cpp title="plugin.cpp"
+#include "source2toolkit/IToolkitPermissions.h"
+```
+
+## Permissions
+
+A permission is a dotted name a plugin makes up for itself, in lower case:
+`myplugin.admin.kick`, `vip.trail`. What a player **holds** may be a wildcard:
+
+| Held | Covers |
+|---|---|
+| `myplugin.admin.kick` | exactly that |
+| `myplugin.admin.*` | `myplugin.admin` and everything below it — not `myplugin.adminx` |
+| `*` | everything (root) |
+
+Names are compared case-insensitively. Prefix yours with your plugin's name,
+so two plugins never mean different things by the same permission.
+
+## Groups
+
+A group is a name with permissions, an immunity and groups it inherits from.
+A player in `admin` below holds `admin.*` and everything `vip` holds:
+
+```json title="configs/permissions.json"
+{
+  "Groups": {
+    "default": { "Permissions": [] },
+    "vip":     { "Permissions": [ "vip.*" ] },
+    "admin":   { "Permissions": [ "admin.*" ], "Inherits": [ "vip" ], "Immunity": 50 },
+    "root":    { "Permissions": [ "*" ], "Immunity": 100 }
+  }
+}
+```
+
+The group `default` applies to every player — also to one whose SteamID is
+not known yet. Inheritance may go any depth; a cycle simply stops.
+
+## permissions.json
+
+`configs/permissions.json` is for admins written by hand. On its first start
+the core creates it from `permissions.example.json`. Comments are allowed.
+
+```json title="configs/permissions.json"
+{
+  "Groups": { /* as above */ },
+
+  // Keyed by SteamID64, STEAM_X:Y:Z or [U:1:N].
+  "Admins": {
+    "76561198012345678": { "Groups": [ "root" ] },
+    "STEAM_1:0:123456":  { "Groups": [ "admin" ], "Permissions": [ "myplugin.extra" ], "Immunity": 60 }
+  },
+
+  // Re-assign what a command needs, whoever registered it. "" opens it to everybody.
+  "Overrides": {
+    "kick": "admin.kick"
+  }
+}
+```
+
+From the server console:
+
+| Command | |
+|---|---|
+| `toolkit admins reload` | Re-reads the file. A file that does not parse is reported and the old contents stay. What plugins granted is not touched. |
+| `toolkit admins list` | The connected players: SteamID, whether Steam validated it, groups, immunity. |
+| `toolkit admins info <slot\|steamid>` | Everything one SteamID ends up with. |
+
+## Granting at runtime
+
+A plugin that keeps its admins elsewhere — a database, a web backend — grants
+them from code instead:
+
+```cpp title="plugin.cpp"
+void MyPlugin::OnAdminLoaded(uint64 steamId, int tier, bool vip)
+{
+    PERMISSIONS_ADD_TO_GROUP(steamId, tier >= 5 ? "myplugin.headadmin" : "myplugin.admin");
+    if (vip)
+        PERMISSIONS_ADD_TO_GROUP(steamId, "vip");
+
+    g_pToolkitPermissions->SetImmunity(g_PluginID, steamId, tier * 10);
+}
+```
+
+Groups can be defined from code too, so the plugin does not depend on what
+the server owner put in the file:
+
+```cpp title="plugin.cpp — Load()"
+g_pToolkitPermissions->CreateGroup(g_PluginID, "myplugin.admin", 50);
+g_pToolkitPermissions->AddGroupPermission(g_PluginID, "myplugin.admin", "myplugin.admin.*");
+
+g_pToolkitPermissions->CreateGroup(g_PluginID, "myplugin.headadmin", 90);
+g_pToolkitPermissions->AddGroupParent(g_PluginID, "myplugin.headadmin", "myplugin.admin");
+g_pToolkitPermissions->AddGroupPermission(g_PluginID, "myplugin.headadmin", "myplugin.root.*");
+```
+
+### Layers
+
+Everything a plugin grants or defines goes into **its own layer**, next to
+the file's. A player holds the union of every layer, and a group defined in
+several layers has all of their permissions and parents and the highest
+immunity. So:
+
+- `toolkit admins reload` replaces the file's layer and nothing else.
+- A plugin's layer is dropped when the plugin unloads. Grant again from
+  `Load()` — with `late` set, for the players already on the server.
+- `RevokePermission`, `RemoveFromGroup` and `ClearPlayer` only undo what the
+  same plugin did; they never take away what the file or another plugin gave.
+
+Runtime grants are by SteamID64 and work before the player connects. Nothing
+is written back to the file.
+
+## Commands with a permission
+
+```cpp
+REGISTER_CON_COMMAND("kick", OnKick, "myplugin.admin.kick");
+REGISTER_CHAT_LISTENER("trail", OnTrail, "vip.trail");
+```
+
+A player without the permission does not reach the handler. They are told
+`AccessDeniedMessage` from core.json ("You do not have access to this
+command.") through [`ReplyToCommand`](/docs/convars-commands/commands#replying)
+— in chat when they typed it in chat, in their console otherwise. The server
+console always may.
+
+A plugin can answer in its own words instead — a translation, a prefix:
+
+```cpp title="plugin.cpp — Load()"
+g_pToolkitPermissions->SetAccessDeniedHandler([](const ToolkitCommandContext& ctx, const ToolkitCommandArgs& args, const char* permission)
+{
+    const bool vip = strncmp(permission, "vip.", 4) == 0;
+    REPLY_TO_COMMAND(ctx, "%s", vip ? "VIP only." : "Admins only.");
+});
+```
+
+The handler set last answers for every refused command on the server; when
+its plugin unloads, the one before takes over again.
+
+## Checking yourself
+
+```cpp
+// The player in this slot (the server console holds everything).
+if (PERMISSIONS_PLAYER_HAS(slot, "myplugin.admin.noclip")) { ... }
+
+// A SteamID, connected or not.
+if (PERMISSIONS_HAS(steamId, "vip.trail")) { ... }
+
+// SourceMod's CheckCommandAccess: the owner can re-assign "myplugin_bhop"
+// under Overrides; without an entry, "vip.bhop" is what counts.
+if (PERMISSIONS_CHECK_ACCESS(slot, "myplugin_bhop", "vip.bhop")) { ... }
+
+// In a group, directly or by inheritance.
+if (g_pToolkitPermissions->InGroup(steamId, "vip")) { ... }
+```
+
+### Immunity
+
+`CanTarget(caller, target)` is what admin commands that act on another player
+check: the server console and a root (`*`) caller always may, anybody may
+target themselves, and otherwise the caller's immunity has to be at least
+the target's. A player's immunity is the highest of their own and all their
+groups'.
+
+```cpp
+if (!g_pToolkitPermissions->CanTarget(ctx.GetPlayerSlot(), target->GetPlayerSlot()))
+{
+    REPLY_TO_COMMAND(ctx, "You cannot target %s.", target->GetPlayerName());
+    return;
+}
+```
+
+### When something changes
+
+`IToolkitListener::OnPermissionsChanged(steamId)` fires when what a SteamID
+holds may have changed — a grant, a group, Steam validating the player. `0`
+means anybody may be affected (a group edited, the file reloaded, a plugin's
+layer dropped). A plugin that caches "is admin" for its HUD or chat tags
+refreshes there.
+
+## Which SteamID counts
+
+A connected player is checked under a SteamID, and which one depends on
+`SteamAuthMode` in core.json:
+
+| Mode | |
+|---|---|
+| `auto` (default) | The SteamID the client claimed, right away, when the server does not validate Steam tickets (`-insecure`, `sv_lan 1`, no Steam connection); otherwise only once Steam validated it. |
+| `flexible` | Always the claimed SteamID, right away. |
+| `strict` | Always only once Steam validated it. |
+
+Until then the player holds `default` and nothing else.
+`GetPlayerSteamID(slot)` is the SteamID they are checked under (0 while
+there is none), `IsPlayerAuthorized(slot)` whether Steam validated it.
+
+`IToolkitListener::OnClientAuthorized(slot, steamId)` fires when Steam
+validates a player. `OnClientAuthorizeFailed(slot, steamId)` fires when Steam
+refuses their ticket; whatever their claimed SteamID was given stops
+counting.
+
+<Callout type="warn">
+  `flexible` on a server that validates tickets trusts whatever SteamID a
+  client claims until Steam answers. Keep it for test servers.
+</Callout>
+
+## Reference
+
+[`IToolkitPermissions`](/docs/core-api/IToolkitPermissions) — every call with
+its parameters.
